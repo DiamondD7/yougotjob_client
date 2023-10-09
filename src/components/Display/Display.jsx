@@ -1,9 +1,12 @@
 import React from "react";
 
+import "../../styles/displaystyles.css";
 const Display = () => {
   return (
     <>
-      <h1>Hello, World!</h1>
+      <div className="display__wrapper">
+        <h1>Hello!</h1>
+      </div>
     </>
   );
 };
