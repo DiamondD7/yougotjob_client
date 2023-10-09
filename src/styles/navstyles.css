@@ -5,3 +5,43 @@
     height: 100vh;
     padding: 10px;
 }
+
+.navside__wrapper ul {
+    list-style: none;
+}
+
+.navside__wrapper ul li{
+    margin-top: 10px;
+    font-size: 24px;
+    display: inline-block;
+}
+
+.navside__wrapper ul button{
+    background-color: transparent;
+    border: none;
+    border-bottom: 1px solid transparent; 
+    cursor: pointer;
+    font-size: 24px;
+    
+}
+
+.navside__wrapper ul button:hover{
+    border-bottom: 1px solid black;
+    animation: hoverBorder 1s ease;
+}
+
+@keyframes hoverBorder{
+    0%{
+        border-bottom: 1px solid black;
+        width: 0%;
+    }
+    100%{
+        border-bottom: 1px solid black;
+        width: 100%;
+    }
+}
+
+.logout-btn{
+    position: absolute;
+    bottom: 10px;
+}
