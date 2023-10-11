@@ -1,9 +1,29 @@
 /* #EFF6FF */
+.nav-date__wrapper{
+    display: flex;
+    justify-content: space-between;
+    height: 40px;
+    width: 100%;
+    border-bottom: 1px solid black;
+}
+
+.nav-date__wrapper p{
+    font-size: 12px;
+    color: rgba(0,0,0,0.6);
+}
+
+.nav-menu-arrow__button{
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+}
+
+
 .navside__wrapper{
     background-color: #E5F0FF;
     width: 13%;
     height: 100vh;
-    padding: 10px;
+    padding: 10px 20px;
 }
 
 .navside__wrapper ul {
@@ -12,8 +32,6 @@
 
 .navside__wrapper ul li{
     margin-top: 10px;
-    /* font-size: 24px; */
-    /* display: inline-block; */
 }
 
 .navside__wrapper ul button{
@@ -25,29 +43,38 @@
     
 }
 
-.navside__wrapper ul button:hover{
-    border-bottom: 1px solid black;
-    animation: hoverBorder 1s ease;
-}
-
-@keyframes hoverBorder{
-    0%{
-        border-bottom: 1px solid black;
-        width: 0%;
-    }
-    100%{
-        border-bottom: 1px solid black;
-        width: 100%;
-    }
-}
-
 .navside__wrapper ul label{
-    background-color: red;
     position: relative;
     left: 0px;
+    opacity: 0;
+
+}
+
+.navside__wrapper ul button:hover + .calendar-label,
+.navside__wrapper ul button:hover + .notification-label,
+.navside__wrapper ul button:hover + .domain-label{
+    position: relative;
+    top: -4px;
+    left: 20px;
+    opacity: 1;
+    animation: labelSlide 1s ease;
+}
+
+@keyframes labelSlide{
+    0%{
+        left: 0px;
+        opacity: 0;
+    }
+    50%{
+        opacity: 0.5;
+    }
+    100%{
+        left:20px;
+        opacity: 1;
+    }
 }
 
 .logout-btn{
-    position: absolute;
-    bottom: 10px;
+    position: absolute; 
+    bottom: 20px;
 }
