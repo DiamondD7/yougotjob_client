@@ -1,4 +1,5 @@
 import React from "react";
+import { Calendar } from "@phosphor-icons/react";
 
 import "../../styles/navstyles.css";
 const Nav = () => {
@@ -7,7 +8,9 @@ const Nav = () => {
       <div className="navside__wrapper">
         <ul>
           <li>
-            <button>Calendar</button>
+            <button>
+              <Calendar size={16} color="#454545" />
+            </button>
           </li>
           <li>
             <button>Notification</button>
