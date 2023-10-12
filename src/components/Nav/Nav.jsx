@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Calendar,
   BellRinging,
@@ -10,15 +10,32 @@ import {
 
 import "../../styles/navstyles.css";
 const Nav = () => {
+  const [minimizedNav, setMinimizedNav] = useState(false);
+
   return (
     <>
-      <div className="navside__wrapper">
+      <div
+        className={`navside__wrapper ${
+          minimizedNav === true ? `minimized` : ""
+        }`}
+      >
         <div>
-          <div className="nav-date__wrapper">
-            <p>1/12/2023</p>
+          <div
+            className={`nav-date__wrapper ${
+              minimizedNav === true ? "dateMinimized" : ""
+            }`}
+          >
+            {minimizedNav === false ? <p>1/12/2023</p> : ""}
             <div>
-              <button className="nav-menu-arrow__button">
-                <ArrowFatLinesLeft size={16} color="#454545" />
+              <button
+                className="nav-menu-arrow__button"
+                onClick={() => setMinimizedNav(!minimizedNav)}
+              >
+                {minimizedNav === false ? (
+                  <ArrowFatLinesLeft size={16} color="#454545" />
+                ) : (
+                  <ArrowFatLinesRight size={16} color="#454545" />
+                )}
               </button>
             </div>
           </div>
@@ -29,19 +46,27 @@ const Nav = () => {
               <Calendar size={20} color="#454545" />
             </button>
 
-            <label className="calendar-label">Calendar</label>
+            <label className={minimizedNav === true ? "" : "calendar-label"}>
+              Calendar
+            </label>
           </li>
           <li>
             <button>
               <BellRinging size={20} color="#454545" />
             </button>
-            <label className="notification-label">Notification</label>
+            <label
+              className={minimizedNav === true ? "" : "notification-label"}
+            >
+              Notification
+            </label>
           </li>
           <li>
             <button>
               <Briefcase size={20} color="#454545" />
             </button>
-            <label className="domain-label">Domain</label>
+            <label className={minimizedNav === true ? "" : "domain-label"}>
+              Domain
+            </label>
           </li>
           <br />
           <li className="logout-btn">
