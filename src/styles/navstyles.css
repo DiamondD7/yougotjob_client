@@ -7,6 +7,10 @@
     border-bottom: 1px solid black;
 }
 
+.dateMinimized{
+    border-bottom: none;
+}
+
 .nav-date__wrapper p{
     font-size: 12px;
     color: rgba(0,0,0,0.6);
@@ -24,6 +28,31 @@
     width: 13%;
     height: 100vh;
     padding: 10px 20px;
+    animation: maximizedNav .5s ease;
+}
+
+.minimized{
+    width: 3%;
+    padding-left: 18px;
+    animation: minimizedNav .5s ease;
+}
+
+@keyframes minimizedNav{
+    0%{
+        width: 13%;
+    }
+    100%{
+        width: 3%;
+    }
+}
+
+@keyframes maximizedNav{
+    0%{
+        width: 3%;
+    }
+    100%{
+        width: 13%;
+    }
 }
 
 .navside__wrapper ul {
