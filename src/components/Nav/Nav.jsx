@@ -6,6 +6,7 @@ import {
   SignOut,
   ArrowFatLinesRight,
   ArrowFatLinesLeft,
+  User,
 } from "@phosphor-icons/react";
 
 import "../../styles/navstyles.css";
@@ -69,6 +70,11 @@ const Nav = () => {
             </label>
           </li>
           <br />
+          <li className="profile-btn">
+            <button>
+              <User size={20} color="#454545" />
+            </button>
+          </li>
           <li className="logout-btn">
             <button>
               <SignOut size={20} color="#454545" />

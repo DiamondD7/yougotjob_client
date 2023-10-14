@@ -103,6 +103,11 @@
     }
 }
 
+.profile-btn{
+    position:absolute;
+    bottom: 60px;
+}
+
 .logout-btn{
     position: absolute; 
     bottom: 20px;
