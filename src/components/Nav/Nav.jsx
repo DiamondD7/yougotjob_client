@@ -8,6 +8,8 @@ import {
   ArrowFatLinesLeft,
   User,
   Note,
+  Chat,
+  BookOpenText,
 } from "@phosphor-icons/react";
 
 import "../../styles/navstyles.css";
@@ -48,7 +50,7 @@ const Nav = () => {
               <Calendar size={20} color="#454545" />
             </button>
 
-            <label className={minimizedNav === true ? "" : "calendar-label"}>
+            <label className={minimizedNav === true ? "" : "icon-label"}>
               Calendar
             </label>
           </li>
@@ -56,26 +58,40 @@ const Nav = () => {
             <button>
               <BellRinging size={20} color="#454545" />
             </button>
-            <label
-              className={minimizedNav === true ? "" : "notification-label"}
-            >
+            <label className={minimizedNav === true ? "" : "icon-label"}>
               Notification
+            </label>
+          </li>
+          <li>
+            <button>
+              <Chat size={20} color="#454545" />
+            </button>
+            <label className={minimizedNav === true ? "" : "icon-label"}>
+              Communication
             </label>
           </li>
           <li>
             <button>
               <Note size={20} color="#454545" />
             </button>
-            <label className={minimizedNav === true ? "" : "domain-label"}>
-              Lab Results
+            <label className={minimizedNav === true ? "" : "icon-label"}>
+              Results
             </label>
           </li>
           <li>
             <button>
               <Briefcase size={20} color="#454545" />
             </button>
-            <label className={minimizedNav === true ? "" : "domain-label"}>
+            <label className={minimizedNav === true ? "" : "icon-label"}>
               Domain
+            </label>
+          </li>
+          <li>
+            <button>
+              <BookOpenText size={20} color="#454545" />
+            </button>
+            <label className={minimizedNav === true ? "" : "icon-label"}>
+              Care Plan
             </label>
           </li>
           <br />
