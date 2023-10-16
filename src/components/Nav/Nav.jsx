@@ -7,6 +7,7 @@ import {
   ArrowFatLinesRight,
   ArrowFatLinesLeft,
   User,
+  Note,
 } from "@phosphor-icons/react";
 
 import "../../styles/navstyles.css";
@@ -59,6 +60,14 @@ const Nav = () => {
               className={minimizedNav === true ? "" : "notification-label"}
             >
               Notification
+            </label>
+          </li>
+          <li>
+            <button>
+              <Note size={20} color="#454545" />
+            </button>
+            <label className={minimizedNav === true ? "" : "domain-label"}>
+              Lab Results
             </label>
           </li>
           <li>
