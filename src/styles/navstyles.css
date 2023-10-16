@@ -79,9 +79,7 @@
 
 }
 
-.navside__wrapper ul button:hover + .calendar-label,
-.navside__wrapper ul button:hover + .notification-label,
-.navside__wrapper ul button:hover + .domain-label{
+.navside__wrapper ul button:hover + .icon-label{
     position: relative;
     top: -4px;
     left: 20px;
