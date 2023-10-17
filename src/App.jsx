@@ -1,5 +1,6 @@
 import Home from "./components/Home";
 import { Route, Routes } from "react-router-dom";
+import SignIn from "./components/SignIn/SignIn";
 
 import "./App.css";
 
@@ -8,7 +9,8 @@ function App() {
     <>
       <>
         <Routes>
-          <Route path="/" element={<Home />} />
+          <Route path="/" element={<SignIn />} />
+          <Route path="/home" element={<Home />} />
         </Routes>
       </>
     </>
