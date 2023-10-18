@@ -45,7 +45,7 @@ const Nav = () => {
               className={minimizedNav === true ? "btn-normal" : "icon-label"}
             >
               <Calendar size={20} color="#454545" />
-
+              &nbsp;
               {minimizedNav === true ? "" : "Calendar"}
             </button>
           </li>
@@ -54,6 +54,7 @@ const Nav = () => {
               className={minimizedNav === true ? "btn-normal" : "icon-label"}
             >
               <BellRinging size={20} color="#454545" />
+              &nbsp;
               {minimizedNav === true ? "" : "Notification"}
             </button>
           </li>
@@ -62,7 +63,7 @@ const Nav = () => {
               className={minimizedNav === true ? "btn-normal" : "icon-label"}
             >
               <Chat size={20} color="#454545" />
-
+              &nbsp;
               {minimizedNav === true ? "" : "Communication"}
             </button>
           </li>
@@ -71,7 +72,7 @@ const Nav = () => {
               className={minimizedNav === true ? "btn-normal" : "icon-label"}
             >
               <Note size={20} color="#454545" />
-
+              &nbsp;
               {minimizedNav === true ? "" : "Results"}
             </button>
           </li>
@@ -80,7 +81,7 @@ const Nav = () => {
               className={minimizedNav === true ? "btn-normal" : "icon-label"}
             >
               <Briefcase size={20} color="#454545" />
-
+              &nbsp;
               {minimizedNav === true ? "" : "Domain"}
             </button>
           </li>
@@ -89,6 +90,7 @@ const Nav = () => {
               className={minimizedNav === true ? "btn-normal" : "icon-label"}
             >
               <BookOpenText size={20} color="#454545" />
+              &nbsp;
               {minimizedNav === true ? "" : "Care Plan"}
             </button>
           </li>
