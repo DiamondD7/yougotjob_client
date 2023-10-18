@@ -48,12 +48,6 @@ const Nav = () => {
 
               {minimizedNav === true ? "" : "Calendar"}
             </button>
-
-            {/* <label
-              className={minimizedNav === true ? "remove-label" : "icon-label"}
-            >
-              Calendar
-            </label> */}
           </li>
           <li>
             <button
