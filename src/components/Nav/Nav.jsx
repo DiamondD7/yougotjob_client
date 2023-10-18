@@ -41,65 +41,62 @@ const Nav = () => {
         </div>
         <ul>
           <li>
-            <button>
+            <button
+              className={minimizedNav === true ? "btn-normal" : "icon-label"}
+            >
               <Calendar size={20} color="#454545" />
+
+              {minimizedNav === true ? "" : "Calendar"}
             </button>
 
-            <label
+            {/* <label
               className={minimizedNav === true ? "remove-label" : "icon-label"}
             >
               Calendar
-            </label>
+            </label> */}
           </li>
           <li>
-            <button>
+            <button
+              className={minimizedNav === true ? "btn-normal" : "icon-label"}
+            >
               <BellRinging size={20} color="#454545" />
+              {minimizedNav === true ? "" : "Notification"}
             </button>
-            <label
-              className={minimizedNav === true ? "remove-label" : "icon-label"}
-            >
-              Notification
-            </label>
           </li>
           <li>
-            <button>
+            <button
+              className={minimizedNav === true ? "btn-normal" : "icon-label"}
+            >
               <Chat size={20} color="#454545" />
+
+              {minimizedNav === true ? "" : "Communication"}
             </button>
-            <label
-              className={minimizedNav === true ? "remove-label" : "icon-label"}
-            >
-              Communication
-            </label>
           </li>
           <li>
-            <button>
+            <button
+              className={minimizedNav === true ? "btn-normal" : "icon-label"}
+            >
               <Note size={20} color="#454545" />
+
+              {minimizedNav === true ? "" : "Results"}
             </button>
-            <label
-              className={minimizedNav === true ? "remove-label" : "icon-label"}
-            >
-              Results
-            </label>
           </li>
           <li>
-            <button>
+            <button
+              className={minimizedNav === true ? "btn-normal" : "icon-label"}
+            >
               <Briefcase size={20} color="#454545" />
+
+              {minimizedNav === true ? "" : "Domain"}
             </button>
-            <label
-              className={minimizedNav === true ? "remove-label" : "icon-label"}
-            >
-              Domain
-            </label>
           </li>
           <li>
-            <button>
-              <BookOpenText size={20} color="#454545" />
-            </button>
-            <label
-              className={minimizedNav === true ? "remove-label" : "icon-label"}
+            <button
+              className={minimizedNav === true ? "btn-normal" : "icon-label"}
             >
-              Care Plan
-            </label>
+              <BookOpenText size={20} color="#454545" />
+              {minimizedNav === true ? "" : "Care Plan"}
+            </button>
           </li>
           <br />
           <li className="profile-btn">

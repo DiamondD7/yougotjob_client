@@ -14,12 +14,14 @@
 .nav-date__wrapper p{
     font-size: 12px;
     color: rgba(0,0,0,0.6);
+    padding: 10px 0 0 10px;
 }
 
 .nav-menu-arrow__button{
     border: none;
     background-color: transparent;
     cursor: pointer;
+    padding: 7px 10px 0 0;
 }
 
 
@@ -27,7 +29,7 @@
     background-color: #E5F0FF;
     width: 13%;
     height: 100vh;
-    padding: 10px 20px;
+    /* padding: 10px 20px; */
     animation: maximizedNav .5s ease;
 }
 
@@ -59,24 +61,31 @@
     list-style: none;
 }
 
-.navside__wrapper ul li{
-    margin-top: 10px;
-}
-
-.navside__wrapper ul button{
+.icon-label{
     background-color: transparent;
     border: none;
-    border-bottom: 1px solid transparent; 
     cursor: pointer;
-    font-size: 24px;
+    width: 100%;
+    height: 30px;
+    padding: 25px 0 25px 10px;
     
+
+    display: flex;
+    align-items: center;
+    animation: labelShow .4s ease;
 }
 
-.icon-label{
-    position: relative;
-    left: 10px;
-    top: -4px;
-    animation: labelShow .5s ease;
+.icon-label:hover{
+    background-color: #D6E8FF;
+    border: none;
+}
+
+.btn-normal{
+    font-size: 15px;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    margin-top: 20px;
 }
 
 .remove-label{
@@ -90,17 +99,31 @@
     50%{
         opacity: 0;
     }
-    100%{
+    60%{
         opacity: 1;
     }
 }
 
 .profile-btn{
     position:absolute;
+    left: 15px;
     bottom: 60px;
+}
+
+.profile-btn button{
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
 }
 
 .logout-btn{
     position: absolute; 
+    left: 15px;
     bottom: 20px;
+}
+
+.logout-btn button{
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
 }
