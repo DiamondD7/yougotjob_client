@@ -4,8 +4,7 @@ import {
   BellRinging,
   Briefcase,
   SignOut,
-  ArrowFatLinesRight,
-  ArrowFatLinesLeft,
+  List,
   User,
   Note,
   Chat,
@@ -35,11 +34,7 @@ const Nav = () => {
                 className="nav-menu-arrow__button"
                 onClick={() => setMinimizedNav(!minimizedNav)}
               >
-                {minimizedNav === false ? (
-                  <ArrowFatLinesLeft size={16} color="#454545" />
-                ) : (
-                  <ArrowFatLinesRight size={16} color="#454545" />
-                )}
+                <List size={20} color="#454545" />
               </button>
             </div>
           </div>
