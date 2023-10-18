@@ -72,31 +72,25 @@
     
 }
 
-.navside__wrapper ul label{
+.icon-label{
     position: relative;
-    left: 0px;
-    opacity: 0;
-
-}
-
-.navside__wrapper ul button:hover + .icon-label{
-    position: relative;
+    left: 10px;
     top: -4px;
-    left: 20px;
-    opacity: 1;
-    animation: labelSlide 1s ease;
+    animation: labelShow .5s ease;
 }
 
-@keyframes labelSlide{
+.remove-label{
+    display: none;
+}
+
+@keyframes labelShow{
     0%{
-        left: 0px;
         opacity: 0;
     }
     50%{
-        opacity: 0.5;
+        opacity: 0;
     }
     100%{
-        left:20px;
         opacity: 1;
     }
 }

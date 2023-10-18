@@ -45,7 +45,9 @@ const Nav = () => {
               <Calendar size={20} color="#454545" />
             </button>
 
-            <label className={minimizedNav === true ? "" : "icon-label"}>
+            <label
+              className={minimizedNav === true ? "remove-label" : "icon-label"}
+            >
               Calendar
             </label>
           </li>
@@ -53,7 +55,9 @@ const Nav = () => {
             <button>
               <BellRinging size={20} color="#454545" />
             </button>
-            <label className={minimizedNav === true ? "" : "icon-label"}>
+            <label
+              className={minimizedNav === true ? "remove-label" : "icon-label"}
+            >
               Notification
             </label>
           </li>
@@ -61,7 +65,9 @@ const Nav = () => {
             <button>
               <Chat size={20} color="#454545" />
             </button>
-            <label className={minimizedNav === true ? "" : "icon-label"}>
+            <label
+              className={minimizedNav === true ? "remove-label" : "icon-label"}
+            >
               Communication
             </label>
           </li>
@@ -69,7 +75,9 @@ const Nav = () => {
             <button>
               <Note size={20} color="#454545" />
             </button>
-            <label className={minimizedNav === true ? "" : "icon-label"}>
+            <label
+              className={minimizedNav === true ? "remove-label" : "icon-label"}
+            >
               Results
             </label>
           </li>
@@ -77,7 +85,9 @@ const Nav = () => {
             <button>
               <Briefcase size={20} color="#454545" />
             </button>
-            <label className={minimizedNav === true ? "" : "icon-label"}>
+            <label
+              className={minimizedNav === true ? "remove-label" : "icon-label"}
+            >
               Domain
             </label>
           </li>
@@ -85,7 +95,9 @@ const Nav = () => {
             <button>
               <BookOpenText size={20} color="#454545" />
             </button>
-            <label className={minimizedNav === true ? "" : "icon-label"}>
+            <label
+              className={minimizedNav === true ? "remove-label" : "icon-label"}
+            >
               Care Plan
             </label>
           </li>
