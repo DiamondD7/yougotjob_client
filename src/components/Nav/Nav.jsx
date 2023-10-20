@@ -15,9 +15,11 @@ import "../../styles/navstyles.css";
 
 const Nav = ({ setDisplayed }) => {
   const [minimizedNav, setMinimizedNav] = useState(false);
+  const [activeDisplay, setActiveDisplay] = useState("");
 
   const onClickDisplayed = (display) => {
     setDisplayed(display);
+    setActiveDisplay(display);
   };
 
   return (
@@ -49,6 +51,11 @@ const Nav = ({ setDisplayed }) => {
             <button
               className={minimizedNav === true ? "btn-normal" : "icon-label"}
               onClick={() => onClickDisplayed("calendar")}
+              style={
+                activeDisplay === "calendar"
+                  ? { backgroundColor: "#D6E8FF" }
+                  : {}
+              }
             >
               <Calendar size={20} color="#454545" />
               &nbsp;
@@ -59,6 +66,11 @@ const Nav = ({ setDisplayed }) => {
             <button
               className={minimizedNav === true ? "btn-normal" : "icon-label"}
               onClick={() => onClickDisplayed("notification")}
+              style={
+                activeDisplay === "notification"
+                  ? { backgroundColor: "#D6E8FF" }
+                  : {}
+              }
             >
               <BellRinging size={20} color="#454545" />
               &nbsp;
@@ -69,6 +81,11 @@ const Nav = ({ setDisplayed }) => {
             <button
               className={minimizedNav === true ? "btn-normal" : "icon-label"}
               onClick={() => onClickDisplayed("communication")}
+              style={
+                activeDisplay === "communication"
+                  ? { backgroundColor: "#D6E8FF" }
+                  : {}
+              }
             >
               <Chat size={20} color="#454545" />
               &nbsp;
@@ -79,6 +96,11 @@ const Nav = ({ setDisplayed }) => {
             <button
               className={minimizedNav === true ? "btn-normal" : "icon-label"}
               onClick={() => onClickDisplayed("results")}
+              style={
+                activeDisplay === "results"
+                  ? { backgroundColor: "#D6E8FF" }
+                  : {}
+              }
             >
               <Note size={20} color="#454545" />
               &nbsp;
@@ -89,6 +111,9 @@ const Nav = ({ setDisplayed }) => {
             <button
               className={minimizedNav === true ? "btn-normal" : "icon-label"}
               onClick={() => onClickDisplayed("domain")}
+              style={
+                activeDisplay === "domain" ? { backgroundColor: "#D6E8FF" } : {}
+              }
             >
               <Briefcase size={20} color="#454545" />
               &nbsp;
@@ -99,6 +124,11 @@ const Nav = ({ setDisplayed }) => {
             <button
               className={minimizedNav === true ? "btn-normal" : "icon-label"}
               onClick={() => onClickDisplayed("careplan")}
+              style={
+                activeDisplay === "careplan"
+                  ? { backgroundColor: "#D6E8FF" }
+                  : {}
+              }
             >
               <BookOpenText size={20} color="#454545" />
               &nbsp;
