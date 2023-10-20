@@ -1,17 +1,20 @@
-import React from "react";
+import React, { useState } from "react";
 import Nav from "./Nav/Nav";
 import Display from "./Display/Display";
 
 import "../styles/homestyles.css";
 const Home = () => {
+  const [displayed, setDisplayed] = useState("");
+
+  console.log(displayed);
   return (
     <>
       <div className="main-display__wrapper">
         <>
-          <Nav />
+          <Nav setDisplayed={setDisplayed} />
         </>
         <>
-          <Display />
+          <Display displayed={displayed} />
         </>
       </div>
     </>

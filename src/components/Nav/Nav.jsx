@@ -12,8 +12,13 @@ import {
 } from "@phosphor-icons/react";
 
 import "../../styles/navstyles.css";
-const Nav = () => {
+
+const Nav = ({ setDisplayed }) => {
   const [minimizedNav, setMinimizedNav] = useState(false);
+
+  const onClickDisplayed = (display) => {
+    setDisplayed(display);
+  };
 
   return (
     <>
@@ -43,6 +48,7 @@ const Nav = () => {
           <li>
             <button
               className={minimizedNav === true ? "btn-normal" : "icon-label"}
+              onClick={() => onClickDisplayed("calendar")}
             >
               <Calendar size={20} color="#454545" />
               &nbsp;
@@ -52,6 +58,7 @@ const Nav = () => {
           <li>
             <button
               className={minimizedNav === true ? "btn-normal" : "icon-label"}
+              onClick={() => onClickDisplayed("notification")}
             >
               <BellRinging size={20} color="#454545" />
               &nbsp;
@@ -61,6 +68,7 @@ const Nav = () => {
           <li>
             <button
               className={minimizedNav === true ? "btn-normal" : "icon-label"}
+              onClick={() => onClickDisplayed("communication")}
             >
               <Chat size={20} color="#454545" />
               &nbsp;
@@ -70,6 +78,7 @@ const Nav = () => {
           <li>
             <button
               className={minimizedNav === true ? "btn-normal" : "icon-label"}
+              onClick={() => onClickDisplayed("results")}
             >
               <Note size={20} color="#454545" />
               &nbsp;
@@ -79,6 +88,7 @@ const Nav = () => {
           <li>
             <button
               className={minimizedNav === true ? "btn-normal" : "icon-label"}
+              onClick={() => onClickDisplayed("domain")}
             >
               <Briefcase size={20} color="#454545" />
               &nbsp;
@@ -88,6 +98,7 @@ const Nav = () => {
           <li>
             <button
               className={minimizedNav === true ? "btn-normal" : "icon-label"}
+              onClick={() => onClickDisplayed("careplan")}
             >
               <BookOpenText size={20} color="#454545" />
               &nbsp;
