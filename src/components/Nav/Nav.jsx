@@ -47,13 +47,20 @@ const Nav = ({ setDisplayed }) => {
           </div>
         </div>
         <ul>
-          <li>
+          <li
+            className={minimizedNav === true ? "minimizednav-icons" : ""}
+            style={
+              activeDisplay === "calendar" ? { backgroundColor: "#D6E8FF" } : {}
+            }
+          >
             <button
               className={minimizedNav === true ? "btn-normal" : "icon-label"}
               onClick={() => onClickDisplayed("calendar")}
               style={
-                activeDisplay === "calendar"
-                  ? { backgroundColor: "#D6E8FF" }
+                minimizedNav === false
+                  ? activeDisplay === "calendar"
+                    ? { backgroundColor: "#D6E8FF" }
+                    : {}
                   : {}
               }
             >
@@ -62,13 +69,22 @@ const Nav = ({ setDisplayed }) => {
               {minimizedNav === true ? "" : "Calendar"}
             </button>
           </li>
-          <li>
+          <li
+            className={minimizedNav === true ? "minimizednav-icons" : ""}
+            style={
+              activeDisplay === "notification"
+                ? { backgroundColor: "#D6E8FF" }
+                : {}
+            }
+          >
             <button
               className={minimizedNav === true ? "btn-normal" : "icon-label"}
               onClick={() => onClickDisplayed("notification")}
               style={
-                activeDisplay === "notification"
-                  ? { backgroundColor: "#D6E8FF" }
+                minimizedNav === false
+                  ? activeDisplay === "notification"
+                    ? { backgroundColor: "#D6E8FF" }
+                    : {}
                   : {}
               }
             >
@@ -77,13 +93,22 @@ const Nav = ({ setDisplayed }) => {
               {minimizedNav === true ? "" : "Notification"}
             </button>
           </li>
-          <li>
+          <li
+            className={minimizedNav === true ? "minimizednav-icons" : ""}
+            style={
+              activeDisplay === "communication"
+                ? { backgroundColor: "#D6E8FF" }
+                : {}
+            }
+          >
             <button
               className={minimizedNav === true ? "btn-normal" : "icon-label"}
               onClick={() => onClickDisplayed("communication")}
               style={
-                activeDisplay === "communication"
-                  ? { backgroundColor: "#D6E8FF" }
+                minimizedNav === false
+                  ? activeDisplay === "communication"
+                    ? { backgroundColor: "#D6E8FF" }
+                    : {}
                   : {}
               }
             >
@@ -92,13 +117,20 @@ const Nav = ({ setDisplayed }) => {
               {minimizedNav === true ? "" : "Communication"}
             </button>
           </li>
-          <li>
+          <li
+            className={minimizedNav === true ? "minimizednav-icons" : ""}
+            style={
+              activeDisplay === "results" ? { backgroundColor: "#D6E8FF" } : {}
+            }
+          >
             <button
               className={minimizedNav === true ? "btn-normal" : "icon-label"}
               onClick={() => onClickDisplayed("results")}
               style={
-                activeDisplay === "results"
-                  ? { backgroundColor: "#D6E8FF" }
+                minimizedNav === false
+                  ? activeDisplay === "results"
+                    ? { backgroundColor: "#D6E8FF" }
+                    : {}
                   : {}
               }
             >
@@ -107,12 +139,21 @@ const Nav = ({ setDisplayed }) => {
               {minimizedNav === true ? "" : "Results"}
             </button>
           </li>
-          <li>
+          <li
+            className={minimizedNav === true ? "minimizednav-icons" : ""}
+            style={
+              activeDisplay === "domain" ? { backgroundColor: "#D6E8FF" } : {}
+            }
+          >
             <button
               className={minimizedNav === true ? "btn-normal" : "icon-label"}
               onClick={() => onClickDisplayed("domain")}
               style={
-                activeDisplay === "domain" ? { backgroundColor: "#D6E8FF" } : {}
+                minimizedNav === false
+                  ? activeDisplay === "domain"
+                    ? { backgroundColor: "#D6E8FF" }
+                    : {}
+                  : {}
               }
             >
               <Briefcase size={20} color="#454545" />
@@ -120,13 +161,20 @@ const Nav = ({ setDisplayed }) => {
               {minimizedNav === true ? "" : "Domain"}
             </button>
           </li>
-          <li>
+          <li
+            className={minimizedNav === true ? "minimizednav-icons" : ""}
+            style={
+              activeDisplay === "careplan" ? { backgroundColor: "#D6E8FF" } : {}
+            }
+          >
             <button
               className={minimizedNav === true ? "btn-normal" : "icon-label"}
               onClick={() => onClickDisplayed("careplan")}
               style={
-                activeDisplay === "careplan"
-                  ? { backgroundColor: "#D6E8FF" }
+                minimizedNav === false
+                  ? activeDisplay === "careplan"
+                    ? { backgroundColor: "#D6E8FF" }
+                    : {}
                   : {}
               }
             >
