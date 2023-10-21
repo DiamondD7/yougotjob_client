@@ -21,7 +21,7 @@
     border: none;
     background-color: transparent;
     cursor: pointer;
-    padding: 7px 10px 0 0;
+    padding: 7px 10px 0 18px;
 }
 
 
@@ -61,9 +61,8 @@
     list-style: none;
 }
 
-.navside__wrapper ul li {
-   background-color: red;
-   padding-left: 18px;
+.minimizednav-icons {
+   padding:0px 0 15px 18px;
 }
 
 .icon-label{
@@ -111,6 +110,7 @@
 
 .profile-btn{
     position:absolute;
+    left: 15px;
     bottom: 60px;
 }
 
@@ -122,6 +122,7 @@
 
 .logout-btn{
     position: absolute; 
+    left: 15px;
     bottom: 20px;
 }
 
