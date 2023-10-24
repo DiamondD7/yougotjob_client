@@ -36,3 +36,9 @@
     width: 5%;
     cursor: pointer;
 }
+
+
+.currentMonth{
+    background-color: #D6E8FF;
+    width: 5%;
+}

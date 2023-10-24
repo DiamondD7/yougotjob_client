@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { CaretDown, CaretUp } from "@phosphor-icons/react";
 
 import "../../styles/calendarstyles.css";
@@ -21,6 +21,11 @@ const Calendar = () => {
   ];
   const [selectedMonth, setSelectedMonth] = useState(months[today.getMonth()]);
   const [openDropDownList, setOpenDropDownList] = useState(false);
+  let currentMonth = today.getMonth();
+
+  // useEffect(()=>{
+  //   currentMonth
+  // })
   return (
     <div>
       <div className="month-selection__wrapper">
@@ -40,7 +45,9 @@ const Calendar = () => {
           <div className="month-selection-option__wrapper">
             {months.map((months) => (
               <button
-                className="month-selection__option"
+                className={`month-selection__option ${
+                  selectedMonth === months ? "currentMonth" : ""
+                }`}
                 onClick={(e) => setSelectedMonth(e.target.value)}
                 value={months}
               >
@@ -51,17 +58,6 @@ const Calendar = () => {
         ) : (
           ""
         )}
-        {/* <select
-          className="month-selection__dropdown"
-          onChange={(e) => setSelectedMonth(e.target.value)}
-          value={selectedMonth}
-        >
-          {months.map((months) => (
-            <option value={months} className="opt">
-              {months}
-            </option>
-          ))}
-        </select> */}
       </div>
     </div>
   );
