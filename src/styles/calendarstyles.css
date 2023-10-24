@@ -1,0 +1,37 @@
+.month-selection__wrapper{
+    margin:10px 0 0 20px
+}
+
+.month-selection__dropdown{
+    font-size: 15px;
+    padding: 3px 10px 3px 10px;
+    border: 1px solid #202020;
+    background-color: #f3f3f3;
+    border: none;
+    border-radius: 3px;
+
+    box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
+    cursor: pointer;
+}
+
+.month-selection-option__wrapper{
+    background-color: #f3f3f3;
+    margin-top: 10px;
+    width: 5.3%;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+}
+
+.month-selection__option{
+    background-color: transparent;
+    width: 100%;
+    border-radius: 3px;
+    padding: 3px 10px 3px 10px;
+    border: none;
+}
+
+
+.month-selection__option:hover{
+    background-color: #D6E8FF;
+    width: 100%;
+    cursor: pointer;
+}
