@@ -17,21 +17,22 @@
 .month-selection-option__wrapper{
     background-color: #f3f3f3;
     margin-top: 10px;
-    width: 5.3%;
+    width: 5%;
     box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 }
 
 .month-selection__option{
+    display:block;
     background-color: transparent;
-    width: 100%;
+    
     border-radius: 3px;
-    padding: 3px 10px 3px 10px;
+    padding: 10px 74px 10px 10px;
     border: none;
 }
 
 
 .month-selection__option:hover{
     background-color: #D6E8FF;
-    width: 100%;
+    width: 5%;
     cursor: pointer;
 }
