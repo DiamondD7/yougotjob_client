@@ -28,41 +28,45 @@ const Calendar = () => {
   // })
   return (
     <div>
-      <div className="month-selection__wrapper">
-        <button
-          className="month-selection__dropdown"
-          onClick={() => setOpenDropDownList(!openDropDownList)}
-        >
-          {selectedMonth} &nbsp; &nbsp; &nbsp;{" "}
-          {openDropDownList === false ? (
-            <CaretDown size={11} color="#202020" />
-          ) : (
-            <CaretUp size={11} color="#202020" />
-          )}
-        </button>
+      <div className="calendar-headers__wrapper">
+        <div className="month-selection__wrapper">
+          <button
+            className="month-selection__dropdown"
+            onClick={() => setOpenDropDownList(!openDropDownList)}
+          >
+            {selectedMonth} &nbsp; &nbsp; &nbsp;{" "}
+            {openDropDownList === false ? (
+              <CaretDown size={11} color="#202020" />
+            ) : (
+              <CaretUp size={11} color="#202020" />
+            )}
+          </button>
+        </div>
 
-        {openDropDownList === true ? (
-          <div className="month-selection-option__wrapper">
-            {months.map((months) => (
-              <button
-                className={`month-selection__option ${
-                  selectedMonth === months ? "currentMonth" : ""
-                }`}
-                onClick={(e) => setSelectedMonth(e.target.value)}
-                value={months}
-              >
-                {months}
-              </button>
-            ))}
-          </div>
-        ) : (
-          ""
-        )}
+        <div className="filter-calendar__wrapper">
+          <button>Agenda</button>
+          <button>Week</button>
+          <button>Year</button>
+        </div>
       </div>
 
-      <div>
-        <h1>Hello</h1>
-      </div>
+      {openDropDownList === true ? (
+        <div className="month-selection-option__wrapper">
+          {months.map((months) => (
+            <button
+              className={`month-selection__option ${
+                selectedMonth === months ? "currentMonth" : ""
+              }`}
+              onClick={(e) => setSelectedMonth(e.target.value)}
+              value={months}
+            >
+              {months}
+            </button>
+          ))}
+        </div>
+      ) : (
+        ""
+      )}
     </div>
   );
 };
