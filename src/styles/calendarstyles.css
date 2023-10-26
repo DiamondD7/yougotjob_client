@@ -16,7 +16,7 @@
 
 .month-selection-option__wrapper{
     background-color: #f3f3f3;
-    margin-top: 10px;
+    margin:10px 0 0 20px;
     width: 5%;
     box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 }
@@ -41,4 +41,26 @@
 .currentMonth{
     background-color: #D6E8FF;
     width: 5%;
+}
+
+
+
+.calendar-headers__wrapper{
+    display: flex;
+    justify-content: space-between;
+}
+
+.filter-calendar__wrapper{
+    height: 23px;
+    width: 181px;
+    margin:10px 20px 0 0;
+}
+
+.filter-calendar__wrapper button{
+    font-size: 15px;
+    background-color: #f3f3f3;
+    border: none;
+    padding: 0px 10px;
+    box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
+    cursor: pointer;
 }
