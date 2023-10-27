@@ -19,10 +19,20 @@ const Calendar = () => {
     "Nov",
     "Dec",
   ];
+
+  const days = [
+    1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21,
+    22, 23, 24, 25, 26, 27, 28, 29, 30, 31,
+  ];
   const [selectedMonth, setSelectedMonth] = useState(months[today.getMonth()]);
   const [openDropDownList, setOpenDropDownList] = useState(false);
   let currentMonth = today.getMonth();
 
+  const setMonth = (e) => {
+    e.preventDefault();
+    setSelectedMonth(e.target.value);
+    setOpenDropDownList(!openDropDownList);
+  };
   // useEffect(()=>{
   //   currentMonth
   // })
@@ -57,7 +67,7 @@ const Calendar = () => {
               className={`month-selection__option ${
                 selectedMonth === months ? "currentMonth" : ""
               }`}
-              onClick={(e) => setSelectedMonth(e.target.value)}
+              onClick={setMonth}
               value={months}
             >
               {months}
@@ -67,6 +77,14 @@ const Calendar = () => {
       ) : (
         ""
       )}
+
+      <div className="calendar-grid__wrapper">
+        {days.map((days) => (
+          <div className="calendar-grid-day__wrapper">
+            <p>{days}</p>
+          </div>
+        ))}
+      </div>
     </div>
   );
 };

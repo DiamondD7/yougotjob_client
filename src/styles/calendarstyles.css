@@ -17,8 +17,11 @@
 .month-selection-option__wrapper{
     background-color: #f3f3f3;
     margin:10px 0 0 20px;
-    width: 5%;
+    /* width: 5%; */ 
+    width: 84px;
     box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    position: relative;
+    z-index: 4;
 }
 
 .month-selection__option{
@@ -33,14 +36,14 @@
 
 .month-selection__option:hover{
     background-color: #D6E8FF;
-    width: 5%;
+    width: 84px;
     cursor: pointer;
 }
 
 
 .currentMonth{
     background-color: #D6E8FF;
-    width: 5%;
+    width: 84px;
 }
 
 
@@ -63,4 +66,23 @@
     padding: 0px 10px;
     box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
     cursor: pointer;
+}
+
+.calendar-grid__wrapper{
+    display: grid;
+    grid-template-columns: repeat(7, 200px);
+    grid-template-rows: repeat(6, 150px);
+    gap: 20px;
+
+    position: absolute;
+    top:80px;
+    left:240px;
+    z-index: 1;
+}
+
+.calendar-grid-day__wrapper{
+    box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
+    height: 150px;
+    width: 200px;
+    padding: 10px;
 }
