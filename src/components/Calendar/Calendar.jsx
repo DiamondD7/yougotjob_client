@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { CaretDown, CaretUp } from "@phosphor-icons/react";
+import { monthList } from "../../assets/js/months";
 
 import "../../styles/calendarstyles.css";
 const Calendar = () => {
@@ -20,6 +21,7 @@ const Calendar = () => {
     "Dec",
   ];
 
+  // console.log(monthList[0].monthName);
   const days = [
     1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21,
     22, 23, 24, 25, 26, 27, 28, 29, 30, 31,
@@ -62,15 +64,15 @@ const Calendar = () => {
 
       {openDropDownList === true ? (
         <div className="month-selection-option__wrapper">
-          {months.map((months) => (
+          {monthList.map((months) => (
             <button
               className={`month-selection__option ${
-                selectedMonth === months ? "currentMonth" : ""
+                selectedMonth === months.monthName ? "currentMonth" : ""
               }`}
               onClick={setMonth}
-              value={months}
+              value={months.monthName}
             >
-              {months}
+              {months.monthName}
             </button>
           ))}
         </div>
