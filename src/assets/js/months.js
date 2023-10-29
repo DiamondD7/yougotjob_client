@@ -1,3 +1,5 @@
+export const currentYear = 2023;
+
 export const monthList = [
         {
             monthName:"Jan",
@@ -5,7 +7,7 @@ export const monthList = [
         },
         {
             monthName:"Feb",
-            maxDays:28,
+            maxDays: currentYear % 4 === 0 ? 29 : 28 ,
         },
         {
             monthName:"Mar",

@@ -1,43 +1,49 @@
 import React, { useState, useEffect } from "react";
 import { CaretDown, CaretUp } from "@phosphor-icons/react";
-import { monthList } from "../../assets/js/months";
+import { monthList, currentYear } from "../../assets/js/months";
 
 import "../../styles/calendarstyles.css";
 const Calendar = () => {
   const today = new Date();
 
-  const months = [
-    "Jan",
-    "Feb",
-    "Mar",
-    "Apr",
-    "May",
-    "Jun",
-    "Jul",
-    "Aug",
-    "Sep",
-    "Oct",
-    "Nov",
-    "Dec",
-  ];
-
-  // console.log(monthList[0].monthName);
   const days = [
     1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21,
     22, 23, 24, 25, 26, 27, 28, 29, 30, 31,
-  ];
-  const [selectedMonth, setSelectedMonth] = useState(months[today.getMonth()]);
+  ]; //reference to the days of each month
+  const [selectedMonth, setSelectedMonth] = useState("");
+  const [selectedMaxMonthDays, setSelectedMaxMonthDays] = useState(0);
   const [openDropDownList, setOpenDropDownList] = useState(false);
-  let currentMonth = today.getMonth();
 
-  const setMonth = (e) => {
+  const setMonth = (e, months) => {
+    //handle the onclick function when choosing a month
     e.preventDefault();
-    setSelectedMonth(e.target.value);
+    setSelectedMonth(months.monthName);
+    setSelectedMaxMonthDays(months.maxDays);
     setOpenDropDownList(!openDropDownList);
   };
-  // useEffect(()=>{
-  //   currentMonth
-  // })
+
+  useEffect(() => {
+    const months = [
+      "Jan",
+      "Feb",
+      "Mar",
+      "Apr",
+      "May",
+      "Jun",
+      "Jul",
+      "Aug",
+      "Sep",
+      "Oct",
+      "Nov",
+      "Dec",
+    ];
+    monthList.map((month) => {
+      if (month.monthName === months[today.getMonth()]) {
+        setSelectedMaxMonthDays(month.maxDays);
+        setSelectedMonth(month.monthName);
+      } //handles the current month and the current month's max days.
+    });
+  }, []);
   return (
     <div>
       <div className="calendar-headers__wrapper">
@@ -69,7 +75,7 @@ const Calendar = () => {
               className={`month-selection__option ${
                 selectedMonth === months.monthName ? "currentMonth" : ""
               }`}
-              onClick={setMonth}
+              onClick={(e) => setMonth(e, months)}
               value={months.monthName}
             >
               {months.monthName}
@@ -81,11 +87,16 @@ const Calendar = () => {
       )}
 
       <div className="calendar-grid__wrapper">
-        {days.map((days) => (
-          <div className="calendar-grid-day__wrapper">
-            <p>{days}</p>
-          </div>
-        ))}
+        {days.map(
+          (day) => (
+            days.splice(selectedMaxMonthDays),
+            (
+              <div className="calendar-grid-day__wrapper">
+                <p>{day}</p>
+              </div>
+            )
+          )
+        )}
       </div>
     </div>
   );
