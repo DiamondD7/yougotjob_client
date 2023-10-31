@@ -1,10 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { CaretDown, CaretUp } from "@phosphor-icons/react";
-import {
-  monthList,
-  currentYear,
-  handleYearChange,
-} from "../../assets/js/months";
+import { currentYear, handleYearChange } from "../../assets/js/months";
 
 import "../../styles/calendarstyles.css";
 const Calendar = () => {
@@ -29,12 +25,16 @@ const Calendar = () => {
     "Dec",
   ];
 
-  const [selectedMonth, setSelectedMonth] = useState(months[today.getMonth()]);
-  const [selectedMaxMonthDays, setSelectedMaxMonthDays] = useState(0);
+  const [selectedMonth, setSelectedMonth] = useState(months[today.getMonth()]); //sets the current month
+
+  const [selectedMaxMonthDays, setSelectedMaxMonthDays] = useState(0); //sets the max days of each month.
+
   const [openDropDownList, setOpenDropDownList] = useState(false);
-  const [selectedYear, setSelectedYear] = useState(currentYear);
+
+  const [selectedYear, setSelectedYear] = useState(currentYear); //sets its current year
+
   const [fullDate, setFullDate] = useState(
-    handleYearChange(today.getFullYear())
+    handleYearChange(today.getFullYear()) //calling a function from months.js file to update the month list.
   );
 
   const setMonth = (e, months) => {
@@ -44,8 +44,8 @@ const Calendar = () => {
     setOpenDropDownList(!openDropDownList);
   };
   useEffect(() => {
-    refreshCalendarList();
-  }, [fullDate]);
+    refreshCalendarList(); //use this to refresh the whole calendar. Incase there might be changes.
+  }, [fullDate]); //will run this again once it senses that there is a change in 'fullDate'.
 
   const refreshCalendarList = () => {
     fullDate.map((month) => {
@@ -57,8 +57,8 @@ const Calendar = () => {
   };
 
   useEffect(() => {
-    setFullDate(handleYearChange(parseInt(selectedYear)));
-  }, [selectedYear]);
+    setFullDate(handleYearChange(parseInt(selectedYear))); //updating the full calendar date if there is changes in year.
+  }, [selectedYear]); //this will only run when the state got change
   return (
     <div>
       <div className="calendar-headers__wrapper">
