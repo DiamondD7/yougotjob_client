@@ -78,8 +78,10 @@ const Calendar = () => {
 
         <div>
           <input
+            className="year-input"
             type="text"
             value={selectedYear}
+            placeholder="Choose year"
             onChange={(e) => setSelectedYear(e.target.value)}
           />
         </div>
