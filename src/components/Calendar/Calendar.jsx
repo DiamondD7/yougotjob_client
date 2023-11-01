@@ -111,6 +111,16 @@ const Calendar = () => {
         ""
       )}
 
+      <div className="daysOfWeek__wrapper">
+        <label>Mon</label>
+        <label>Tue</label>
+        <label>Wed</label>
+        <label>Thu</label>
+        <label>Fri</label>
+        <label>Sat</label>
+        <label>Sun</label>
+      </div>
+
       <div className="calendar-grid__wrapper">
         {days.map(
           (day) => (

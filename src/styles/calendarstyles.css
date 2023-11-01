@@ -95,4 +95,47 @@
     border: none;
     font-size: 24px;
     text-align: center;
+    background-color: #f3f3f3;
+}
+
+.daysOfWeek__wrapper{
+    position: absolute;
+    top:50px;
+    left: 240px;
+}
+
+.daysOfWeek__wrapper label:nth-child(1){
+    color: rgba(0, 0, 0, 0.5);
+    margin-right: 185px;
+}
+
+
+.daysOfWeek__wrapper label:nth-child(2) {
+    color: rgba(0, 0, 0, 0.5);
+    margin-right: 194px;
+}
+
+
+.daysOfWeek__wrapper label:nth-child(3) {
+    color: rgba(0, 0, 0, 0.5);
+    margin-right: 186px;
+}
+
+.daysOfWeek__wrapper label:nth-child(4) {
+    color: rgba(0, 0, 0, 0.5);
+    margin-right: 195px;
+}
+
+.daysOfWeek__wrapper label:nth-child(5) {
+    color: rgba(0, 0, 0, 0.5);
+    margin-right: 200px;
+}
+
+.daysOfWeek__wrapper label:nth-child(6) {
+    color: rgba(0, 0, 0, 0.5);
+    margin-right: 197px;
+}
+
+.daysOfWeek__wrapper label:nth-child(7) {
+    color: rgba(0, 0, 0, 0.5);
 }
