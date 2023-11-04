@@ -58,6 +58,7 @@ const Calendar = () => {
   useEffect(() => {
     setFullDate(handleYearChange(parseInt(selectedYear))); //updating the full calendar date if there is changes in year.
   }, [selectedYear]); //this will only run when the state got change
+
   return (
     <div>
       <div className="calendar-headers__wrapper">
@@ -124,7 +125,9 @@ const Calendar = () => {
         {days.map(
           (day) => (
             days.splice(selectedMaxMonthDays),
-            day === today.getUTCDate() ? (
+            day === today.getUTCDate() &&
+            selectedMonth === months[today.getMonth()] &&
+            parseInt(selectedYear) === currentYear ? (
               <div className="calendar-grid-day__wrapper dayOfTheMonth-highlight">
                 <p>{day}</p>
               </div>
