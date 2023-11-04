@@ -5,7 +5,6 @@ import { currentYear, handleYearChange } from "../../assets/js/months";
 import "../../styles/calendarstyles.css";
 const Calendar = () => {
   const today = new Date();
-
   const days = [
     1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21,
     22, 23, 24, 25, 26, 27, 28, 29, 30, 31,
@@ -125,7 +124,11 @@ const Calendar = () => {
         {days.map(
           (day) => (
             days.splice(selectedMaxMonthDays),
-            (
+            day === today.getUTCDate() ? (
+              <div className="calendar-grid-day__wrapper dayOfTheMonth-highlight">
+                <p>{day}</p>
+              </div>
+            ) : (
               <div className="calendar-grid-day__wrapper">
                 <p>{day}</p>
               </div>
