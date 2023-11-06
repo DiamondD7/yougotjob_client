@@ -71,7 +71,7 @@
 .calendar-grid__wrapper{
     display: grid;
     grid-template-columns: repeat(7, 200px);
-    grid-template-rows: repeat(6, 150px);
+    grid-template-rows: repeat(6, 130px);
     gap: 20px;
 
     position: absolute;
@@ -82,9 +82,18 @@
 
 .calendar-grid-day__wrapper{
     box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
-    height: 150px;
+    height: 140px;
     width: 200px;
     padding: 10px;
+}
+
+.previousMonthDay, .previousMonthDay p{
+    color: rgba(0, 0, 0, 0.5);
+    box-shadow: none;
+}
+.nextMonthDay, .nextMonthDay p{
+    color: rgba(0, 0, 0, 0.5);
+    box-shadow: none;
 }
 
 .year-input{
