@@ -1,6 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { CaretDown, CaretUp } from "@phosphor-icons/react";
-import { currentYear, handleYearChange } from "../../assets/js/months";
+import {
+  currentYear,
+  handleYearChange,
+  getNextMonthDays,
+  getDaysFromPreviousMonth,
+} from "../../assets/js/months";
 
 import "../../styles/calendarstyles.css";
 const Calendar = () => {
@@ -59,52 +64,13 @@ const Calendar = () => {
     setFullDate(handleYearChange(parseInt(selectedYear))); //updating the full calendar date if there is changes in year.
   }, [selectedYear]); //this will only run when the state got change
 
-  const getDaysFromPreviousMonth = () => {
-    //get the prefix of the last month
-
-    const todayDate = new Date(selectedYear, months.indexOf(selectedMonth), 1);
-    todayDate.setDate(0); // Set the date to the last day of the previous month
-    const daysInPreviousMonth = todayDate.getDate(); // Get the number of days in the previous month
-    const prefixDaysArray = [];
-
-    for (
-      let i = daysInPreviousMonth;
-      i > daysInPreviousMonth - todayDate.getDay();
-      i--
-    ) {
-      prefixDaysArray.unshift(i);
-    }
-
-    return prefixDaysArray;
-  };
-
-  const getNextMonthDays = () => {
-    //get the prefix of the next month
-
-    const nextMonthDate = new Date(
-      selectedYear,
-      months.indexOf(selectedMonth) + 1,
-      1
-    );
-    const currentMonthLastDay = new Date(
-      selectedYear,
-      months.indexOf(selectedMonth) + 1,
-      1
-    );
-    currentMonthLastDay.setDate(0); // Set the date to the last day of the previous month
-    const nextMonthPrefixArray = [];
-    for (
-      let i = nextMonthDate.getDate();
-      i <= 7 - currentMonthLastDay.getDay();
-      i++
-    ) {
-      nextMonthPrefixArray.push(i);
-    }
-    return nextMonthPrefixArray;
-  };
-
-  const nextMonthDays = getNextMonthDays();
-  const previousMonthDays = getDaysFromPreviousMonth();
+  //CALLING THE METHODS FROM months.js TO GET THE PREFIXES.
+  const nextMonthDays = getNextMonthDays(selectedYear, months, selectedMonth);
+  const previousMonthDays = getDaysFromPreviousMonth(
+    selectedYear,
+    months,
+    selectedMonth
+  );
   return (
     <div>
       <div className="calendar-headers__wrapper">
