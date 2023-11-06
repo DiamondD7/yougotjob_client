@@ -72,6 +72,7 @@
     display: grid;
     grid-template-columns: repeat(7, 200px);
     grid-template-rows: repeat(6, 130px);
+    
     gap: 20px;
 
     position: absolute;
