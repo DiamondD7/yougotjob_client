@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { CaretDown, CaretUp } from "@phosphor-icons/react";
+import { CaretDown, CaretUp, Plus } from "@phosphor-icons/react";
 import {
   currentYear,
   handleYearChange,
@@ -86,9 +86,6 @@ const Calendar = () => {
               <CaretUp size={11} color="#202020" />
             )}
           </button>
-        </div>
-
-        <div>
           <input
             className="year-input"
             type="text"
@@ -96,6 +93,13 @@ const Calendar = () => {
             placeholder="Choose year"
             onChange={(e) => setSelectedYear(e.target.value)}
           />
+        </div>
+
+        <div className="add-event-btn__wrapper">
+          <button>
+            <Plus size={16} color="#202020" />
+            &nbsp; Add event
+          </button>
         </div>
 
         <div className="filter-calendar__wrapper">
