@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import {
   Calendar,
-  BellRinging,
+  Users,
   Briefcase,
   SignOut,
   List,
@@ -72,25 +72,23 @@ const Nav = ({ setDisplayed }) => {
           <li
             className={minimizedNav === true ? "minimizednav-icons" : ""}
             style={
-              activeDisplay === "notification"
-                ? { backgroundColor: "#D6E8FF" }
-                : {}
+              activeDisplay === "patients" ? { backgroundColor: "#D6E8FF" } : {}
             }
           >
             <button
               className={minimizedNav === true ? "btn-normal" : "icon-label"}
-              onClick={() => onClickDisplayed("notification")}
+              onClick={() => onClickDisplayed("patients")}
               style={
                 minimizedNav === false
-                  ? activeDisplay === "notification"
+                  ? activeDisplay === "patients"
                     ? { backgroundColor: "#D6E8FF" }
                     : {}
                   : {}
               }
             >
-              <BellRinging size={20} color="#454545" />
+              <Users size={20} color="#454545" />
               &nbsp;
-              {minimizedNav === true ? "" : "Notification"}
+              {minimizedNav === true ? "" : "Patients"}
             </button>
           </li>
           <li
