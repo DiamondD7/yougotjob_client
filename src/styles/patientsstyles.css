@@ -1,0 +1,52 @@
+.patients-form__wrapper{
+    position: absolute;
+    top:40%;
+    left:50%;
+    transform: translate(-50%, -50%);
+    height: 600px;
+    width: 800px;
+    background-color: #E5F0FF;
+    box-shadow: rgba(100, 100, 111, 0.3) 0px 7px 29px 0px;
+}
+
+.patients-form__wrapper h2{
+    margin-top: 50px;
+    text-align: center;
+    letter-spacing: .5px;
+}
+
+.patients-form{
+    position: relative;
+    top:50px;
+    left:200px;
+    display: inline-block;
+}
+
+
+.id-input{
+    width: 400px;
+    text-align: center;
+    outline: none;
+}
+
+.names-input{
+    text-align: center;
+    width: 400px;
+    outline: none;
+}
+
+.patient-form__btn{
+    display: flex;
+    justify-content: center;
+    margin-top: 30px;
+    width: 400px;
+    border: none;
+    color: #f3f3f3;
+    background-color: #9DCD5A;
+    cursor: pointer;
+}
+
+/* .patient-form__btn:hover{
+    color: #9DCD5A;
+    background-color: transparent;
+} */
