@@ -5,31 +5,18 @@ import "../../styles/patientsstyles.css";
 const Patients = () => {
   return (
     <div>
-      <div className="patients-form__wrapper">
-        <h2>Patient's Details</h2>
-        <form className="patients-form">
-          <label style={{ marginLeft: "155px" }}> Patient's ID &nbsp;</label>
-          <br />
+      <div className="patientsId-search__wrapper">
+        <h1>Search Patient</h1>
+        <div>
           <input
-            className="id-input"
+            className="patientID__input"
             type="text"
-            placeholder="eg. #AJS2023GTKT00752"
+            placeholder="Patient ID"
           />
-          <br />
-          <br />
-          <label style={{ marginLeft: "190px", color: "rgba(0,0,0,0.4)" }}>
-            or
-          </label>
-          <br />
-          <br />
-          <input className="names-input" type="text" placeholder="Surname" />
-          <br />
-          <input className="names-input" type="text" placeholder="First Name" />
-          <br />
-          <button className="patient-form__btn">
-            <MagnifyingGlass size={16} color="#f3f3f3" /> search
+          <button className="patientsearch__btn">
+            <MagnifyingGlass size={32} color="#f3f3f3" />
           </button>
-        </form>
+        </div>
       </div>
     </div>
   );
