@@ -1,52 +1,54 @@
-.patients-form__wrapper{
+.patientsId-search__wrapper{
     position: absolute;
-    top:40%;
-    left:50%;
+    top:20%;
+    left:55%;
     transform: translate(-50%, -50%);
-    height: 600px;
-    width: 800px;
-    background-color: #E5F0FF;
-    box-shadow: rgba(100, 100, 111, 0.3) 0px 7px 29px 0px;
-}
-
-.patients-form__wrapper h2{
-    margin-top: 50px;
     text-align: center;
-    letter-spacing: .5px;
 }
-
-.patients-form{
-    position: relative;
-    top:50px;
-    left:200px;
-    display: inline-block;
-}
-
-
-.id-input{
-    width: 400px;
-    text-align: center;
-    outline: none;
-}
-
-.names-input{
-    text-align: center;
-    width: 400px;
-    outline: none;
-}
-
-.patient-form__btn{
-    display: flex;
-    justify-content: center;
-    margin-top: 30px;
-    width: 400px;
-    border: none;
-    color: #f3f3f3;
-    background-color: #9DCD5A;
-    cursor: pointer;
-}
-
-/* .patient-form__btn:hover{
-    color: #9DCD5A;
-    background-color: transparent;
+/* 
+.patientsId-search__wrapper h1{
+    padding-top: 20px;
 } */
+
+.patientsId-search__wrapper p{
+    margin-top: 40px;
+    color: rgba(0,0,0,0.4);
+}
+
+.patientID__input{
+    margin-top: 50px;
+    padding: 5px 5px;
+    width: 600px;
+    border: 1px solid rgba(0,0,0,0.4);
+    border-radius: 10px;
+    border-right: none;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    font-size: 35px;
+    outline: none;
+    box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
+}
+
+.patientFirstLastName__input{
+    margin-top: 20px;
+    padding: 5px 3px;
+    width: 800px;
+    border: 1px solid #9DCD5A;
+    font-size: 35px;
+    outline: none;
+    border-radius: 10px;
+    text-align: center;
+}
+
+.patientsearch__btn{
+    cursor: pointer;
+    background-color:#9DCD5A;
+    width: 100px;
+    padding: 5px 5px;
+    font-size: 35px;
+    border: 1px solid #9DCD5A;
+    border-radius: 10px;
+    
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}
