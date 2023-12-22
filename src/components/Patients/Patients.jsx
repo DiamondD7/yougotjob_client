@@ -14,7 +14,7 @@ const Patients = () => {
             placeholder="Patient ID"
           />
           <button className="patientsearch__btn">
-            <MagnifyingGlass size={32} color="#f3f3f3" />
+            <MagnifyingGlass size={22} color="#f3f3f3" />
           </button>
         </div>
       </div>
