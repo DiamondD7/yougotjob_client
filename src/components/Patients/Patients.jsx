@@ -6,15 +6,14 @@ const Patients = () => {
   return (
     <div>
       <div className="patientsId-search__wrapper">
-        <h1>Search Patient</h1>
         <div>
           <input
             className="patientID__input"
             type="text"
-            placeholder="Patient ID"
+            placeholder="Patient ID/First or Last Name"
           />
           <button className="patientsearch__btn">
-            <MagnifyingGlass size={22} color="#f3f3f3" />
+            <MagnifyingGlass size={16} color="#f3f3f3" />
           </button>
         </div>
       </div>
