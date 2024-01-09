@@ -71,6 +71,7 @@ const Calendar = () => {
     months,
     selectedMonth
   );
+
   return (
     <div>
       <div className="calendar-headers__wrapper">
@@ -149,7 +150,7 @@ const Calendar = () => {
         {days.map(
           (day) => (
             days.splice(selectedMaxMonthDays),
-            day === today.getUTCDate() &&
+            day === today.getDate() &&
             selectedMonth === months[today.getMonth()] &&
             parseInt(selectedYear) === currentYear ? (
               <div className="calendar-grid-day__wrapper dayOfTheMonth-highlight">
