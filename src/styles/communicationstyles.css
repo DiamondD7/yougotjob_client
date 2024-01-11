@@ -1,3 +1,66 @@
+.communication-container__wrapper{
+    display: flex;
+}
+
+.convo-container__wrapper{
+    /* background-color: red; */
+    height: 80vh;
+    width: 1500px;
+    margin-top: 5px;
+    padding: 10px;
+    overflow: auto;
+
+}
+
+.convo-details__wrapper{
+    display: flex;
+    align-items: center;
+}
+
+.textbox-message{
+    max-height: 12vh;
+    min-height: 12vh;
+    max-width: 1500px;
+    min-width: 1500px;
+    outline: none;
+    padding: 3px 5px;
+    margin-top: 5px;
+}
+
+.recieved-message-container__wrapper{
+    /* background-color: darkgreen; */
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+    padding: 10px;
+}
+
+.recieved-message__wrapper{
+    /* no height */
+    width: 650px;
+    background-color: rgba(157,205,90,0.3);
+    padding: 20px;
+    border-radius: 50px;
+    border-top-left-radius: 0;
+}
+
+.user-message-container__wrapper{
+    /* background-color: aqua; */
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    padding: 10px;
+}
+
+.user-message__wrapper{
+    /* no height */
+    width: 650px;
+    background-color: #9DCD5A;
+    padding: 20px;
+    border-radius: 50px;
+    border-top-right-radius: 0;
+}
+
 .communication-profiles__wrapper{
     height: 100vh;
     width: 270px;
@@ -29,6 +92,15 @@
     border-radius: 50px;
 }
 
+.test-image-details{
+    width: 35px;
+    height: 35px;
+    object-fit: cover;
+    object-position: center center;
+    border-radius: 50px;
+    margin-right: 10px;
+}
+
 .profile-label__wrapper{
     display: flex;
     align-items: center;
@@ -42,7 +114,7 @@
 }
 
 .profile-label__wrapper:hover{
-    background-color: #9DCD5A;
+    background-color: rgba(157,205,90,0.3);
     border-top-left-radius: 50px;
     border-bottom-left-radius: 50px;
 
