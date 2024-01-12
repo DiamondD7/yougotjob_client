@@ -130,3 +130,11 @@
     padding: 0 5px;
     outline: none;
 }
+
+.send-btn{
+    padding:5px 10px;
+    background-color: #9DCD5A;
+    border: 1px solid #9DCD5A;
+    border-radius: 50px;
+    cursor: pointer;
+}

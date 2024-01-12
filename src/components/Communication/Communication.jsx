@@ -260,7 +260,7 @@ const Communication = () => {
             className="textbox-message"
             placeholder="Write your message here..."
           ></textarea>
-          <button>send</button>
+          <button className="send-btn">send</button>
         </div>
       </div>
     </div>
