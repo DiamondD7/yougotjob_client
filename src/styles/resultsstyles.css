@@ -3,6 +3,9 @@
 }
 
 .patients-results-container{
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
     width: 100%;
     height: 60px;
     /* background-color: red; */
@@ -22,7 +25,30 @@
     
 }
 
+.patient-diagnosis__wrapper {
+    text-align: center;
+    padding:10px 10px 10px 0;
+    height: 100%;
+    width: 1100px;
+    overflow: auto;
+}
+.patient-diagnosis__wrapper p{
+    color: rgba(0, 0, 0, 0.4);
+}
+
 
 .patient-id__text{
+    font-size: 12px;
+}
+
+.patient-view__btn{
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+    font-size: 12px;
+}
+
+.patient-result-date{
+    color: rgba(0, 0, 0, 0.5);
     font-size: 12px;
 }
