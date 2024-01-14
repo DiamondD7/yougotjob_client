@@ -5,7 +5,7 @@
 .convo-container__wrapper{
     /* background-color: red; */
     height: 80vh;
-    width: 1500px;
+    width: 1300px;
     margin-top: 5px;
     padding: 10px;
     overflow: auto;
@@ -20,8 +20,8 @@
 .textbox-message{
     max-height: 12vh;
     min-height: 12vh;
-    max-width: 1500px;
-    min-width: 1500px;
+    max-width: 1300px;
+    min-width: 1300px;
     outline: none;
     padding: 3px 5px;
     margin-top: 5px;
@@ -63,7 +63,7 @@
 
 .communication-profiles__wrapper{
     height: 100vh;
-    width: 270px;
+    width: 270px; 
 
     padding:5px 0 0 10px;
     overflow: auto;
