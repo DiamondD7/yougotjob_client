@@ -22,6 +22,8 @@ const Nav = ({ setDisplayed }) => {
     setActiveDisplay(display);
   };
 
+  let date = new Date();
+
   return (
     <>
       <div
@@ -35,7 +37,7 @@ const Nav = ({ setDisplayed }) => {
               minimizedNav === true ? "dateMinimized" : ""
             }`}
           >
-            {minimizedNav === false ? <p>1/12/2023</p> : ""}
+            {minimizedNav === false ? <p>{date.toLocaleDateString()}</p> : ""}
             <div>
               <button
                 className="nav-menu-arrow__button"
