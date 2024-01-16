@@ -4,7 +4,7 @@ import Display from "./Display/Display";
 
 import "../styles/homestyles.css";
 const Home = () => {
-  const [displayed, setDisplayed] = useState("");
+  const [displayed, setDisplayed] = useState("dashboard");
 
   return (
     <>
