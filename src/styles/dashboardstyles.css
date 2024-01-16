@@ -2,16 +2,24 @@
     /* background-color: red; */
     height: 220px;
     width: 100%;
-    padding: 10px;
 }
 
 .dashboard-cards__wrapper{
     /* background-color: blue; */
     height: 190px;
     width: 350px;
-    padding: 5px;
     
     box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
+}
+
+.dashboard-card-title__wrapper{
+    display: flex;
+    align-items: center;
+    padding: 10px;
+}
+
+.dashboard-card-title__wrapper h5{
+    margin-left: 10px;
 }
 
 .dashboard-card-profilepic{
@@ -32,7 +40,7 @@
 .dashboard-patient-card__wrapper{
     display: flex;
     align-items: center;
-    background-color: #9DCD5A;
+    /* background-color: #9DCD5A; */
 }
 
 .dashboard-patient-card-details__wrapper{
