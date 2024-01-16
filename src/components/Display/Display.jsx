@@ -7,6 +7,7 @@ import Domain from "../Domain/Domain";
 import CarePlan from "../CarePlan/CarePlan";
 
 import "../../styles/displaystyles.css";
+import Dashboard from "../Dashboard/Dashboard";
 const Display = ({ displayed }) => {
   return (
     <>
@@ -23,6 +24,8 @@ const Display = ({ displayed }) => {
           <Domain />
         ) : displayed === "careplan" ? (
           <CarePlan />
+        ) : displayed === "dashboard" ? (
+          <Dashboard />
         ) : (
           ""
         )}

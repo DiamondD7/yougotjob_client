@@ -9,13 +9,14 @@ import {
   Note,
   Chat,
   BookOpenText,
+  House,
 } from "@phosphor-icons/react";
 
 import "../../styles/navstyles.css";
 
 const Nav = ({ setDisplayed }) => {
   const [minimizedNav, setMinimizedNav] = useState(false);
-  const [activeDisplay, setActiveDisplay] = useState("");
+  const [activeDisplay, setActiveDisplay] = useState("dashboard");
 
   const onClickDisplayed = (display) => {
     setDisplayed(display);
@@ -49,6 +50,30 @@ const Nav = ({ setDisplayed }) => {
           </div>
         </div>
         <ul>
+          <li
+            className={minimizedNav === true ? "minimizednav-icons" : ""}
+            style={
+              activeDisplay === "dashboard"
+                ? { backgroundColor: "#D6E8FF" }
+                : {}
+            }
+          >
+            <button
+              className={minimizedNav === true ? "btn-normal" : "icon-label"}
+              onClick={() => onClickDisplayed("dashboard")}
+              style={
+                minimizedNav === false
+                  ? activeDisplay === "dashboard"
+                    ? { backgroundColor: "#D6E8FF" }
+                    : {}
+                  : {}
+              }
+            >
+              <House size={20} color="#454545" />
+              &nbsp;
+              {minimizedNav === true ? "" : "Dashboard"}
+            </button>
+          </li>
           <li
             className={minimizedNav === true ? "minimizednav-icons" : ""}
             style={
