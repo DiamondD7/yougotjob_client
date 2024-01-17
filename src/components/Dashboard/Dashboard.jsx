@@ -5,48 +5,36 @@ import "../../styles/dashboardstyles.css";
 const Dashboard = () => {
   let today = new Date();
 
-  const [days, setDays] = useState(3);
+  const [days, setDays] = useState(0);
   const [hours, setHours] = useState(0);
   const [minutes, setMinutes] = useState(0);
-  const [seconds, setSeconds] = useState(60);
-  const [miliseconds, setMiliseconds] = useState(60);
+  const [seconds, setSeconds] = useState(0);
 
-  // useEffect(() => {
-  //   // setHours(today.getHours());
-  //   // setMinutes(minutez);
-  //   let interval;
-  //   interval = setInterval(() => {
-  //     if (seconds > 0) {
-  //       setSeconds(60 - today.getSeconds());
-  //       // setMiliseconds(99);
-  //     } else if (minutes > 0) {
-  //       setMinutes(60 - today.getMinutes());
-  //       setSeconds(60);
-  //       setMiliseconds(99);
-  //     } else if (hours > 0) {
-  //       setHours((hours) => hours - 1);
-  //       setMinutes(60);
-  //       setSeconds(60);
-  //       setMiliseconds(99);
-  //     } else if (days > 0) {
-  //       setDays((days) => days - 1);
-  //       setHours(24);
-  //       setMinutes(60);
-  //       setSeconds(60);
-  //       setMiliseconds(99);
-  //     }
-  //   }, 1000);
-  //   return () => clearInterval(interval);
-  // }, [miliseconds, seconds, minutes, hours, days]);
+  const [inputDate, setInputDate] = useState("20 Jan 2024");
+  const [currentDate, setCurrentDate] = useState(inputDate);
 
-  // useEffect(() => {
-  //   // let interval;
-  //   // interval = setInterval(() => {
-  //   //   setSeconds(today.getSeconds());
-  //   // }, 1000);
-  //   setSeconds(today.getSeconds());
-  //   console.log("Dasdas");
-  // }, [seconds]);
+  useEffect(() => {
+    const changingDate = new Date(inputDate);
+    const currentDate = new Date();
+    const totalSeconds = (changingDate - currentDate) / 1000;
+
+    setDays(Math.floor(totalSeconds / 3600 / 24));
+    setHours(Math.floor(totalSeconds / 3600) % 24);
+    setMinutes(Math.floor(totalSeconds / 60) % 60);
+
+    let interval = setInterval(() => {
+      setSeconds((prevSeconds) => {
+        if (prevSeconds === 0) {
+          clearInterval(interval);
+        }
+        return Math.floor(totalSeconds % 60);
+      });
+    }, 1000);
+
+    // Cleanup function to clear the interval when the component unmounts or the effect is re-run
+    return () => clearInterval(interval);
+  }, [days, minutes, hours, seconds]);
+
   return (
     <div>
       <div className="dashboard-summary-cards__wrapper">
@@ -70,7 +58,9 @@ const Dashboard = () => {
           </div>
           <div className="dashboard-patient-card-details__wrapper">
             <h2>23/01/2024 12:40pm</h2>
-            <h2>{seconds}</h2>
+            <h2>
+              {days} : {hours} : {minutes} : {seconds}
+            </h2>
           </div>
         </div>
       </div>
