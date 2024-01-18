@@ -43,6 +43,13 @@
     /* background-color: #9DCD5A; */
 }
 
-.dashboard-patient-card-details__wrapper{
-    /* background-color: #9DCD5A; */
+.dashboard-patient-card-details-h2-schedule{
+    margin-top: 10px;
+    font-size: 13px;
+}
+
+.dashboard-patient-card-details-h2-countdown{
+    text-align: center;
+    margin-top: 5px;
+    color: #9DCD5A;
 }

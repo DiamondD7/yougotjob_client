@@ -57,8 +57,10 @@ const Dashboard = () => {
             </div>
           </div>
           <div className="dashboard-patient-card-details__wrapper">
-            <h2>23/01/2024 12:40pm</h2>
-            <h2>
+            <h2 className="dashboard-patient-card-details-h2-schedule">
+              23/01/2024 12:40pm
+            </h2>
+            <h2 className="dashboard-patient-card-details-h2-countdown">
               {days} : {hours} : {minutes} : {seconds}
             </h2>
           </div>
