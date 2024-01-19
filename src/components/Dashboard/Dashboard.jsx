@@ -1,10 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { User } from "@phosphor-icons/react";
+import { User, Calendar } from "@phosphor-icons/react";
 
 import "../../styles/dashboardstyles.css";
 const Dashboard = () => {
-  let today = new Date();
-
   const [days, setDays] = useState(0);
   const [hours, setHours] = useState(0);
   const [minutes, setMinutes] = useState(0);
@@ -63,6 +61,51 @@ const Dashboard = () => {
             <h2 className="dashboard-patient-card-details-h2-countdown">
               {days} : {hours} : {minutes} : {seconds}
             </h2>
+            <p className="countdown-indications">
+              day &nbsp; &nbsp; &nbsp; hr &nbsp; &nbsp; &nbsp; &nbsp; min &nbsp;
+              &nbsp; &nbsp; &nbsp; &nbsp; sec
+            </p>
+          </div>
+        </div>
+
+        <div className="dashboard-cards__wrapper">
+          <div className="dashboard-card-title__wrapper">
+            <div>
+              <Calendar size={19} color="#9DCD5A" />
+            </div>
+            <h5>Appointments</h5>
+          </div>
+        </div>
+
+        <div className="dashboard-cards__wrapper">
+          <div className="dashboard-card-title__wrapper">
+            <div>
+              <User size={19} color="#9DCD5A" />
+            </div>
+            <h5>Next appointment</h5>
+          </div>
+          <div className="dashboard-patient-card__wrapper">
+            <img
+              src="https://images.unsplash.com/photo-1521119989659-a83eee488004?q=80&w=1923&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+              alt="test-picture"
+              className="dashboard-card-profilepic"
+            />
+            <div>
+              <h3>Aaron Sierra</h3>
+              <label className="patient-card-id__label">ID:30004997</label>
+            </div>
+          </div>
+          <div className="dashboard-patient-card-details__wrapper">
+            <h2 className="dashboard-patient-card-details-h2-schedule">
+              23/01/2024 12:40pm
+            </h2>
+            <h2 className="dashboard-patient-card-details-h2-countdown">
+              {days} : {hours} : {minutes} : {seconds}
+            </h2>
+            <p className="countdown-indications">
+              day &nbsp; &nbsp; &nbsp; hr &nbsp; &nbsp; &nbsp; &nbsp; min &nbsp;
+              &nbsp; &nbsp; &nbsp; &nbsp; sec
+            </p>
           </div>
         </div>
       </div>
