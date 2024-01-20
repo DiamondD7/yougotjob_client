@@ -8,7 +8,7 @@ const Dashboard = () => {
   const [minutes, setMinutes] = useState(0);
   const [seconds, setSeconds] = useState(0);
 
-  const [inputDate, setInputDate] = useState("20 Jan 2024");
+  const [inputDate, setInputDate] = useState("29 Jan 2024");
   const [currentDate, setCurrentDate] = useState(inputDate);
 
   useEffect(() => {
@@ -16,9 +16,16 @@ const Dashboard = () => {
     const currentDate = new Date();
     const totalSeconds = (changingDate - currentDate) / 1000;
 
-    setDays(Math.floor(totalSeconds / 3600 / 24));
-    setHours(Math.floor(totalSeconds / 3600) % 24);
-    setMinutes(Math.floor(totalSeconds / 60) % 60);
+    if (totalSeconds <= 0) {
+      setDays(0);
+      setHours(0);
+      setMinutes(0);
+      setSeconds(0);
+    } else if (totalSeconds > 0) {
+      setDays(Math.floor(totalSeconds / 3600 / 24));
+      setHours(Math.floor(totalSeconds / 3600) % 24);
+      setMinutes(Math.floor(totalSeconds / 60) % 60);
+    }
 
     let interval = setInterval(() => {
       setSeconds((prevSeconds) => {
