@@ -35,11 +35,6 @@
     object-position: center center;
 }
 
-.countdown-indications{
-    font-size: 10px;
-    margin-left: 10px;
-}
-
 
 .patient-card-id__label{
     font-size: 12px;
@@ -62,4 +57,9 @@
     
     margin: 5px 0 0 10px;
     color: #9DCD5A;
+}
+
+.time-indication{
+    font-weight: 100;
+    font-size: 11px;
 }

@@ -40,6 +40,10 @@ const Dashboard = () => {
     return () => clearInterval(interval);
   }, [days, minutes, hours, seconds]);
 
+  const day = <label className="time-indication">d</label>;
+  const hour = <label className="time-indication">hr</label>;
+  const min = <label className="time-indication">min</label>;
+  const sec = <label className="time-indication">sec</label>;
   return (
     <div>
       <div className="dashboard-summary-cards__wrapper">
@@ -66,12 +70,12 @@ const Dashboard = () => {
               23/01/2024 12:40pm
             </h2>
             <h2 className="dashboard-patient-card-details-h2-countdown">
-              {days} : {hours} : {minutes} : {seconds}
+              {days}
+              {day} : {hours}
+              {hour} : {minutes}
+              {min} : {seconds}
+              {sec}
             </h2>
-            <p className="countdown-indications">
-              day &nbsp; &nbsp; &nbsp; hr &nbsp; &nbsp; &nbsp; &nbsp; min &nbsp;
-              &nbsp; &nbsp; &nbsp; &nbsp; sec
-            </p>
           </div>
         </div>
 
@@ -107,12 +111,12 @@ const Dashboard = () => {
               23/01/2024 12:40pm
             </h2>
             <h2 className="dashboard-patient-card-details-h2-countdown">
-              {days} : {hours} : {minutes} : {seconds}
+              {days}
+              {day} : {hours}
+              {hour} : {minutes}
+              {min} : {seconds}
+              {sec}
             </h2>
-            <p className="countdown-indications">
-              day &nbsp; &nbsp; &nbsp; hr &nbsp; &nbsp; &nbsp; &nbsp; min &nbsp;
-              &nbsp; &nbsp; &nbsp; &nbsp; sec
-            </p>
           </div>
         </div>
       </div>
