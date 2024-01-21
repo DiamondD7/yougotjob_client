@@ -11,6 +11,7 @@ const Dashboard = () => {
   const [inputDate, setInputDate] = useState("29 Jan 2024 12:40:00");
   const [currentDate, setCurrentDate] = useState(inputDate);
 
+  //handles countdown
   useEffect(() => {
     const changingDate = new Date(inputDate);
     const currentDate = new Date();
