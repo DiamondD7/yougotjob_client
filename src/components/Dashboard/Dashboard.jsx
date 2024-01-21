@@ -8,7 +8,7 @@ const Dashboard = () => {
   const [minutes, setMinutes] = useState(0);
   const [seconds, setSeconds] = useState(0);
 
-  const [inputDate, setInputDate] = useState("29 Jan 2024");
+  const [inputDate, setInputDate] = useState("29 Jan 2024 12:40:00");
   const [currentDate, setCurrentDate] = useState(inputDate);
 
   useEffect(() => {
