@@ -85,7 +85,24 @@ const Dashboard = () => {
             <div>
               <Calendar size={19} color="#9DCD5A" />
             </div>
-            <h5>Appointments</h5>
+            <h5>Previous appointment</h5>
+          </div>
+          <div className="dashboard-patient-card__wrapper">
+            <img
+              src="https://images.unsplash.com/photo-1521119989659-a83eee488004?q=80&w=1923&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+              alt="test-picture"
+              className="dashboard-card-profilepic"
+            />
+            <div>
+              <h3>John Doe</h3>
+              <label className="patient-card-id__label">ID:54004987</label>
+            </div>
+          </div>
+
+          <div className="dashboard-patient-card-details__wrapper">
+            <h2 className="dashboard-patient-card-details-h2-schedule">
+              19/01/2024 8:40am
+            </h2>
           </div>
         </div>
 
