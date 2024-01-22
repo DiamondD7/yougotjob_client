@@ -103,6 +103,9 @@ const Dashboard = () => {
             <h2 className="dashboard-patient-card-details-h2-schedule">
               19/01/2024 8:40am
             </h2>
+            <div className="previous-patient-view__wrapper">
+              <button className="previous-patient-view__btn">view</button>
+            </div>
           </div>
         </div>
 
