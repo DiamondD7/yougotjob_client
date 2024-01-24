@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { User, Calendar } from "@phosphor-icons/react";
 
 import "../../styles/dashboardstyles.css";
+
 const Dashboard = () => {
   const [days, setDays] = useState(0);
   const [hours, setHours] = useState(0);
@@ -139,6 +140,15 @@ const Dashboard = () => {
               {sec}
             </h2>
           </div>
+        </div>
+      </div>
+
+      <div className="mid-wrapper"></div>
+      <div className="low-wrapper">
+        <div className="low1-wrapper"></div>
+        <div className="low2-wrapper">
+          <div className="mini-calendar__wrapper"></div>
+          <div className="email-notification__wrapper"></div>
         </div>
       </div>
     </div>
