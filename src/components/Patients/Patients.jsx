@@ -2,6 +2,7 @@ import React from "react";
 import { MagnifyingGlass } from "@phosphor-icons/react";
 
 import "../../styles/patientsstyles.css";
+import SearchProfile from "./SearchProfile";
 const Patients = () => {
   return (
     <div>
@@ -13,10 +14,12 @@ const Patients = () => {
             placeholder="Patient ID/First or Last Name"
           />
           <button className="patientsearch__btn">
-            <MagnifyingGlass size={16} color="#f3f3f3" />
+            <MagnifyingGlass size={16} color="#454545" />
           </button>
         </div>
       </div>
+
+      <SearchProfile />
     </div>
   );
 };
