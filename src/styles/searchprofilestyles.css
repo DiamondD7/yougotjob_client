@@ -1,0 +1,44 @@
+.search-profile-container__wrapper{
+    
+    margin-left: 10px;
+}
+
+.search-profile__img{
+    width: 200px;
+    height: 200px;
+    object-fit: cover;
+    object-position: center center;
+    border-radius: 5px;
+}
+
+.search-profile-header__wrapper{
+    display: flex;
+    gap: 10px;
+}
+
+.search-profile-header__texts{
+    color: rgba(0, 0, 0, 0.6);
+    font-size: 13px;
+    padding: 5px;
+}
+
+.search-profile-header__btn{
+    border: none;
+    background-color: #9DCD5A;
+    cursor: pointer;
+    border-radius: 10px;
+    padding: 5px 10px;
+    display: flex;
+    align-items: center;
+}
+
+.search-profile-name__text{
+    margin-top: 5px;
+    font-size: 19px;
+}
+
+.search-profile-nhi__text{
+    color: rgba(0, 0, 0, 0.5);
+    font-size: 12px;
+    letter-spacing: .3px;
+}
