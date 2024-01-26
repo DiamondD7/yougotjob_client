@@ -2,7 +2,11 @@ import React, { useState } from "react";
 import { CaretRight, MagnifyingGlass, SmileySad } from "@phosphor-icons/react";
 
 import "../../styles/searchprofilestyles.css";
-const SearchProfile = ({ searchField }) => {
+const SearchProfile = ({
+  searchField,
+  setFullProfileData,
+  setOpenFullProfile,
+}) => {
   const testProfile = [
     {
       id: 55,
@@ -47,6 +51,12 @@ const SearchProfile = ({ searchField }) => {
       email: "jackarm@gmail.com",
     },
   ];
+
+  const openingFullProfileClick = (e, data) => {
+    e.preventDefault();
+    setFullProfileData(data);
+    setOpenFullProfile(true);
+  };
 
   const ReturnSearchData = () => {
     const filterData = testProfile.filter(
@@ -96,7 +106,10 @@ const SearchProfile = ({ searchField }) => {
                 </p>
               </div>
               <div>
-                <button className="search-profile-header__btn">
+                <button
+                  className="search-profile-header__btn"
+                  onClick={(e) => openingFullProfileClick(e, items)}
+                >
                   Full Profile <CaretRight size={13} color="#454545" />
                 </button>
               </div>
