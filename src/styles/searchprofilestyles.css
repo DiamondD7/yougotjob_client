@@ -50,3 +50,10 @@
     align-items: center;
     margin-top: 200px;
 }
+
+
+.full-profile__btn{
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+}
