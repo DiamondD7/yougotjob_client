@@ -42,3 +42,11 @@
     font-size: 12px;
     letter-spacing: .3px;
 }
+
+
+.no-search__wrapper{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 200px;
+}
