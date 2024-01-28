@@ -1,67 +1,83 @@
-.search-profile-container__wrapper{
-    margin-left: 10px;
+.search-profile-container__wrapper {
+  margin-left: 10px;
 }
 
-.search-profile__img{
-    width: 200px;
-    height: 200px;
-    object-fit: cover;
-    object-position: center center;
-    border-radius: 5px;
+.search-profile__img {
+  width: 200px;
+  height: 200px;
+  object-fit: cover;
+  object-position: center center;
+  border-radius: 5px;
 }
 
-.search-profile-header__wrapper{
-    display: flex;
-    gap: 10px;
+.search-profile-header__wrapper {
+  display: flex;
+  gap: 10px;
 }
 
-.search-profile-header__texts{
-    color: rgba(0, 0, 0, 0.6);
-    font-size: 13px;
-    padding: 5px;
+.search-profile-header__texts {
+  color: rgba(0, 0, 0, 0.6);
+  font-size: 13px;
+  padding: 5px;
 }
 
-.search-profile-header__btn{
-    border: none;
-    background-color: #9DCD5A;
-    cursor: pointer;
-    border-radius: 10px;
-    padding: 5px 10px;
-    display: flex;
-    align-items: center;
+.search-profile-header__btn {
+  border: none;
+  background-color: #9dcd5a;
+  cursor: pointer;
+  border-radius: 10px;
+  padding: 5px 10px;
+  display: flex;
+  align-items: center;
 }
 
-.search-profile-name__text{
-    margin-top: 5px;
-    font-size: 19px;
+.search-profile-name__text {
+  margin-top: 5px;
+  font-size: 19px;
 }
 
-.search-profile-nhi__text{
-    color: rgba(0, 0, 0, 0.5);
-    font-size: 12px;
-    letter-spacing: .3px;
+.search-profile-nhi__text {
+  color: rgba(0, 0, 0, 0.5);
+  font-size: 12px;
+  letter-spacing: 0.3px;
 }
 
-
-.no-search__wrapper{
-    text-align: center;
-    margin-top: 200px;
+.no-search__wrapper {
+  text-align: center;
+  margin-top: 200px;
 }
 
-
-.full-profile__btn{
-    background-color: transparent;
-    border: none;
-    cursor: pointer;
+.full-profile__btn {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
 }
 
-
-.full-profile-container__wrapper{
-    display: flex;
-    justify-content: space-between;
+.full-profile-container__wrapper {
+  display: flex;
+  justify-content: space-between;
 }
 
-.pdf-container__wrapper{
-    width: 69%;
-    height: 100vh;
+.pdf-container__wrapper {
+  width: 69%;
+  height: 100vh;
+}
+
+.personal-medical-history__wrapper {
+  margin-top: 50px;
+  background-color: #f3f3f3;
+  padding: 10px;
+}
+
+.personal-medical-history__wrapper h3 {
+  margin-bottom: 10px;
+}
+
+.personal-medical-history__wrapper ul {
+  margin: 10px 0 0 15px;
+}
+
+.ul-medical__wrapper {
+  overflow-y: auto;
+  height: 100px;
 }

@@ -9,7 +9,6 @@ import "@react-pdf-viewer/default-layout/lib/styles/index.css";
 
 const FullProfile = ({ fullProfileData, setOpenFullProfile }) => {
   const newPlugin = defaultLayoutPlugin();
-  console.log(ViewPDF);
   return (
     <div>
       <div className="full-profile-container__wrapper">
@@ -51,6 +50,21 @@ const FullProfile = ({ fullProfileData, setOpenFullProfile }) => {
             {fullProfileData.firstName} {fullProfileData.lastName}
           </p>
           <p className="search-profile-nhi__text">NHI: {fullProfileData.nhi}</p>
+          <div className="personal-medical-history__wrapper">
+            <div>
+              <h3>Personal Medical History</h3>
+            </div>
+            <div className="ul-medical__wrapper">
+              <ul>
+                <li>Acid Reflux</li>
+                <li>Allergy Problems</li>
+                <li>Anxiety</li>
+                <li>Anxiety</li>
+                <li>Anxiety</li>
+                <li>Anxiety</li>
+              </ul>
+            </div>
+          </div>
         </div>
 
         <div className="pdf-container__wrapper">
