@@ -1,5 +1,4 @@
 .search-profile-container__wrapper{
-    
     margin-left: 10px;
 }
 
@@ -54,4 +53,15 @@
     background-color: transparent;
     border: none;
     cursor: pointer;
+}
+
+
+.full-profile-container__wrapper{
+    display: flex;
+    justify-content: space-between;
+}
+
+.pdf-container__wrapper{
+    width: 69%;
+    height: 100vh;
 }
