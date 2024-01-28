@@ -11,6 +11,9 @@
   },
   "dependencies": {
     "@phosphor-icons/react": "^2.0.13",
+    "@react-pdf-viewer/core": "^3.12.0",
+    "@react-pdf-viewer/default-layout": "^3.12.0",
+    "pdfjs-dist": "^3.4.120",
     "phosphor-icons": "^1.4.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
