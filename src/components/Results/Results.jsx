@@ -102,7 +102,7 @@ const Results = () => {
           </tr>
           <tr>
             <td>2/11/2023</td>
-            <td>Aaron Sierra</td>
+            <td>Aaron Sierras</td>
             <td>
               Lorem ipsum dolor sit amet consectetur adipisicing elit. Iusto id
               error non placeat ipsum
