@@ -65,6 +65,27 @@ const FullProfile = ({ fullProfileData, setOpenFullProfile }) => {
               </ul>
             </div>
           </div>
+
+          <div className="emergency-contacts__wrapper">
+            <div>
+              <h3>Emergency Contact Person</h3>
+              <p>Name: John Doe</p>
+              <p>Relation: Father</p>
+              <p>Mobile: 022022022022</p>
+            </div>
+            <br />
+            <div>
+              <p>Name: Jane Doe</p>
+              <p>Relation: Mother</p>
+              <p>Mobile: 021021021021</p>
+            </div>
+            <br />
+            <div>
+              <p>Name: Sweetie Doe</p>
+              <p>Relation: Wife</p>
+              <p>Mobile: 123123123123</p>
+            </div>
+          </div>
         </div>
 
         <div className="pdf-container__wrapper">
