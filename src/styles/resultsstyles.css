@@ -29,7 +29,7 @@ table tbody tr:last-of-type {
 table tbody tr td button {
   border: none;
   background-color: #9dcd5a;
-  padding: 10px 20px;
+  padding: 5px 15px;
   border-radius: 10px;
   cursor: pointer;
 }
