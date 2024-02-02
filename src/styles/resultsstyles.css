@@ -34,11 +34,9 @@ table tbody tr td button {
   cursor: pointer;
 }
 
-/* 
-table,
-th,
-td {
-  border-collapse: collapse;
-  border: 1px solid #000;
-  overflow: auto;
-} */
+
+.fullres-back__btn{
+  cursor: pointer;
+  border: none;
+  background-color: transparent;
+}
