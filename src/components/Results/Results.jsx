@@ -48,7 +48,7 @@ const Results = () => {
         </table>
       ) : (
         <div>
-          <FullResult />
+          <FullResult setOpenResult={setOpenResult} />
         </div>
       )}
     </div>
