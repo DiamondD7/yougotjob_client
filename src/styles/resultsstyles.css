@@ -46,3 +46,37 @@ table tbody tr td button {
 .fullres-profile__wrapper{
   margin: 30px 0 0 10px;
 }
+
+.fullres-profile__wrapper p {
+  font-size: 14px;
+  color: rgba(0,0,0,0.7);
+}
+
+.nhi-header{
+  font-size: 13px;
+  margin-bottom: 10px;
+  color: rgba(0,0,0,0.6);
+}
+
+.fullres-profile-container__wrapper{
+  display: flex;
+  justify-content: space-between;
+}
+
+.pdf-container__wrapper {
+  width: 69%;
+  height: 97vh;
+}
+
+.fullres-testdescription__wrapper{
+  margin: 30px 0 0 10px;
+}
+
+.symptoms-textarea{
+  min-width: 505px;
+  max-width: 505px;
+  min-height: 100px;
+  max-height: 100px;
+  padding: 5px;
+  overflow: auto;
+}
