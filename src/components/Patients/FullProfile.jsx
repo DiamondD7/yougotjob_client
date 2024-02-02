@@ -1,14 +1,14 @@
 import React, { useState } from "react";
 import { X } from "@phosphor-icons/react";
-import ViewPDF from "../../assets/pdf/Aaron-CoverLetter.pdf";
+// import ViewPDF from "../../assets/pdf/Aaron-CoverLetter.pdf";
 
-import { Viewer, Worker } from "@react-pdf-viewer/core";
-import { defaultLayoutPlugin } from "@react-pdf-viewer/default-layout";
-import "@react-pdf-viewer/core/lib/styles/index.css";
-import "@react-pdf-viewer/default-layout/lib/styles/index.css";
+// import { Viewer, Worker } from "@react-pdf-viewer/core";
+// import { defaultLayoutPlugin } from "@react-pdf-viewer/default-layout";
+// import "@react-pdf-viewer/core/lib/styles/index.css";
+// import "@react-pdf-viewer/default-layout/lib/styles/index.css";
 
 const FullProfile = ({ fullProfileData, setOpenFullProfile }) => {
-  const newPlugin = defaultLayoutPlugin();
+  // const newPlugin = defaultLayoutPlugin();
   return (
     <div>
       <div className="full-profile-container__wrapper">
@@ -88,11 +88,11 @@ const FullProfile = ({ fullProfileData, setOpenFullProfile }) => {
           </div>
         </div>
 
-        <div className="pdf-container__wrapper">
+        {/* <div className="pdf-container__wrapper">
           <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.4.120/build/pdf.worker.min.js">
             <Viewer fileUrl={ViewPDF} plugins={[newPlugin]} />
           </Worker>
-        </div>
+        </div> */}
       </div>
     </div>
   );
