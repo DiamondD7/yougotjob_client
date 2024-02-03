@@ -171,3 +171,36 @@
 .daysOfWeek__wrapper label:nth-child(7) {
     color: rgba(0, 0, 0, 0.5);
 }
+
+
+/* ------------------------------------------------------------------------------------------- */
+
+.addevent-container__wrapper{
+    position: absolute;
+    top:0;
+    left:0;
+
+    background-color: rgba(0, 0, 0, 0.6);
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+}
+
+.addevent__wrapper{
+    position: absolute;
+    top:50%;
+    left:50%;
+    transform: translate(-50%, -50%);
+
+    width: 1000px;
+    height: 900px;
+    background-color: #D6E8FF;
+    z-index: 5;
+}
+
+.addevent-close__btn{
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+}
+
