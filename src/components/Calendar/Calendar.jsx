@@ -8,6 +8,7 @@ import {
 } from "../../assets/js/months";
 
 import "../../styles/calendarstyles.css";
+import AddEvent from "./AddEvent";
 const Calendar = () => {
   const today = new Date();
   const days = [
@@ -72,106 +73,122 @@ const Calendar = () => {
     selectedMonth
   );
 
+  const [openAddEventModal, setOpenAddEventModal] = useState(false);
+
   return (
     <div>
-      <div className="calendar-headers__wrapper">
-        <div className="month-selection__wrapper">
-          <button
-            className="month-selection__dropdown"
-            onClick={() => setOpenDropDownList(!openDropDownList)}
-          >
-            {selectedMonth} &nbsp; &nbsp; &nbsp;{" "}
-            {openDropDownList === false ? (
-              <CaretDown size={11} color="#202020" />
-            ) : (
-              <CaretUp size={11} color="#202020" />
-            )}
-          </button>
-          <input
-            className="year-input"
-            type="text"
-            value={selectedYear}
-            placeholder="Choose year"
-            onChange={(e) => setSelectedYear(e.target.value)}
-          />
-        </div>
+      <div
+        className={
+          openAddEventModal === true ? "addevent-container__wrapper" : ""
+        }
+      ></div>
 
-        <div className="add-event-btn__wrapper">
-          <button>
-            <Plus size={16} color="#202020" />
-            &nbsp; Add event
-          </button>
+      {openAddEventModal && (
+        <div>
+          <AddEvent setOpenAddEventModal={setOpenAddEventModal} />
         </div>
-
-        <div className="filter-calendar__wrapper">
-          <button>Agenda</button>
-          <button>Week</button>
-          <button>Year</button>
-        </div>
-      </div>
-
-      {openDropDownList === true ? (
-        <div className="month-selection-option__wrapper">
-          {fullDate.map((months) => (
-            <button
-              className={`month-selection__option ${
-                selectedMonth === months.monthName ? "currentMonth" : ""
-              }`}
-              onClick={(e) => setMonth(e, months)}
-              value={months.monthName}
-            >
-              {months.monthName}
-            </button>
-          ))}
-        </div>
-      ) : (
-        ""
       )}
 
-      <div className="daysOfWeek__wrapper">
-        <label>Mon</label>
-        <label>Tue</label>
-        <label>Wed</label>
-        <label>Thu</label>
-        <label>Fri</label>
-        <label>Sat</label>
-        <label>Sun</label>
-      </div>
-
-      <div className="calendar-grid__wrapper">
-        {previousMonthDays.map((day, index) => (
-          <div
-            key={`prevDayCell-${index}`}
-            className="calendar-grid-day__wrapper previousMonthDay"
-          >
-            <p>{day}</p>
+      <div>
+        <div className="calendar-headers__wrapper">
+          <div className="month-selection__wrapper">
+            <button
+              className="month-selection__dropdown"
+              onClick={() => setOpenDropDownList(!openDropDownList)}
+            >
+              {selectedMonth} &nbsp; &nbsp; &nbsp;{" "}
+              {openDropDownList === false ? (
+                <CaretDown size={11} color="#202020" />
+              ) : (
+                <CaretUp size={11} color="#202020" />
+              )}
+            </button>
+            <input
+              className="year-input"
+              type="text"
+              value={selectedYear}
+              placeholder="Choose year"
+              onChange={(e) => setSelectedYear(e.target.value)}
+            />
           </div>
-        ))}
-        {days.map(
-          (day) => (
-            days.splice(selectedMaxMonthDays),
-            day === today.getDate() &&
-            selectedMonth === months[today.getMonth()] &&
-            parseInt(selectedYear) === currentYear ? (
-              <div className="calendar-grid-day__wrapper dayOfTheMonth-highlight">
-                <p>{day}</p>
-              </div>
-            ) : (
-              <div className="calendar-grid-day__wrapper">
-                <p>{day}</p>
-              </div>
-            )
-          )
+
+          <div className="add-event-btn__wrapper">
+            <button onClick={() => setOpenAddEventModal(true)}>
+              <Plus size={16} color="#202020" />
+              &nbsp; Add event
+            </button>
+          </div>
+
+          <div className="filter-calendar__wrapper">
+            <button>Agenda</button>
+            <button>Week</button>
+            <button>Year</button>
+          </div>
+        </div>
+
+        {openDropDownList === true ? (
+          <div className="month-selection-option__wrapper">
+            {fullDate.map((months) => (
+              <button
+                className={`month-selection__option ${
+                  selectedMonth === months.monthName ? "currentMonth" : ""
+                }`}
+                onClick={(e) => setMonth(e, months)}
+                value={months.monthName}
+              >
+                {months.monthName}
+              </button>
+            ))}
+          </div>
+        ) : (
+          ""
         )}
 
-        {nextMonthDays.map((day, index) => (
-          <div
-            key={`nextDayCell-${index}`}
-            className="calendar-grid-day__wrapper nextMonthDay"
-          >
-            <p>{day}</p>
-          </div>
-        ))}
+        <div className="daysOfWeek__wrapper">
+          <label>Mon</label>
+          <label>Tue</label>
+          <label>Wed</label>
+          <label>Thu</label>
+          <label>Fri</label>
+          <label>Sat</label>
+          <label>Sun</label>
+        </div>
+
+        <div className="calendar-grid__wrapper">
+          {previousMonthDays.map((day, index) => (
+            <div
+              key={`prevDayCell-${index}`}
+              className="calendar-grid-day__wrapper previousMonthDay"
+            >
+              <p>{day}</p>
+            </div>
+          ))}
+          {days.map(
+            (day) => (
+              days.splice(selectedMaxMonthDays),
+              day === today.getDate() &&
+              selectedMonth === months[today.getMonth()] &&
+              parseInt(selectedYear) === currentYear ? (
+                <div className="calendar-grid-day__wrapper dayOfTheMonth-highlight">
+                  <p>{day}</p>
+                </div>
+              ) : (
+                <div className="calendar-grid-day__wrapper">
+                  <p>{day}</p>
+                </div>
+              )
+            )
+          )}
+
+          {nextMonthDays.map((day, index) => (
+            <div
+              key={`nextDayCell-${index}`}
+              className="calendar-grid-day__wrapper nextMonthDay"
+            >
+              <p>{day}</p>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );
