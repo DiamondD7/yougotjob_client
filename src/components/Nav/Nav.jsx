@@ -14,7 +14,7 @@ import {
 
 import "../../styles/navstyles.css";
 
-const Nav = ({ setDisplayed }) => {
+const Nav = ({ setDisplayed, fakeRole }) => {
   const [minimizedNav, setMinimizedNav] = useState(false);
   const [activeDisplay, setActiveDisplay] = useState("dashboard");
 
@@ -74,51 +74,63 @@ const Nav = ({ setDisplayed }) => {
               {minimizedNav === true ? "" : "Dashboard"}
             </button>
           </li>
-          <li
-            className={minimizedNav === true ? "minimizednav-icons" : ""}
-            style={
-              activeDisplay === "calendar" ? { backgroundColor: "#D6E8FF" } : {}
-            }
-          >
-            <button
-              className={minimizedNav === true ? "btn-normal" : "icon-label"}
-              onClick={() => onClickDisplayed("calendar")}
+          {fakeRole === "Receptionist" ? (
+            <li
+              className={minimizedNav === true ? "minimizednav-icons" : ""}
               style={
-                minimizedNav === false
-                  ? activeDisplay === "calendar"
-                    ? { backgroundColor: "#D6E8FF" }
-                    : {}
+                activeDisplay === "calendar"
+                  ? { backgroundColor: "#D6E8FF" }
                   : {}
               }
             >
-              <Calendar size={20} color="#454545" />
-              &nbsp;
-              {minimizedNav === true ? "" : "Calendar"}
-            </button>
-          </li>
-          <li
-            className={minimizedNav === true ? "minimizednav-icons" : ""}
-            style={
-              activeDisplay === "patients" ? { backgroundColor: "#D6E8FF" } : {}
-            }
-          >
-            <button
-              className={minimizedNav === true ? "btn-normal" : "icon-label"}
-              onClick={() => onClickDisplayed("patients")}
-              style={
-                minimizedNav === false
-                  ? activeDisplay === "patients"
-                    ? { backgroundColor: "#D6E8FF" }
+              <button
+                className={minimizedNav === true ? "btn-normal" : "icon-label"}
+                onClick={() => onClickDisplayed("calendar")}
+                style={
+                  minimizedNav === false
+                    ? activeDisplay === "calendar"
+                      ? { backgroundColor: "#D6E8FF" }
+                      : {}
                     : {}
+                }
+              >
+                <Calendar size={20} color="#454545" />
+                &nbsp;
+                {minimizedNav === true ? "" : "Calendar"}
+              </button>
+            </li>
+          ) : (
+            ""
+          )}
+          {fakeRole === "Receptionist" || fakeRole === "General Practioner" ? (
+            <li
+              className={minimizedNav === true ? "minimizednav-icons" : ""}
+              style={
+                activeDisplay === "patients"
+                  ? { backgroundColor: "#D6E8FF" }
                   : {}
               }
             >
-              <Users size={20} color="#454545" />
-              &nbsp;
-              {minimizedNav === true ? "" : "Patients"}
-            </button>
-          </li>
-          <li
+              <button
+                className={minimizedNav === true ? "btn-normal" : "icon-label"}
+                onClick={() => onClickDisplayed("patients")}
+                style={
+                  minimizedNav === false
+                    ? activeDisplay === "patients"
+                      ? { backgroundColor: "#D6E8FF" }
+                      : {}
+                    : {}
+                }
+              >
+                <Users size={20} color="#454545" />
+                &nbsp;
+                {minimizedNav === true ? "" : "Patients"}
+              </button>
+            </li>
+          ) : (
+            ""
+          )}
+          {/* <li
             className={minimizedNav === true ? "minimizednav-icons" : ""}
             style={
               activeDisplay === "communication"
@@ -141,29 +153,37 @@ const Nav = ({ setDisplayed }) => {
               &nbsp;
               {minimizedNav === true ? "" : "Communication"}
             </button>
-          </li>
-          <li
-            className={minimizedNav === true ? "minimizednav-icons" : ""}
-            style={
-              activeDisplay === "results" ? { backgroundColor: "#D6E8FF" } : {}
-            }
-          >
-            <button
-              className={minimizedNav === true ? "btn-normal" : "icon-label"}
-              onClick={() => onClickDisplayed("results")}
+          </li> */}
+
+          {fakeRole === "General Practioner" ? (
+            <li
+              className={minimizedNav === true ? "minimizednav-icons" : ""}
               style={
-                minimizedNav === false
-                  ? activeDisplay === "results"
-                    ? { backgroundColor: "#D6E8FF" }
-                    : {}
+                activeDisplay === "results"
+                  ? { backgroundColor: "#D6E8FF" }
                   : {}
               }
             >
-              <Note size={20} color="#454545" />
-              &nbsp;
-              {minimizedNav === true ? "" : "Results"}
-            </button>
-          </li>
+              <button
+                className={minimizedNav === true ? "btn-normal" : "icon-label"}
+                onClick={() => onClickDisplayed("results")}
+                style={
+                  minimizedNav === false
+                    ? activeDisplay === "results"
+                      ? { backgroundColor: "#D6E8FF" }
+                      : {}
+                    : {}
+                }
+              >
+                <Note size={20} color="#454545" />
+                &nbsp;
+                {minimizedNav === true ? "" : "Results"}
+              </button>
+            </li>
+          ) : (
+            ""
+          )}
+
           <li
             className={minimizedNav === true ? "minimizednav-icons" : ""}
             style={
