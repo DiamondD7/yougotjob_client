@@ -1,14 +1,7 @@
 import React, { useState } from "react";
-import { X } from "@phosphor-icons/react";
-// import ViewPDF from "../../assets/pdf/Aaron-CoverLetter.pdf";
-
-// import { Viewer, Worker } from "@react-pdf-viewer/core";
-// import { defaultLayoutPlugin } from "@react-pdf-viewer/default-layout";
-// import "@react-pdf-viewer/core/lib/styles/index.css";
-// import "@react-pdf-viewer/default-layout/lib/styles/index.css";
+import { X, CalendarCheck, Heartbeat } from "@phosphor-icons/react";
 
 const FullProfile = ({ fullProfileData, setOpenFullProfile }) => {
-  // const newPlugin = defaultLayoutPlugin();
   return (
     <div>
       <div className="full-profile-container__wrapper">
@@ -50,6 +43,10 @@ const FullProfile = ({ fullProfileData, setOpenFullProfile }) => {
             {fullProfileData.firstName} {fullProfileData.lastName}
           </p>
           <p className="search-profile-nhi__text">NHI: {fullProfileData.nhi}</p>
+
+          <button className="search-profile-moreinformation__btn">
+            See all information
+          </button>
           <div className="personal-medical-history__wrapper">
             <div>
               <h3>Personal Medical History</h3>
@@ -66,33 +63,43 @@ const FullProfile = ({ fullProfileData, setOpenFullProfile }) => {
             </div>
           </div>
 
-          <div className="emergency-contacts__wrapper">
-            <div>
-              <h3>Emergency Contact Person</h3>
-              <p>Name: John Doe</p>
-              <p>Relation: Father</p>
-              <p>Mobile: 022022022022</p>
+          <div className="appointment-history-lists__wrapper">
+            <div className="appointment-history-header__wrapper">
+              <h3>Appointment history</h3>
+              <button>view all</button>
             </div>
-            <br />
-            <div>
-              <p>Name: Jane Doe</p>
-              <p>Relation: Mother</p>
-              <p>Mobile: 021021021021</p>
+            <div className="appointment-history__wrapper">
+              <div>
+                <CalendarCheck size={17} />
+              </div>
+              <div>
+                <p>General appointment</p>
+                <p>Dr. Malephosa Juno</p>
+                <p>25/12/2023</p>
+              </div>
             </div>
-            <br />
-            <div>
-              <p>Name: Sweetie Doe</p>
-              <p>Relation: Wife</p>
-              <p>Mobile: 123123123123</p>
+            <div className="appointment-history__wrapper">
+              <div>
+                <Heartbeat size={17} />
+              </div>
+              <div>
+                <p>Cholesterol Test</p>
+                <p>Dr. Henry Chun</p>
+                <p>10/01/2024</p>
+              </div>
+            </div>
+            <div className="appointment-history__wrapper">
+              <div>
+                <Heartbeat size={17} />
+              </div>
+              <div>
+                <p>Cholesterol Test</p>
+                <p>Dr. Henry Chun</p>
+                <p>10/01/2024</p>
+              </div>
             </div>
           </div>
         </div>
-
-        {/* <div className="pdf-container__wrapper">
-          <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.4.120/build/pdf.worker.min.js">
-            <Viewer fileUrl={ViewPDF} plugins={[newPlugin]} />
-          </Worker>
-        </div> */}
       </div>
     </div>
   );
