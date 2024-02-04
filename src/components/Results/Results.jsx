@@ -8,7 +8,7 @@ const Results = () => {
   return (
     <div>
       {openResult === false ? (
-        <table>
+        <table className="result-table__table">
           <thead>
             <tr>
               <th>Date</th>
