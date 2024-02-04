@@ -1,5 +1,11 @@
 import React, { useState } from "react";
-import { X, CalendarCheck, Heartbeat } from "@phosphor-icons/react";
+import {
+  X,
+  CalendarCheck,
+  Heartbeat,
+  CheckCircle,
+  Question,
+} from "@phosphor-icons/react";
 
 const FullProfile = ({ fullProfileData, setOpenFullProfile }) => {
   return (
@@ -82,38 +88,83 @@ const FullProfile = ({ fullProfileData, setOpenFullProfile }) => {
           </div>
 
           <div className="appointment-history-lists__wrapper">
-            <div className="appointment-history-header__wrapper">
-              <h3>Appointment history</h3>
-              <button>view all</button>
+            <div>
+              <div className="appointment-history-header__wrapper">
+                <h3>Appointment history</h3>
+                <button>view all</button>
+              </div>
+              <div className="appointment-history__wrapper">
+                <div>
+                  <CalendarCheck size={17} />
+                </div>
+                <div>
+                  <p>General appointment</p>
+                  <p>Dr. Malephosa Juno</p>
+                  <p>25/12/2023</p>
+                </div>
+              </div>
+              <div className="appointment-history__wrapper">
+                <div>
+                  <Heartbeat size={17} />
+                </div>
+                <div>
+                  <p>Cholesterol Test</p>
+                  <p>Dr. Henry Chun</p>
+                  <p>10/01/2024</p>
+                </div>
+              </div>
+              <div className="appointment-history__wrapper">
+                <div>
+                  <Heartbeat size={17} />
+                </div>
+                <div>
+                  <p>Cholesterol Test</p>
+                  <p>Dr. Henry Chun</p>
+                  <p>10/01/2024</p>
+                </div>
+              </div>
             </div>
-            <div className="appointment-history__wrapper">
-              <div>
-                <CalendarCheck size={17} />
+
+            <div>
+              <div className="medical-bills-header__wrapper">
+                <h3>Medical bills</h3>
+                <button>view all</button>
               </div>
-              <div>
-                <p>General appointment</p>
-                <p>Dr. Malephosa Juno</p>
-                <p>25/12/2023</p>
+              <div className="medical-bills-information__wrapper">
+                <div>
+                  <p>$50 NZD</p>
+                  <p>29/01/2024</p>
+                </div>
+                <div className="medical-bills-status__wrapper">
+                  <Question size={17} color="#d7c60f" /> <p>Pending</p>
+                </div>
               </div>
-            </div>
-            <div className="appointment-history__wrapper">
-              <div>
-                <Heartbeat size={17} />
+              <div className="medical-bills-information__wrapper">
+                <div>
+                  <p>$50 NZD</p>
+                  <p>10/01/2024</p>
+                </div>
+                <div className="medical-bills-status__wrapper">
+                  <CheckCircle size={17} color="#81bb30" /> <p>Paid</p>
+                </div>
               </div>
-              <div>
-                <p>Cholesterol Test</p>
-                <p>Dr. Henry Chun</p>
-                <p>10/01/2024</p>
+              <div className="medical-bills-information__wrapper">
+                <div>
+                  <p>$50 NZD</p>
+                  <p>10/01/2024</p>
+                </div>
+                <div className="medical-bills-status__wrapper">
+                  <CheckCircle size={17} color="#81bb30" /> <p>Paid</p>
+                </div>
               </div>
-            </div>
-            <div className="appointment-history__wrapper">
-              <div>
-                <Heartbeat size={17} />
-              </div>
-              <div>
-                <p>Cholesterol Test</p>
-                <p>Dr. Henry Chun</p>
-                <p>10/01/2024</p>
+              <div className="medical-bills-information__wrapper">
+                <div>
+                  <p>$50 NZD</p>
+                  <p>10/01/2024</p>
+                </div>
+                <div className="medical-bills-status__wrapper">
+                  <CheckCircle size={17} color="#81bb30" /> <p>Paid</p>
+                </div>
               </div>
             </div>
           </div>
