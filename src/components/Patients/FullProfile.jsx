@@ -358,6 +358,34 @@ const FullProfile = ({ fullProfileData, setOpenFullProfile }) => {
               </div>
             </div>
           </div>
+
+          <div className="reminder__wrapper">
+            <h3>Reminder</h3>
+            <div className="reminder-details__wrapper">
+              <div>
+                <img
+                  className="doctor-picture"
+                  src="https://plus.unsplash.com/premium_photo-1661764878654-3d0fc2eefcca?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                  alt="doctor-picture"
+                />
+              </div>
+              <div>
+                <p
+                  style={{
+                    marginTop: "15px",
+                    fontSize: "15px",
+                    fontWeight: "bold",
+                  }}
+                >
+                  Dr. Mahichit Sharma
+                </p>
+                <p style={{ marginTop: "5px", fontSize: "15px" }}>
+                  General appointment
+                </p>
+                <p style={{ fontSize: "12px" }}>10/02/2024 12:50pm</p>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
