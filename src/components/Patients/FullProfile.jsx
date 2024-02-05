@@ -5,6 +5,10 @@ import {
   Heartbeat,
   CheckCircle,
   Question,
+  PersonArmsSpread,
+  Barbell,
+  Heart,
+  ArrowSquareIn,
 } from "@phosphor-icons/react";
 
 const FullProfile = ({ fullProfileData, setOpenFullProfile }) => {
@@ -181,6 +185,177 @@ const FullProfile = ({ fullProfileData, setOpenFullProfile }) => {
                 <li>Anxiety</li>
                 <li>Anxiety</li>
               </ul>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div className="icons__wrapper">
+            <div className="each-icons__wrapper">
+              <PersonArmsSpread size={100} weight="thin" color={"#A7CE71"} />
+              <p>Height: 160 cm</p>
+            </div>
+
+            <div className="each-icons__wrapper">
+              <Barbell size={100} weight="thin" color={"#A7CE71"} />
+              <p>Weight: 60 kg</p>
+            </div>
+            <div className="each-icons__wrapper">
+              <Heart size={100} weight="thin" color={"#A7CE71"} />
+              <p>BMI: 22.9</p>
+            </div>
+          </div>
+          <div className="analysis__wrapper">
+            <div>
+              <div className="analysis-header__wrapper">
+                <h3>Analysis</h3>
+                <button>more</button>
+              </div>
+              <div
+                style={{
+                  display: "flex",
+                  gap: "50px",
+                }}
+              >
+                <div>
+                  <div
+                    style={{
+                      display: "flex",
+                      alignContent: "center",
+                      marginTop: "20px",
+                      gap: "10px",
+                    }}
+                  >
+                    <Heartbeat size={17} />{" "}
+                    <label className="analysis-label__text">01 Feb 2024</label>
+                  </div>
+                  <div>
+                    <p className="analysis-p__text">Hemoglobin</p>
+                    <label className="analysis-label__text">
+                      Awaiting result
+                    </label>
+                  </div>
+                </div>
+                <div>
+                  <div
+                    style={{
+                      display: "flex",
+                      alignContent: "center",
+                      marginTop: "20px",
+                      gap: "10px",
+                    }}
+                  >
+                    <Heartbeat size={17} />{" "}
+                    <label className="analysis-label__text">28 Jan 2024</label>
+                  </div>
+                  <div>
+                    <p className="analysis-p__text">Covid</p>
+                    <a className="analysis-anchor" href="#">
+                      View result{" "}
+                      <ArrowSquareIn
+                        size={16}
+                        weight="thin"
+                        color={"#515151"}
+                      />
+                    </a>
+                  </div>
+                </div>
+                <div>
+                  <div
+                    style={{
+                      display: "flex",
+                      alignContent: "center",
+                      marginTop: "20px",
+                      gap: "10px",
+                    }}
+                  >
+                    <Heartbeat size={17} />{" "}
+                    <label className="analysis-label__text">25 Jan 2024</label>
+                  </div>
+                  <div>
+                    <p className="analysis-p__text">Cholesterol</p>
+                    <a className="analysis-anchor" href="#">
+                      View result{" "}
+                      <ArrowSquareIn
+                        size={16}
+                        weight="thin"
+                        color={"#515151"}
+                      />
+                    </a>
+                  </div>
+                </div>
+                <div>
+                  <div
+                    style={{
+                      display: "flex",
+                      alignContent: "center",
+                      marginTop: "20px",
+                      gap: "10px",
+                    }}
+                  >
+                    <Heartbeat size={17} />{" "}
+                    <label className="analysis-label__text">15 Jan 2024</label>
+                  </div>
+                  <div>
+                    <p className="analysis-p__text">Sugar</p>
+                    <a className="analysis-anchor" href="#">
+                      View result{" "}
+                      <ArrowSquareIn
+                        size={16}
+                        weight="thin"
+                        color={"#515151"}
+                      />
+                    </a>
+                  </div>
+                </div>
+                <div>
+                  <div
+                    style={{
+                      display: "flex",
+                      alignContent: "center",
+                      marginTop: "20px",
+                      gap: "10px",
+                    }}
+                  >
+                    <Heartbeat size={17} />{" "}
+                    <label className="analysis-label__text">25 Dev 2023</label>
+                  </div>
+                  <div>
+                    <p className="analysis-p__text">Iron Diffeciency</p>
+                    <a className="analysis-anchor" href="#">
+                      View result{" "}
+                      <ArrowSquareIn
+                        size={16}
+                        weight="thin"
+                        color={"#515151"}
+                      />
+                    </a>
+                  </div>
+                </div>
+                <div>
+                  <div
+                    style={{
+                      display: "flex",
+                      alignContent: "center",
+                      marginTop: "20px",
+                      gap: "10px",
+                    }}
+                  >
+                    <Heartbeat size={17} />{" "}
+                    <label className="analysis-label__text">2 Nov 2023</label>
+                  </div>
+                  <div>
+                    <p className="analysis-p__text">X-ray</p>
+                    <a className="analysis-anchor" href="#">
+                      View result{" "}
+                      <ArrowSquareIn
+                        size={16}
+                        weight="thin"
+                        color={"#515151"}
+                      />
+                    </a>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
