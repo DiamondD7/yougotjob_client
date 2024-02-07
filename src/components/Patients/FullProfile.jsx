@@ -8,6 +8,7 @@ import {
   PersonArmsSpread,
   Barbell,
   Heart,
+  UserCircle,
   ArrowSquareIn,
 } from "@phosphor-icons/react";
 
@@ -172,19 +173,55 @@ const FullProfile = ({ fullProfileData, setOpenFullProfile }) => {
               </div>
             </div>
           </div>
-          <div className="personal-medical-history__wrapper">
-            <div>
-              <h3>Personal Medical History</h3>
+          <div className="personal-medical-contact__wrapper">
+            <div className="personal-medical-history__wrapper">
+              <div>
+                <h3>Personal Medical History</h3>
+              </div>
+              <div className="ul-medical__wrapper">
+                <ul>
+                  <li>Acid Reflux</li>
+                  <li>Allergy Problems</li>
+                  <li>Anxiety</li>
+                  <li>Anxiety</li>
+                  <li>Anxiety</li>
+                  <li>Anxiety</li>
+                  <li>Anxiety</li>
+                  <li>Anxiety</li>
+                  <li>Anxiety</li>
+                  <li>Anxiety</li>
+                  <li>Anxiety</li>
+                  <li>Anxiety</li>
+                  <li>Anxiety</li>
+                </ul>
+              </div>
             </div>
-            <div className="ul-medical__wrapper">
-              <ul>
-                <li>Acid Reflux</li>
-                <li>Allergy Problems</li>
-                <li>Anxiety</li>
-                <li>Anxiety</li>
-                <li>Anxiety</li>
-                <li>Anxiety</li>
-              </ul>
+            <div className="emergency-contact__wrapper">
+              <h3>Emergency contacts</h3>
+              <div className="emergency-contact-information__wrapper">
+                <UserCircle size={16} />
+                <div>
+                  <p>Henry Bell</p>
+                  <p>Relationship: Father</p>
+                  <p>021021021</p>
+                </div>
+              </div>
+              <div className="emergency-contact-information__wrapper">
+                <UserCircle size={16} />
+                <div>
+                  <p>Henry Bell</p>
+                  <p>Relationship: Father</p>
+                  <p>021021021</p>
+                </div>
+              </div>
+              <div className="emergency-contact-information__wrapper">
+                <UserCircle size={16} />
+                <div>
+                  <p>Henry Bell</p>
+                  <p>Relationship: Father</p>
+                  <p>021021021</p>
+                </div>
+              </div>
             </div>
           </div>
         </div>
