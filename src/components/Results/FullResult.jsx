@@ -19,13 +19,22 @@ const FullResult = ({ setOpenResult }) => {
       <div className="fullres-profile-container__wrapper">
         <div>
           <div className="fullres-profile__wrapper">
-            <h3>Johnson Martin Leaso Henderson</h3>
-            <h4 className="nhi-header">NHI: 3550837</h4>
-            <p>DOB: 2 November 1998</p>
-            <p>Age: 35</p>
-            <p>Nationality: Mexican</p>
-            <p>Height: 166cm</p>
-            <p>Weight: 75kg</p>
+            <div>
+              <img
+                className="result-profile-pic__img"
+                src="https://images.unsplash.com/photo-1491349174775-aaafddd81942?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                alt="profile-pic"
+              />
+            </div>
+            <div>
+              <h3>Johnson Martin Leaso Henderson</h3>
+              <h4 className="nhi-header">NHI: 3550837</h4>
+              <p>DOB: 2 November 1998</p>
+              <p>Age: 35</p>
+              <p>Nationality: Mexican</p>
+              <p>Height: 166cm</p>
+              <p>Weight: 75kg</p>
+            </div>
           </div>
 
           <div className="fullres-testdescription__wrapper">
