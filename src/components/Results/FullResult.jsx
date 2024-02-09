@@ -26,7 +26,7 @@ const FullResult = ({ setOpenResult }) => {
                 alt="profile-pic"
               />
             </div>
-            <div>
+            <div className="full-result-profile-subinfo__wrapper">
               <h3>Johnson Martin Leaso Henderson</h3>
               <h4 className="nhi-header">NHI: 3550837</h4>
               <p>DOB: 2 November 1998</p>
