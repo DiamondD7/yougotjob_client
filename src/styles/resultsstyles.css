@@ -81,6 +81,7 @@
   max-height: 100px;
   padding: 5px;
   overflow: auto;
+  outline: none;
 }
 
 .result-profile-pic__img {
@@ -93,4 +94,22 @@
 
 .full-result-profile-subinfo__wrapper p {
   margin-top: 5px;
+}
+
+.symptoms-update__btn {
+  padding: 3px 10px;
+  background-color: transparent;
+  border: none;
+  color: #81bb30;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 12px;
+}
+
+.symptoms-label__text {
+  padding: 3px 0px;
+  font-size: 12px;
+  color: rgba(0, 0, 0, 0.5);
 }

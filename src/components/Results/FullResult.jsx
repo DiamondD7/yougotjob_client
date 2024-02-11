@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
 import ViewPDF from "../../assets/pdf/Aaron-CoverLetter.pdf";
+import { PencilSimpleLine } from "@phosphor-icons/react";
 
 import { Viewer, Worker } from "@react-pdf-viewer/core";
 import { defaultLayoutPlugin } from "@react-pdf-viewer/default-layout";
@@ -8,6 +9,11 @@ import "@react-pdf-viewer/default-layout/lib/styles/index.css";
 
 const FullResult = ({ setOpenResult }) => {
   const newPlugin = defaultLayoutPlugin();
+  const initialTestText =
+    "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Ipsa non ea saepe ipsam explicabo dolores eius dolorem expedita! Dolore aut impedit nostrum expedita officiis perspiciatis esse laborum quaerat neque blanditiis.";
+  const [testText, setTestText] = useState(
+    "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Ipsa non ea saepe ipsam explicabo dolores eius dolorem expedita! Dolore aut impedit nostrum expedita officiis perspiciatis esse laborum quaerat neque blanditiis."
+  );
   return (
     <div>
       <button
@@ -39,10 +45,26 @@ const FullResult = ({ setOpenResult }) => {
 
           <div className="fullres-testdescription__wrapper">
             <h3>Haemoglobin Test:</h3>
-            <br />
-            <div>
+
+            <div style={{ marginTop: "10px" }}>
               <h5>Symptoms</h5>
-              <textarea className="symptoms-textarea"></textarea>
+              <textarea
+                className="symptoms-textarea"
+                value={testText}
+                onChange={(e) => setTestText(e.target.value)}
+              ></textarea>
+              <div style={{ display: "flex", justifyContent: "space-between" }}>
+                {initialTestText !== testText ? (
+                  <button className="symptoms-update__btn">
+                    <PencilSimpleLine size={18} color={"#81bb30"} /> update
+                  </button>
+                ) : (
+                  <div></div>
+                )}
+                <label className="symptoms-label__text">
+                  last updated 3/12/2023
+                </label>
+              </div>
             </div>
           </div>
         </div>
