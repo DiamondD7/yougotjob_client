@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import ViewPDF from "../../assets/pdf/Aaron-CoverLetter.pdf";
-import { PencilSimpleLine } from "@phosphor-icons/react";
+import { PencilSimpleLine, Prescription } from "@phosphor-icons/react";
 
 import { Viewer, Worker } from "@react-pdf-viewer/core";
 import { defaultLayoutPlugin } from "@react-pdf-viewer/default-layout";
@@ -47,7 +47,7 @@ const FullResult = ({ setOpenResult }) => {
             <h3>Haemoglobin Test:</h3>
 
             <div style={{ marginTop: "10px" }}>
-              <h5>Symptoms</h5>
+              <h5>Test summary</h5>
               <textarea
                 className="symptoms-textarea"
                 value={testText}
@@ -64,6 +64,31 @@ const FullResult = ({ setOpenResult }) => {
                 <label className="symptoms-label__text">
                   last updated 3/12/2023
                 </label>
+              </div>
+            </div>
+          </div>
+
+          <div className="fullres-prescribed__wrapper">
+            <h5>Prescribed medicines</h5>
+            <div className="fullres-prescription-details__wrapper">
+              <Prescription size={19} />
+              <div>
+                <p>Phenolynx Celyn</p>
+                <p>18/mcg</p>
+              </div>
+            </div>
+            <div className="fullres-prescription-details__wrapper">
+              <Prescription size={19} />
+              <div>
+                <p>Amoxicillin </p>
+                <p>5/mcg</p>
+              </div>
+            </div>
+            <div className="fullres-prescription-details__wrapper">
+              <Prescription size={19} />
+              <div>
+                <p>Phenolynx Celyn</p>
+                <p>18/mcg</p>
               </div>
             </div>
           </div>
