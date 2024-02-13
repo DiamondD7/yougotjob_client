@@ -76,62 +76,75 @@ const FullResult = ({ setOpenResult }) => {
             </div>
           </div>
 
-          <div className="fullres-prescribed__wrapper">
-            <div style={{ display: "flex", gap: "5px" }}>
-              <h5>Prescribed medicines</h5>
-              <button
-                className="fullres-btn-edit"
-                onClick={() => setEditMed(!editMed)}
-              >
-                {editMed === true ? "cancel" : "edit"}
-              </button>
-
-              {editMed && (
+          <div
+            className="fullres-prescribed__wrapper"
+            style={{ display: "flex", justifyContent: "space-between" }}
+          >
+            <div>
+              <div style={{ display: "flex", gap: "5px" }}>
+                <h5>Prescribed medicines</h5>
                 <button
                   className="fullres-btn-edit"
                   onClick={() => setEditMed(!editMed)}
                 >
-                  done
+                  {editMed === true ? "cancel" : "edit"}
                 </button>
-              )}
-            </div>
-            <div className="fullres-prescription-details__wrapper">
-              <Prescription size={19} />
-              <div>
-                {editMed === true ? (
-                  <input
-                    value={prescribedMed}
-                    onChange={(e) => setPrescribedMed(e.target.value)}
-                  />
-                ) : (
-                  <p>{prescribedMed}</p>
+
+                {editMed && (
+                  <button
+                    className="fullres-btn-edit"
+                    onClick={() => setEditMed(!editMed)}
+                  >
+                    done
+                  </button>
                 )}
               </div>
-            </div>
-            <div className="fullres-prescription-details__wrapper">
-              <Prescription size={19} />
-              <div>
-                {editMed === true ? (
-                  <input
-                    value={prescribedMed}
-                    onChange={(e) => setPrescribedMed(e.target.value)}
-                  />
-                ) : (
-                  <p>{prescribedMed}</p>
-                )}
+              <div className="fullres-prescription-details__wrapper">
+                <Prescription size={19} />
+                <div>
+                  {editMed === true ? (
+                    <input
+                      value={prescribedMed}
+                      onChange={(e) => setPrescribedMed(e.target.value)}
+                    />
+                  ) : (
+                    <p>{prescribedMed}</p>
+                  )}
+                </div>
+              </div>
+              <div className="fullres-prescription-details__wrapper">
+                <Prescription size={19} />
+                <div>
+                  {editMed === true ? (
+                    <input
+                      value={prescribedMed}
+                      onChange={(e) => setPrescribedMed(e.target.value)}
+                    />
+                  ) : (
+                    <p>{prescribedMed}</p>
+                  )}
+                </div>
+              </div>
+              <div className="fullres-prescription-details__wrapper">
+                <Prescription size={19} />
+                <div>
+                  {editMed === true ? (
+                    <input
+                      value={prescribedMed}
+                      onChange={(e) => setPrescribedMed(e.target.value)}
+                    />
+                  ) : (
+                    <p>{prescribedMed}</p>
+                  )}
+                </div>
               </div>
             </div>
-            <div className="fullres-prescription-details__wrapper">
-              <Prescription size={19} />
-              <div>
-                {editMed === true ? (
-                  <input
-                    value={prescribedMed}
-                    onChange={(e) => setPrescribedMed(e.target.value)}
-                  />
-                ) : (
-                  <p>{prescribedMed}</p>
-                )}
+            <div style={{ width: "200px" }}>
+              <h5>Allergies</h5>
+              <div className="fullres-allergies__wrapper">
+                <p>Milk</p>
+                <p>Peanuts</p>
+                <p>Pets/fur</p>
               </div>
             </div>
           </div>
