@@ -14,6 +14,9 @@ const FullResult = ({ setOpenResult }) => {
   const [testText, setTestText] = useState(
     "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Ipsa non ea saepe ipsam explicabo dolores eius dolorem expedita! Dolore aut impedit nostrum expedita officiis perspiciatis esse laborum quaerat neque blanditiis."
   );
+
+  const [prescribedMed, setPrescribedMed] = useState("Phenolynx Celyn 18/mcg");
+  const [editMed, setEditMed] = useState(false);
   return (
     <div>
       <button
@@ -71,27 +74,59 @@ const FullResult = ({ setOpenResult }) => {
           <div className="fullres-prescribed__wrapper">
             <div style={{ display: "flex", gap: "5px" }}>
               <h5>Prescribed medicines</h5>
-              <button className="fullres-btn-edit">edit</button>
+              <button
+                className="fullres-btn-edit"
+                onClick={() => setEditMed(!editMed)}
+              >
+                {editMed === true ? "cancel" : "edit"}
+              </button>
+
+              {editMed && (
+                <button
+                  className="fullres-btn-edit"
+                  onClick={() => setEditMed(!editMed)}
+                >
+                  done
+                </button>
+              )}
             </div>
             <div className="fullres-prescription-details__wrapper">
               <Prescription size={19} />
               <div>
-                <p>Phenolynx Celyn</p>
-                <p>18/mcg</p>
+                {editMed === true ? (
+                  <input
+                    value={prescribedMed}
+                    onChange={(e) => setPrescribedMed(e.target.value)}
+                  />
+                ) : (
+                  <p>{prescribedMed}</p>
+                )}
               </div>
             </div>
             <div className="fullres-prescription-details__wrapper">
               <Prescription size={19} />
               <div>
-                <p>Amoxicillin </p>
-                <p>5/mcg</p>
+                {editMed === true ? (
+                  <input
+                    value={prescribedMed}
+                    onChange={(e) => setPrescribedMed(e.target.value)}
+                  />
+                ) : (
+                  <p>{prescribedMed}</p>
+                )}
               </div>
             </div>
             <div className="fullres-prescription-details__wrapper">
               <Prescription size={19} />
               <div>
-                <p>Phenolynx Celyn</p>
-                <p>18/mcg</p>
+                {editMed === true ? (
+                  <input
+                    value={prescribedMed}
+                    onChange={(e) => setPrescribedMed(e.target.value)}
+                  />
+                ) : (
+                  <p>{prescribedMed}</p>
+                )}
               </div>
             </div>
           </div>
