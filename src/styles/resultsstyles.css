@@ -150,3 +150,8 @@
   color: #81bb30;
   cursor: pointer;
 }
+
+.fullres-allergies__wrapper p {
+  font-size: 13px;
+  margin-top: 5px;
+}
