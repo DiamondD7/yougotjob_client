@@ -133,3 +133,9 @@
 .fullres-prescription-details__wrapper p {
   font-size: 13px;
 }
+
+.fullres-btn-edit {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+}

@@ -69,7 +69,10 @@ const FullResult = ({ setOpenResult }) => {
           </div>
 
           <div className="fullres-prescribed__wrapper">
-            <h5>Prescribed medicines</h5>
+            <div style={{ display: "flex", gap: "5px" }}>
+              <h5>Prescribed medicines</h5>
+              <button className="fullres-btn-edit">edit</button>
+            </div>
             <div className="fullres-prescription-details__wrapper">
               <Prescription size={19} />
               <div>
