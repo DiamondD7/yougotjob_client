@@ -51,27 +51,23 @@ const FullResult = ({ setOpenResult }) => {
             </button>
           </div>
 
-          <div className="fullres-testdescription__wrapper">
-            <h3>Haemoglobin Test:</h3>
-
-            <div style={{ marginTop: "10px" }}>
-              <h5>Test summary</h5>
-              <textarea
-                className="symptoms-textarea"
-                value={testText}
-                onChange={(e) => setTestText(e.target.value)}
-              ></textarea>
-              <div style={{ display: "flex", justifyContent: "space-between" }}>
-                {initialTestText !== testText ? (
-                  <button className="symptoms-update__btn">
-                    <PencilSimpleLine size={18} color={"#81bb30"} /> update
-                  </button>
-                ) : (
-                  <div></div>
-                )}
-                <label className="symptoms-label__text">
-                  last updated 3/12/2023
-                </label>
+          <div className="fullres-details__wrapper">
+            <h5>Details</h5>
+            <div className="fullres-details-infos__wrapper">
+              <div>
+                <p>Physician: Dr. Mahit Sharma</p>
+                <p>Office: Epsom Medical Centre </p>
+                <p>Room 4</p>
+              </div>
+              <div>
+                <p>Condition: Hemoglobin</p>
+                <p>Triage level: 3</p>
+                <p>Duration: 40 mins</p>
+              </div>
+              <div>
+                <p>Condition: Hemoglobin</p>
+                <p>Triage level: 3</p>
+                <p>Duration: 40 mins</p>
               </div>
             </div>
           </div>
@@ -145,6 +141,29 @@ const FullResult = ({ setOpenResult }) => {
                 <p>Milk</p>
                 <p>Peanuts</p>
                 <p>Pets/fur</p>
+              </div>
+            </div>
+          </div>
+
+          <div className="fullres-testdescription__wrapper">
+            <div style={{ marginTop: "10px" }}>
+              <h5>Test summary</h5>
+              <textarea
+                className="symptoms-textarea"
+                value={testText}
+                onChange={(e) => setTestText(e.target.value)}
+              ></textarea>
+              <div style={{ display: "flex", justifyContent: "space-between" }}>
+                {initialTestText !== testText ? (
+                  <button className="symptoms-update__btn">
+                    <PencilSimpleLine size={18} color={"#81bb30"} /> update
+                  </button>
+                ) : (
+                  <div></div>
+                )}
+                <label className="symptoms-label__text">
+                  last updated 3/12/2023
+                </label>
               </div>
             </div>
           </div>

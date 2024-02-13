@@ -75,6 +75,24 @@
   justify-content: space-between;
 }
 
+.fullres-details__wrapper {
+  margin: 30px 0 0 10px;
+}
+
+.fullres-details-infos__wrapper {
+  display: flex;
+  gap: 20px;
+  width: 500px;
+  height: 68px;
+  overflow: auto;
+
+  margin-top: 10px;
+}
+
+.fullres-details__wrapper p {
+  font-size: 13px;
+}
+
 .pdf-container__wrapper {
   width: 69%;
   height: 97vh;
@@ -88,8 +106,8 @@
   margin-top: 10px;
   min-width: 505px;
   max-width: 505px;
-  min-height: 100px;
-  max-height: 100px;
+  min-height: 200px;
+  max-height: 200px;
   padding: 5px;
   border-radius: 10px;
   overflow: auto;
