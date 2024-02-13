@@ -45,6 +45,11 @@ const FullResult = ({ setOpenResult }) => {
               <p>Weight: 75kg</p>
             </div>
           </div>
+          <div>
+            <button className="fullres-viewprofile__btn">
+              view patient's profile
+            </button>
+          </div>
 
           <div className="fullres-testdescription__wrapper">
             <h3>Haemoglobin Test:</h3>
