@@ -5,9 +5,10 @@ import Communication from "../Communication/Communication";
 import Results from "../Results/Results";
 import Domain from "../Domain/Domain";
 import CarePlan from "../CarePlan/CarePlan";
+import PhysicianProfile from "../ProfileDepartment/PhysicianProfile";
+import Dashboard from "../Dashboard/Dashboard";
 
 import "../../styles/displaystyles.css";
-import Dashboard from "../Dashboard/Dashboard";
 const Display = ({ displayed }) => {
   return (
     <>
@@ -26,6 +27,8 @@ const Display = ({ displayed }) => {
           <CarePlan />
         ) : displayed === "dashboard" ? (
           <Dashboard />
+        ) : displayed === "profile" ? (
+          <PhysicianProfile />
         ) : (
           ""
         )}
