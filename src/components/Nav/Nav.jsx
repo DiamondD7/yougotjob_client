@@ -8,6 +8,7 @@ import {
   User,
   Note,
   Chat,
+  Gear,
   BookOpenText,
   House,
 } from "@phosphor-icons/react";
@@ -229,16 +230,23 @@ const Nav = ({ setDisplayed, fakeRole }) => {
             </button>
           </li>
           <br />
-          <li className="profile-btn">
-            <button>
-              <User size={20} color="#454545" />
-            </button>
-          </li>
-          <li className="logout-btn">
-            <button>
-              <SignOut size={20} color="#454545" />
-            </button>
-          </li>
+          <div className="navigation-bottom-icons__wrapper">
+            <li className="profile-btn">
+              <button onClick={() => onClickDisplayed("profile")}>
+                <User size={20} color="#454545" />
+              </button>
+            </li>
+            <li className="settings-btn">
+              <button>
+                <Gear size={20} color="#454545" />
+              </button>
+            </li>
+            <li className="logout-btn">
+              <button>
+                <SignOut size={20} color="#454545" />
+              </button>
+            </li>
+          </div>
         </ul>
       </div>
     </>
