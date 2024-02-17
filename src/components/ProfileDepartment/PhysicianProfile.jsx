@@ -7,6 +7,7 @@ import {
   UserList,
   FolderNotch,
   FolderNotchOpen,
+  Calendar,
 } from "@phosphor-icons/react";
 
 import "../../styles/physicianprofilestyles.css";
@@ -51,24 +52,33 @@ const HeaderProfile = () => {
 };
 
 const NavProfile = () => {
-  const [hovered, setHovered] = useState("");
+  const [hovered, setHovered] = useState(""); //initialisation of the btn hovered effect, started out as an empty string
+  const [clickNav, setClickNav] = useState(""); //initialisation of the click nav, started out as an empty string
 
   useEffect(() => {
-    const buttons = document.querySelectorAll(".nav-btns");
+    //useEffect to be use everytime when a user hover a button in the navigation section
+    const buttons = document.querySelectorAll(".nav-btns"); //adding all buttons in a list to be loop.
+
     buttons.forEach((button, index) => {
+      //looping through all the buttons with the className of ".nav-btns"
       if (hovered === "") {
         button.addEventListener("mouseenter", () => {
+          //added an eventListener when the cursor is hovering on the btn
           if (index === 0) {
-            setHovered("overview");
+            //index 0 is the first navigation button which is the overview.
+            setHovered("overview"); //setting the state to overview
           } else if (index === 1) {
-            setHovered("records");
+            setHovered("records"); //setting the state to records
           } else if (index === 2) {
-            setHovered("documents");
+            setHovered("documents"); //setting the state to documents
+          } else if (index === 3) {
+            setHovered("appointments"); //setting the state to appointments
           }
         });
       } else {
         button.addEventListener("mouseleave", () => {
-          setHovered("");
+          //when the cursor is not hovering anymore
+          setHovered(""); //setting the state back to its initial state, an empty string.
         });
       }
     });
@@ -81,17 +91,32 @@ const NavProfile = () => {
           style={{
             display: "block",
             textAlign: "center",
-            borderTop: hovered === "overview" ? "1px solid #81bb30" : "",
+            borderTop:
+              hovered === "overview" || clickNav === "overview"
+                ? "1px solid #81bb30"
+                : "", //change borderTop color if the cursor is hovering on the "overview" button or if the user click on the button
             height: "50px",
+            color:
+              hovered === "overview" || clickNav === "overview"
+                ? "#81bb30"
+                : "", //change the fontcolor if the cursor is hovering on the "overview" button or if the user click on the button
           }}
           className="nav-btns"
-          id="overview"
+          onClick={() => setClickNav("overview")} //setting up the onClick event and changing its state
         >
           <div>
             <ListMagnifyingGlass
               size={20}
-              color={hovered === "overview" ? "#81bb30" : ""}
-              weight={hovered === "overview" ? "fill" : "regular"}
+              color={
+                hovered === "overview" || clickNav === "overview"
+                  ? "#81bb30"
+                  : "" //change the fontcolor if the cursor is hovering on the "overview" button or if the user click on the button
+              }
+              weight={
+                hovered === "overview" || clickNav === "overview"
+                  ? "fill"
+                  : "regular" //change the weight of the icon if the cursor is hovering on the "overview" button or if the user click on the button
+              }
             />
           </div>
           overview
@@ -102,15 +127,27 @@ const NavProfile = () => {
           style={{
             display: "block",
             textAlign: "center",
-            borderTop: hovered === "records" ? "1px solid #81bb30" : "",
+            borderTop:
+              hovered === "records" || clickNav === "records"
+                ? "1px solid #81bb30"
+                : "", //change borderTop color if the cursor is hovering on the "overview" button or if the user click on the button
             height: "50px",
+            color:
+              hovered === "records" || clickNav === "records" ? "#81bb30" : "", //change the fontcolor if the cursor is hovering on the "records" button or if the user click on the button
           }}
+          onClick={() => setClickNav("records")}
         >
           <div>
             <UserList
               size={20}
-              color={hovered === "records" ? "#81bb30" : ""}
-              weight={hovered === "records" ? "fill" : "regular"}
+              color={
+                hovered === "records" || clickNav === "records" ? "#81bb30" : ""
+              } //change the fontcolor if the cursor is hovering on the "records" button or if the user click on the button
+              weight={
+                hovered === "records" || clickNav === "records"
+                  ? "fill"
+                  : "regular" //change the weight of the icon if the cursor is hovering on the "records" button or if the user click on the button
+              }
             />
           </div>
           records
@@ -120,25 +157,73 @@ const NavProfile = () => {
           style={{
             display: "block",
             textAlign: "center",
-            borderTop: hovered === "documents" ? "1px solid #81bb30" : "",
+            borderTop:
+              hovered === "documents" || clickNav === "documents"
+                ? "1px solid #81bb30"
+                : "", //change borderTop color if the cursor is hovering on the "documents" button or if the user click on the button
             height: "50px",
+            color:
+              hovered === "documents" || clickNav === "documents"
+                ? "#81bb30"
+                : "", //change font color if the cursor is hovering on the "documents" button or if the user click on the button
           }}
+          onClick={() => setClickNav("documents")}
         >
           <div>
-            {hovered === "documents" ? (
+            {hovered === "documents" || clickNav === "documents" ? (
               <FolderNotchOpen
                 size={20}
-                color={hovered === "documents" ? "#81bb30" : ""}
-                weight={hovered === "documents" ? "fill" : "regular"}
+                color={
+                  hovered === "documents" || clickNav === "documents"
+                    ? "#81bb30"
+                    : "" //change font color if the cursor is hovering on the "documents" button or if the user click on the button
+                }
+                weight={
+                  hovered === "documents" || clickNav === "documents"
+                    ? "fill"
+                    : "regular" //change weight of the icon if the cursor is hovering on the "documents" button or if the user click on the button
+                }
               />
             ) : (
-              <FolderNotch size={20} weight="fill" />
+              <FolderNotch size={20} weight="fill" /> //use this icon if btn is not hovered and the btn is not click
             )}
           </div>
           documents
         </button>
-        <button>saved documents</button>
-        <button>saved documents</button>
+        <button
+          className="nav-btns"
+          style={{
+            display: "block",
+            textAlign: "center",
+            borderTop:
+              hovered === "appointments" || clickNav === "appointments"
+                ? "1px solid #81bb30"
+                : "", //change borderTop color if the cursor is hovering on the "appointments" button or if the user click on the button
+            height: "50px",
+            color:
+              hovered === "appointments" || clickNav === "appointments"
+                ? "#81bb30"
+                : "", //change font color if the cursor is hovering on the "appointments" button or if the user click on the button
+          }}
+          onClick={() => setClickNav("appointments")}
+        >
+          <div>
+            <Calendar
+              size={20}
+              color={
+                hovered === "appointments" || clickNav === "appointments"
+                  ? "#81bb30"
+                  : "" //change font color if the cursor is hovering on the "appointments" button or if the user click on the button
+              }
+              weight={
+                hovered === "appointments" || clickNav === "appointments"
+                  ? "fill"
+                  : "regular" //change weight of the icon if the cursor is hovering on the "appointments" button or if the user click on the button
+              }
+            />
+          </div>
+          appointments
+        </button>
       </div>
     </div>
   );
