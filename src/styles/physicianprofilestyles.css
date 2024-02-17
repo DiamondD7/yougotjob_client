@@ -25,9 +25,11 @@
 }
 
 .nav-btns__wrapper {
-  margin: 50px 20px 0 20px;
+  margin-top: 50px;
+  padding: 0 10px;
   display: flex;
   gap: 100px;
+  border-top: 0.5px solid rgba(0, 0, 0, 0.05);
 }
 
 .nav-btns__wrapper button {
@@ -37,6 +39,6 @@
   font-size: 11px;
 }
 
-.nav-btns__wrapper button:hover {
+/* .nav-btns__wrapper button:hover {
   color: #81bb30;
-}
+} */
