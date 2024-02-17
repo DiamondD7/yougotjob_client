@@ -16,3 +16,10 @@
   gap: 10px;
   margin-top: 5px;
 }
+.physician-profile-sub-details__wrapper p {
+  color: rgba(0, 0, 0, 0.5);
+}
+
+.physician-profile-allinfo__btn {
+  margin-top: 29px;
+}
