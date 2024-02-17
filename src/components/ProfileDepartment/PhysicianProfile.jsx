@@ -1,8 +1,16 @@
-import React from "react";
-import { Phone, Envelope, GraduationCap } from "@phosphor-icons/react";
+import React, { useState, useEffect } from "react";
+import {
+  Phone,
+  Envelope,
+  GraduationCap,
+  ListMagnifyingGlass,
+  UserList,
+  FolderNotch,
+  FolderNotchOpen,
+} from "@phosphor-icons/react";
 
 import "../../styles/physicianprofilestyles.css";
-const PhysicianProfile = () => {
+const HeaderProfile = () => {
   return (
     <div>
       <div className="profile-details__wrapper">
@@ -37,6 +45,126 @@ const PhysicianProfile = () => {
             </div>
           </div>
         </div>
+      </div>
+    </div>
+  );
+};
+
+const NavProfile = () => {
+  const [hovered, setHovered] = useState("");
+
+  useEffect(() => {
+    const buttons = document.querySelectorAll(".nav-btns");
+    buttons.forEach((button, index) => {
+      if (hovered === "") {
+        button.addEventListener("mouseenter", () => {
+          if (index === 0) {
+            setHovered("overview");
+          } else if (index === 1) {
+            setHovered("records");
+          } else if (index === 2) {
+            setHovered("documents");
+          }
+        });
+      } else {
+        button.addEventListener("mouseleave", () => {
+          setHovered("");
+        });
+      }
+    });
+  }, [hovered]);
+
+  return (
+    <div>
+      <div className="nav-btns__wrapper">
+        <button
+          style={{
+            display: "block",
+            textAlign: "center",
+            borderTop: hovered === "overview" ? "1px solid #81bb30" : "",
+            height: "50px",
+          }}
+          className="nav-btns"
+          id="overview"
+        >
+          <div>
+            <ListMagnifyingGlass
+              size={20}
+              color={hovered === "overview" ? "#81bb30" : ""}
+              weight={hovered === "overview" ? "fill" : "regular"}
+            />
+          </div>
+          overview
+        </button>
+
+        <button
+          className="nav-btns"
+          style={{
+            display: "block",
+            textAlign: "center",
+            borderTop: hovered === "records" ? "1px solid #81bb30" : "",
+            height: "50px",
+          }}
+        >
+          <div>
+            <UserList
+              size={20}
+              color={hovered === "records" ? "#81bb30" : ""}
+              weight={hovered === "records" ? "fill" : "regular"}
+            />
+          </div>
+          records
+        </button>
+        <button
+          className="nav-btns"
+          style={{
+            display: "block",
+            textAlign: "center",
+            borderTop: hovered === "documents" ? "1px solid #81bb30" : "",
+            height: "50px",
+          }}
+        >
+          <div>
+            {hovered === "documents" ? (
+              <FolderNotchOpen
+                size={20}
+                color={hovered === "documents" ? "#81bb30" : ""}
+                weight={hovered === "documents" ? "fill" : "regular"}
+              />
+            ) : (
+              <FolderNotch size={20} weight="fill" />
+            )}
+          </div>
+          documents
+        </button>
+        <button>saved documents</button>
+        <button>saved documents</button>
+      </div>
+    </div>
+  );
+};
+
+const BodyProfile = () => {
+  return (
+    <div>
+      <p></p>
+    </div>
+  );
+};
+
+const PhysicianProfile = () => {
+  return (
+    <div>
+      <div>
+        <HeaderProfile />
+      </div>
+
+      <div>
+        <NavProfile />
+      </div>
+
+      <div>
+        <BodyProfile />
       </div>
     </div>
   );

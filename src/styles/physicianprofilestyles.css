@@ -23,3 +23,20 @@
 .physician-profile-allinfo__btn {
   margin-top: 29px;
 }
+
+.nav-btns__wrapper {
+  margin: 50px 20px 0 20px;
+  display: flex;
+  gap: 100px;
+}
+
+.nav-btns__wrapper button {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 11px;
+}
+
+.nav-btns__wrapper button:hover {
+  color: #81bb30;
+}
