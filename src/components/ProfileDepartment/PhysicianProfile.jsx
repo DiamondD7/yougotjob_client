@@ -8,6 +8,8 @@ import {
   FolderNotch,
   FolderNotchOpen,
   Calendar,
+  MapPin,
+  Video,
 } from "@phosphor-icons/react";
 
 import "../../styles/physicianprofilestyles.css";
@@ -26,10 +28,14 @@ const HeaderProfile = () => {
               Dr. Mahichit Sharma
             </p>
             <p>General Practioner</p>
-            <div style={{ marginTop: "20px" }}>
+            <div style={{ marginTop: "10px" }}>
               <div className="physician-profile-sub-details__wrapper">
                 <GraduationCap size={17} color="rgba(0,0,0,0.5)" />
                 <p style={{ fontSize: "13px" }}>Phd in Medicine </p>
+              </div>
+              <div className="physician-profile-sub-details__wrapper">
+                <MapPin size={17} color="rgba(0,0,0,0.5)" />
+                <p style={{ fontSize: "13px" }}>Epsom Medical Centre </p>
               </div>
               <div className="physician-profile-sub-details__wrapper">
                 <Envelope size={17} color="rgba(0,0,0,0.5)" />
@@ -73,6 +79,8 @@ const NavProfile = () => {
             setHovered("documents"); //setting the state to documents
           } else if (index === 3) {
             setHovered("appointments"); //setting the state to appointments
+          } else if (index === 4) {
+            setHovered("learning");
           }
         });
       } else {
@@ -96,6 +104,7 @@ const NavProfile = () => {
                 ? "1px solid #81bb30"
                 : "", //change borderTop color if the cursor is hovering on the "overview" button or if the user click on the button
             height: "50px",
+            width: "90px",
             color:
               hovered === "overview" || clickNav === "overview"
                 ? "#81bb30"
@@ -132,6 +141,7 @@ const NavProfile = () => {
                 ? "1px solid #81bb30"
                 : "", //change borderTop color if the cursor is hovering on the "overview" button or if the user click on the button
             height: "50px",
+            width: "90px",
             color:
               hovered === "records" || clickNav === "records" ? "#81bb30" : "", //change the fontcolor if the cursor is hovering on the "records" button or if the user click on the button
           }}
@@ -162,6 +172,7 @@ const NavProfile = () => {
                 ? "1px solid #81bb30"
                 : "", //change borderTop color if the cursor is hovering on the "documents" button or if the user click on the button
             height: "50px",
+            width: "90px",
             color:
               hovered === "documents" || clickNav === "documents"
                 ? "#81bb30"
@@ -200,6 +211,7 @@ const NavProfile = () => {
                 ? "1px solid #81bb30"
                 : "", //change borderTop color if the cursor is hovering on the "appointments" button or if the user click on the button
             height: "50px",
+            width: "90px",
             color:
               hovered === "appointments" || clickNav === "appointments"
                 ? "#81bb30"
@@ -223,6 +235,42 @@ const NavProfile = () => {
             />
           </div>
           appointments
+        </button>
+
+        <button
+          className="nav-btns"
+          style={{
+            display: "block",
+            textAlign: "center",
+            borderTop:
+              hovered === "learning" || clickNav === "learning"
+                ? "1px solid #81bb30"
+                : "", //change borderTop color if the cursor is hovering on the "learning" button or if the user click on the button
+            height: "50px",
+            width: "90px",
+            color:
+              hovered === "learning" || clickNav === "learning"
+                ? "#81bb30"
+                : "", //change font color if the cursor is hovering on the "learning" button or if the user click on the button
+          }}
+          onClick={() => setClickNav("learning")}
+        >
+          <div>
+            <Video
+              size={20}
+              color={
+                hovered === "learning" || clickNav === "learning"
+                  ? "#81bb30"
+                  : "" //change font color if the cursor is hovering on the "learning" button or if the user click on the button
+              }
+              weight={
+                hovered === "learning" || clickNav === "learning"
+                  ? "fill"
+                  : "regular" //change weight of the icon if the cursor is hovering on the "learning" button or if the user click on the button
+              }
+            />
+          </div>
+          learning
         </button>
       </div>
     </div>
