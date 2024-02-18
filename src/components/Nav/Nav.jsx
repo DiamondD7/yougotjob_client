@@ -210,15 +210,15 @@ const Nav = ({ setDisplayed, fakeRole }) => {
           <li
             className={minimizedNav === true ? "minimizednav-icons" : ""}
             style={
-              activeDisplay === "careplan" ? { backgroundColor: "#D6E8FF" } : {}
+              activeDisplay === "learning" ? { backgroundColor: "#D6E8FF" } : {}
             }
           >
             <button
               className={minimizedNav === true ? "btn-normal" : "icon-label"}
-              onClick={() => onClickDisplayed("careplan")}
+              onClick={() => onClickDisplayed("learning")}
               style={
                 minimizedNav === false
-                  ? activeDisplay === "careplan"
+                  ? activeDisplay === "learning"
                     ? { backgroundColor: "#D6E8FF" }
                     : {}
                   : {}
@@ -226,7 +226,7 @@ const Nav = ({ setDisplayed, fakeRole }) => {
             >
               <BookOpenText size={20} color="#454545" />
               &nbsp;
-              {minimizedNav === true ? "" : "Care Plan"}
+              {minimizedNav === true ? "" : "Learning"}
             </button>
           </li>
           <br />
