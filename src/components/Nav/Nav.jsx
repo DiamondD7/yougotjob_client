@@ -8,6 +8,7 @@ import {
   User,
   Note,
   Chat,
+  ChalkboardTeacher,
   Gear,
   BookOpenText,
   House,
@@ -188,23 +189,23 @@ const Nav = ({ setDisplayed, fakeRole }) => {
           <li
             className={minimizedNav === true ? "minimizednav-icons" : ""}
             style={
-              activeDisplay === "domain" ? { backgroundColor: "#D6E8FF" } : {}
+              activeDisplay === "support" ? { backgroundColor: "#D6E8FF" } : {}
             }
           >
             <button
               className={minimizedNav === true ? "btn-normal" : "icon-label"}
-              onClick={() => onClickDisplayed("domain")}
+              onClick={() => onClickDisplayed("support")}
               style={
                 minimizedNav === false
-                  ? activeDisplay === "domain"
+                  ? activeDisplay === "support"
                     ? { backgroundColor: "#D6E8FF" }
                     : {}
                   : {}
               }
             >
-              <Briefcase size={20} color="#454545" />
+              <ChalkboardTeacher size={20} color="#454545" />
               &nbsp;
-              {minimizedNav === true ? "" : "Domain"}
+              {minimizedNav === true ? "" : "Support"}
             </button>
           </li>
           <li
