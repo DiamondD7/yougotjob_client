@@ -9,6 +9,7 @@ const Support = () => {
   const [openNewIn2024, setOpenNewIn2024] = useState(false);
   return (
     <div>
+      <h1 className="support-header__text">Documents</h1>
       <div className="support-folders__wrapper">
         <button
           className="support-folders__btn"
