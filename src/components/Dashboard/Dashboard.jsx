@@ -1,15 +1,18 @@
 import React, { useState, useEffect } from "react";
+import { MockUserData } from "../../assets/js/mockChartData";
 import { User, Calendar } from "@phosphor-icons/react";
+import { Line } from "react-chartjs-2";
+import { Chart as ChartJS } from "chart.js/auto";
 
 import "../../styles/dashboardstyles.css";
 
-const Dashboard = () => {
+const SummaryCards = () => {
   const [days, setDays] = useState(0);
   const [hours, setHours] = useState(0);
   const [minutes, setMinutes] = useState(0);
   const [seconds, setSeconds] = useState(0);
 
-  const [inputDate, setInputDate] = useState("29 Jan 2024 12:40:00");
+  const [inputDate, setInputDate] = useState("21 Feb 2024 13:40:00");
   const [currentDate, setCurrentDate] = useState(inputDate);
 
   //handles countdown
@@ -142,14 +145,95 @@ const Dashboard = () => {
           </div>
         </div>
       </div>
+    </div>
+  );
+};
 
-      <div className="mid-wrapper"></div>
-      <div className="low-wrapper">
-        <div className="low1-wrapper"></div>
-        <div className="low2-wrapper">
-          <div className="mini-calendar__wrapper"></div>
-          <div className="email-notification__wrapper"></div>
-        </div>
+const PatientLineGraph = () => {
+  const [changeChartSubject, setChangeChartSubject] = useState(1);
+  const [userData, setUserData] = useState({
+    labels: MockUserData.map((data) => data.monthName),
+    datasets: [
+      {
+        label: "Amount of Appointments per month",
+        data: MockUserData.map((data) => data.appointments),
+        backgroundColor: "#9dcd5a",
+        borderColor: "#9dcd5a",
+      },
+    ],
+  });
+
+  const handleChangeChartSubject = () => {
+    if (changeChartSubject < 3) {
+      setChangeChartSubject(changeChartSubject + 1);
+    } else {
+      setChangeChartSubject(1);
+    }
+  };
+
+  useEffect(() => {
+    if (changeChartSubject === 1) {
+      setUserData({
+        labels: MockUserData.map((data) => data.monthName),
+        datasets: [
+          {
+            label: "Amount of Appointments per month",
+            data: MockUserData.map((data) => data.appointments),
+            backgroundColor: "#9dcd5a",
+            borderColor: "#9dcd5a",
+          },
+        ],
+      });
+    } else if (changeChartSubject === 2) {
+      setUserData({
+        labels: MockUserData.map((data) => data.monthName),
+        datasets: [
+          {
+            label: "Amount of Flu Vaccination per month",
+            data: MockUserData.map((data) => data.fluVacinnation),
+            backgroundColor: "purple",
+            borderColor: "purple",
+          },
+        ],
+      });
+    } else {
+      setUserData({
+        labels: MockUserData.map((data) => data.monthName),
+        datasets: [
+          {
+            label: "Amount of Covid Vaccination per month",
+            data: MockUserData.map((data) => data.covidVaccination),
+            backgroundColor: "red",
+            borderColor: "red",
+          },
+        ],
+      });
+    }
+  }, [changeChartSubject]);
+
+  return (
+    <div>
+      <div className="dashboard-graph__wrapper">
+        <Line data={userData} />
+        <button
+          className="dashboard-graph-switch__btn"
+          onClick={handleChangeChartSubject}
+        >
+          switch
+        </button>
+      </div>
+    </div>
+  );
+};
+
+const Dashboard = () => {
+  return (
+    <div>
+      <div>
+        <SummaryCards />
+      </div>
+      <div className="dashboard-graph__wrapper">
+        <PatientLineGraph />
       </div>
     </div>
   );
