@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { MockUserData } from "../../assets/js/mockChartData";
-import { User, Calendar, CaretDown } from "@phosphor-icons/react";
+import { User, Calendar, CaretDown, CaretUp } from "@phosphor-icons/react";
 import { Line } from "react-chartjs-2";
 import { Chart as ChartJS } from "chart.js/auto";
 
@@ -227,18 +227,94 @@ const PatientLineGraph = () => {
 };
 
 const AppointmentContainer = () => {
+  const [openAppointmentContainer, setOpenAppointmentContainer] =
+    useState(false);
   return (
     <div>
-      <div className="appointment-container__wrapper">
-        <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-          <h1 style={{ color: "#9dcd5a" }}>5</h1>
-          <h4 style={{ width: "100px", fontSize: "13px" }}>
-            appointments due today
-          </h4>
-          <button className="btnclear appointment-container__btn">
-            expand <CaretDown size={16} />
-          </button>
+      <button
+        className="appointment-container__wrapper"
+        onClick={() => setOpenAppointmentContainer(!openAppointmentContainer)}
+        style={{ cursor: "pointer" }}
+      >
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
+        >
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "10px",
+            }}
+          >
+            <h1 style={{ color: "#9dcd5a" }}>5</h1>
+            <h4 style={{ width: "100px", fontSize: "13px" }}>
+              appointments due today
+            </h4>
+          </div>
+          <p className="appointment-container__text">
+            {openAppointmentContainer === true ? (
+              <>
+                close <CaretUp size={16} />
+              </>
+            ) : (
+              <>
+                expand <CaretDown size={16} />
+              </>
+            )}
+          </p>
         </div>
+      </button>
+      <div
+        className={`appointment-container__wrapper ${
+          openAppointmentContainer === true
+            ? "fullsize-appointment"
+            : "fullsize-appointment-down"
+        }`}
+      >
+        <table
+          className={`appointment-fullsize__table ${
+            openAppointmentContainer === false ? "hideTableData" : ""
+          }`}
+        >
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Name</th>
+              <th>Date & Time</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>1</td>
+              <td>Sierra, Aaron</td>
+              <td>15 Mar 2024 12:40pm</td>
+            </tr>
+            <tr>
+              <td>2</td>
+              <td>Sierra, Aaron</td>
+              <td>15 Mar 2024 12:40pm</td>
+            </tr>
+            <tr>
+              <td>3</td>
+              <td>Sierra, Aaron</td>
+              <td>15 Mar 2024 12:40pm</td>
+            </tr>
+            <tr>
+              <td>4</td>
+              <td>Sierra, Aaron</td>
+              <td>15 Mar 2024 12:40pm</td>
+            </tr>
+            <tr>
+              <td>5</td>
+              <td>Sierra, Aaron</td>
+              <td>15 Mar 2024 12:40pm</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
   );
