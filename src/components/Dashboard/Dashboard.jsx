@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { MockUserData } from "../../assets/js/mockChartData";
-import { User, Calendar } from "@phosphor-icons/react";
+import { User, Calendar, CaretDown } from "@phosphor-icons/react";
 import { Line } from "react-chartjs-2";
 import { Chart as ChartJS } from "chart.js/auto";
 
@@ -226,14 +226,37 @@ const PatientLineGraph = () => {
   );
 };
 
+const AppointmentContainer = () => {
+  return (
+    <div>
+      <div className="appointment-container__wrapper">
+        <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+          <h1 style={{ color: "#9dcd5a" }}>5</h1>
+          <h4 style={{ width: "100px", fontSize: "13px" }}>
+            appointments due today
+          </h4>
+          <button className="btnclear appointment-container__btn">
+            expand <CaretDown size={16} />
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 const Dashboard = () => {
   return (
     <div>
       <div>
         <SummaryCards />
       </div>
-      <div className="dashboard-graph__wrapper">
-        <PatientLineGraph />
+      <div className="dashboard-graph-container__wrapper">
+        <div className="dashboard-graph__wrapper">
+          <PatientLineGraph />
+        </div>
+        <div>
+          <AppointmentContainer />
+        </div>
       </div>
     </div>
   );
