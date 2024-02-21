@@ -169,3 +169,19 @@
 .appointment-fullsize__table tbody tr:nth-child(even) {
   background-color: #d6e8ff;
 }
+
+.continue-learning-container__wrapper {
+  margin: 33px 0 0 10px;
+  width: 450px;
+  height: 300px;
+  box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px,
+    rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
+}
+
+.continue-learning__img {
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
+  object-position: center center;
+  border-radius: 50%;
+}
