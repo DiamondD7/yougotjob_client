@@ -18,7 +18,7 @@ const SummaryCards = () => {
   const [minutes, setMinutes] = useState(0);
   const [seconds, setSeconds] = useState(0);
 
-  const [inputDate, setInputDate] = useState("21 Feb 2024 13:40:00");
+  const [inputDate, setInputDate] = useState("27 Feb 2024 15:50:00");
   const [currentDate, setCurrentDate] = useState(inputDate);
 
   //handles countdown
@@ -354,9 +354,61 @@ const ContinueLearningContainer = () => {
           </h3>
         </div>
       </div>
-      <button className="btnclear" style={{ margin: "14px 0 0 10px" }}>
+      <button className="btnclear" style={{ margin: "10px 0 0 10px" }}>
         Continue reading
       </button>
+    </div>
+  );
+};
+
+const EmailNotificationContainer = () => {
+  return <div></div>;
+};
+
+const WeeklyScheduleContainer = () => {
+  let today = new Date();
+  let currentDate = today.getDate();
+  let startDate = currentDate - 3;
+  let weeklyDate = [];
+  let weeklyDay = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+
+  for (let i = startDate; i <= currentDate + 3; i++) {
+    weeklyDate.push(i);
+  }
+
+  return (
+    <div>
+      <div className="weekly-email-container__wrapper">
+        <div className="weekly-calendar__wrapper">
+          <div style={{ display: "flex", height: "170px", overflow: "auto" }}>
+            {weeklyDate.map((day, index) => (
+              <div className="days-daily__wrapper" key={index}>
+                <h4>{weeklyDay[index]}</h4>
+                <h4
+                  style={
+                    currentDate === day
+                      ? {
+                          color: "#f3f3f3",
+                          borderRadius: "50px",
+                          border: "1px solid #9dcd5a",
+                          backgroundColor: "#9dcd5a",
+                        }
+                      : {}
+                  }
+                >
+                  {day}
+                </h4>
+                <p>appointment @ 12 55pm</p>
+                <p>appointment @ 12 55pm</p>
+                <p>appointment @ 12 55pm</p>
+              </div>
+            ))}
+          </div>
+        </div>
+        <div className="email-notif-container__wrapper">
+          <EmailNotificationContainer />
+        </div>
+      </div>
     </div>
   );
 };
@@ -376,6 +428,19 @@ const Dashboard = () => {
         </div>
         <div>
           <ContinueLearningContainer />
+        </div>
+      </div>
+      <div style={{ display: "flex", justifyContent: "space-between" }}>
+        <div
+          style={{
+            width: "695px",
+            height: "230px",
+            backgroundColor: "red",
+            margin: "20px 0 0 20px",
+          }}
+        ></div>
+        <div>
+          <WeeklyScheduleContainer />
         </div>
       </div>
     </div>
