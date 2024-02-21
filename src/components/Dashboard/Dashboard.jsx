@@ -1,6 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { MockUserData } from "../../assets/js/mockChartData";
-import { User, Calendar, CaretDown, CaretUp } from "@phosphor-icons/react";
+import {
+  User,
+  Calendar,
+  CaretDown,
+  CaretUp,
+  BookOpenText,
+} from "@phosphor-icons/react";
 import { Line } from "react-chartjs-2";
 import { Chart as ChartJS } from "chart.js/auto";
 
@@ -319,6 +325,41 @@ const AppointmentContainer = () => {
     </div>
   );
 };
+const ContinueLearningContainer = () => {
+  return (
+    <div>
+      <div className="continue-learning-container__wrapper">
+        <h5 style={{ display: "flex", gap: "5px", padding: "10px" }}>
+          {" "}
+          <BookOpenText size={19} color="#9dcd5a" /> continue learning
+        </h5>
+        <div style={{ marginTop: "5px", textAlign: "center" }}>
+          <label style={{ color: "rgba(0,0,0,0.4)" }}>Dr. Henry Campbell</label>
+
+          <p
+            style={{
+              color: "rgba(0,0,0,0.4)",
+              fontSize: "13px",
+            }}
+          >
+            17/12/2023
+          </p>
+          <img
+            className="continue-learning__img"
+            src="https://images.unsplash.com/photo-1584036561566-baf8f5f1b144?q=80&w=1932&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+            alt="module-picture"
+          />
+          <h3 style={{ marginTop: "5px" }}>
+            Virus 101 - Physicians guide to 0% virus free
+          </h3>
+        </div>
+      </div>
+      <button className="btnclear" style={{ margin: "14px 0 0 10px" }}>
+        Continue reading
+      </button>
+    </div>
+  );
+};
 
 const Dashboard = () => {
   return (
@@ -332,6 +373,9 @@ const Dashboard = () => {
         </div>
         <div>
           <AppointmentContainer />
+        </div>
+        <div>
+          <ContinueLearningContainer />
         </div>
       </div>
     </div>
