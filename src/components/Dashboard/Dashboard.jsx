@@ -368,28 +368,33 @@ const EmailNotificationContainer = () => {
 const WeeklyScheduleContainer = () => {
   let today = new Date();
   let currentDate = today.getDate();
-  let startDate = currentDate - 3;
   let weeklyDate = [];
-  const [weeklyDay, setWeeklyDay] = useState([
-    "Sun",
-    "Mon",
-    "Tue",
-    "Wed",
-    "Thu",
-    "Fri",
-    "Sat",
-  ]);
+  const [weekDays, setWeekDays] = useState([]);
 
-  for (let i = startDate; i <= currentDate + 3; i++) {
+  for (let i = currentDate; i <= currentDate + 6; i++) {
     weeklyDate.push(i);
   }
 
   useEffect(() => {
-    let newArr = [...weeklyDay]; //copies
-    const firstElement = newArr.shift(); //sun
-    newArr.push(firstElement);
-    setWeeklyDay(newArr);
-  }, [currentDate]);
+    const getWeekDays = () => {
+      const days = [
+        "Sunday",
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday",
+        "Saturday",
+      ];
+      const dynamicWeekdays = [];
+      const currentDayIndex = today.getDay();
+      for (let i = 0; i < 7; i++) {
+        dynamicWeekdays.push(days[(currentDayIndex + i) % 7]);
+      }
+      return dynamicWeekdays;
+    };
+    setWeekDays(getWeekDays());
+  }, []);
 
   return (
     <div>
@@ -398,7 +403,7 @@ const WeeklyScheduleContainer = () => {
           <div style={{ display: "flex", height: "170px", overflow: "auto" }}>
             {weeklyDate.map((day, index) => (
               <div className="days-daily__wrapper" key={index}>
-                <h4>{weeklyDay[index]}</h4>
+                <h4 key={index}>{weekDays[index]}</h4>
 
                 <h4
                   style={
@@ -408,6 +413,8 @@ const WeeklyScheduleContainer = () => {
                           borderRadius: "50px",
                           border: "1px solid #9dcd5a",
                           backgroundColor: "#9dcd5a",
+                          display: "inline-block",
+                          padding: "0 25px",
                         }
                       : {}
                   }
