@@ -370,11 +370,26 @@ const WeeklyScheduleContainer = () => {
   let currentDate = today.getDate();
   let startDate = currentDate - 3;
   let weeklyDate = [];
-  let weeklyDay = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+  const [weeklyDay, setWeeklyDay] = useState([
+    "Sun",
+    "Mon",
+    "Tue",
+    "Wed",
+    "Thu",
+    "Fri",
+    "Sat",
+  ]);
 
   for (let i = startDate; i <= currentDate + 3; i++) {
     weeklyDate.push(i);
   }
+
+  useEffect(() => {
+    let newArr = [...weeklyDay]; //copies
+    const firstElement = newArr.shift(); //sun
+    newArr.push(firstElement);
+    setWeeklyDay(newArr);
+  }, [currentDate]);
 
   return (
     <div>
@@ -384,6 +399,7 @@ const WeeklyScheduleContainer = () => {
             {weeklyDate.map((day, index) => (
               <div className="days-daily__wrapper" key={index}>
                 <h4>{weeklyDay[index]}</h4>
+
                 <h4
                   style={
                     currentDate === day
