@@ -369,32 +369,90 @@ const WeeklyScheduleContainer = () => {
   let today = new Date();
   let currentDate = today.getDate();
   let weeklyDate = [];
-  const [weekDays, setWeekDays] = useState([]);
+  let sundayDate = currentDate - today.getDay();
+  let lastDateOfWeek = 7 - today.getDay();
+  const weeklyDay = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
-  for (let i = currentDate; i <= currentDate + 6; i++) {
+  for (let i = sundayDate; i < currentDate + lastDateOfWeek; i++) {
     weeklyDate.push(i);
   }
+  // if (today.getDay() !== 0) {
+  //   for (let i = sundayDate; i < currentDate + lastDateOfWeek; i++) {
+  //     weeklyDate.push(i);
+  //   }
+  // } else {
+  //   for (let i = sundayDate; i <= currentDate + 3; i++) {
+  //     weeklyDate.push(i);
+  //   }
+  // }
 
-  useEffect(() => {
-    const getWeekDays = () => {
-      const days = [
-        "Sunday",
-        "Monday",
-        "Tuesday",
-        "Wednesday",
-        "Thursday",
-        "Friday",
-        "Saturday",
-      ];
-      const dynamicWeekdays = [];
-      const currentDayIndex = today.getDay();
-      for (let i = 0; i < 7; i++) {
-        dynamicWeekdays.push(days[(currentDayIndex + i) % 7]);
-      }
-      return dynamicWeekdays;
-    };
-    setWeekDays(getWeekDays());
-  }, []);
+  // useEffect(() => {
+  //   if (weeklyDate[0] !== startDate) {
+  //     for (let i = startDate; i <= currentDate + 3; i++) {
+  //       weeklyDate.push(i);
+  //     }
+  //   }
+  // }, [weeklyDay]);
+
+  // for (let i = currentDate; i <= currentDate + 6; i++) {
+  //   weeklyDate.push(i);
+  // }
+
+  // useEffect(() => {
+  //   const getWeekDays = () => {
+  //     const days = [
+  //       "Sunday",
+  //       "Monday",
+  //       "Tuesday",
+  //       "Wednesday",
+  //       "Thursday",
+  //       "Friday",
+  //       "Saturday",
+  //     ];
+  //     const dynamicWeekdays = [];
+  //     const currentDayIndex = today.getDay();
+  //     for (let i = 0; i < 7; i++) {
+  //       dynamicWeekdays.push(days[(currentDayIndex + i) % 7]);
+  //     }
+  //     return dynamicWeekdays;
+  //   };
+  //   setWeekDays(getWeekDays());
+  // }, []);
+
+  // const isNewDayHandle = () => {
+  //   let isNewDay = today.getDay();
+  //   if (currentDay === isNewDay) {
+  //     console.log("1");
+  //     setCurrentDay(today.getDay());
+  //   }
+  // };
+
+  // useEffect(() => {
+  //   let newArr = [...weeklyDay]; //copies
+  //   const firstElement = newArr.shift(); //sun
+  //   newArr.push(firstElement);
+  //   setWeeklyDay(newArr);
+  // }, []);
+
+  // useEffect(() => {
+  //   const testest = () => {
+  //     const currentDay = today.getDay(); // 0 for Sunday, 1 for Monday, and so on...
+  //     const currentDate = today.getDate();
+  //     const sundayDate = currentDate - currentDay; // Calculate Sunday's date
+  //     const sunday = new Date(today.setDate(sundayDate)); // Set to Sunday
+
+  //     for (let i = 0; i < 7; i++) {
+  //       const date = new Date();
+  //       date.setDate(sunday.getDate() + i);
+  //       const options = { weekday: "short" };
+  //       weekdays.push(date.toLocaleDateString("en-US", options)); // Store dates as strings
+  //     }
+
+  //     return weekdays;
+  //   };
+
+  //   testest();
+  // }, []);
 
   return (
     <div>
@@ -403,7 +461,7 @@ const WeeklyScheduleContainer = () => {
           <div style={{ display: "flex", height: "170px", overflow: "auto" }}>
             {weeklyDate.map((day, index) => (
               <div className="days-daily__wrapper" key={index}>
-                <h4 key={index}>{weekDays[index]}</h4>
+                <h4 key={index}>{weeklyDay[index]}</h4>
 
                 <h4
                   style={
