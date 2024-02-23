@@ -368,13 +368,14 @@ const EmailNotificationContainer = () => {
 const WeeklyScheduleContainer = () => {
   let today = new Date();
   let currentDate = today.getDate();
-  let weeklyDate = [];
-  let sundayDate = currentDate - today.getDay();
-  let lastDateOfWeek = 7 - today.getDay();
+  let weeklyDate = []; //initialising empty array, before populating it.
+  let sundayDate = currentDate - today.getDay(); //gets the sunday date of the week by subtracting the current date and the day (eg. sun(0), mon(1)...)
+  let lastDateOfWeek = 7 - today.getDay(); //gets the value of the max days of the week for the for loop below.
   const weeklyDay = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
   for (let i = sundayDate; i < currentDate + lastDateOfWeek; i++) {
-    weeklyDate.push(i);
+    // i is the sunday date and the max value is the currentDate plus the max days
+    weeklyDate.push(i); //populating the array to display.
   }
   // if (today.getDay() !== 0) {
   //   for (let i = sundayDate; i < currentDate + lastDateOfWeek; i++) {
