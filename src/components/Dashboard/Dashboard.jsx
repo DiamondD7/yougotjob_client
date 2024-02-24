@@ -361,10 +361,6 @@ const ContinueLearningContainer = () => {
   );
 };
 
-const EmailNotificationContainer = () => {
-  return <div></div>;
-};
-
 const WeeklyScheduleContainer = () => {
   let today = new Date();
   let currentDate = today.getDate();
@@ -373,93 +369,41 @@ const WeeklyScheduleContainer = () => {
   let lastDateOfWeek = 7 - today.getDay(); //gets the value of the max days of the week for the for loop below.
   const weeklyDay = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
+  let count = 0;
+  var lastDayOfMonth = new Date(
+    today.getFullYear(),
+    today.getMonth() + 1,
+    0
+  ).getDate(); //gets us the last day of the current month
+
   for (let i = sundayDate; i < currentDate + lastDateOfWeek; i++) {
     // i is the sunday date and the max value is the currentDate plus the max days
     weeklyDate.push(i); //populating the array to display.
+
+    if (i > lastDayOfMonth) {
+      //checking if the i is greater than last day of the month, then do this operation.
+      count = count + 1; //counting to help us get the remaining iteration that this whole loop has.
+      for (let j = 1; j <= count; j++) {
+        weeklyDate[weeklyDate.length - 1] = j;
+      }
+    }
   }
-  // if (today.getDay() !== 0) {
-  //   for (let i = sundayDate; i < currentDate + lastDateOfWeek; i++) {
-  //     weeklyDate.push(i);
-  //   }
-  // } else {
-  //   for (let i = sundayDate; i <= currentDate + 3; i++) {
-  //     weeklyDate.push(i);
-  //   }
-  // }
-
-  // useEffect(() => {
-  //   if (weeklyDate[0] !== startDate) {
-  //     for (let i = startDate; i <= currentDate + 3; i++) {
-  //       weeklyDate.push(i);
-  //     }
-  //   }
-  // }, [weeklyDay]);
-
-  // for (let i = currentDate; i <= currentDate + 6; i++) {
-  //   weeklyDate.push(i);
-  // }
-
-  // useEffect(() => {
-  //   const getWeekDays = () => {
-  //     const days = [
-  //       "Sunday",
-  //       "Monday",
-  //       "Tuesday",
-  //       "Wednesday",
-  //       "Thursday",
-  //       "Friday",
-  //       "Saturday",
-  //     ];
-  //     const dynamicWeekdays = [];
-  //     const currentDayIndex = today.getDay();
-  //     for (let i = 0; i < 7; i++) {
-  //       dynamicWeekdays.push(days[(currentDayIndex + i) % 7]);
-  //     }
-  //     return dynamicWeekdays;
-  //   };
-  //   setWeekDays(getWeekDays());
-  // }, []);
-
-  // const isNewDayHandle = () => {
-  //   let isNewDay = today.getDay();
-  //   if (currentDay === isNewDay) {
-  //     console.log("1");
-  //     setCurrentDay(today.getDay());
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   let newArr = [...weeklyDay]; //copies
-  //   const firstElement = newArr.shift(); //sun
-  //   newArr.push(firstElement);
-  //   setWeeklyDay(newArr);
-  // }, []);
-
-  // useEffect(() => {
-  //   const testest = () => {
-  //     const currentDay = today.getDay(); // 0 for Sunday, 1 for Monday, and so on...
-  //     const currentDate = today.getDate();
-  //     const sundayDate = currentDate - currentDay; // Calculate Sunday's date
-  //     const sunday = new Date(today.setDate(sundayDate)); // Set to Sunday
-
-  //     for (let i = 0; i < 7; i++) {
-  //       const date = new Date();
-  //       date.setDate(sunday.getDate() + i);
-  //       const options = { weekday: "short" };
-  //       weekdays.push(date.toLocaleDateString("en-US", options)); // Store dates as strings
-  //     }
-
-  //     return weekdays;
-  //   };
-
-  //   testest();
-  // }, []);
 
   return (
     <div>
-      <div className="weekly-email-container__wrapper">
+      <div className="weekly-container__wrapper">
         <div className="weekly-calendar__wrapper">
-          <div style={{ display: "flex", height: "170px", overflow: "auto" }}>
+          <h2 className="weekly-calendar-month-header__text">
+            Feb {today.getFullYear()}
+          </h2>
+          <div
+            style={{
+              display: "flex",
+              height: "190px",
+              overflow: "auto",
+              marginTop: "10px",
+            }}
+          >
             {weeklyDate.map((day, index) => (
               <div className="days-daily__wrapper" key={index}>
                 <h4 key={index}>{weeklyDay[index]}</h4>
@@ -475,7 +419,7 @@ const WeeklyScheduleContainer = () => {
                           display: "inline-block",
                           padding: "0 25px",
                         }
-                      : {}
+                      : { color: "rgba(0,0,0,0.5)" }
                   }
                 >
                   {day}
@@ -486,9 +430,6 @@ const WeeklyScheduleContainer = () => {
               </div>
             ))}
           </div>
-        </div>
-        <div className="email-notif-container__wrapper">
-          <EmailNotificationContainer />
         </div>
       </div>
     </div>
