@@ -79,7 +79,7 @@
 
 .dashboard-graph-container__wrapper {
   display: flex;
-  margin: 60px 0 0 10px;
+  margin: 30px 0 0 10px;
   gap: 10px;
 }
 
@@ -255,4 +255,33 @@
 }
 .dashboard-invoice-table tbody tr:nth-child(even) {
   background-color: #d6e8ff;
+}
+
+/* -------------------------- */
+
+.notes__wrapper {
+  width: 490px;
+  height: 205px;
+  margin: 40px 0 0 10px;
+  padding: 10px;
+  box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px,
+    rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
+  overflow: auto;
+}
+
+.note-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 50px;
+  width: 100%;
+  border-radius: 10px;
+  box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px,
+    rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
+  padding: 0px 10px;
+}
+
+.note-container p {
+  color: rgba(0, 0, 0, 0.5);
+  font-size: 11px;
 }

@@ -6,6 +6,10 @@ import {
   CaretDown,
   CaretUp,
   BookOpenText,
+  Notepad,
+  Trash,
+  CalendarCheck,
+  ChatCenteredText,
 } from "@phosphor-icons/react";
 import { Line } from "react-chartjs-2";
 import { Chart as ChartJS } from "chart.js/auto";
@@ -122,32 +126,9 @@ const SummaryCards = () => {
         <div className="dashboard-cards__wrapper">
           <div className="dashboard-card-title__wrapper">
             <div>
-              <User size={19} color="#9DCD5A" />
+              <ChatCenteredText size={19} color="#9DCD5A" />
             </div>
-            <h5>Next appointment</h5>
-          </div>
-          <div className="dashboard-patient-card__wrapper">
-            <img
-              src="https://images.unsplash.com/photo-1521119989659-a83eee488004?q=80&w=1923&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-              alt="test-picture"
-              className="dashboard-card-profilepic"
-            />
-            <div>
-              <h3>Aaron Sierra</h3>
-              <label className="patient-card-id__label">ID:30004997</label>
-            </div>
-          </div>
-          <div className="dashboard-patient-card-details__wrapper">
-            <h2 className="dashboard-patient-card-details-h2-schedule">
-              23/01/2024 12:40pm
-            </h2>
-            <h2 className="dashboard-patient-card-details-h2-countdown">
-              {days}
-              {day} : {hours}
-              {hour} : {minutes}
-              {min} : {seconds}
-              {sec}
-            </h2>
+            <h5>Messages</h5>
           </div>
         </div>
       </div>
@@ -483,7 +464,7 @@ const InvoiceContainer = () => {
             <tr>
               <th>#</th>
               <th>Date</th>
-              <th>Code</th>
+              <th>Invoice Code</th>
               <th>Description</th>
               <th>Tax</th>
               <th>Total</th>
@@ -510,11 +491,107 @@ const InvoiceContainer = () => {
   );
 };
 
+const NotesContainer = () => {
+  const noteTest =
+    "Lorem ipsum dolor sit amet consectetur adipisicing elit. Tempora incidunt ab natus unde quae fugiat nihil esse error doloremque atque. Voluptas repellat neque earum quos! Ipsam, qui! Unde, impedit vero!";
+  return (
+    <div>
+      <div className="notes__wrapper">
+        <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+          <Notepad size={19} color="#9DCD5A" />
+          <h5>Notes</h5>
+        </div>
+        <div style={{ marginTop: "10px" }}>
+          <button
+            className="note-container"
+            style={{
+              backgroundColor: "transparent",
+              border: "none",
+              cursor: "pointer",
+            }}
+          >
+            <div style={{ textAlign: "start" }}>
+              <h5 style={{ fontSize: "13px" }}>Must do</h5>
+              <p>
+                {noteTest.length > 70
+                  ? `${noteTest.substring(0, 80)}....`
+                  : noteTest}
+              </p>
+            </div>
+            <button
+              style={{
+                backgroundColor: "transparent",
+                border: "none",
+                cursor: "pointer",
+              }}
+            >
+              <Trash size={17} color="#DA4A1A" />
+            </button>
+          </button>
+        </div>
+        <div style={{ marginTop: "10px" }}>
+          <button
+            className="note-container"
+            style={{
+              backgroundColor: "transparent",
+              border: "none",
+              cursor: "pointer",
+            }}
+          >
+            <div style={{ textAlign: "start" }}>
+              <h5 style={{ fontSize: "13px" }}>Sign up Henry</h5>
+              <p>Need to make sure to sign up Henry</p>
+            </div>
+            <button
+              style={{
+                backgroundColor: "transparent",
+                border: "none",
+                cursor: "pointer",
+              }}
+            >
+              <Trash size={17} color="#DA4A1A" />
+            </button>
+          </button>
+        </div>
+        <div style={{ marginTop: "10px" }}>
+          <button
+            className="note-container"
+            style={{
+              backgroundColor: "transparent",
+              border: "none",
+              cursor: "pointer",
+            }}
+          >
+            <div style={{ textAlign: "start" }}>
+              <h5 style={{ fontSize: "13px" }}>Must do</h5>
+              <p>
+                {noteTest.length > 70
+                  ? `${noteTest.substring(0, 80)}....`
+                  : noteTest}
+              </p>
+            </div>
+            <button
+              style={{
+                backgroundColor: "transparent",
+                border: "none",
+                cursor: "pointer",
+              }}
+            >
+              <Trash size={17} color="#DA4A1A" />
+            </button>
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 const Dashboard = () => {
   return (
     <div>
-      <div>
+      <div style={{ display: "flex" }}>
         <SummaryCards />
+        <NotesContainer />
       </div>
       <div className="dashboard-graph-container__wrapper">
         <div className="dashboard-graph__wrapper">
