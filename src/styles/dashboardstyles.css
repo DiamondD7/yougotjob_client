@@ -234,25 +234,25 @@
     rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
 }
 
-.dashbpard-invoice-table {
+.dashboard-invoice-table {
   width: 100%;
   border-collapse: collapse;
 }
 
-.dashbpard-invoice-table thead th {
+.dashboard-invoice-table thead th {
   padding: 10px;
   text-align: start;
 }
 
-.dashbpard-invoice-table tbody tr td {
+.dashboard-invoice-table tbody tr td {
   padding: 10px;
   text-align: start;
   font-size: 14px;
 }
 
-.dashbpard-invoice-table tbody tr:nth-child(odd) {
+.dashboard-invoice-table tbody tr:nth-child(odd) {
   background-color: #e5f0ff;
 }
-.dashbpard-invoice-table tbody tr:nth-child(even) {
+.dashboard-invoice-table tbody tr:nth-child(even) {
   background-color: #d6e8ff;
 }

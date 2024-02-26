@@ -478,7 +478,7 @@ const InvoiceContainer = () => {
   return (
     <div>
       <div className="dashboard-invoice-container__wrapper">
-        <table className="dashbpard-invoice-table">
+        <table className="dashboard-invoice-table">
           <thead>
             <tr>
               <th>#</th>
