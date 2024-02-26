@@ -306,6 +306,24 @@ const AppointmentContainer = () => {
     </div>
   );
 };
+const TotalAppointmentContainer = () => {
+  return (
+    <div>
+      <div className="total-appointment__wrapper">
+        <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
+          <h1 style={{ color: "#9dcd5a" }}>213</h1>
+          <h4 style={{ width: "100px", fontSize: "13px" }}>
+            total appointments
+          </h4>
+        </div>
+        <div>
+          <p style={{ fontSize: "13px" }}>since 2019</p>
+          <p style={{ fontSize: "13px", color: "#9dcd5a" }}>+ 8%</p>
+        </div>
+      </div>
+    </div>
+  );
+};
 const ContinueLearningContainer = () => {
   return (
     <div>
@@ -598,6 +616,7 @@ const Dashboard = () => {
           <PatientLineGraph />
         </div>
         <div>
+          <TotalAppointmentContainer />
           <AppointmentContainer />
         </div>
         <div>
