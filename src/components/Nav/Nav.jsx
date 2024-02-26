@@ -40,7 +40,11 @@ const Nav = ({ setDisplayed, fakeRole }) => {
               minimizedNav === true ? "dateMinimized" : ""
             }`}
           >
-            {minimizedNav === false ? <p>{date.toLocaleDateString()}</p> : ""}
+            {minimizedNav === false ? (
+              <p>{date.toLocaleDateString("en-NZ")}</p>
+            ) : (
+              ""
+            )}
             <div>
               <button
                 className="nav-menu-arrow__button"
