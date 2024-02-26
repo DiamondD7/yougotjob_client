@@ -97,6 +97,7 @@
   border-radius: 3px;
   cursor: pointer;
 }
+/* ------------------- */
 
 .appointment-container__wrapper {
   background-color: transparent;
@@ -104,7 +105,7 @@
   width: 350px;
   height: 50px;
   padding: 5px;
-  margin-top: 33px;
+  margin-top: 20px;
   box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px,
     rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
   overflow: auto;
@@ -169,6 +170,22 @@
 .appointment-fullsize__table tbody tr:nth-child(even) {
   background-color: #d6e8ff;
 }
+
+/* ----------------------------- */
+
+.total-appointment__wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 350px;
+  height: 50px;
+  padding: 5px;
+  margin-top: 33px;
+  box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px,
+    rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
+}
+
+/* ----------------------------- */
 
 .continue-learning-container__wrapper {
   margin: 33px 0 0 10px;
