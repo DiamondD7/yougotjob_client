@@ -436,6 +436,80 @@ const WeeklyScheduleContainer = () => {
   );
 };
 
+const InvoiceContainer = () => {
+  const testinvoice = [
+    {
+      Date: "23/02/2024",
+      Code: 3445,
+      Description: "Short Consultation",
+      Tax: 0.0,
+      Total: 76.0,
+    },
+    {
+      Date: "23/02/2024",
+      Code: 3445,
+      Description: "Short Consultation",
+      Tax: 0.0,
+      Total: 76.0,
+    },
+    {
+      Date: "23/02/2024",
+      Code: 3445,
+      Description: "Short Consultation",
+      Tax: 0.0,
+      Total: 76.0,
+    },
+    {
+      Date: "23/02/2024",
+      Code: 3445,
+      Description: "Short Consultation",
+      Tax: 0.0,
+      Total: 76.0,
+    },
+    {
+      Date: "23/02/2024",
+      Code: 3445,
+      Description: "Short Consultation",
+      Tax: 0.0,
+      Total: 76.0,
+    },
+  ];
+
+  return (
+    <div>
+      <div className="dashboard-invoice-container__wrapper">
+        <table className="dashbpard-invoice-table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Date</th>
+              <th>Code</th>
+              <th>Description</th>
+              <th>Tax</th>
+              <th>Total</th>
+            </tr>
+          </thead>
+          <tbody>
+            {testinvoice.map((data, index) => (
+              <tr key={index}>
+                <td>{index + 1}</td>
+                <td>{data.Date}</td>
+                <td>{data.Code}</td>
+                <td>{data.Description}</td>
+                <td>${data.Tax}</td>
+                <td>${data.Total}</td>
+                <td>
+                  <button className="btnclear">view</button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+};
+
 const Dashboard = () => {
   return (
     <div>
@@ -456,12 +530,11 @@ const Dashboard = () => {
       <div style={{ display: "flex", justifyContent: "space-between" }}>
         <div
           style={{
-            width: "695px",
-            height: "230px",
-            backgroundColor: "red",
             margin: "20px 0 0 20px",
           }}
-        ></div>
+        >
+          <InvoiceContainer />
+        </div>
         <div>
           <WeeklyScheduleContainer />
         </div>
