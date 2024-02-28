@@ -21,14 +21,14 @@ function App() {
     height: "160",
     weight: "60",
     email: "henry@gmail.com",
-    role: "General Practioner",
+    role: "General Practitioner",
   };
 
   let fakeRole;
   if (fakeUser.role === "Receptionist") {
     fakeRole = "Receptionist";
-  } else if (fakeUser.role === "General Practioner") {
-    fakeRole = "General Practioner";
+  } else if (fakeUser.role === "General Practitioner") {
+    fakeRole = "General Practitioner";
   } else {
     fakeRole = "Patients";
   }
@@ -44,7 +44,7 @@ function App() {
             element={
               fakeRole === "Receptionist" ? (
                 <Receptionist fakeRole={fakeRole} />
-              ) : fakeRole === "General Practioner" ? (
+              ) : fakeRole === "General Practitioner" ? (
                 <GeneralPractioner fakeRole={fakeRole} />
               ) : (
                 <PatientsHome />

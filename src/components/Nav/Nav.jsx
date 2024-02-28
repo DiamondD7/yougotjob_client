@@ -80,7 +80,8 @@ const Nav = ({ setDisplayed, fakeRole }) => {
               {minimizedNav === true ? "" : "Dashboard"}
             </button>
           </li>
-          {fakeRole === "Receptionist" ? (
+          {fakeRole === "Receptionist" ||
+          fakeRole === "General Practitioner" ? (
             <li
               className={minimizedNav === true ? "minimizednav-icons" : ""}
               style={
@@ -108,7 +109,8 @@ const Nav = ({ setDisplayed, fakeRole }) => {
           ) : (
             ""
           )}
-          {fakeRole === "Receptionist" || fakeRole === "General Practioner" ? (
+          {fakeRole === "Receptionist" ||
+          fakeRole === "General Practitioner" ? (
             <li
               className={minimizedNav === true ? "minimizednav-icons" : ""}
               style={
@@ -161,7 +163,7 @@ const Nav = ({ setDisplayed, fakeRole }) => {
             </button>
           </li> */}
 
-          {fakeRole === "General Practioner" ? (
+          {fakeRole === "General Practitioner" ? (
             <li
               className={minimizedNav === true ? "minimizednav-icons" : ""}
               style={
