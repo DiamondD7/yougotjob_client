@@ -375,6 +375,9 @@ const WeeklyScheduleContainer = () => {
     0
   ).getDate(); //gets us the last day of the current month
 
+  var t1 = new Date(today.getFullYear(), today.getMonth(), 1);
+  var t2 = new Date(t1 - 1);
+
   for (let i = sundayDate; i < currentDate + lastDateOfWeek; i++) {
     // i is the sunday date and the max value is the currentDate plus the max days
     weeklyDate.push(i); //populating the array to display.
