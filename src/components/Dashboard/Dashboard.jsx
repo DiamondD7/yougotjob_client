@@ -365,7 +365,8 @@ const WeeklyScheduleContainer = () => {
   let currentDate = today.getDate();
   let weeklyDate = []; //initialising empty array, before populating it.
   let sundayDate = currentDate - today.getDay(); //gets the sunday date of the week by subtracting the current date and the day (eg. sun(0), mon(1)...)
-  let lastDateOfWeek = 7 - today.getDay(); //gets the value of the max days of the week for the for loop below.
+  // let lastDateOfWeek = 7 - today.getDay();
+  //gets the value of the max days of the week for the for loop below.
   const weeklyDay = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
   let count = 0;
@@ -375,15 +376,30 @@ const WeeklyScheduleContainer = () => {
     0
   ).getDate(); //gets us the last day of the current month
 
-  var t1 = new Date(today.getFullYear(), today.getMonth(), 1);
-  var t2 = new Date(t1 - 1);
+  var firstDayOfTheCurrentMonth = new Date( //first day of the current month.
+    today.getFullYear(),
+    today.getMonth(),
+    1
+  );
+  var lastDayOfThePrevMonth = new Date(firstDayOfTheCurrentMonth - 1); //minus one the firstDayOfTheCurrentMonth, will get me the last day of the prev month by using .getMonth()
 
-  for (let i = sundayDate; i < currentDate + lastDateOfWeek; i++) {
+  //alternative has a condition statements to use the right initial date of the for loop
+  let alternative =
+    sundayDate < 0
+      ? lastDayOfThePrevMonth.getDate() - sundayDate * -1 //sundayDate * -1 will help the logic to convert negative numbers to positive.
+      : sundayDate === 0
+      ? lastDayOfThePrevMonth.getDate()
+      : sundayDate;
+
+  for (let i = alternative; i < alternative + 7; i++) {
     // i is the sunday date and the max value is the currentDate plus the max days
+
     weeklyDate.push(i); //populating the array to display.
 
-    if (i > lastDayOfMonth) {
-      //checking if the i is greater than last day of the month, then do this operation.
+    if (
+      i > lastDayOfMonth ||
+      (i > lastDayOfThePrevMonth.getDate() && sundayDate <= 0) //TWO conditions to check if i is less than the prevMonth or currentMonth's last day
+    ) {
       count = count + 1; //counting to help us get the remaining iteration that this whole loop has.
       for (let j = 1; j <= count; j++) {
         weeklyDate[weeklyDate.length - 1] = j;
