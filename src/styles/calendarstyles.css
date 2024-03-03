@@ -1,206 +1,216 @@
-.month-selection__wrapper{
-    margin:10px 0 0 20px
+.month-selection__wrapper {
+  margin: 10px 0 0 20px;
 }
 
-.month-selection__dropdown{
-    font-size: 15px;
-    padding: 3px 10px 3px 10px;
-    border: 1px solid #202020;
-    background-color: #f3f3f3;
-    border: none;
-    border-radius: 3px;
+.month-selection__dropdown {
+  font-size: 15px;
+  padding: 3px 10px 3px 10px;
+  border: 1px solid #202020;
+  background-color: #f3f3f3;
+  border: none;
+  border-radius: 3px;
 
-    box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
-    cursor: pointer;
+  box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px,
+    rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
+  cursor: pointer;
 }
 
-.month-selection-option__wrapper{
-    background-color: #f3f3f3;
-    margin:10px 0 0 20px;
-    /* width: 5%; */ 
-    width: 84px;
-    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
-    position: relative;
-    z-index: 4;
+.month-selection-option__wrapper {
+  background-color: #f3f3f3;
+  margin: 10px 0 0 20px;
+  /* width: 5%; */
+  width: 84px;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  position: relative;
+  z-index: 4;
 }
 
-.month-selection__option{
-    display:block;
-    background-color: transparent;
-    
-    border-radius: 3px;
-    padding: 10px 74px 10px 10px;
-    border: none;
+.month-selection__option {
+  display: block;
+  background-color: transparent;
+
+  border-radius: 3px;
+  padding: 10px 74px 10px 10px;
+  border: none;
 }
 
-
-.month-selection__option:hover{
-    background-color: #D6E8FF;
-    width: 84px;
-    cursor: pointer;
+.month-selection__option:hover {
+  background-color: #d6e8ff;
+  width: 84px;
+  cursor: pointer;
 }
 
-
-.currentMonth{
-    background-color: #D6E8FF;
-    width: 84px;
+.currentMonth {
+  background-color: #d6e8ff;
+  width: 84px;
 }
 
-
-
-.calendar-headers__wrapper{
-    display: flex;
-    justify-content: space-between;
+.calendar-headers__wrapper {
+  display: flex;
+  justify-content: space-between;
 }
 
-.filter-calendar__wrapper{
-    height: 23px;
-    width: 181px;
-    margin:10px 20px 0 0;
+.filter-calendar__wrapper {
+  height: 23px;
+  width: 181px;
+  margin: 10px 20px 0 0;
 }
 
-.filter-calendar__wrapper button{
-    font-size: 15px;
-    background-color: #f3f3f3;
-    border: none;
-    padding: 0px 10px;
-    box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
-    cursor: pointer;
+.filter-calendar__wrapper button {
+  font-size: 15px;
+  background-color: #f3f3f3;
+  border: none;
+  padding: 0px 10px;
+  box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px,
+    rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
+  cursor: pointer;
 }
 
-.calendar-grid__wrapper{
-    display: grid;
-    grid-template-columns: repeat(7, 200px);
-    grid-template-rows: repeat(6, 130px);
-    
-    gap: 20px;
+.calendar-grid__wrapper {
+  display: grid;
+  grid-template-columns: repeat(7, 200px);
+  grid-template-rows: repeat(6, 125px);
 
-    position: absolute;
-    top:80px;
-    left:240px;
-    z-index: 1;
+  gap: 20px;
+
+  position: absolute;
+  top: 80px;
+  left: 240px;
+  z-index: 1;
 }
 
-.calendar-grid-day__wrapper{
-    box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
-    height: 140px;
-    width: 200px;
-    padding: 10px;
+.calendar-grid-day__wrapper {
+  box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px,
+    rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
+  height: 140px;
+  width: 200px;
+  padding: 10px;
 }
 
-.previousMonthDay, .previousMonthDay p{
-    color: rgba(0, 0, 0, 0.5);
-    box-shadow: none;
+.previousMonthDay,
+.previousMonthDay p {
+  color: rgba(0, 0, 0, 0.5);
+  box-shadow: none;
 }
-.nextMonthDay, .nextMonthDay p{
-    color: rgba(0, 0, 0, 0.5);
-    box-shadow: none;
-}
-
-.year-input{
-    margin-left: 10px;
-    box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
-    border-radius: 3px;
-    outline: none;
-    padding: 3px 10px 3px 10px;
-    border: none;
-    font-size: 15px;
-    text-align: center;
-    background-color: #f3f3f3;
-    width: 100px;
+.nextMonthDay,
+.nextMonthDay p {
+  color: rgba(0, 0, 0, 0.5);
+  box-shadow: none;
 }
 
-.add-event-btn__wrapper{
-    margin-top: 10px;
+.year-input {
+  margin-left: 10px;
+  box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px,
+    rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
+  border-radius: 3px;
+  outline: none;
+  padding: 3px 10px 3px 10px;
+  border: none;
+  font-size: 15px;
+  text-align: center;
+  background-color: #f3f3f3;
+  width: 100px;
 }
 
-.add-event-btn__wrapper button{
-    display: flex;
-    align-items: center;
-    font-size: 17px;
-    border: none;
-    cursor: pointer;
-    padding: 3px 10px 3px 10px;
-    background-color: #f3f3f3;
-    /* box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px; */
+.add-event-btn__wrapper {
+  margin-top: 10px;
 }
 
-.dayOfTheMonth-highlight{
-    box-shadow: rgba(0, 0, 0, 0.5) 0px 5px 15px;
-    font-weight: bold;
+.add-event-btn__wrapper button {
+  display: flex;
+  align-items: center;
+  font-size: 17px;
+  border: none;
+  cursor: pointer;
+  padding: 3px 10px 3px 10px;
+  background-color: #f3f3f3;
+  /* box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px; */
 }
 
-.daysOfWeek__wrapper{
-    position: absolute;
-    top:50px;
-    left: 240px;
+.dayOfTheMonth-highlight {
+  box-shadow: rgba(0, 0, 0, 0.5) 0px 5px 15px;
+  font-weight: bold;
 }
 
-.daysOfWeek__wrapper label:nth-child(1){
-    color: rgba(0, 0, 0, 0.5);
-    margin-right: 185px;
+.daysOfWeek__wrapper {
+  position: absolute;
+  top: 50px;
+  left: 240px;
 }
 
+.daysOfWeek__wrapper label:nth-child(1) {
+  color: rgba(0, 0, 0, 0.5);
+  margin-right: 185px;
+}
 
 .daysOfWeek__wrapper label:nth-child(2) {
-    color: rgba(0, 0, 0, 0.5);
-    margin-right: 194px;
+  color: rgba(0, 0, 0, 0.5);
+  margin-right: 194px;
 }
 
-
 .daysOfWeek__wrapper label:nth-child(3) {
-    color: rgba(0, 0, 0, 0.5);
-    margin-right: 186px;
+  color: rgba(0, 0, 0, 0.5);
+  margin-right: 186px;
 }
 
 .daysOfWeek__wrapper label:nth-child(4) {
-    color: rgba(0, 0, 0, 0.5);
-    margin-right: 195px;
+  color: rgba(0, 0, 0, 0.5);
+  margin-right: 195px;
 }
 
 .daysOfWeek__wrapper label:nth-child(5) {
-    color: rgba(0, 0, 0, 0.5);
-    margin-right: 200px;
+  color: rgba(0, 0, 0, 0.5);
+  margin-right: 200px;
 }
 
 .daysOfWeek__wrapper label:nth-child(6) {
-    color: rgba(0, 0, 0, 0.5);
-    margin-right: 197px;
+  color: rgba(0, 0, 0, 0.5);
+  margin-right: 197px;
 }
 
 .daysOfWeek__wrapper label:nth-child(7) {
-    color: rgba(0, 0, 0, 0.5);
+  color: rgba(0, 0, 0, 0.5);
 }
-
 
 /* ------------------------------------------------------------------------------------------- */
 
-.addevent-container__wrapper{
-    position: absolute;
-    top:0;
-    left:0;
+.addevent-container__wrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
 
-    background-color: rgba(0, 0, 0, 0.6);
-    width: 100%;
-    height: 100%;
-    z-index: 1;
+  background-color: rgba(0, 0, 0, 0.4);
+  width: 100%;
+  height: 100%;
+  z-index: 1;
 }
 
-.addevent__wrapper{
-    position: absolute;
-    top:50%;
-    left:50%;
-    transform: translate(-50%, -50%);
+.addevent__wrapper {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 
-    width: 1000px;
-    height: 900px;
-    background-color: #D6E8FF;
-    z-index: 5;
+  border-radius: 20px;
+  width: 1000px;
+  height: 900px;
+  background-color: #d6e8ff;
+  z-index: 5;
+  padding: 10px;
 }
 
-.addevent-close__btn{
-    background-color: transparent;
-    border: none;
-    cursor: pointer;
+.addevent-close__btn {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
 }
 
+.addevent-subcontainer__wrapper {
+  margin: 20px 0 0 90px;
+  width: 80%;
+  height: 80%;
+  background-color: #e5f0ff;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  border-radius: 10px;
+  padding: 10px;
+}
