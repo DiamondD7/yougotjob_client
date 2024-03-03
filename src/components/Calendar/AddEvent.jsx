@@ -11,7 +11,9 @@ const AddEvent = ({ setOpenAddEventModal }) => {
         >
           <X size={30} color="#202020" />
         </button>
-        <h1>Create an appointment</h1>
+        <div className="addevent-subcontainer__wrapper">
+          <h2>Create Appointment</h2>
+        </div>
       </div>
     </div>
   );
