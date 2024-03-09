@@ -11,8 +11,11 @@ const AddEvent = ({ setOpenAddEventModal }) => {
         >
           <X size={30} color="#202020" />
         </button>
+        <h1 style={{ textAlign: "center" }}>Create Appointment</h1>
         <div className="addevent-subcontainer__wrapper">
-          <h2>Create Appointment</h2>
+          <div className="form-details__wrapper">
+            <h3>Full Details</h3>
+          </div>
         </div>
       </div>
     </div>
