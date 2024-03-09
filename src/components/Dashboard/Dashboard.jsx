@@ -642,7 +642,7 @@ const Dashboard = () => {
           <ContinueLearningContainer />
         </div>
       </div>
-      <div style={{ display: "flex", justifyContent: "space-between" }}>
+      <div style={{ display: "flex" }}>
         <div
           style={{
             margin: "20px 0 0 20px",
@@ -650,7 +650,11 @@ const Dashboard = () => {
         >
           <InvoiceContainer />
         </div>
-        <div>
+        <div
+          style={{
+            marginLeft: "115px",
+          }}
+        >
           <WeeklyScheduleContainer />
         </div>
       </div>
