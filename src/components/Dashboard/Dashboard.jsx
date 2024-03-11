@@ -9,6 +9,7 @@ import {
   Notepad,
   Trash,
   CalendarCheck,
+  Plus,
   ChatCenteredText,
 } from "@phosphor-icons/react";
 import { Line } from "react-chartjs-2";
@@ -534,9 +535,20 @@ const NotesContainer = () => {
   return (
     <div>
       <div className="notes__wrapper">
-        <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-          <Notepad size={19} color="#9DCD5A" />
-          <h5>Notes</h5>
+        <div style={{ display: "flex", justifyContent: "space-between" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+            <Notepad size={19} color="#9DCD5A" />
+            <h5>Notes</h5>
+          </div>
+          <button
+            style={{
+              backgroundColor: "transparent",
+              border: "none",
+              cursor: "pointer",
+            }}
+          >
+            <Plus size={15} color="#515151" />
+          </button>
         </div>
         <div style={{ marginTop: "10px" }}>
           <button
