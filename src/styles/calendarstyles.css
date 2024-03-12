@@ -214,3 +214,23 @@
   border-radius: 10px;
   padding: 10px;
 }
+
+/* -------------------------------------------------------------------- */
+.form__input {
+  width: 224px;
+  font-size: 17px;
+  padding: 5px;
+  border: 1px solid rgba(0, 0, 0, 0.4);
+  border-radius: 5px;
+  outline: none;
+}
+
+.form-address__input {
+  width: 96%;
+  margin: 5px 0 0 16px;
+  font-size: 17px;
+  padding: 5px;
+  border: 1px solid rgba(0, 0, 0, 0.4);
+  border-radius: 5px;
+  outline: none;
+}
