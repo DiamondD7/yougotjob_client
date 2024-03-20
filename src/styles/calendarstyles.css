@@ -216,6 +216,42 @@
 }
 
 /* -------------------------------------------------------------------- */
+.form-search-users__wrapper{
+  width: 100%;
+  padding: 5px;
+  height: 95px;
+  margin-bottom: 10px;
+}
+
+
+.form-search-users__input{
+  width: 96%;
+  margin: 5px 0 0 16px;
+  font-size: 17px;
+  padding: 5px;
+  border: 1px solid rgba(0, 0, 0, 0.4);
+  border-radius: 5px;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+  outline: none;
+}
+
+.form-search-result__wrapper{
+  width: 96%;
+  height: 28px;
+  margin-left: 16px;
+  padding: 0 5px;
+  outline: none;
+  background-color: rgba(24,24,24,0.1);
+  overflow: auto;
+}
+
+.form-search-profile-picture__img{
+  width: 20px;
+  height: 20px;
+  border-radius: 50px;
+}
+
 .form-details__input {
   width: 359px;
   font-size: 17px;
@@ -256,7 +292,7 @@
 
 .form-submit__btn {
   width: 96%;
-  margin: 130px 0 0 16px;
+  margin:15px 0 0 16px;
   font-size: 10px;
   padding: 3px 0;
   letter-spacing: 1px;
