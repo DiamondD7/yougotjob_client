@@ -1,9 +1,17 @@
-import React, { useState } from "react";
-import { X } from "@phosphor-icons/react";
+import React, { useState, useEffect } from "react";
+import { X, ArrowLeft, ArrowRight } from "@phosphor-icons/react";
+import {
+  getDaysFromPreviousMonth,
+  getNextMonthDays,
+  currentYear,
+  handleYearChange,
+} from "../../assets/js/months";
 
-const AddEvent = ({ setOpenAddEventModal }) => {
-  const [formSearchField, setFormSearchField] = useState("");
-
+const AppointmentForm = ({
+  setOpenAddEventModal,
+  setFormSearchField,
+  formSearchField,
+}) => {
   const testProfile = [
     {
       id: 55,
@@ -48,221 +56,359 @@ const AddEvent = ({ setOpenAddEventModal }) => {
       email: "jackarm@gmail.com",
     },
   ];
+
   const filteredFormData = testProfile.filter(
     (data) =>
       data.firstName.toLowerCase().includes(formSearchField.toLowerCase()) ||
       data.lastName.toLowerCase().includes(formSearchField.toLowerCase()) ||
       data.nhi.toLowerCase().includes(formSearchField.toLowerCase())
   );
+  return (
+    <div>
+      <button
+        className="addevent-close__btn"
+        onClick={() => setOpenAddEventModal(false)}
+      >
+        <X size={30} color="#f3f3f3" />
+      </button>
+      <h1 style={{ color: "#f3f3f3", marginLeft: "100px" }}>
+        Appointment Form
+      </h1>
+      <div className="addevent-subcontainer__wrapper">
+        <div className="form-search-users__wrapper">
+          <h4 style={{ textAlign: "center" }}>Search for existing user</h4>
+          <input
+            type="text"
+            className="form-search-users__input"
+            placeholder="Patient ID / Name / NHI"
+            onChange={(e) => setFormSearchField(e.target.value)}
+          />
+          {filteredFormData.length === 0 || formSearchField === "" ? (
+            <div></div>
+          ) : (
+            <div className="form-search-result__wrapper">
+              {filteredFormData.map((data, index) => (
+                <button
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "10px",
+                    marginTop: "3px",
+                    width: "100%",
+                    backgroundColor: "transparent",
+                    border: "none",
+                    cursor: "pointer",
+                  }}
+                  key={index}
+                >
+                  <img
+                    className="form-search-profile-picture__img"
+                    src={data.picture}
+                    alt="profilepic"
+                  />
+                  <p style={{ fontSize: "11px" }}>
+                    {data.firstName} {data.lastName}
+                  </p>
+                  <p style={{ fontSize: "11px" }}>{data.nhi}</p>
+                  <p style={{ fontSize: "11px" }}>{data.height}cm</p>
+                  <p style={{ fontSize: "11px" }}>{data.weight}kg</p>
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+        <div className="form-details__wrapper">
+          <p
+            style={{
+              textAlign: "center",
+              fontSize: "12px",
+            }}
+          >
+            Or
+          </p>
+          <h4 style={{ textAlign: "center", marginBottom: "10px" }}>
+            Create a new appointment
+          </h4>
+          <div style={{ display: "flex" }}>
+            <div>
+              <input className="form-details__input" type="text" />
+              <p
+                style={{
+                  fontSize: "10px",
+                  fontWeight: "bold",
+                  marginTop: "5px",
+                  marginLeft: "16px",
+                }}
+              >
+                First Name
+              </p>
+            </div>
+            <div>
+              <input className="form-details__input" type="text" />
+              <p
+                style={{
+                  fontSize: "10px",
+                  fontWeight: "bold",
+                  marginTop: "5px",
+                  marginLeft: "16px",
+                }}
+              >
+                Last Name
+              </p>
+            </div>
+          </div>
+          <div
+            style={{
+              display: "flex",
+              marginTop: "10px",
+            }}
+          >
+            <div>
+              <input className="form-details__input" type="text" />
+              <p
+                style={{
+                  fontSize: "10px",
+                  fontWeight: "bold",
+                  marginTop: "5px",
+                  marginLeft: "16px",
+                }}
+              >
+                Contact number
+              </p>
+            </div>
+            <div>
+              <input className="form-details__input" type="text" />
+              <p
+                style={{
+                  fontSize: "10px",
+                  fontWeight: "bold",
+                  marginTop: "5px",
+                  marginLeft: "16px",
+                }}
+              >
+                Email Address
+              </p>
+            </div>
+          </div>
+          <div style={{ marginTop: "10px" }}>
+            <input className="form-address__input" type="text" />
+            <p
+              style={{
+                fontSize: "10px",
+                fontWeight: "bold",
+                margin: "5px 0 0 16px",
+              }}
+            >
+              Street Address
+            </p>
+            <input className="form-address__input" type="text" />
+            <p
+              style={{
+                fontSize: "10px",
+                fontWeight: "bold",
+                margin: "5px 0 0 16px",
+              }}
+            >
+              Street Address Line 2
+            </p>
+          </div>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-around",
+              marginTop: "10px",
+            }}
+          >
+            <div>
+              <input className="form__input" type="text" />
+              <p
+                style={{
+                  fontSize: "10px",
+                  fontWeight: "bold",
+                  marginTop: "5px",
+                }}
+              >
+                City
+              </p>
+            </div>
+            <div>
+              <input className="form__input" type="text" />
+              <p
+                style={{
+                  fontSize: "10px",
+                  fontWeight: "bold",
+                  marginTop: "5px",
+                }}
+              >
+                Postal / Zip Code
+              </p>
+            </div>
+            <div>
+              <input className="form__input" type="text" />
+              <p
+                style={{
+                  fontSize: "10px",
+                  fontWeight: "bold",
+                  marginTop: "5px",
+                }}
+              >
+                State/Province
+              </p>
+            </div>
+          </div>
+          {/* <div>
+              <button className="form-checkavailabledate__btn">
+                Check available dates <Calendar size={14} />
+              </button>
+            </div> */}
+          <div>
+            <textarea className="form-comments__textarea"></textarea>
+            <p
+              style={{
+                fontSize: "10px",
+                fontWeight: "bold",
+                marginTop: "2px",
+                marginLeft: "16px",
+              }}
+            >
+              Comments
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const AvailableDatesCalendar = ({ months, selectedMaxMonthDays }) => {
+  let today = new Date();
+
+  const days = [
+    1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21,
+    22, 23, 24, 25, 26, 27, 28, 29, 30, 31,
+  ];
+
+  const [selectedMonth, setSelectedMonth] = useState(today.getMonth());
+
+  const handleMonthChanged = (month, isIncrease) => {
+    if (month === 0 && isIncrease === false) {
+      setSelectedMonth(0);
+    } else if (month === 11 && isIncrease === true) {
+      setSelectedMonth(11);
+    } else if (isIncrease === true) {
+      setSelectedMonth(selectedMonth + 1);
+    } else {
+      setSelectedMonth(selectedMonth - 1);
+    }
+  };
+
+  const nextMonthDays = getNextMonthDays(
+    today.getFullYear(),
+    months,
+    selectedMonth
+  );
+  const previousMonthDays = getDaysFromPreviousMonth(
+    today.getFullYear(),
+    months,
+    selectedMonth
+  );
+
+  // ---------------------------------------
+
+  return (
+    <div>
+      <div className="availbledatecalendar-container__wrapper">
+        <div className="availabledatecalendar__wrapper">
+          <div style={{ display: "flex", justifyContent: "space-evenly" }}>
+            <button
+              style={{
+                backgroundColor: "transparent",
+                border: "none",
+                cursor: "pointer",
+              }}
+              onClick={() => handleMonthChanged(selectedMonth, false)}
+            >
+              <ArrowLeft size={19} />
+            </button>
+            <h4 style={{ textAlign: "center" }}>
+              {months[selectedMonth]} {today.getFullYear()}
+            </h4>
+            <button
+              style={{
+                backgroundColor: "transparent",
+                border: "none",
+                cursor: "pointer",
+              }}
+              onClick={() => handleMonthChanged(selectedMonth, true)}
+            >
+              <ArrowRight size={19} />
+            </button>
+          </div>
+          <div className="availabledatecalendar-daysofweek__wrapper">
+            <label>Mon</label>
+            <label>Tue</label>
+            <label>Wed</label>
+            <label>Thu</label>
+            <label>Fri</label>
+            <label>Sat</label>
+            <label>Sun</label>
+          </div>
+          <div className="availabledatecalendar-days__wrapper">
+            {previousMonthDays.map((day, index) => (
+              <div key={index}>
+                <p>{day}</p>
+              </div>
+            ))}
+            {days.map(
+              (day, index) => (
+                days.splice(selectedMaxMonthDays),
+                (
+                  <div key={index}>
+                    <p>{day}</p>
+                  </div>
+                )
+              )
+            )}
+            {nextMonthDays.map((day, index) => (
+              <div key={index}>
+                <p>{day}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const AddEvent = ({
+  setOpenAddEventModal,
+  months,
+  previousMonthDays,
+  selectedMaxMonthDays,
+}) => {
+  const [formSearchField, setFormSearchField] = useState("");
 
   return (
     <div>
       <div className="addevent__wrapper">
-        <button
-          className="addevent-close__btn"
-          onClick={() => setOpenAddEventModal(false)}
-        >
-          <X size={30} color="#f3f3f3" />
-        </button>
-        <h1 style={{ color: "#f3f3f3", marginLeft: "100px" }}>
-          Appointment Form
-        </h1>
-        <div className="addevent-subcontainer__wrapper">
-          <div className="form-search-users__wrapper">
-            <h4 style={{ textAlign: "center" }}>Search for existing user</h4>
-            <input
-              type="text"
-              className="form-search-users__input"
-              placeholder="Patient ID / Name / NHI"
-              onChange={(e) => setFormSearchField(e.target.value)}
-            />
-            {filteredFormData.length === 0 || formSearchField === "" ? (
-              <div></div>
-            ) : (
-              <div className="form-search-result__wrapper">
-                {filteredFormData.map((data, index) => (
-                  <button
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "10px",
-                      marginTop: "3px",
-                      width: "100%",
-                      backgroundColor: "transparent",
-                      border: "none",
-                      cursor: "pointer",
-                    }}
-                    key={index}
-                  >
-                    <img
-                      className="form-search-profile-picture__img"
-                      src={data.picture}
-                      alt="profilepic"
-                    />
-                    <p style={{ fontSize: "11px" }}>
-                      {data.firstName} {data.lastName}
-                    </p>
-                    <p style={{ fontSize: "11px" }}>{data.nhi}</p>
-                    <p style={{ fontSize: "11px" }}>{data.height}cm</p>
-                    <p style={{ fontSize: "11px" }}>{data.weight}kg</p>
-                  </button>
-                ))}
-              </div>
-            )}
-          </div>
-          <div className="form-details__wrapper">
-            <p
-              style={{
-                textAlign: "center",
-                fontSize: "12px",
-              }}
+        <div>
+          <AppointmentForm
+            setOpenAddEventModal={setOpenAddEventModal}
+            setFormSearchField={setFormSearchField}
+            formSearchField={formSearchField}
+          />
+          <AvailableDatesCalendar
+            months={months}
+            selectedMaxMonthDays={selectedMaxMonthDays}
+          />
+          <div className="form-submit__wrapper">
+            <button
+              className="form-submit__btn"
+              onClick={() => setOpenAvailableDatesCalendar(true)}
             >
-              Or
-            </p>
-            <h4 style={{ textAlign: "center", marginBottom: "10px" }}>
-              Create a new appointment
-            </h4>
-            <div style={{ display: "flex" }}>
-              <div>
-                <input className="form-details__input" type="text" />
-                <p
-                  style={{
-                    fontSize: "10px",
-                    fontWeight: "bold",
-                    marginTop: "5px",
-                    marginLeft: "16px",
-                  }}
-                >
-                  First Name
-                </p>
-              </div>
-              <div>
-                <input className="form-details__input" type="text" />
-                <p
-                  style={{
-                    fontSize: "10px",
-                    fontWeight: "bold",
-                    marginTop: "5px",
-                    marginLeft: "16px",
-                  }}
-                >
-                  Last Name
-                </p>
-              </div>
-            </div>
-            <div
-              style={{
-                display: "flex",
-                marginTop: "10px",
-              }}
-            >
-              <div>
-                <input className="form-details__input" type="text" />
-                <p
-                  style={{
-                    fontSize: "10px",
-                    fontWeight: "bold",
-                    marginTop: "5px",
-                    marginLeft: "16px",
-                  }}
-                >
-                  Contact number
-                </p>
-              </div>
-              <div>
-                <input className="form-details__input" type="text" />
-                <p
-                  style={{
-                    fontSize: "10px",
-                    fontWeight: "bold",
-                    marginTop: "5px",
-                    marginLeft: "16px",
-                  }}
-                >
-                  Email Address
-                </p>
-              </div>
-            </div>
-            <div style={{ marginTop: "10px" }}>
-              <input className="form-address__input" type="text" />
-              <p
-                style={{
-                  fontSize: "10px",
-                  fontWeight: "bold",
-                  margin: "5px 0 0 16px",
-                }}
-              >
-                Street Address
-              </p>
-              <input className="form-address__input" type="text" />
-              <p
-                style={{
-                  fontSize: "10px",
-                  fontWeight: "bold",
-                  margin: "5px 0 0 16px",
-                }}
-              >
-                Street Address Line 2
-              </p>
-            </div>
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "space-around",
-                marginTop: "10px",
-              }}
-            >
-              <div>
-                <input className="form__input" type="text" />
-                <p
-                  style={{
-                    fontSize: "10px",
-                    fontWeight: "bold",
-                    marginTop: "5px",
-                  }}
-                >
-                  City
-                </p>
-              </div>
-              <div>
-                <input className="form__input" type="text" />
-                <p
-                  style={{
-                    fontSize: "10px",
-                    fontWeight: "bold",
-                    marginTop: "5px",
-                  }}
-                >
-                  Postal / Zip Code
-                </p>
-              </div>
-              <div>
-                <input className="form__input" type="text" />
-                <p
-                  style={{
-                    fontSize: "10px",
-                    fontWeight: "bold",
-                    marginTop: "5px",
-                  }}
-                >
-                  State/Province
-                </p>
-              </div>
-            </div>
-            <div>
-              <textarea className="form-comments__textarea"></textarea>
-              <p
-                style={{
-                  fontSize: "10px",
-                  fontWeight: "bold",
-                  marginTop: "2px",
-                  marginLeft: "16px",
-                }}
-              >
-                Comments
-              </p>
-            </div>
-            <button className="form-submit__btn">Submit</button>
+              Submit
+            </button>
           </div>
         </div>
       </div>

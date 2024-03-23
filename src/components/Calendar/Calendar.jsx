@@ -85,7 +85,12 @@ const Calendar = () => {
 
       {openAddEventModal && (
         <div>
-          <AddEvent setOpenAddEventModal={setOpenAddEventModal} />
+          <AddEvent
+            months={months}
+            previousMonthDays={previousMonthDays}
+            selectedMaxMonthDays={selectedMaxMonthDays}
+            setOpenAddEventModal={setOpenAddEventModal}
+          />
         </div>
       )}
 
