@@ -290,9 +290,24 @@
   padding: 5px;
 }
 
+.form-submit__wrapper{
+  margin: 20px 0 0 88px;
+  width: 80%;
+  height: 80%;
+  background-color: #e5f0ff;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  border-radius: 10px;
+  padding: 10px 10px;
+}
+
 .form-submit__btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+
   width: 96%;
-  margin:15px 0 0 16px;
+  margin:0 0 0 16px;
   font-size: 10px;
   padding: 3px 0;
   letter-spacing: 1px;
@@ -303,4 +318,56 @@
   border-radius: 5px;
   background-color: #9dcd5a;
   border: none;
+}
+
+
+
+/* ---------------------------------------------------- */
+
+.availbledatecalendar-container__wrapper{
+  position: absolute;
+  top:9.5%;
+  right:-40%;
+  
+  
+  width: 48.5%;
+}
+
+
+.availabledatecalendar__wrapper{
+  margin-top: 20px;
+  height: 500px;
+  background-color: #e5f0ff;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  border-radius: 10px;
+  padding: 20px 10px;
+  overflow: auto;
+}
+
+.availabledatecalendar-daysofweek__wrapper{
+  /* display: flex;
+  justify-content: space-around; */
+  display: grid;
+  grid-template-columns: repeat(7, 65px);
+  /* gap: 25px; */
+  gap: 2px;
+}
+
+.availabledatecalendar-daysofweek__wrapper label{
+  font-size: 12px;
+}
+
+.availabledatecalendar-days__wrapper{
+  display:grid;
+  grid-template-columns: repeat(7, 62px);
+  grid-template-rows: repeat(6,62px);
+  gap: 5px;
+
+  font-size: 10px;
+  margin:10px 0 0 0;
+}
+
+.availabledatecalendar-days__wrapper p{
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  height: 65px;
 }
