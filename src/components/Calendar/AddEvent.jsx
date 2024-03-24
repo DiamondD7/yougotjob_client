@@ -280,25 +280,43 @@ const AppointmentForm = ({
   );
 };
 
-const AvailableDatesCalendar = ({ months, selectedMaxMonthDays }) => {
+const AvailableDatesCalendar = () => {
   let today = new Date();
 
+  const [selectedMaxMonthDays, setSelectedMaxMonthDays] = useState(0); //sets the max days of each month.
+  const months = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
+  ];
   const days = [
     1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21,
     22, 23, 24, 25, 26, 27, 28, 29, 30, 31,
   ];
 
-  const [selectedMonth, setSelectedMonth] = useState(today.getMonth());
+  const [selectedMonth, setSelectedMonth] = useState(months[today.getMonth()]); //
 
   const handleMonthChanged = (month, isIncrease) => {
-    if (month === 0 && isIncrease === false) {
-      setSelectedMonth(0);
-    } else if (month === 11 && isIncrease === true) {
-      setSelectedMonth(11);
+    if (month === "Jan" && isIncrease === false) {
+      setSelectedMonth(months[0]);
+    } else if (month === "Dec" && isIncrease === true) {
+      setSelectedMonth(months[11]);
     } else if (isIncrease === true) {
-      setSelectedMonth(selectedMonth + 1);
+      // setSelectedMonth(selectedMonth + 1);
+      let indexOfNextMonth = months.indexOf(selectedMonth) + 1;
+      setSelectedMonth(months[indexOfNextMonth]);
     } else {
-      setSelectedMonth(selectedMonth - 1);
+      let indexOfPreviousMonth = months.indexOf(selectedMonth) - 1;
+      setSelectedMonth(months[indexOfPreviousMonth]);
     }
   };
 
@@ -314,6 +332,26 @@ const AvailableDatesCalendar = ({ months, selectedMaxMonthDays }) => {
   );
 
   // ---------------------------------------
+  const [selectedYear, setSelectedYear] = useState(currentYear); //sets its current year
+  const [fullDate, setFullDate] = useState(
+    handleYearChange(today.getFullYear()) //calling a function from months.js file to update the month list.
+  );
+
+  useEffect(() => {
+    refreshCalendarList(); //use this to refresh the whole calendar. Incase there might be changes.
+  }, [fullDate, selectedMonth]); //will run this again once it senses that there is a change in 'fullDate'.
+
+  const refreshCalendarList = () => {
+    fullDate.map((month) => {
+      if (month.monthName === selectedMonth) {
+        setSelectedMaxMonthDays(month.maxDays);
+        setSelectedMonth(month.monthName);
+      } //handles the current month and the current month's max days.
+    });
+  };
+  useEffect(() => {
+    setFullDate(handleYearChange(parseInt(selectedYear))); //updating the full calendar date if there is changes in year.
+  }, [selectedYear]); //this will only run when the state got change
 
   return (
     <div>
@@ -331,7 +369,7 @@ const AvailableDatesCalendar = ({ months, selectedMaxMonthDays }) => {
               <ArrowLeft size={19} />
             </button>
             <h4 style={{ textAlign: "center" }}>
-              {months[selectedMonth]} {today.getFullYear()}
+              {selectedMonth} {today.getFullYear()}
             </h4>
             <button
               style={{
@@ -356,22 +394,41 @@ const AvailableDatesCalendar = ({ months, selectedMaxMonthDays }) => {
           <div className="availabledatecalendar-days__wrapper">
             {previousMonthDays.map((day, index) => (
               <div key={index}>
-                <p>{day}</p>
+                <p className="availabledatecalendar-subdays__text">{day}</p>
               </div>
             ))}
             {days.map(
               (day, index) => (
                 days.splice(selectedMaxMonthDays),
-                (
-                  <div key={index}>
-                    <p>{day}</p>
-                  </div>
+                (day < today.getDate() &&
+                  selectedMonth === months[today.getMonth()] &&
+                  parseInt(selectedYear) === currentYear) ||
+                months.indexOf(selectedMonth) < //getting the index of selectedMonth from 0 to 11: 0 means Jan
+                  months.indexOf(months[today.getMonth()]) ? ( //is LESS than the indexOf the currentMonth. because if we dont do indexOf then the output will just be a string eg. "Mar"
+                  <button
+                    style={{ textAlign: "start", fontSize: "10px" }}
+                    disabled={true}
+                    key={index}
+                  >
+                    <p className="availabledatecalendar-daysofthemonth__text">
+                      {day}
+                    </p>
+                  </button>
+                ) : (
+                  <button
+                    className="availabledatecalendar-daysofthemonth__btn"
+                    key={index}
+                  >
+                    <p className="availabledatecalendar-daysofthemonth__text">
+                      {day}
+                    </p>
+                  </button>
                 )
               )
             )}
             {nextMonthDays.map((day, index) => (
               <div key={index}>
-                <p>{day}</p>
+                <p className="availabledatecalendar-subdays__text">{day}</p>
               </div>
             ))}
           </div>
@@ -398,10 +455,7 @@ const AddEvent = ({
             setFormSearchField={setFormSearchField}
             formSearchField={formSearchField}
           />
-          <AvailableDatesCalendar
-            months={months}
-            selectedMaxMonthDays={selectedMaxMonthDays}
-          />
+          <AvailableDatesCalendar />
           <div className="form-submit__wrapper">
             <button
               className="form-submit__btn"
