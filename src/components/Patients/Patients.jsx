@@ -17,13 +17,13 @@ const Patients = () => {
               <input
                 className="patientID__input"
                 type="text"
-                placeholder="Patient ID/First or Last Name"
+                placeholder="Search"
                 value={searchField}
                 onChange={(e) => setSearchField(e.target.value)}
               />
-              <button className="patientsearch__btn">
+              {/* <button className="patientsearch__btn">
                 <MagnifyingGlass size={16} color="#454545" />
-              </button>
+              </button> */}
             </div>
           </div>
 

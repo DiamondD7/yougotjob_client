@@ -70,12 +70,25 @@ const SearchProfile = ({
         <div>
           {searchField === "" ? (
             <div className="no-search__wrapper">
-              <MagnifyingGlass size={72} color="rgba(0,0,0,0.25)" />
-              <h2 style={{ color: "rgba(0,0,0,0.25)" }}>Search results</h2>
+              <MagnifyingGlass size={72} color="#9DCD5A" weight="fill" />
+              <h2
+                style={{
+                  color: "rgba(0,0,0,0.25)",
+                }}
+              >
+                Search patient results,
+              </h2>
+              <h2
+                style={{
+                  color: "rgba(0,0,0,0.25)",
+                }}
+              >
+                search their names or their NHI number
+              </h2>
             </div>
           ) : (
             <div className="no-search__wrapper">
-              <SmileySad size={60} color="rgba(0,0,0,0.25)" />
+              <SmileySad size={60} color="#9DCD5A" weight="fill" />
               <h2 style={{ color: "rgba(0,0,0,0.25)" }}>
                 Sorry we couldn't find any results
               </h2>

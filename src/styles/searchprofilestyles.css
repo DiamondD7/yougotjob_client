@@ -44,7 +44,13 @@
 
 .no-search__wrapper {
   text-align: center;
-  margin-top: 200px;
+  width: 950px;
+  
+  margin:100px 0 0 380px;
+  /* position: absolute;
+  top:30%;
+  left:50%;
+  transform: translate(-50%,-50%); */
 }
 
 .full-profile__btn {
