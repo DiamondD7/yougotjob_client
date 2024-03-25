@@ -1,20 +1,17 @@
 .patientsId-search__wrapper{
     /* position: absolute;
-    top:20%;
-    left:55%;
+    top:10%;
+    left:50%;
     transform: translate(-50%, -50%); */
-    text-align: center;
+    margin:10px 0 0 380px;
 }
 
 .patientID__input{
-    margin-top: 10px;
     padding: 5px 5px;
-    width: 600px;
+    width: 1000px;
     border: 1px solid rgba(0,0,0,0.4);
     border-radius: 10px;
-    border-right: none;
-    border-top-right-radius: 0;
-    border-bottom-right-radius: 0;
+
     font-size: 21px;
     outline: none;
     /* box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px; */
