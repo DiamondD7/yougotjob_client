@@ -1,19 +1,20 @@
 .result-table__table {
-  width: 99%;
-  margin-left: 10px;
+  width: 70%;
+  margin:10px 0 0 50px;
   border-collapse: collapse;
+  font-size: 13px;
 }
 .result-table__table thead {
   background-color: #d6e8ff;
 }
 
 .result-table__table thead tr th {
-  padding: 10px;
+  padding: 10px 20px;
   text-align: left;
 }
 
 .result-table__table tbody tr td {
-  padding: 10px;
+  padding: 10px 20px;
 }
 
 .result-table__table tbody tr:nth-child(odd) {
@@ -32,6 +33,16 @@
   padding: 5px 15px;
   border-radius: 10px;
   cursor: pointer;
+  
+}
+
+.result-table-pagination__button{
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+  font-size: 15px;
+  padding: 10px;
+  color: #9dcd5a;
 }
 
 /* -------------------------------------------------------------------- */
