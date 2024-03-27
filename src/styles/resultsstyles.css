@@ -1,3 +1,39 @@
+.filter-result__wrapper{
+  width: 70%;
+  margin:10px 0 20px 50px;
+  padding: 10px 20px;
+  background-color: #d6e8ff;
+  border-radius: 5px;
+
+  display: flex;
+  gap: 30px;
+}
+
+.filter-result-search__input{
+  width: 100%;
+  font-size: 12px;
+  margin-top: 10px;
+  padding: 5px 10px;
+  outline: none;
+  border-radius: 10px;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  border: none;
+  color: rgba(0, 0, 0, 0.6);
+}
+
+.filter-result__dropdown{
+  width: 100%;
+  font-size: 12px;
+  outline: none;
+  border: none;
+  cursor: pointer;
+  margin-top: 10px;
+  padding: 3px 10px;
+  border-radius: 10px;
+  color: rgba(0, 0, 0, 0.6);
+}
+
 .result-table__table {
   width: 70%;
   margin:10px 0 0 50px;
@@ -6,6 +42,7 @@
 }
 .result-table__table thead {
   background-color: #d6e8ff;
+  
 }
 
 .result-table__table thead tr th {
@@ -31,7 +68,7 @@
   border: none;
   background-color: #9dcd5a;
   padding: 5px 15px;
-  border-radius: 10px;
+  border-radius: 5px;
   cursor: pointer;
   
 }
