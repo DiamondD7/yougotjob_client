@@ -1,14 +1,80 @@
 import React, { useState } from "react";
 import FullResult from "./FullResult";
-import { CaretRight, CaretLeft } from "@phosphor-icons/react";
+import { CaretRight, CaretLeft, MagnifyingGlass } from "@phosphor-icons/react";
 
 import "../../styles/resultsstyles.css";
+const FilterResults = () => {
+  return (
+    <div>
+      <div className="filter-result__wrapper">
+        <div style={{ width: "35%" }}>
+          <h4 style={{ fontSize: "12px" }}>What are you looking for?</h4>
+          <div style={{ display: "flex", alignItems: "center" }}>
+            <div
+              style={{
+                backgroundColor: "white",
+                borderTopLeftRadius: "10px",
+                borderBottomLeftRadius: "10px",
+                padding: "2.5px 0 2.5px 10px",
+                marginTop: "10px",
+              }}
+            >
+              <MagnifyingGlass size={11} />
+            </div>
+            <input
+              className="filter-result-search__input"
+              type="text"
+              placeholder="Search for name, nhi, subject, status etc."
+            />
+          </div>
+        </div>
+        <div style={{ width: "22%" }}>
+          <h4 style={{ fontSize: "12px" }}>Visit Type</h4>
+          <select className="filter-result__dropdown">
+            <option>All</option>
+            <option>General Appointment</option>
+            <option>Vaccination</option>
+            <option>Checkup</option>
+          </select>
+        </div>
+        <div style={{ width: "12%" }}>
+          <h4 style={{ fontSize: "12px" }}>Status</h4>
+          <select className="filter-result__dropdown">
+            <option>All</option>
+            <option>Pending</option>
+            <option>Complete</option>
+            <option>KK</option>
+          </select>
+        </div>
+        <div style={{ width: "10%" }}>
+          <h4 style={{ fontSize: "12px" }}>Payment</h4>
+          <select className="filter-result__dropdown">
+            <option>All</option>
+            <option>Paid</option>
+            <option>Pending</option>
+          </select>
+        </div>
+        <div style={{ width: "10%" }}>
+          <h4 style={{ fontSize: "12px" }}>Triage Level</h4>
+          <select className="filter-result__dropdown">
+            <option>All</option>
+            <option>Level 1</option>
+            <option>Level 2</option>
+            <option>Level 3</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 const Results = () => {
   const [openResult, setOpenResult] = useState(false);
 
   return (
     <div>
       <h2 style={{ margin: "30px 0 0 50px" }}>Results</h2>
+      <FilterResults />
       {openResult === false ? (
         <table className="result-table__table">
           <thead>
