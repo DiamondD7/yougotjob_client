@@ -162,3 +162,19 @@ export const getNextMonthDays = (selectedYear, months, selectedMonth) => {
     }
     return nextMonthPrefixArray;
   };
+
+
+export const exportedMonthsArray = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
+  ];

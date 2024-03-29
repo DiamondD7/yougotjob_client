@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { MockUserData } from "../../assets/js/mockChartData";
+import { exportedMonthsArray } from "../../assets/js/months";
 import {
   User,
   Calendar,
@@ -419,7 +420,7 @@ const WeeklyScheduleContainer = () => {
       <div className="weekly-container__wrapper">
         <div className="weekly-calendar__wrapper">
           <h2 className="weekly-calendar-month-header__text">
-            Feb {today.getFullYear()}
+            {exportedMonthsArray[today.getMonth()]} {today.getFullYear()}
           </h2>
           <div
             style={{
