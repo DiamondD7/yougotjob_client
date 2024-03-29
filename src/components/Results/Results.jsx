@@ -52,6 +52,7 @@ const FilterResults = () => {
             <option>All</option>
             <option>Paid</option>
             <option>Pending</option>
+            <option>Overdue</option>
           </select>
         </div>
         <div style={{ width: "10%" }}>
@@ -86,6 +87,7 @@ const Results = () => {
               <th>Subject</th>
               <th>Duration</th>
               <th>Comments</th>
+              <th>Payment</th>
               <th>Status</th>
               <th></th>
             </tr>
@@ -100,6 +102,7 @@ const Results = () => {
               <td>Liver function test</td>
               <td>30 mins</td>
               <td>-</td>
+              <td style={{ color: "#d7c60f" }}>Pending</td>
               <td>KK</td>
               <td>
                 <button onClick={() => setOpenResult(true)}>view</button>
@@ -113,6 +116,7 @@ const Results = () => {
               <td>General appointment</td>
               <td>45 mins</td>
               <td>-</td>
+              <td style={{ color: "#d7c60f" }}>Pending</td>
               <td>KK</td>
               <td>
                 <button onClick={() => setOpenResult(true)}>view</button>
@@ -126,6 +130,7 @@ const Results = () => {
               <td>General appointment</td>
               <td>45 mins</td>
               <td>-</td>
+              <td style={{ color: "red" }}>Overdue</td>
               <td>KK</td>
               <td>
                 <button onClick={() => setOpenResult(true)}>view</button>
@@ -139,6 +144,7 @@ const Results = () => {
               <td>General appointment</td>
               <td>45 mins</td>
               <td>-</td>
+              <td>Paid</td>
               <td>KK</td>
               <td>
                 <button onClick={() => setOpenResult(true)}>view</button>
@@ -152,6 +158,7 @@ const Results = () => {
               <td>General appointment</td>
               <td>45 mins</td>
               <td>-</td>
+              <td>Paid</td>
               <td>KK</td>
               <td>
                 <button onClick={() => setOpenResult(true)}>view</button>
@@ -165,6 +172,7 @@ const Results = () => {
               <td>General appointment</td>
               <td>45 mins</td>
               <td>-</td>
+              <td>Paid</td>
               <td>KK</td>
               <td>
                 <button onClick={() => setOpenResult(true)}>view</button>
@@ -178,6 +186,7 @@ const Results = () => {
               <td>General appointment</td>
               <td>45 mins</td>
               <td>-</td>
+              <td>Paid</td>
               <td>KK</td>
               <td>
                 <button onClick={() => setOpenResult(true)}>view</button>
@@ -191,6 +200,7 @@ const Results = () => {
               <td>General appointment</td>
               <td>45 mins</td>
               <td>-</td>
+              <td>Paid</td>
               <td>KK</td>
               <td>
                 <button onClick={() => setOpenResult(true)}>view</button>
@@ -204,6 +214,7 @@ const Results = () => {
               <td>General appointment</td>
               <td>45 mins</td>
               <td>-</td>
+              <td>Paid</td>
               <td>KK</td>
               <td>
                 <button onClick={() => setOpenResult(true)}>view</button>
@@ -220,6 +231,7 @@ const Results = () => {
                 Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minus
                 iure quae accusamus tenetur quibusdam esse porro iusto
               </td>
+              <td>Paid</td>
               <td>KK</td>
               <td>
                 <button onClick={() => setOpenResult(true)}>view</button>
@@ -233,6 +245,7 @@ const Results = () => {
               <td>General appointment</td>
               <td>45 mins</td>
               <td>-</td>
+              <td>Paid</td>
               <td>KK</td>
               <td>
                 <button onClick={() => setOpenResult(true)}>view</button>
@@ -246,6 +259,7 @@ const Results = () => {
               <td>General appointment</td>
               <td>45 mins</td>
               <td>-</td>
+              <td>Paid</td>
               <td>KK</td>
               <td>
                 <button onClick={() => setOpenResult(true)}>view</button>
