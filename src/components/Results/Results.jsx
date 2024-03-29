@@ -74,199 +74,201 @@ const Results = () => {
 
   return (
     <div>
-      <h2 style={{ margin: "10px 0 0 50px" }}>Results</h2>
-      <FilterResults />
       {openResult === false ? (
-        <table className="result-table__table">
-          <thead>
-            <tr>
-              <th>NHI</th>
-              <th>Date</th>
-              <th>Name</th>
-              <th>Visit type</th>
-              <th>Subject</th>
-              <th>Duration</th>
-              <th>Comments</th>
-              <th>Payment</th>
-              <th>Status</th>
-              <th></th>
-            </tr>
-          </thead>
+        <div>
+          <h2 style={{ margin: "10px 0 0 50px" }}>Results</h2>
+          <FilterResults />
+          <table className="result-table__table">
+            <thead>
+              <tr>
+                <th>NHI</th>
+                <th>Date</th>
+                <th>Name</th>
+                <th>Visit type</th>
+                <th>Subject</th>
+                <th>Duration</th>
+                <th>Comments</th>
+                <th>Payment</th>
+                <th>Status</th>
+                <th></th>
+              </tr>
+            </thead>
 
-          <tbody>
-            <tr>
-              <td>YBN777652</td>
-              <td>2/11/2023</td>
-              <td>Johnson Martin Leaso Henderson</td>
-              <td>General appointment</td>
-              <td>Liver function test</td>
-              <td>30 mins</td>
-              <td>-</td>
-              <td style={{ color: "#d7c60f" }}>Pending</td>
-              <td>KK</td>
-              <td>
-                <button onClick={() => setOpenResult(true)}>view</button>
-              </td>
-            </tr>
-            <tr>
-              <td>HHO332921</td>
-              <td>2/11/2023</td>
-              <td>Aaron Sierra</td>
-              <td>Chronic care</td>
-              <td>General appointment</td>
-              <td>45 mins</td>
-              <td>-</td>
-              <td style={{ color: "#d7c60f" }}>Pending</td>
-              <td>KK</td>
-              <td>
-                <button onClick={() => setOpenResult(true)}>view</button>
-              </td>
-            </tr>
-            <tr>
-              <td>HHO332921</td>
-              <td>2/11/2023</td>
-              <td>Aaron Sierra</td>
-              <td>Chronic care</td>
-              <td>General appointment</td>
-              <td>45 mins</td>
-              <td>-</td>
-              <td style={{ color: "red" }}>Overdue</td>
-              <td>KK</td>
-              <td>
-                <button onClick={() => setOpenResult(true)}>view</button>
-              </td>
-            </tr>
-            <tr>
-              <td>HHO332921</td>
-              <td>2/11/2023</td>
-              <td>Aaron Sierra</td>
-              <td>Chronic care</td>
-              <td>General appointment</td>
-              <td>45 mins</td>
-              <td>-</td>
-              <td>Paid</td>
-              <td>KK</td>
-              <td>
-                <button onClick={() => setOpenResult(true)}>view</button>
-              </td>
-            </tr>
-            <tr>
-              <td>HHO332921</td>
-              <td>2/11/2023</td>
-              <td>Aaron Sierra</td>
-              <td>Chronic care</td>
-              <td>General appointment</td>
-              <td>45 mins</td>
-              <td>-</td>
-              <td>Paid</td>
-              <td>KK</td>
-              <td>
-                <button onClick={() => setOpenResult(true)}>view</button>
-              </td>
-            </tr>
-            <tr>
-              <td>HHO332921</td>
-              <td>2/11/2023</td>
-              <td>Aaron Sierra</td>
-              <td>Chronic care</td>
-              <td>General appointment</td>
-              <td>45 mins</td>
-              <td>-</td>
-              <td>Paid</td>
-              <td>KK</td>
-              <td>
-                <button onClick={() => setOpenResult(true)}>view</button>
-              </td>
-            </tr>
-            <tr>
-              <td>HHO332921</td>
-              <td>2/11/2023</td>
-              <td>Aaron Sierra</td>
-              <td>Chronic care</td>
-              <td>General appointment</td>
-              <td>45 mins</td>
-              <td>-</td>
-              <td>Paid</td>
-              <td>KK</td>
-              <td>
-                <button onClick={() => setOpenResult(true)}>view</button>
-              </td>
-            </tr>
-            <tr>
-              <td>HHO332921</td>
-              <td>2/11/2023</td>
-              <td>Aaron Sierra</td>
-              <td>Chronic care</td>
-              <td>General appointment</td>
-              <td>45 mins</td>
-              <td>-</td>
-              <td>Paid</td>
-              <td>KK</td>
-              <td>
-                <button onClick={() => setOpenResult(true)}>view</button>
-              </td>
-            </tr>
-            <tr>
-              <td>HHO332921</td>
-              <td>2/11/2023</td>
-              <td>Aaron Sierra</td>
-              <td>Chronic care</td>
-              <td>General appointment</td>
-              <td>45 mins</td>
-              <td>-</td>
-              <td>Paid</td>
-              <td>KK</td>
-              <td>
-                <button onClick={() => setOpenResult(true)}>view</button>
-              </td>
-            </tr>
-            <tr>
-              <td>HHO332921</td>
-              <td>2/11/2023</td>
-              <td>Aaron Sierra</td>
-              <td>Chronic care</td>
-              <td>General appointment</td>
-              <td>45 mins</td>
-              <td>
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minus
-                iure quae accusamus tenetur quibusdam esse porro iusto
-              </td>
-              <td>Paid</td>
-              <td>KK</td>
-              <td>
-                <button onClick={() => setOpenResult(true)}>view</button>
-              </td>
-            </tr>
-            <tr>
-              <td>HHO332921</td>
-              <td>2/11/2023</td>
-              <td>Aaron Sierra</td>
-              <td>Chronic care</td>
-              <td>General appointment</td>
-              <td>45 mins</td>
-              <td>-</td>
-              <td>Paid</td>
-              <td>KK</td>
-              <td>
-                <button onClick={() => setOpenResult(true)}>view</button>
-              </td>
-            </tr>
-            <tr>
-              <td>HHO332921</td>
-              <td>2/11/2023</td>
-              <td>Aaron Sierra</td>
-              <td>Chronic care</td>
-              <td>General appointment</td>
-              <td>45 mins</td>
-              <td>-</td>
-              <td>Paid</td>
-              <td>KK</td>
-              <td>
-                <button onClick={() => setOpenResult(true)}>view</button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+            <tbody>
+              <tr>
+                <td>YBN777652</td>
+                <td>2/11/2023</td>
+                <td>Johnson Martin Leaso Henderson</td>
+                <td>General appointment</td>
+                <td>Liver function test</td>
+                <td>30 mins</td>
+                <td>-</td>
+                <td style={{ color: "#d7c60f" }}>Pending</td>
+                <td>KK</td>
+                <td>
+                  <button onClick={() => setOpenResult(true)}>view</button>
+                </td>
+              </tr>
+              <tr>
+                <td>HHO332921</td>
+                <td>2/11/2023</td>
+                <td>Aaron Sierra</td>
+                <td>Chronic care</td>
+                <td>General appointment</td>
+                <td>45 mins</td>
+                <td>-</td>
+                <td style={{ color: "#d7c60f" }}>Pending</td>
+                <td>KK</td>
+                <td>
+                  <button onClick={() => setOpenResult(true)}>view</button>
+                </td>
+              </tr>
+              <tr>
+                <td>HHO332921</td>
+                <td>2/11/2023</td>
+                <td>Aaron Sierra</td>
+                <td>Chronic care</td>
+                <td>General appointment</td>
+                <td>45 mins</td>
+                <td>-</td>
+                <td style={{ color: "red" }}>Overdue</td>
+                <td>KK</td>
+                <td>
+                  <button onClick={() => setOpenResult(true)}>view</button>
+                </td>
+              </tr>
+              <tr>
+                <td>HHO332921</td>
+                <td>2/11/2023</td>
+                <td>Aaron Sierra</td>
+                <td>Chronic care</td>
+                <td>General appointment</td>
+                <td>45 mins</td>
+                <td>-</td>
+                <td>Paid</td>
+                <td>KK</td>
+                <td>
+                  <button onClick={() => setOpenResult(true)}>view</button>
+                </td>
+              </tr>
+              <tr>
+                <td>HHO332921</td>
+                <td>2/11/2023</td>
+                <td>Aaron Sierra</td>
+                <td>Chronic care</td>
+                <td>General appointment</td>
+                <td>45 mins</td>
+                <td>-</td>
+                <td>Paid</td>
+                <td>KK</td>
+                <td>
+                  <button onClick={() => setOpenResult(true)}>view</button>
+                </td>
+              </tr>
+              <tr>
+                <td>HHO332921</td>
+                <td>2/11/2023</td>
+                <td>Aaron Sierra</td>
+                <td>Chronic care</td>
+                <td>General appointment</td>
+                <td>45 mins</td>
+                <td>-</td>
+                <td>Paid</td>
+                <td>KK</td>
+                <td>
+                  <button onClick={() => setOpenResult(true)}>view</button>
+                </td>
+              </tr>
+              <tr>
+                <td>HHO332921</td>
+                <td>2/11/2023</td>
+                <td>Aaron Sierra</td>
+                <td>Chronic care</td>
+                <td>General appointment</td>
+                <td>45 mins</td>
+                <td>-</td>
+                <td>Paid</td>
+                <td>KK</td>
+                <td>
+                  <button onClick={() => setOpenResult(true)}>view</button>
+                </td>
+              </tr>
+              <tr>
+                <td>HHO332921</td>
+                <td>2/11/2023</td>
+                <td>Aaron Sierra</td>
+                <td>Chronic care</td>
+                <td>General appointment</td>
+                <td>45 mins</td>
+                <td>-</td>
+                <td>Paid</td>
+                <td>KK</td>
+                <td>
+                  <button onClick={() => setOpenResult(true)}>view</button>
+                </td>
+              </tr>
+              <tr>
+                <td>HHO332921</td>
+                <td>2/11/2023</td>
+                <td>Aaron Sierra</td>
+                <td>Chronic care</td>
+                <td>General appointment</td>
+                <td>45 mins</td>
+                <td>-</td>
+                <td>Paid</td>
+                <td>KK</td>
+                <td>
+                  <button onClick={() => setOpenResult(true)}>view</button>
+                </td>
+              </tr>
+              <tr>
+                <td>HHO332921</td>
+                <td>2/11/2023</td>
+                <td>Aaron Sierra</td>
+                <td>Chronic care</td>
+                <td>General appointment</td>
+                <td>45 mins</td>
+                <td>
+                  Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+                  Minus iure quae accusamus tenetur quibusdam esse porro iusto
+                </td>
+                <td>Paid</td>
+                <td>KK</td>
+                <td>
+                  <button onClick={() => setOpenResult(true)}>view</button>
+                </td>
+              </tr>
+              <tr>
+                <td>HHO332921</td>
+                <td>2/11/2023</td>
+                <td>Aaron Sierra</td>
+                <td>Chronic care</td>
+                <td>General appointment</td>
+                <td>45 mins</td>
+                <td>-</td>
+                <td>Paid</td>
+                <td>KK</td>
+                <td>
+                  <button onClick={() => setOpenResult(true)}>view</button>
+                </td>
+              </tr>
+              <tr>
+                <td>HHO332921</td>
+                <td>2/11/2023</td>
+                <td>Aaron Sierra</td>
+                <td>Chronic care</td>
+                <td>General appointment</td>
+                <td>45 mins</td>
+                <td>-</td>
+                <td>Paid</td>
+                <td>KK</td>
+                <td>
+                  <button onClick={() => setOpenResult(true)}>view</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       ) : (
         <FullResult setOpenResult={setOpenResult} />
       )}
