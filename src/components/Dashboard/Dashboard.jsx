@@ -8,7 +8,7 @@ import {
   BookOpenText,
   Notepad,
   Trash,
-  CalendarCheck,
+  EnvelopeOpen,
   Plus,
   ChatCenteredText,
 } from "@phosphor-icons/react";
@@ -130,6 +130,12 @@ const SummaryCards = () => {
               <ChatCenteredText size={19} color="#9DCD5A" />
             </div>
             <h5>Messages</h5>
+          </div>
+          <div style={{ textAlign: "center", marginTop: "30px" }}>
+            <EnvelopeOpen size={25} color="rgba(0,0,0,0.4)" />
+            <p style={{ color: "rgba(0,0,0,0.3)", fontSize: "13px" }}>
+              No new messages
+            </p>
           </div>
         </div>
       </div>
