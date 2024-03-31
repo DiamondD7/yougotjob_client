@@ -76,7 +76,7 @@ const Results = () => {
     <div>
       {openResult === false ? (
         <div>
-          <h2 style={{ margin: "10px 0 0 50px" }}>Results</h2>
+          <h2 style={{ margin: "10px 0 0 50px", fontSize: "26px" }}>Results</h2>
           <FilterResults />
           <table className="result-table__table">
             <thead>
