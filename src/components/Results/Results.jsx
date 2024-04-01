@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import FullResult from "./FullResult";
+import { PatientResultData } from "../../assets/js/usermock";
 import { CaretRight, CaretLeft, MagnifyingGlass } from "@phosphor-icons/react";
 
 import "../../styles/resultsstyles.css";
@@ -95,163 +96,32 @@ const Results = () => {
             </thead>
 
             <tbody>
-              <tr>
-                <td>YBN777652</td>
-                <td>2/11/2023</td>
-                <td>Johnson Martin Leaso Henderson</td>
-                <td>General appointment</td>
-                <td>Liver function test</td>
-                <td>30 mins</td>
-                <td>-</td>
-                <td style={{ color: "#d7c60f" }}>Pending</td>
-                <td>KK</td>
-                <td>
-                  <button onClick={() => setOpenResult(true)}>view</button>
-                </td>
-              </tr>
-              <tr>
-                <td>HHO332921</td>
-                <td>2/11/2023</td>
-                <td>Aaron Sierra</td>
-                <td>Chronic care</td>
-                <td>General appointment</td>
-                <td>45 mins</td>
-                <td>-</td>
-                <td style={{ color: "#d7c60f" }}>Pending</td>
-                <td>KK</td>
-                <td>
-                  <button onClick={() => setOpenResult(true)}>view</button>
-                </td>
-              </tr>
-              <tr>
-                <td>HHO332921</td>
-                <td>2/11/2023</td>
-                <td>Aaron Sierra</td>
-                <td>Chronic care</td>
-                <td>General appointment</td>
-                <td>45 mins</td>
-                <td>-</td>
-                <td style={{ color: "red" }}>Overdue</td>
-                <td>KK</td>
-                <td>
-                  <button onClick={() => setOpenResult(true)}>view</button>
-                </td>
-              </tr>
-              <tr>
-                <td>HHO332921</td>
-                <td>2/11/2023</td>
-                <td>Aaron Sierra</td>
-                <td>Chronic care</td>
-                <td>General appointment</td>
-                <td>45 mins</td>
-                <td>-</td>
-                <td>Paid</td>
-                <td>KK</td>
-                <td>
-                  <button onClick={() => setOpenResult(true)}>view</button>
-                </td>
-              </tr>
-              <tr>
-                <td>HHO332921</td>
-                <td>2/11/2023</td>
-                <td>Aaron Sierra</td>
-                <td>Chronic care</td>
-                <td>General appointment</td>
-                <td>45 mins</td>
-                <td>-</td>
-                <td>Paid</td>
-                <td>KK</td>
-                <td>
-                  <button onClick={() => setOpenResult(true)}>view</button>
-                </td>
-              </tr>
-              <tr>
-                <td>HHO332921</td>
-                <td>2/11/2023</td>
-                <td>Aaron Sierra</td>
-                <td>Chronic care</td>
-                <td>General appointment</td>
-                <td>45 mins</td>
-                <td>-</td>
-                <td>Paid</td>
-                <td>KK</td>
-                <td>
-                  <button onClick={() => setOpenResult(true)}>view</button>
-                </td>
-              </tr>
-              <tr>
-                <td>HHO332921</td>
-                <td>2/11/2023</td>
-                <td>Aaron Sierra</td>
-                <td>Chronic care</td>
-                <td>General appointment</td>
-                <td>45 mins</td>
-                <td>-</td>
-                <td>Paid</td>
-                <td>KK</td>
-                <td>
-                  <button onClick={() => setOpenResult(true)}>view</button>
-                </td>
-              </tr>
-              <tr>
-                <td>HHO332921</td>
-                <td>2/11/2023</td>
-                <td>Aaron Sierra</td>
-                <td>Chronic care</td>
-                <td>General appointment</td>
-                <td>45 mins</td>
-                <td>-</td>
-                <td>Paid</td>
-                <td>KK</td>
-                <td>
-                  <button onClick={() => setOpenResult(true)}>view</button>
-                </td>
-              </tr>
-              <tr>
-                <td>HHO332921</td>
-                <td>2/11/2023</td>
-                <td>Aaron Sierra</td>
-                <td>Chronic care</td>
-                <td>General appointment</td>
-                <td>45 mins</td>
-                <td>-</td>
-                <td>Paid</td>
-                <td>KK</td>
-                <td>
-                  <button onClick={() => setOpenResult(true)}>view</button>
-                </td>
-              </tr>
-              <tr>
-                <td>HHO332921</td>
-                <td>2/11/2023</td>
-                <td>Aaron Sierra</td>
-                <td>Chronic care</td>
-                <td>General appointment</td>
-                <td>45 mins</td>
-                <td>
-                  Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                  Minus iure quae accusamus tenetur quibusdam esse porro iusto
-                </td>
-                <td>Paid</td>
-                <td>KK</td>
-                <td>
-                  <button onClick={() => setOpenResult(true)}>view</button>
-                </td>
-              </tr>
-              <tr>
-                <td>HHO332921</td>
-                <td>2/11/2023</td>
-                <td>Aaron Sierra</td>
-                <td>Chronic care</td>
-                <td>General appointment</td>
-                <td>45 mins</td>
-                <td>-</td>
-                <td>Paid</td>
-                <td>KK</td>
-                <td>
-                  <button onClick={() => setOpenResult(true)}>view</button>
-                </td>
-              </tr>
+              {PatientResultData.map((data, index) => (
+                <tr key={index}>
+                  <td>{data.NHI}</td>
+                  <td>{data.Date}</td>
+                  <td>{data.Name}</td>
+                  <td>{data.VisitType}</td>
+                  <td>{data.Subject}</td>
+                  <td>{data.Duration}</td>
+                  <td>{data.Comments}</td>
+                  <td
+                    style={
+                      data.Payment === "Paid"
+                        ? { color: "#9dcd5a" }
+                        : data.Payment === "Overdue"
+                        ? { color: "red" }
+                        : { color: "#d7c60f" }
+                    }
+                  >
+                    {data.Payment}
+                  </td>
+                  <td>{data.Status}</td>
+                  <td>
+                    <button onClick={() => setOpenResult(true)}>view</button>
+                  </td>
+                </tr>
+              ))}
             </tbody>
           </table>
         </div>
