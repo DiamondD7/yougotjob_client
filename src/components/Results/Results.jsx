@@ -252,20 +252,6 @@ const Results = () => {
                   <button onClick={() => setOpenResult(true)}>view</button>
                 </td>
               </tr>
-              <tr>
-                <td>HHO332921</td>
-                <td>2/11/2023</td>
-                <td>Aaron Sierra</td>
-                <td>Chronic care</td>
-                <td>General appointment</td>
-                <td>45 mins</td>
-                <td>-</td>
-                <td>Paid</td>
-                <td>KK</td>
-                <td>
-                  <button onClick={() => setOpenResult(true)}>view</button>
-                </td>
-              </tr>
             </tbody>
           </table>
         </div>
