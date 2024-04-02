@@ -72,6 +72,18 @@ const FilterResults = () => {
 
 const Results = () => {
   const [openResult, setOpenResult] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  let recordsPerPage = 12;
+
+  let indexOFLastRecord = currentPage * recordsPerPage;
+  let indexOfirstRecord = indexOFLastRecord - recordsPerPage;
+
+  let paginationButtons = []; //setting initial value
+  let paginationLength = Math.ceil(PatientResultData.length / recordsPerPage);
+
+  for (let i = 0; i < paginationLength; i++) {
+    paginationButtons[i] = i; //populating the array based on the pages needed to fit all the data
+  }
 
   return (
     <div>
@@ -96,7 +108,10 @@ const Results = () => {
             </thead>
 
             <tbody>
-              {PatientResultData.map((data, index) => (
+              {PatientResultData.slice(
+                indexOfirstRecord,
+                indexOFLastRecord
+              ).map((data, index) => (
                 <tr key={index}>
                   <td>{data.NHI}</td>
                   <td>{data.Date}</td>
@@ -147,10 +162,11 @@ const Results = () => {
           <CaretLeft size={19} />
         </button>
         <div>
-          <button className="result-table-pagination__button">1</button>
-          <button className="result-table-pagination__button">2</button>
-          <button className="result-table-pagination__button">3</button>
-          <button className="result-table-pagination__button">4</button>
+          {paginationButtons.map((btn, index) => (
+            <button key={index} className="result-table-pagination__button">
+              {btn + 1}
+            </button>
+          ))}
         </div>
         <button
           style={{
