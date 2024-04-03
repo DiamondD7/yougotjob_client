@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import FullResult from "./FullResult";
 import { PatientResultData } from "../../assets/js/usermock";
 import { CaretRight, CaretLeft, MagnifyingGlass } from "@phosphor-icons/react";
@@ -71,6 +71,7 @@ const FilterResults = () => {
 };
 
 const Results = () => {
+  const [updatedData, setUpdatedData] = useState([]);
   const [openResult, setOpenResult] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   let recordsPerPage = 12;
@@ -84,6 +85,16 @@ const Results = () => {
   for (let i = 0; i < paginationLength; i++) {
     paginationButtons[i] = i; //populating the array based on the pages needed to fit all the data
   }
+
+  useEffect(() => {
+    updateRecord(); //calling updateRecord when currentPage is updated
+  }, [currentPage]);
+
+  const updateRecord = () => {
+    setUpdatedData(
+      PatientResultData.slice(indexOfirstRecord, indexOFLastRecord) //setting PatientResultData to updatedData when pages are changed.
+    );
+  };
 
   return (
     <div>
@@ -108,10 +119,7 @@ const Results = () => {
             </thead>
 
             <tbody>
-              {PatientResultData.slice(
-                indexOfirstRecord,
-                indexOFLastRecord
-              ).map((data, index) => (
+              {updatedData.map((data, index) => (
                 <tr key={index}>
                   <td>{data.NHI}</td>
                   <td>{data.Date}</td>
@@ -163,7 +171,11 @@ const Results = () => {
         </button>
         <div>
           {paginationButtons.map((btn, index) => (
-            <button key={index} className="result-table-pagination__button">
+            <button
+              key={index}
+              className="result-table-pagination__button"
+              onClick={() => setCurrentPage(btn + 1)}
+            >
               {btn + 1}
             </button>
           ))}
