@@ -1,7 +1,12 @@
 import React, { useEffect, useState } from "react";
 import FullResult from "./FullResult";
 import { PatientResultData } from "../../assets/js/usermock";
-import { CaretRight, CaretLeft, MagnifyingGlass } from "@phosphor-icons/react";
+import {
+  CaretRight,
+  CaretLeft,
+  MagnifyingGlass,
+  CircleNotch,
+} from "@phosphor-icons/react";
 
 import "../../styles/resultsstyles.css";
 const FilterResults = () => {
@@ -74,6 +79,7 @@ const Results = () => {
   const [updatedData, setUpdatedData] = useState([]);
   const [openResult, setOpenResult] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
+  const [loadingTable, setLoadingTable] = useState(false);
   let recordsPerPage = 12;
 
   let indexOFLastRecord = currentPage * recordsPerPage;
@@ -88,12 +94,16 @@ const Results = () => {
 
   useEffect(() => {
     updateRecord(); //calling updateRecord when currentPage is updated
+    setLoadingTable(false);
   }, [currentPage]);
 
   const updateRecord = () => {
     setUpdatedData(
       PatientResultData.slice(indexOfirstRecord, indexOFLastRecord) //setting PatientResultData to updatedData when pages are changed.
     );
+    setTimeout(() => {
+      setLoadingTable(true);
+    }, 2000);
   };
 
   return (
@@ -102,51 +112,57 @@ const Results = () => {
         <div>
           <h2 style={{ margin: "10px 0 0 50px", fontSize: "26px" }}>Results</h2>
           <FilterResults />
-          <table className="result-table__table">
-            <thead>
-              <tr>
-                <th>NHI</th>
-                <th>Date</th>
-                <th>Name</th>
-                <th>Visit type</th>
-                <th>Subject</th>
-                <th>Duration</th>
-                <th>Comments</th>
-                <th>Payment</th>
-                <th>Status</th>
-                <th></th>
-              </tr>
-            </thead>
-
-            <tbody>
-              {updatedData.map((data, index) => (
-                <tr key={index}>
-                  <td>{data.NHI}</td>
-                  <td>{data.Date}</td>
-                  <td>{data.Name}</td>
-                  <td>{data.VisitType}</td>
-                  <td>{data.Subject}</td>
-                  <td>{data.Duration}</td>
-                  <td>{data.Comments}</td>
-                  <td
-                    style={
-                      data.Payment === "Paid"
-                        ? { color: "#9dcd5a" }
-                        : data.Payment === "Overdue"
-                        ? { color: "red" }
-                        : { color: "#d7c60f" }
-                    }
-                  >
-                    {data.Payment}
-                  </td>
-                  <td>{data.Status}</td>
-                  <td>
-                    <button onClick={() => setOpenResult(true)}>view</button>
-                  </td>
+          {loadingTable === true ? (
+            <table className="result-table__table">
+              <thead>
+                <tr>
+                  <th>NHI</th>
+                  <th>Date</th>
+                  <th>Name</th>
+                  <th>Visit type</th>
+                  <th>Subject</th>
+                  <th>Duration</th>
+                  <th>Comments</th>
+                  <th>Payment</th>
+                  <th>Status</th>
+                  <th></th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+
+              <tbody>
+                {updatedData.map((data, index) => (
+                  <tr key={index}>
+                    <td>{data.NHI}</td>
+                    <td>{data.Date}</td>
+                    <td>{data.Name}</td>
+                    <td>{data.VisitType}</td>
+                    <td>{data.Subject}</td>
+                    <td>{data.Duration}</td>
+                    <td>{data.Comments}</td>
+                    <td
+                      style={
+                        data.Payment === "Paid"
+                          ? { color: "#9dcd5a" }
+                          : data.Payment === "Overdue"
+                          ? { color: "red" }
+                          : { color: "#d7c60f" }
+                      }
+                    >
+                      {data.Payment}
+                    </td>
+                    <td>{data.Status}</td>
+                    <td>
+                      <button onClick={() => setOpenResult(true)}>view</button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          ) : (
+            <div>
+              <CircleNotch size={32} className={"loading__icon"} />
+            </div>
+          )}
         </div>
       ) : (
         <FullResult setOpenResult={setOpenResult} />
