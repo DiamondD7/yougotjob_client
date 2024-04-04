@@ -14,6 +14,22 @@
   cursor: pointer;
   color: #9dcd5a;
 }
+.loading__icon {
+  position: absolute;
+  top: 40%;
+  left: 44.5%;
+  transform: translate(-50%, -50%);
+  animation: loadingAnimation 1s infinite;
+}
+
+@keyframes loadingAnimation {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
 
 /* width */
 ::-webkit-scrollbar {
