@@ -226,3 +226,21 @@ export const PatientResultData = [
     Status: "KK",
   },
 ];
+
+export const CalendarEventMockData = [
+  {
+    FirstName: "Jane",
+    LastName: "Doe",
+    ContactNumber: "021021021022",
+    EmailAddress: "janiedoe@gmail.com",
+    StreetAddress: "31 Jockston Road",
+    StreetAddressLine2: "11 Frankburn Street",
+    City: "Auckland",
+    Zip: "2222",
+    StateProvince: "",
+    Comments: "",
+    EventDay: 14,
+    EventMonth: 3,
+    EventYear: 2024,
+  },
+];

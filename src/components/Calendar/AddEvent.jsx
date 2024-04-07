@@ -11,6 +11,17 @@ const AppointmentForm = ({
   setOpenAddEventModal,
   setFormSearchField,
   formSearchField,
+  setCalendarEvents,
+  setFirstName,
+  setLastName,
+  setContactNum,
+  setEmail,
+  setCity,
+  setStreetAddress,
+  setStreetAddressLine2,
+  setZipCode,
+  setStateProvince,
+  setComments,
 }) => {
   const testProfile = [
     {
@@ -63,6 +74,7 @@ const AppointmentForm = ({
       data.lastName.toLowerCase().includes(formSearchField.toLowerCase()) ||
       data.nhi.toLowerCase().includes(formSearchField.toLowerCase())
   );
+
   return (
     <div>
       <button
@@ -131,7 +143,11 @@ const AppointmentForm = ({
           </h4>
           <div style={{ display: "flex" }}>
             <div>
-              <input className="form-details__input" type="text" />
+              <input
+                className="form-details__input"
+                type="text"
+                onChange={(e) => setFirstName(e.target.value)}
+              />
               <p
                 style={{
                   fontSize: "10px",
@@ -144,7 +160,11 @@ const AppointmentForm = ({
               </p>
             </div>
             <div>
-              <input className="form-details__input" type="text" />
+              <input
+                className="form-details__input"
+                type="text"
+                onChange={(e) => setLastName(e.target.value)}
+              />
               <p
                 style={{
                   fontSize: "10px",
@@ -164,7 +184,11 @@ const AppointmentForm = ({
             }}
           >
             <div>
-              <input className="form-details__input" type="text" />
+              <input
+                className="form-details__input"
+                type="text"
+                onChange={(e) => setContactNum(e.target.value)}
+              />
               <p
                 style={{
                   fontSize: "10px",
@@ -177,7 +201,11 @@ const AppointmentForm = ({
               </p>
             </div>
             <div>
-              <input className="form-details__input" type="text" />
+              <input
+                className="form-details__input"
+                type="text"
+                onChange={(e) => setEmail(e.target.value)}
+              />
               <p
                 style={{
                   fontSize: "10px",
@@ -191,7 +219,11 @@ const AppointmentForm = ({
             </div>
           </div>
           <div style={{ marginTop: "10px" }}>
-            <input className="form-address__input" type="text" />
+            <input
+              className="form-address__input"
+              type="text"
+              onChange={(e) => setStreetAddress(e.target.value)}
+            />
             <p
               style={{
                 fontSize: "10px",
@@ -201,7 +233,11 @@ const AppointmentForm = ({
             >
               Street Address
             </p>
-            <input className="form-address__input" type="text" />
+            <input
+              className="form-address__input"
+              type="text"
+              onChange={(e) => setStreetAddressLine2(e.target.value)}
+            />
             <p
               style={{
                 fontSize: "10px",
@@ -220,7 +256,11 @@ const AppointmentForm = ({
             }}
           >
             <div>
-              <input className="form__input" type="text" />
+              <input
+                className="form__input"
+                type="text"
+                onChange={(e) => setCity(e.target.value)}
+              />
               <p
                 style={{
                   fontSize: "10px",
@@ -232,7 +272,11 @@ const AppointmentForm = ({
               </p>
             </div>
             <div>
-              <input className="form__input" type="text" />
+              <input
+                className="form__input"
+                type="text"
+                onChange={(e) => setZipCode(e.target.value)}
+              />
               <p
                 style={{
                   fontSize: "10px",
@@ -244,7 +288,11 @@ const AppointmentForm = ({
               </p>
             </div>
             <div>
-              <input className="form__input" type="text" />
+              <input
+                className="form__input"
+                type="text"
+                onChange={(e) => setStateProvince(e.target.value)}
+              />
               <p
                 style={{
                   fontSize: "10px",
@@ -262,7 +310,10 @@ const AppointmentForm = ({
               </button>
             </div> */}
           <div>
-            <textarea className="form-comments__textarea"></textarea>
+            <textarea
+              className="form-comments__textarea"
+              onChange={(e) => setComments(e.target.value)}
+            ></textarea>
             <p
               style={{
                 fontSize: "10px",
@@ -280,7 +331,7 @@ const AppointmentForm = ({
   );
 };
 
-const AvailableDatesCalendar = () => {
+const AvailableDatesCalendar = ({ setDay, setMonth, setYear }) => {
   let today = new Date();
 
   const [selectedMaxMonthDays, setSelectedMaxMonthDays] = useState(0); //sets the max days of each month.
@@ -353,6 +404,13 @@ const AvailableDatesCalendar = () => {
     setFullDate(handleYearChange(parseInt(selectedYear))); //updating the full calendar date if there is changes in year.
   }, [selectedYear]); //this will only run when the state got change
 
+  const handleDatePickerEvent = (e, day, month, year) => {
+    e.preventDefault();
+    setDay(day);
+    setMonth(month);
+    setYear(year);
+  };
+
   return (
     <div>
       <div className="availbledatecalendar-container__wrapper">
@@ -418,6 +476,14 @@ const AvailableDatesCalendar = () => {
                   <button
                     className="availabledatecalendar-daysofthemonth__btn"
                     key={index}
+                    onClick={(e) =>
+                      handleDatePickerEvent(
+                        e,
+                        day,
+                        months.indexOf(selectedMonth),
+                        today.getFullYear()
+                      )
+                    }
                   >
                     <p className="availabledatecalendar-daysofthemonth__text">
                       {day}
@@ -438,14 +504,56 @@ const AvailableDatesCalendar = () => {
   );
 };
 
-const AddEvent = ({
-  setOpenAddEventModal,
-  months,
-  previousMonthDays,
-  selectedMaxMonthDays,
-}) => {
+const AddEvent = ({ setOpenAddEventModal, setCalendarEvents }) => {
   const [formSearchField, setFormSearchField] = useState("");
 
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
+  const [streetAddress, setStreetAddress] = useState("");
+  const [city, setCity] = useState("");
+  const [zipCode, setZipCode] = useState("");
+  const [stateProvince, setStateProvince] = useState("");
+  const [streetAddressLine2, setStreetAddressLine2] = useState("");
+  const [contactNum, setContactNum] = useState("");
+  const [comments, setComments] = useState("");
+  const [day, setDay] = useState(0);
+  const [month, setMonth] = useState(0);
+  const [year, setYear] = useState(0);
+
+  const handleSaveEventData = () => {
+    // const addedObject = {
+    //   FirstName: firstName,
+    //   LastName: lastName,
+    //   ContactNumber: contactNum,
+    //   EmailAddress: email,
+    //   StreetAddress: streetAddress,
+    //   City: city,
+    //   Zip: zipCode,
+    //   StateProvince: stateProvince,
+    //   StreetAddressLine2: streetAddressLine2,
+    //   Comments: comments,
+    //   EventDay: day,
+    //   EventMonth: month,
+    //   EventYear: year,
+    // };
+
+    setCalendarEvents({
+      FirstName: firstName,
+      LastName: lastName,
+      ContactNumber: contactNum,
+      EmailAddress: email,
+      StreetAddress: streetAddress,
+      City: city,
+      Zip: zipCode,
+      StateProvince: stateProvince,
+      StreetAddressLine2: streetAddressLine2,
+      Comments: comments,
+      EventDay: day,
+      EventMonth: month,
+      EventYear: year,
+    });
+  };
   return (
     <div>
       <div className="addevent__wrapper">
@@ -454,13 +562,25 @@ const AddEvent = ({
             setOpenAddEventModal={setOpenAddEventModal}
             setFormSearchField={setFormSearchField}
             formSearchField={formSearchField}
+            setCalendarEvents={setCalendarEvents}
+            setFirstName={setFirstName}
+            setLastName={setLastName}
+            setEmail={setEmail}
+            setStreetAddress={setStreetAddress}
+            setCity={setCity}
+            setZipCode={setZipCode}
+            setStateProvince={setStateProvince}
+            setStreetAddressLine2={setStreetAddressLine2}
+            setContactNum={setContactNum}
+            setComments={setComments}
           />
-          <AvailableDatesCalendar />
+          <AvailableDatesCalendar
+            setDay={setDay}
+            setMonth={setMonth}
+            setYear={setYear}
+          />
           <div className="form-submit__wrapper">
-            <button
-              className="form-submit__btn"
-              onClick={() => setOpenAvailableDatesCalendar(true)}
-            >
+            <button className="form-submit__btn" onClick={handleSaveEventData}>
               Submit
             </button>
           </div>
