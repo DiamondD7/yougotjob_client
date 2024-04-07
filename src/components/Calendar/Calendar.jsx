@@ -6,6 +6,7 @@ import {
   getNextMonthDays,
   getDaysFromPreviousMonth,
 } from "../../assets/js/months";
+import { CalendarEventMockData } from "../../assets/js/usermock";
 
 import "../../styles/calendarstyles.css";
 import AddEvent from "./AddEvent";
@@ -75,6 +76,7 @@ const Calendar = () => {
 
   const [openAddEventModal, setOpenAddEventModal] = useState(false);
 
+  const [calendarEvents, setCalendarEvents] = useState(CalendarEventMockData);
   return (
     <div>
       <div
@@ -90,6 +92,7 @@ const Calendar = () => {
             previousMonthDays={previousMonthDays}
             selectedMaxMonthDays={selectedMaxMonthDays}
             setOpenAddEventModal={setOpenAddEventModal}
+            setCalendarEvents={setCalendarEvents}
           />
         </div>
       )}
@@ -133,13 +136,14 @@ const Calendar = () => {
 
         {openDropDownList === true ? (
           <div className="month-selection-option__wrapper">
-            {fullDate.map((months) => (
+            {fullDate.map((months, index) => (
               <button
                 className={`month-selection__option ${
                   selectedMonth === months.monthName ? "currentMonth" : ""
                 }`}
                 onClick={(e) => setMonth(e, months)}
                 value={months.monthName}
+                key={index}
               >
                 {months.monthName}
               </button>
