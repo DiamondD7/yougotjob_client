@@ -355,6 +355,7 @@ const AvailableDatesCalendar = ({ setDay, setMonth, setYear }) => {
   ];
 
   const [selectedMonth, setSelectedMonth] = useState(months[today.getMonth()]); //
+  const [buttonPressed, setButtonPressed] = useState(0);
 
   const handleMonthChanged = (month, isIncrease) => {
     if (month === "Jan" && isIncrease === false) {
@@ -409,6 +410,8 @@ const AvailableDatesCalendar = ({ setDay, setMonth, setYear }) => {
     setDay(day);
     setMonth(month);
     setYear(year);
+
+    setButtonPressed(day);
   };
 
   return (
@@ -474,7 +477,12 @@ const AvailableDatesCalendar = ({ setDay, setMonth, setYear }) => {
                   </button>
                 ) : (
                   <button
-                    className="availabledatecalendar-daysofthemonth__btn"
+                    className={`availabledatecalendar-daysofthemonth__btn ${
+                      buttonPressed === day &&
+                      months.indexOf(selectedMonth) === today.getMonth()
+                        ? "colored"
+                        : ""
+                    }`} //buttonPressed color change
                     key={index}
                     onClick={(e) =>
                       handleDatePickerEvent(
@@ -522,37 +530,25 @@ const AddEvent = ({ setOpenAddEventModal, setCalendarEvents }) => {
   const [year, setYear] = useState(0);
 
   const handleSaveEventData = () => {
-    // const addedObject = {
-    //   FirstName: firstName,
-    //   LastName: lastName,
-    //   ContactNumber: contactNum,
-    //   EmailAddress: email,
-    //   StreetAddress: streetAddress,
-    //   City: city,
-    //   Zip: zipCode,
-    //   StateProvince: stateProvince,
-    //   StreetAddressLine2: streetAddressLine2,
-    //   Comments: comments,
-    //   EventDay: day,
-    //   EventMonth: month,
-    //   EventYear: year,
-    // };
-
-    setCalendarEvents({
-      FirstName: firstName,
-      LastName: lastName,
-      ContactNumber: contactNum,
-      EmailAddress: email,
-      StreetAddress: streetAddress,
-      City: city,
-      Zip: zipCode,
-      StateProvince: stateProvince,
-      StreetAddressLine2: streetAddressLine2,
-      Comments: comments,
-      EventDay: day,
-      EventMonth: month,
-      EventYear: year,
-    });
+    setCalendarEvents((prevItems) => [
+      //adding objects in an array of objects (using prevItems)
+      ...prevItems,
+      {
+        FirstName: firstName,
+        LastName: lastName,
+        ContactNumber: contactNum,
+        EmailAddress: email,
+        StreetAddress: streetAddress,
+        City: city,
+        Zip: zipCode,
+        StateProvince: stateProvince,
+        StreetAddressLine2: streetAddressLine2,
+        Comments: comments,
+        EventDay: day,
+        EventMonth: month,
+        EventYear: year,
+      },
+    ]);
     setOpenAddEventModal(false);
   };
   return (
