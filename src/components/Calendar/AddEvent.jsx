@@ -553,6 +553,7 @@ const AddEvent = ({ setOpenAddEventModal, setCalendarEvents }) => {
       EventMonth: month,
       EventYear: year,
     });
+    setOpenAddEventModal(false);
   };
   return (
     <div>

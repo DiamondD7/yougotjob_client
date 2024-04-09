@@ -184,6 +184,16 @@ const Calendar = () => {
               ) : (
                 <div className="calendar-grid-day__wrapper">
                   <p>{day}</p>
+                  {calendarEvents.map((events, index) =>
+                    events.EventDay === day &&
+                    events.EventYear === parseInt(selectedYear) ? (
+                      <p key={index} className="calendar-grid-day-event">
+                        appointment
+                      </p>
+                    ) : (
+                      ""
+                    )
+                  )}
                 </div>
               )
             )
