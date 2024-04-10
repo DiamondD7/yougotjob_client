@@ -507,6 +507,7 @@ const AvailableDatesCalendar = ({ setDay, setMonth, setYear }) => {
             ))}
           </div>
         </div>
+        <div className="available-time__wrapper"></div>
       </div>
     </div>
   );
