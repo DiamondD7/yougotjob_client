@@ -348,6 +348,12 @@
   overflow: auto;
 }
 
+.available-time-default__text {
+  text-align: center;
+  font-size: 18px;
+  margin-top: 10px;
+}
+
 .availabledatecalendar-daysofweek__wrapper {
   /* display: flex;
   justify-content: space-around; */

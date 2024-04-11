@@ -507,7 +507,10 @@ const AvailableDatesCalendar = ({ setDay, setMonth, setYear }) => {
             ))}
           </div>
         </div>
-        <div className="available-time__wrapper"></div>
+        <div className="available-time__wrapper">
+          <h2 style={{ textAlign: "center" }}>Available time</h2>
+          <p className="available-time-default__text">Select a day first</p>
+        </div>
       </div>
     </div>
   );
