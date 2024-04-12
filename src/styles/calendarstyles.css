@@ -344,7 +344,7 @@
   background-color: #e5f0ff;
   box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
   border-radius: 10px;
-  padding: 20px 10px;
+  padding: 20px 0px;
   overflow: auto;
 }
 
@@ -352,6 +352,35 @@
   text-align: center;
   font-size: 18px;
   margin-top: 10px;
+}
+
+.available-times__wrapper {
+  text-align: center;
+  height: 130px;
+  overflow: auto;
+}
+
+.available-times__wrapper ul {
+  list-style: none;
+}
+
+.available-times__wrapper ul li button {
+  border: none;
+  background-color: transparent;
+  color: rgba(0, 0, 0, 0.4);
+  padding: 3px;
+  font-size: 24px;
+}
+.available-times__wrapper ul li button:hover {
+  color: #202020;
+  font-weight: bold;
+
+  cursor: pointer;
+}
+
+.pickedTime {
+  color: red;
+  font-weight: bold;
 }
 
 .availabledatecalendar-daysofweek__wrapper {
@@ -398,6 +427,7 @@
 }
 
 .calendar-grid-day-event {
+  font-size: 14px;
   padding: 0px 5px;
   background-color: #91bcf5;
   z-index: 0;

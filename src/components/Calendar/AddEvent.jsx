@@ -331,7 +331,12 @@ const AppointmentForm = ({
   );
 };
 
-const AvailableDatesCalendar = ({ setDay, setMonth, setYear }) => {
+const AvailableDatesCalendar = ({
+  setDay,
+  setMonth,
+  setYear,
+  setEventTime,
+}) => {
   let today = new Date();
 
   const [selectedMaxMonthDays, setSelectedMaxMonthDays] = useState(0); //sets the max days of each month.
@@ -412,6 +417,11 @@ const AvailableDatesCalendar = ({ setDay, setMonth, setYear }) => {
     setYear(year);
 
     setButtonPressed(day);
+  };
+
+  const pickTimeEvent = (e, time) => {
+    e.preventDefault();
+    setEventTime(time);
   };
 
   return (
@@ -509,7 +519,99 @@ const AvailableDatesCalendar = ({ setDay, setMonth, setYear }) => {
         </div>
         <div className="available-time__wrapper">
           <h2 style={{ textAlign: "center" }}>Available time</h2>
-          <p className="available-time-default__text">Select a day first</p>
+          {buttonPressed === 0 ? (
+            <p className="available-time-default__text">Select a day first</p>
+          ) : (
+            <div className="available-times__wrapper">
+              <ul>
+                <li>
+                  <button onClick={(e) => pickTimeEvent(e, "09:00:00")}>
+                    09:00:00
+                  </button>
+                </li>
+                <li>
+                  <button onClick={(e) => pickTimeEvent(e, "09:30:00")}>
+                    09:30:00
+                  </button>
+                </li>
+                <li>
+                  <button onClick={(e) => pickTimeEvent(e, "10:00:00")}>
+                    10:00:00
+                  </button>
+                </li>
+                <li>
+                  <button onClick={(e) => pickTimeEvent(e, "10:30:00")}>
+                    10:30:00
+                  </button>
+                </li>
+                <li>
+                  <button onClick={(e) => pickTimeEvent(e, "11:00:00")}>
+                    11:00:00
+                  </button>
+                </li>
+                <li>
+                  <button onClick={(e) => pickTimeEvent(e, "11:30:00")}>
+                    11:30:00
+                  </button>
+                </li>
+                <li>
+                  <button onClick={(e) => pickTimeEvent(e, "12:00:00")}>
+                    12:00:00
+                  </button>
+                </li>
+                <li>
+                  <button onClick={(e) => pickTimeEvent(e, "12:30:00")}>
+                    12:30:00
+                  </button>
+                </li>
+                <li>
+                  <button onClick={(e) => pickTimeEvent(e, "13:00:00")}>
+                    13:00:00
+                  </button>
+                </li>
+                <li>
+                  <button onClick={(e) => pickTimeEvent(e, "13:30:00")}>
+                    13:30:00
+                  </button>
+                </li>
+                <li>
+                  <button onClick={(e) => pickTimeEvent(e, "14:00:00")}>
+                    14:00:00
+                  </button>
+                </li>
+                <li>
+                  <button onClick={(e) => pickTimeEvent(e, "14:30:00")}>
+                    14:30:00
+                  </button>
+                </li>
+                <li>
+                  <button onClick={(e) => pickTimeEvent(e, "15:00:00")}>
+                    15:00:00
+                  </button>
+                </li>
+                <li>
+                  <button onClick={(e) => pickTimeEvent(e, "15:30:00")}>
+                    15:30:00
+                  </button>
+                </li>
+                <li>
+                  <button onClick={(e) => pickTimeEvent(e, "16:00:00")}>
+                    16:00:00
+                  </button>
+                </li>
+                <li>
+                  <button onClick={(e) => pickTimeEvent(e, "16:30:00")}>
+                    16:30:00
+                  </button>
+                </li>
+                <li>
+                  <button onClick={(e) => pickTimeEvent(e, "17:00:00")}>
+                    17:00:00
+                  </button>
+                </li>
+              </ul>
+            </div>
+          )}
         </div>
       </div>
     </div>
@@ -532,6 +634,7 @@ const AddEvent = ({ setOpenAddEventModal, setCalendarEvents }) => {
   const [day, setDay] = useState(0);
   const [month, setMonth] = useState(0);
   const [year, setYear] = useState(0);
+  const [eventTime, setEventTime] = useState(0);
 
   const handleSaveEventData = () => {
     setCalendarEvents((prevItems) => [
@@ -551,6 +654,7 @@ const AddEvent = ({ setOpenAddEventModal, setCalendarEvents }) => {
         EventDay: day,
         EventMonth: month,
         EventYear: year,
+        EventTime: eventTime,
       },
     ]);
     setOpenAddEventModal(false);
@@ -579,6 +683,7 @@ const AddEvent = ({ setOpenAddEventModal, setCalendarEvents }) => {
             setDay={setDay}
             setMonth={setMonth}
             setYear={setYear}
+            setEventTime={setEventTime}
           />
           <div className="form-submit__wrapper">
             <button className="form-submit__btn" onClick={handleSaveEventData}>

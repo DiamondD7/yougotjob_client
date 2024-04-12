@@ -242,5 +242,6 @@ export const CalendarEventMockData = [
     EventDay: 14,
     EventMonth: 3,
     EventYear: 2024,
+    EventTime: "12:30:00",
   },
 ];

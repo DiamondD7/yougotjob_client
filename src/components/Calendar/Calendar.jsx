@@ -188,7 +188,7 @@ const Calendar = () => {
                     events.EventDay === day &&
                     events.EventYear === parseInt(selectedYear) ? (
                       <p key={index} className="calendar-grid-day-event">
-                        appointment
+                        appointment @ {events.EventTime}
                       </p>
                     ) : (
                       ""
