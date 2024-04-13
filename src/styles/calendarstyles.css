@@ -364,14 +364,14 @@
   list-style: none;
 }
 
-.available-times__wrapper ul li button {
+.available-times__btn {
   border: none;
   background-color: transparent;
   color: rgba(0, 0, 0, 0.4);
   padding: 3px;
   font-size: 24px;
 }
-.available-times__wrapper ul li button:hover {
+.available-times__btn:hover {
   color: #202020;
   font-weight: bold;
 
@@ -379,7 +379,7 @@
 }
 
 .pickedTime {
-  color: red;
+  color: #202020;
   font-weight: bold;
 }
 
