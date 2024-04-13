@@ -388,6 +388,8 @@ const AvailableDatesCalendar = ({
     selectedMonth
   );
 
+  const [pickedTime, setPickedTime] = useState("");
+
   // ---------------------------------------
   const [selectedYear, setSelectedYear] = useState(currentYear); //sets its current year
   const [fullDate, setFullDate] = useState(
@@ -422,6 +424,7 @@ const AvailableDatesCalendar = ({
   const pickTimeEvent = (e, time) => {
     e.preventDefault();
     setEventTime(time);
+    setPickedTime(time);
   };
 
   return (
@@ -525,87 +528,172 @@ const AvailableDatesCalendar = ({
             <div className="available-times__wrapper">
               <ul>
                 <li>
-                  <button onClick={(e) => pickTimeEvent(e, "09:00:00")}>
+                  <button
+                    className={`available-times__btn ${
+                      pickedTime === "09:00:00" ? "pickedTime" : ""
+                    }`}
+                    onClick={(e) => pickTimeEvent(e, "09:00:00")}
+                  >
                     09:00:00
                   </button>
                 </li>
                 <li>
-                  <button onClick={(e) => pickTimeEvent(e, "09:30:00")}>
+                  <button
+                    className={`available-times__btn ${
+                      pickedTime === "09:30:00" ? "pickedTime" : ""
+                    }`}
+                    onClick={(e) => pickTimeEvent(e, "09:30:00")}
+                  >
                     09:30:00
                   </button>
                 </li>
                 <li>
-                  <button onClick={(e) => pickTimeEvent(e, "10:00:00")}>
+                  <button
+                    className={`available-times__btn ${
+                      pickedTime === "10:00:00" ? "pickedTime" : ""
+                    }`}
+                    onClick={(e) => pickTimeEvent(e, "10:00:00")}
+                  >
                     10:00:00
                   </button>
                 </li>
                 <li>
-                  <button onClick={(e) => pickTimeEvent(e, "10:30:00")}>
+                  <button
+                    className={`available-times__btn ${
+                      pickedTime === "10:30:00" ? "pickedTime" : ""
+                    }`}
+                    onClick={(e) => pickTimeEvent(e, "10:30:00")}
+                  >
                     10:30:00
                   </button>
                 </li>
                 <li>
-                  <button onClick={(e) => pickTimeEvent(e, "11:00:00")}>
+                  <button
+                    className={`available-times__btn ${
+                      pickedTime === "11:00:00" ? "pickedTime" : ""
+                    }`}
+                    onClick={(e) => pickTimeEvent(e, "11:00:00")}
+                  >
                     11:00:00
                   </button>
                 </li>
                 <li>
-                  <button onClick={(e) => pickTimeEvent(e, "11:30:00")}>
+                  <button
+                    className={`available-times__btn ${
+                      pickedTime === "11:30:00" ? "pickedTime" : ""
+                    }`}
+                    onClick={(e) => pickTimeEvent(e, "11:30:00")}
+                  >
                     11:30:00
                   </button>
                 </li>
                 <li>
-                  <button onClick={(e) => pickTimeEvent(e, "12:00:00")}>
+                  <button
+                    className={`available-times__btn ${
+                      pickedTime === "12:00:00" ? "pickedTime" : ""
+                    }`}
+                    onClick={(e) => pickTimeEvent(e, "12:00:00")}
+                  >
                     12:00:00
                   </button>
                 </li>
                 <li>
-                  <button onClick={(e) => pickTimeEvent(e, "12:30:00")}>
+                  <button
+                    className={`available-times__btn ${
+                      pickedTime === "12:30:00" ? "pickedTime" : ""
+                    }`}
+                    onClick={(e) => pickTimeEvent(e, "12:30:00")}
+                  >
                     12:30:00
                   </button>
                 </li>
                 <li>
-                  <button onClick={(e) => pickTimeEvent(e, "13:00:00")}>
+                  <button
+                    className={`available-times__btn ${
+                      pickedTime === "13:00:00" ? "pickedTime" : ""
+                    }`}
+                    onClick={(e) => pickTimeEvent(e, "13:00:00")}
+                  >
                     13:00:00
                   </button>
                 </li>
                 <li>
-                  <button onClick={(e) => pickTimeEvent(e, "13:30:00")}>
+                  <button
+                    className={`available-times__btn ${
+                      pickedTime === "13:30:00" ? "pickedTime" : ""
+                    }`}
+                    onClick={(e) => pickTimeEvent(e, "13:30:00")}
+                  >
                     13:30:00
                   </button>
                 </li>
                 <li>
-                  <button onClick={(e) => pickTimeEvent(e, "14:00:00")}>
+                  <button
+                    className={`available-times__btn ${
+                      pickedTime === "14:00:00" ? "pickedTime" : ""
+                    }`}
+                    onClick={(e) => pickTimeEvent(e, "14:00:00")}
+                  >
                     14:00:00
                   </button>
                 </li>
                 <li>
-                  <button onClick={(e) => pickTimeEvent(e, "14:30:00")}>
+                  <button
+                    className={`available-times__btn ${
+                      pickedTime === "14:30:00" ? "pickedTime" : ""
+                    }`}
+                    onClick={(e) => pickTimeEvent(e, "14:30:00")}
+                  >
                     14:30:00
                   </button>
                 </li>
                 <li>
-                  <button onClick={(e) => pickTimeEvent(e, "15:00:00")}>
+                  <button
+                    className={`available-times__btn ${
+                      pickedTime === "15:00:00" ? "pickedTime" : ""
+                    }`}
+                    onClick={(e) => pickTimeEvent(e, "15:00:00")}
+                  >
                     15:00:00
                   </button>
                 </li>
                 <li>
-                  <button onClick={(e) => pickTimeEvent(e, "15:30:00")}>
+                  <button
+                    className={`available-times__btn ${
+                      pickedTime === "15:30:00" ? "pickedTime" : ""
+                    }`}
+                    onClick={(e) => pickTimeEvent(e, "15:30:00")}
+                  >
                     15:30:00
                   </button>
                 </li>
                 <li>
-                  <button onClick={(e) => pickTimeEvent(e, "16:00:00")}>
+                  <button
+                    className={`available-times__btn ${
+                      pickedTime === "16:00:00" ? "pickedTime" : ""
+                    }`}
+                    onClick={(e) => pickTimeEvent(e, "16:00:00")}
+                  >
                     16:00:00
                   </button>
                 </li>
                 <li>
-                  <button onClick={(e) => pickTimeEvent(e, "16:30:00")}>
+                  <button
+                    className={`available-times__btn ${
+                      pickedTime === "16:30:00" ? "pickedTime" : ""
+                    }`}
+                    onClick={(e) => pickTimeEvent(e, "16:30:00")}
+                  >
                     16:30:00
                   </button>
                 </li>
                 <li>
-                  <button onClick={(e) => pickTimeEvent(e, "17:00:00")}>
+                  <button
+                    className={`available-times__btn ${
+                      pickedTime === "17:00:00" ? "pickedTime" : ""
+                    }`}
+                    onClick={(e) => pickTimeEvent(e, "17:00:00")}
+                  >
                     17:00:00
                   </button>
                 </li>
