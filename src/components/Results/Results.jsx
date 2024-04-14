@@ -9,7 +9,13 @@ import {
 } from "@phosphor-icons/react";
 
 import "../../styles/resultsstyles.css";
-const FilterResults = () => {
+const FilterResults = ({
+  setSearchField,
+  setVisitType,
+  setStatus,
+  setPayment,
+  setTriageLevel,
+}) => {
   return (
     <div>
       <div className="filter-result__wrapper">
@@ -30,13 +36,17 @@ const FilterResults = () => {
             <input
               className="filter-result-search__input"
               type="text"
-              placeholder="Search for name, nhi, subject, status etc."
+              placeholder="Search for name, nhi or subject"
+              onChange={(e) => setSearchField(e.target.value)}
             />
           </div>
         </div>
         <div style={{ width: "22%" }}>
           <h4 style={{ fontSize: "12px" }}>Visit Type</h4>
-          <select className="filter-result__dropdown">
+          <select
+            className="filter-result__dropdown"
+            onChange={(e) => setVisitType(e.target.value)}
+          >
             <option>All</option>
             <option>General Appointment</option>
             <option>Vaccination</option>
@@ -45,7 +55,10 @@ const FilterResults = () => {
         </div>
         <div style={{ width: "12%" }}>
           <h4 style={{ fontSize: "12px" }}>Status</h4>
-          <select className="filter-result__dropdown">
+          <select
+            className="filter-result__dropdown"
+            onChange={(e) => setStatus(e.target.value)}
+          >
             <option>All</option>
             <option>Pending</option>
             <option>Complete</option>
@@ -54,7 +67,10 @@ const FilterResults = () => {
         </div>
         <div style={{ width: "10%" }}>
           <h4 style={{ fontSize: "12px" }}>Payment</h4>
-          <select className="filter-result__dropdown">
+          <select
+            className="filter-result__dropdown"
+            onChange={(e) => setPayment(e.target.value)}
+          >
             <option>All</option>
             <option>Paid</option>
             <option>Pending</option>
@@ -63,7 +79,10 @@ const FilterResults = () => {
         </div>
         <div style={{ width: "10%" }}>
           <h4 style={{ fontSize: "12px" }}>Triage Level</h4>
-          <select className="filter-result__dropdown">
+          <select
+            className="filter-result__dropdown"
+            onChange={(e) => setTriageLevel(e.target.value)}
+          >
             <option>All</option>
             <option>Level 1</option>
             <option>Level 2</option>
@@ -80,6 +99,12 @@ const Results = () => {
   const [openResult, setOpenResult] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [loadingTable, setLoadingTable] = useState(false);
+  const [searchField, setSearchField] = useState("");
+  const [visitType, setVisitType] = useState("");
+  const [status, setStatus] = useState("");
+  const [payment, setPayment] = useState("");
+  const [triageLevel, setTriageLevel] = useState("");
+
   let recordsPerPage = 12;
 
   let indexOFLastRecord = currentPage * recordsPerPage;
@@ -101,6 +126,7 @@ const Results = () => {
     setUpdatedData(
       PatientResultData.slice(indexOfirstRecord, indexOFLastRecord) //setting PatientResultData to updatedData when pages are changed.
     );
+
     setTimeout(() => {
       setLoadingTable(true);
     }, 2000);
@@ -111,7 +137,13 @@ const Results = () => {
       {openResult === false ? (
         <div>
           <h2 style={{ margin: "10px 0 0 50px", fontSize: "26px" }}>Results</h2>
-          <FilterResults />
+          <FilterResults
+            setSearchField={setSearchField}
+            setVisitType={setVisitType}
+            setStatus={setStatus}
+            setPayment={setPayment}
+            setTriageLevel={setTriageLevel}
+          />
           {loadingTable === true ? (
             <div>
               <table className="result-table__table">
@@ -131,34 +163,52 @@ const Results = () => {
                 </thead>
 
                 <tbody>
-                  {updatedData.map((data, index) => (
-                    <tr key={index}>
-                      <td>{data.NHI}</td>
-                      <td>{data.Date}</td>
-                      <td>{data.Name}</td>
-                      <td>{data.VisitType}</td>
-                      <td>{data.Subject}</td>
-                      <td>{data.Duration}</td>
-                      <td>{data.Comments}</td>
-                      <td
-                        style={
-                          data.Payment === "Paid"
-                            ? { color: "#9dcd5a" }
-                            : data.Payment === "Overdue"
-                            ? { color: "red" }
-                            : { color: "#d7c60f" }
-                        }
-                      >
-                        {data.Payment}
-                      </td>
-                      <td>{data.Status}</td>
-                      <td>
-                        <button onClick={() => setOpenResult(true)}>
-                          view
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
+                  {updatedData
+                    .filter(
+                      (data) =>
+                        data.FirstNames.toLowerCase().includes(
+                          searchField.toLowerCase()
+                        ) ||
+                        data.LastName.toLowerCase().includes(
+                          searchField.toLowerCase()
+                        ) ||
+                        data.NHI.toLowerCase().includes(
+                          searchField.toLowerCase()
+                        ) ||
+                        data.Subject.toLowerCase().includes(
+                          searchField.toLowerCase()
+                        )
+                    )
+                    .map((data, index) => (
+                      <tr key={index}>
+                        <td>{data.NHI}</td>
+                        <td>{data.Date}</td>
+                        <td>
+                          {data.FirstNames} {data.LastName}
+                        </td>
+                        <td>{data.VisitType}</td>
+                        <td>{data.Subject}</td>
+                        <td>{data.Duration}</td>
+                        <td>{data.Comments}</td>
+                        <td
+                          style={
+                            data.Payment === "Paid"
+                              ? { color: "#9dcd5a" }
+                              : data.Payment === "Overdue"
+                              ? { color: "red" }
+                              : { color: "#d7c60f" }
+                          }
+                        >
+                          {data.Payment}
+                        </td>
+                        <td>{data.Status}</td>
+                        <td>
+                          <button onClick={() => setOpenResult(true)}>
+                            view
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
                 </tbody>
               </table>
               <div
