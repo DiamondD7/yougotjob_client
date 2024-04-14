@@ -113,51 +113,95 @@ const Results = () => {
           <h2 style={{ margin: "10px 0 0 50px", fontSize: "26px" }}>Results</h2>
           <FilterResults />
           {loadingTable === true ? (
-            <table className="result-table__table">
-              <thead>
-                <tr>
-                  <th>NHI</th>
-                  <th>Date</th>
-                  <th>Name</th>
-                  <th>Visit type</th>
-                  <th>Subject</th>
-                  <th>Duration</th>
-                  <th>Comments</th>
-                  <th>Payment</th>
-                  <th>Status</th>
-                  <th></th>
-                </tr>
-              </thead>
-
-              <tbody>
-                {updatedData.map((data, index) => (
-                  <tr key={index}>
-                    <td>{data.NHI}</td>
-                    <td>{data.Date}</td>
-                    <td>{data.Name}</td>
-                    <td>{data.VisitType}</td>
-                    <td>{data.Subject}</td>
-                    <td>{data.Duration}</td>
-                    <td>{data.Comments}</td>
-                    <td
-                      style={
-                        data.Payment === "Paid"
-                          ? { color: "#9dcd5a" }
-                          : data.Payment === "Overdue"
-                          ? { color: "red" }
-                          : { color: "#d7c60f" }
-                      }
-                    >
-                      {data.Payment}
-                    </td>
-                    <td>{data.Status}</td>
-                    <td>
-                      <button onClick={() => setOpenResult(true)}>view</button>
-                    </td>
+            <div>
+              <table className="result-table__table">
+                <thead>
+                  <tr>
+                    <th>NHI</th>
+                    <th>Date</th>
+                    <th>Name</th>
+                    <th>Visit type</th>
+                    <th>Subject</th>
+                    <th>Duration</th>
+                    <th>Comments</th>
+                    <th>Payment</th>
+                    <th>Status</th>
+                    <th></th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+
+                <tbody>
+                  {updatedData.map((data, index) => (
+                    <tr key={index}>
+                      <td>{data.NHI}</td>
+                      <td>{data.Date}</td>
+                      <td>{data.Name}</td>
+                      <td>{data.VisitType}</td>
+                      <td>{data.Subject}</td>
+                      <td>{data.Duration}</td>
+                      <td>{data.Comments}</td>
+                      <td
+                        style={
+                          data.Payment === "Paid"
+                            ? { color: "#9dcd5a" }
+                            : data.Payment === "Overdue"
+                            ? { color: "red" }
+                            : { color: "#d7c60f" }
+                        }
+                      >
+                        {data.Payment}
+                      </td>
+                      <td>{data.Status}</td>
+                      <td>
+                        <button onClick={() => setOpenResult(true)}>
+                          view
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+              <div
+                style={{
+                  margin: "10px 0 0 50px",
+                  width: "70%",
+                  display: "flex",
+                  justifyContent: "center",
+                }}
+              >
+                <button
+                  style={{
+                    border: "none",
+                    backgroundColor: "transparent",
+                    cursor: "pointer",
+                    padding: "0 10px",
+                  }}
+                >
+                  <CaretLeft size={19} />
+                </button>
+                <div>
+                  {paginationButtons.map((btn, index) => (
+                    <button
+                      key={index}
+                      className="result-table-pagination__button"
+                      onClick={() => setCurrentPage(btn + 1)}
+                    >
+                      {btn + 1}
+                    </button>
+                  ))}
+                </div>
+                <button
+                  style={{
+                    border: "none",
+                    backgroundColor: "transparent",
+                    cursor: "pointer",
+                    padding: "0 10px",
+                  }}
+                >
+                  <CaretRight size={19} />
+                </button>
+              </div>
+            </div>
           ) : (
             <div>
               <CircleNotch size={32} className={"loading__icon"} />
@@ -167,46 +211,6 @@ const Results = () => {
       ) : (
         <FullResult setOpenResult={setOpenResult} />
       )}
-      <div
-        style={{
-          margin: "10px 0 0 50px",
-          width: "70%",
-          display: "flex",
-          justifyContent: "center",
-        }}
-      >
-        <button
-          style={{
-            border: "none",
-            backgroundColor: "transparent",
-            cursor: "pointer",
-            padding: "0 10px",
-          }}
-        >
-          <CaretLeft size={19} />
-        </button>
-        <div>
-          {paginationButtons.map((btn, index) => (
-            <button
-              key={index}
-              className="result-table-pagination__button"
-              onClick={() => setCurrentPage(btn + 1)}
-            >
-              {btn + 1}
-            </button>
-          ))}
-        </div>
-        <button
-          style={{
-            border: "none",
-            backgroundColor: "transparent",
-            cursor: "pointer",
-            padding: "0 10px",
-          }}
-        >
-          <CaretRight size={19} />
-        </button>
-      </div>
     </div>
   );
 };
