@@ -49,7 +49,7 @@ export const PatientResultData = [
     Date: "25/03/2024",
     FirstNames: "Aaron",
     LastName: "Sierra",
-    VisitType: "Chronic care",
+    VisitType: "Vaccination",
     Subject: "Chronic",
     Duration: "45",
     Comments: "",
@@ -66,7 +66,7 @@ export const PatientResultData = [
     Duration: "45",
     Comments: "",
     Payment: "Overdue",
-    Status: "KK",
+    Status: "Pending",
   },
   {
     NHI: "TJB277652",
@@ -78,7 +78,7 @@ export const PatientResultData = [
     Duration: "45",
     Comments: "",
     Payment: "Paid",
-    Status: "KK",
+    Status: "Complete",
   },
   {
     NHI: "TJB277652",
