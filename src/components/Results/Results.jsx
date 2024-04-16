@@ -45,9 +45,9 @@ const FilterResults = ({
           <h4 style={{ fontSize: "12px" }}>Visit Type</h4>
           <select
             className="filter-result__dropdown"
-            onChange={(e) => setVisitType(e.target.value)}
+            onChange={(e) => setSearchField(e.target.value)}
           >
-            <option>All</option>
+            <option value="">All</option>
             <option>General Appointment</option>
             <option>Vaccination</option>
             <option>Checkup</option>
@@ -57,9 +57,9 @@ const FilterResults = ({
           <h4 style={{ fontSize: "12px" }}>Status</h4>
           <select
             className="filter-result__dropdown"
-            onChange={(e) => setStatus(e.target.value)}
+            onChange={(e) => setSearchField(e.target.value)}
           >
-            <option>All</option>
+            <option value="">All</option>
             <option>Pending</option>
             <option>Complete</option>
             <option>KK</option>
@@ -69,9 +69,9 @@ const FilterResults = ({
           <h4 style={{ fontSize: "12px" }}>Payment</h4>
           <select
             className="filter-result__dropdown"
-            onChange={(e) => setPayment(e.target.value)}
+            onChange={(e) => setSearchField(e.target.value)}
           >
-            <option>All</option>
+            <option value="">All</option>
             <option>Paid</option>
             <option>Pending</option>
             <option>Overdue</option>
@@ -79,11 +79,8 @@ const FilterResults = ({
         </div>
         <div style={{ width: "10%" }}>
           <h4 style={{ fontSize: "12px" }}>Triage Level</h4>
-          <select
-            className="filter-result__dropdown"
-            onChange={(e) => setTriageLevel(e.target.value)}
-          >
-            <option>All</option>
+          <select className="filter-result__dropdown">
+            <option value="">All</option>
             <option>Level 1</option>
             <option>Level 2</option>
             <option>Level 3</option>
@@ -176,6 +173,15 @@ const Results = () => {
                           searchField.toLowerCase()
                         ) ||
                         data.Subject.toLowerCase().includes(
+                          searchField.toLowerCase()
+                        ) ||
+                        data.VisitType.toLowerCase().includes(
+                          searchField.toLowerCase()
+                        ) ||
+                        data.Status.toLowerCase().includes(
+                          searchField.toLowerCase()
+                        ) ||
+                        data.Payment.toLowerCase().includes(
                           searchField.toLowerCase()
                         )
                     )
