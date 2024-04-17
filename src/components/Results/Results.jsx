@@ -79,7 +79,10 @@ const FilterResults = ({
         </div>
         <div style={{ width: "10%" }}>
           <h4 style={{ fontSize: "12px" }}>Triage Level</h4>
-          <select className="filter-result__dropdown">
+          <select
+            className="filter-result__dropdown"
+            onChange={(e) => setSearchField(e.target.value)}
+          >
             <option value="">All</option>
             <option>Level 1</option>
             <option>Level 2</option>
@@ -152,6 +155,7 @@ const Results = () => {
                     <th>Visit type</th>
                     <th>Subject</th>
                     <th>Duration</th>
+                    <th>Triage</th>
                     <th>Comments</th>
                     <th>Payment</th>
                     <th>Status</th>
@@ -183,6 +187,9 @@ const Results = () => {
                         ) ||
                         data.Payment.toLowerCase().includes(
                           searchField.toLowerCase()
+                        ) ||
+                        data.TriageLevel.toLowerCase().includes(
+                          searchField.toLowerCase()
                         )
                     )
                     .map((data, index) => (
@@ -195,6 +202,7 @@ const Results = () => {
                         <td>{data.VisitType}</td>
                         <td>{data.Subject}</td>
                         <td>{data.Duration}</td>
+                        <td>{data.TriageLevel}</td>
                         <td>{data.Comments}</td>
                         <td
                           style={
