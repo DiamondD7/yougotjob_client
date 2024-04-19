@@ -84,9 +84,9 @@ const FilterResults = ({
             onChange={(e) => setSearchField(e.target.value)}
           >
             <option value="">All</option>
-            <option>Level 1</option>
-            <option>Level 2</option>
-            <option>Level 3</option>
+            <option>L1</option>
+            <option>L2</option>
+            <option>L3</option>
           </select>
         </div>
       </div>
