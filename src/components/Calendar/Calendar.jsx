@@ -77,6 +77,7 @@ const Calendar = () => {
   const [openAddEventModal, setOpenAddEventModal] = useState(false);
 
   const [calendarEvents, setCalendarEvents] = useState(CalendarEventMockData);
+
   return (
     <div>
       <div
@@ -186,7 +187,8 @@ const Calendar = () => {
                   <p>{day}</p>
                   {calendarEvents.map((events, index) =>
                     events.EventDay === day &&
-                    events.EventYear === parseInt(selectedYear) ? (
+                    events.EventYear === parseInt(selectedYear) &&
+                    months[events.EventMonth] === selectedMonth ? (
                       <p key={index} className="calendar-grid-day-event">
                         appointment @ {events.EventTime}
                       </p>
