@@ -427,6 +427,7 @@
 }
 
 .calendar-grid-day-event {
+  margin-top: 3px;
   font-size: 14px;
   padding: 0px 5px;
   background-color: #91bcf5;
