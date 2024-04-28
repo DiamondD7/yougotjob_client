@@ -85,6 +85,7 @@
   height: 140px;
   width: 200px;
   padding: 10px;
+  overflow: auto;
 }
 
 .previousMonthDay,
@@ -427,9 +428,31 @@
 }
 
 .calendar-grid-day-event {
+  border: none;
+  cursor: pointer;
+
   margin-top: 3px;
   font-size: 14px;
   padding: 0px 5px;
   background-color: #91bcf5;
   z-index: 0;
+}
+
+/* ------------------------------------------------ */
+
+.appointmentpreviewcard__wrapper {
+  position: absolute;
+  top: 35%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  z-index: 5;
+}
+
+.appointmentpreviewcard-card-container {
+  padding: 10px;
+  border-radius: 10px;
+  background-color: #e5f0ff;
+  width: 600px;
+  height: 300px;
 }
