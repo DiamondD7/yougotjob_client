@@ -7,9 +7,20 @@ import {
   getDaysFromPreviousMonth,
 } from "../../assets/js/months";
 import { CalendarEventMockData } from "../../assets/js/usermock";
+import AddEvent from "./AddEvent";
 
 import "../../styles/calendarstyles.css";
-import AddEvent from "./AddEvent";
+const AppointmentPreviewCard = () => {
+  return (
+    <div className="appointmentpreviewcard__wrapper">
+      <h2 style={{ color: "#f3f3f3", marginBottom: "5px" }}>
+        Scheduled Appointment
+      </h2>
+      <div className="appointmentpreviewcard-card-container"></div>
+    </div>
+  );
+};
+
 const Calendar = () => {
   const today = new Date();
   const days = [
@@ -75,6 +86,7 @@ const Calendar = () => {
   );
 
   const [openAddEventModal, setOpenAddEventModal] = useState(false);
+  const [openAppointmentCard, setOpenAppointmentCard] = useState(false);
 
   const [calendarEvents, setCalendarEvents] = useState(CalendarEventMockData);
 
@@ -82,7 +94,9 @@ const Calendar = () => {
     <div>
       <div
         className={
-          openAddEventModal === true ? "addevent-container__wrapper" : ""
+          openAddEventModal === true || openAppointmentCard === true
+            ? "addevent-container__wrapper"
+            : ""
         }
       ></div>
 
@@ -95,6 +109,12 @@ const Calendar = () => {
             setOpenAddEventModal={setOpenAddEventModal}
             setCalendarEvents={setCalendarEvents}
           />
+        </div>
+      )}
+
+      {openAppointmentCard && (
+        <div>
+          <AppointmentPreviewCard />
         </div>
       )}
 
@@ -181,6 +201,21 @@ const Calendar = () => {
               parseInt(selectedYear) === currentYear ? (
                 <div className="calendar-grid-day__wrapper dayOfTheMonth-highlight">
                   <p>{day}</p>
+                  {calendarEvents.map((events, index) =>
+                    events.EventDay === day &&
+                    events.EventYear === parseInt(selectedYear) &&
+                    months[events.EventMonth] === selectedMonth ? (
+                      <button
+                        key={index}
+                        className="calendar-grid-day-event"
+                        onClick={() => setOpenAppointmentCard(true)}
+                      >
+                        appointment @ {events.EventTime}
+                      </button>
+                    ) : (
+                      ""
+                    )
+                  )}
                 </div>
               ) : (
                 <div className="calendar-grid-day__wrapper">
@@ -189,9 +224,13 @@ const Calendar = () => {
                     events.EventDay === day &&
                     events.EventYear === parseInt(selectedYear) &&
                     months[events.EventMonth] === selectedMonth ? (
-                      <p key={index} className="calendar-grid-day-event">
+                      <button
+                        key={index}
+                        className="calendar-grid-day-event"
+                        onClick={() => setOpenAppointmentCard(true)}
+                      >
                         appointment @ {events.EventTime}
-                      </p>
+                      </button>
                     ) : (
                       ""
                     )
