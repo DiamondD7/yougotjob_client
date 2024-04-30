@@ -10,13 +10,15 @@ import { CalendarEventMockData } from "../../assets/js/usermock";
 import AddEvent from "./AddEvent";
 
 import "../../styles/calendarstyles.css";
-const AppointmentPreviewCard = () => {
+const AppointmentPreviewCard = ({ appointmentCardData }) => {
   return (
     <div className="appointmentpreviewcard__wrapper">
       <h2 style={{ color: "#f3f3f3", marginBottom: "5px" }}>
         Scheduled Appointment
       </h2>
-      <div className="appointmentpreviewcard-card-container"></div>
+      <div className="appointmentpreviewcard-card-container">
+        <p>{appointmentCardData.FirstName}</p>
+      </div>
     </div>
   );
 };
@@ -89,7 +91,12 @@ const Calendar = () => {
   const [openAppointmentCard, setOpenAppointmentCard] = useState(false);
 
   const [calendarEvents, setCalendarEvents] = useState(CalendarEventMockData);
+  const [appointmentCardData, setAppointmentCardData] = useState([]);
 
+  const handleAppointmentCard = (items) => {
+    setOpenAppointmentCard(true);
+    setAppointmentCardData(items);
+  };
   return (
     <div>
       <div
@@ -114,7 +121,7 @@ const Calendar = () => {
 
       {openAppointmentCard && (
         <div>
-          <AppointmentPreviewCard />
+          <AppointmentPreviewCard appointmentCardData={appointmentCardData} />
         </div>
       )}
 
@@ -208,7 +215,7 @@ const Calendar = () => {
                       <button
                         key={index}
                         className="calendar-grid-day-event"
-                        onClick={() => setOpenAppointmentCard(true)}
+                        onClick={() => handleAppointmentCard(events)}
                       >
                         appointment @ {events.EventTime}
                       </button>
@@ -227,7 +234,7 @@ const Calendar = () => {
                       <button
                         key={index}
                         className="calendar-grid-day-event"
-                        onClick={() => setOpenAppointmentCard(true)}
+                        onClick={() => handleAppointmentCard(events)}
                       >
                         appointment @ {events.EventTime}
                       </button>
