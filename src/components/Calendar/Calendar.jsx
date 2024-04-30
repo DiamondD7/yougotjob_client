@@ -18,6 +18,7 @@ const AppointmentPreviewCard = ({ appointmentCardData }) => {
       </h2>
       <div className="appointmentpreviewcard-card-container">
         <p>{appointmentCardData.FirstName}</p>
+        <p>{appointmentCardData.LastName}</p>
       </div>
     </div>
   );
