@@ -10,7 +10,10 @@ import { CalendarEventMockData } from "../../assets/js/usermock";
 import AddEvent from "./AddEvent";
 
 import "../../styles/calendarstyles.css";
-const AppointmentPreviewCard = ({ appointmentCardData }) => {
+const AppointmentPreviewCard = ({
+  appointmentCardData,
+  setOpenAppointmentCard,
+}) => {
   return (
     <div className="appointmentpreviewcard__wrapper">
       <h2 style={{ color: "#f3f3f3", marginBottom: "5px" }}>
@@ -19,6 +22,17 @@ const AppointmentPreviewCard = ({ appointmentCardData }) => {
       <div className="appointmentpreviewcard-card-container">
         <p>{appointmentCardData.FirstName}</p>
         <p>{appointmentCardData.LastName}</p>
+        <p>Contact Number: {appointmentCardData.ContactNumber}</p>
+        <p>Email Address: {appointmentCardData.EmailAddress}</p>
+        <p>
+          Appointment: {appointmentCardData.EventDay}{" "}
+          {appointmentCardData.EventMonth} {appointmentCardData.EventYear} :
+          {appointmentCardData.EventTime}
+        </p>
+        <textarea>{appointmentCardData.Comments}</textarea>
+
+        <button onClick={() => setOpenAppointmentCard(false)}>Back</button>
+        <button>Edit</button>
       </div>
     </div>
   );
@@ -122,7 +136,10 @@ const Calendar = () => {
 
       {openAppointmentCard && (
         <div>
-          <AppointmentPreviewCard appointmentCardData={appointmentCardData} />
+          <AppointmentPreviewCard
+            appointmentCardData={appointmentCardData}
+            setOpenAppointmentCard={setOpenAppointmentCard}
+          />
         </div>
       )}
 
