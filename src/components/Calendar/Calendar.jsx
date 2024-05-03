@@ -1,5 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { CaretDown, CaretUp, Plus } from "@phosphor-icons/react";
+import {
+  CaretDown,
+  CaretUp,
+  Plus,
+  Phone,
+  Envelope,
+} from "@phosphor-icons/react";
 import {
   currentYear,
   handleYearChange,
@@ -20,19 +26,63 @@ const AppointmentPreviewCard = ({
         Scheduled Appointment
       </h2>
       <div className="appointmentpreviewcard-card-container">
-        <p>{appointmentCardData.FirstName}</p>
-        <p>{appointmentCardData.LastName}</p>
-        <p>Contact Number: {appointmentCardData.ContactNumber}</p>
-        <p>Email Address: {appointmentCardData.EmailAddress}</p>
-        <p>
-          Appointment: {appointmentCardData.EventDay}{" "}
-          {appointmentCardData.EventMonth} {appointmentCardData.EventYear} :
-          {appointmentCardData.EventTime}
+        <p style={{ fontWeight: "bold", fontSize: "24px" }}>
+          {appointmentCardData.FirstName} {appointmentCardData.LastName}
         </p>
-        <textarea>{appointmentCardData.Comments}</textarea>
-
-        <button onClick={() => setOpenAppointmentCard(false)}>Back</button>
-        <button>Edit</button>
+        <div style={{ marginTop: "10px" }}>
+          <p className="appointmentpreviewcard-card-contacts__text">
+            <Phone color="#515151" size={18} />{" "}
+            {appointmentCardData.ContactNumber}
+          </p>
+          <p className="appointmentpreviewcard-card-contacts__text">
+            <Envelope color="#515151" size={18} />
+            {appointmentCardData.EmailAddress}
+          </p>
+        </div>
+        <div className="appointmentpreviewcard-card-subcontainer__wrapper">
+          <div style={{ width: "50%", marginTop: "10px" }}>
+            <label className="appointmentpreviewcard-card-title__text">
+              Appointment Agenda :
+            </label>
+            <p style={{ fontSize: "14px", marginTop: "5px" }}>
+              {appointmentCardData.EventAgenda}
+            </p>
+            <br />
+            <label className="appointmentpreviewcard-card-title__text">
+              Date/Time :
+            </label>
+            <p style={{ fontSize: "14px", marginTop: "5px" }}>
+              {appointmentCardData.EventDay}, {appointmentCardData.EventMonth},{" "}
+              {appointmentCardData.EventYear} : {appointmentCardData.EventTime}
+            </p>
+          </div>
+          <div style={{ width: "50%", marginTop: "10px" }}>
+            <label className="appointmentpreviewcard-card-title__text">
+              Comments
+            </label>
+            <p style={{ fontSize: "14px", overflow: "auto", height: "130px" }}>
+              Lorem ipsum dolor, sit amet consectetur adipisicing elit.
+              Reiciendis nihil repellendus, dolores, consequatur voluptas quae
+              mollitia ipsa quibusdam commodi quod totam sed explicabo adipisci
+              minus illo ullam, veniam enim placeat? Lorem ipsum dolor sit amet
+              consectetur adipisicing elit. Consectetur dignissimos voluptate
+              minima laudantium, cum ratione exercitationem, ipsa unde quod,
+              saepe totam distinctio ullam assumenda laborum adipisci eligendi
+              doloremque officia reprehenderit!
+            </p>
+          </div>
+        </div>
+        <button
+          style={{
+            backgroundColor: "transparent",
+            border: "none",
+            cursor: "pointer",
+          }}
+          onClick={() => setOpenAppointmentCard(false)}
+        >
+          Back
+        </button>
+        <button className="appointmentpreviewcard-card__btn">Go to</button>
       </div>
     </div>
   );
