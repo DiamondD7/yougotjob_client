@@ -255,6 +255,7 @@ export const CalendarEventMockData = [
     Zip: "2222",
     StateProvince: "",
     Comments: "lorem",
+    EventAgenda: "Vaccination",
     EventDay: 14,
     EventMonth: 3,
     EventYear: 2024,

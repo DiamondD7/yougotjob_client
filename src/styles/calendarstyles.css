@@ -454,5 +454,49 @@
   border-radius: 10px;
   background-color: #e5f0ff;
   width: 600px;
-  height: 300px;
+  height: 320px;
+}
+
+.appointmentpreviewcard-card-contacts__text {
+  font-size: 15px;
+  display: flex;
+  gap: 5px;
+}
+
+.appointmentpreviewcard-card-subcontainer__wrapper {
+  margin-top: 10px;
+  border-top: 1px solid #515151;
+  display: flex;
+}
+
+.appointmentpreviewcard-card-title__text {
+  font-size: 16px;
+  font-weight: bold;
+  color: #9dcd5a;
+}
+
+.appointmentpreviewcard-card__btn {
+  padding: 10px 20px;
+  margin-left: 10px;
+  border: none;
+  border-radius: 20px;
+  background-color: #9dcd5a;
+  color: #f3f3f3;
+  cursor: pointer;
+}
+
+.btnPending {
+  background-color: #d7c60f;
+  color: #f3f3f3;
+}
+
+.btnCancelled {
+  background-color: #c32626;
+  color: #f3f3f3;
+}
+
+.btnCompleted {
+  background-color: transparent;
+  color: #9dcd5a;
+  cursor: not-allowed;
 }
