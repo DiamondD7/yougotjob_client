@@ -60,7 +60,8 @@ const AppointmentPreviewCard = ({
               Date/Time :
             </label>
             <p style={{ fontSize: "14px", marginTop: "5px" }}>
-              {appointmentCardData.EventDay}, {appointmentCardData.EventMonth},{" "}
+              {appointmentCardData.EventDay},{" "}
+              {appointmentCardData.EventMonth + 1},{" "}
               {appointmentCardData.EventYear} : {appointmentCardData.EventTime}
             </p>
           </div>
@@ -69,14 +70,7 @@ const AppointmentPreviewCard = ({
               Comments
             </label>
             <p style={{ fontSize: "14px", overflow: "auto", height: "130px" }}>
-              Lorem ipsum dolor, sit amet consectetur adipisicing elit.
-              Reiciendis nihil repellendus, dolores, consequatur voluptas quae
-              mollitia ipsa quibusdam commodi quod totam sed explicabo adipisci
-              minus illo ullam, veniam enim placeat? Lorem ipsum dolor sit amet
-              consectetur adipisicing elit. Consectetur dignissimos voluptate
-              minima laudantium, cum ratione exercitationem, ipsa unde quod,
-              saepe totam distinctio ullam assumenda laborum adipisci eligendi
-              doloremque officia reprehenderit!
+              {appointmentCardData.Comments}
             </p>
           </div>
         </div>

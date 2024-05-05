@@ -6,6 +6,7 @@ import {
   currentYear,
   handleYearChange,
 } from "../../assets/js/months";
+import { PatientMockData } from "../../assets/js/usermock";
 
 const AppointmentForm = ({
   setOpenAddEventModal,
@@ -18,62 +19,57 @@ const AppointmentForm = ({
   setEmail,
   setCity,
   setStreetAddress,
-  setStreetAddressLine2,
   setZipCode,
   setStateProvince,
   setComments,
+  setEventAgenda,
+  firstName,
+  lastName,
+  contactNum,
+  email,
+  city,
+  streetAddress,
+  zipCode,
+  stateProvince,
+  eventAgenda,
 }) => {
-  const testProfile = [
-    {
-      id: 55,
-      picture:
-        "https://images.unsplash.com/photo-1682687982502-1529b3b33f85?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-      nhi: "NHNX8438",
-      firstName: "Henry",
-      lastName: "Tood",
-      nationality: "Indian",
-      dob: "28 Jan 1998",
-      age: "25",
-      height: "160",
-      weight: "60",
-      email: "henry@gmail.com",
-    },
-    {
-      id: 56,
-      picture:
-        "https://images.unsplash.com/photo-1705798543468-5b951da25e1e?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-      nhi: "KJHN8438",
-      firstName: "Helen",
-      lastName: "Tood",
-      nationality: "Indian",
-      dob: "2 Nov 1991",
-      age: "32",
-      height: "150",
-      weight: "60",
-      email: "helen@gmail.com",
-    },
-    {
-      id: 57,
-      picture:
-        "https://images.unsplash.com/photo-1699901853492-8bc942fc6a5c?q=80&w=1965&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-      nhi: "CDEK8438",
-      firstName: "Jack",
-      lastName: "Armstrong",
-      nationality: "Kiwi",
-      dob: "15 Aug 1997",
-      age: "26",
-      height: "180",
-      weight: "77",
-      email: "jackarm@gmail.com",
-    },
-  ];
-
-  const filteredFormData = testProfile.filter(
+  const filteredFormData = PatientMockData.filter(
     (data) =>
       data.firstName.toLowerCase().includes(formSearchField.toLowerCase()) ||
       data.lastName.toLowerCase().includes(formSearchField.toLowerCase()) ||
       data.nhi.toLowerCase().includes(formSearchField.toLowerCase())
   );
+
+  const [choseExistingUser, setChoseExistingUser] = useState(false);
+  const [removeExistingUser, setRemoveExistingUser] = useState(false);
+
+  useEffect(() => {
+    setFormSearchField("");
+    setChoseExistingUser(false);
+    setFirstName("");
+    setLastName("");
+    setContactNum("");
+    setEmail("");
+    setCity("");
+    setStreetAddress("");
+    setZipCode("");
+    setStateProvince("");
+    setRemoveExistingUser(false); //setting removeExistingUser to false, so that the program wont run infinitely
+  }, [removeExistingUser === true]); //only run this when removeExistingUser is true.
+
+  const setExistingUser = (data) => {
+    setFormSearchField(`${data.firstName} ${data.lastName}`);
+    setFirstName(data.firstName);
+    setLastName(data.lastName);
+    setContactNum(data.contactNumber);
+    setEmail(data.email);
+    setCity(data.city);
+    setStreetAddress(data.streetAddress);
+    setZipCode(data.zipCode);
+    setStateProvince(data.stateProvince);
+
+    setChoseExistingUser(true);
+  };
 
   return (
     <div>
@@ -89,12 +85,28 @@ const AppointmentForm = ({
       <div className="addevent-subcontainer__wrapper">
         <div className="form-search-users__wrapper">
           <h4 style={{ textAlign: "center" }}>Search for existing user</h4>
-          <input
-            type="text"
-            className="form-search-users__input"
-            placeholder="Patient ID / Name / NHI"
-            onChange={(e) => setFormSearchField(e.target.value)}
-          />
+          <div style={{ display: "flex", alignItems: "center" }}>
+            <input
+              type="text"
+              className="form-search-users__input"
+              placeholder="Patient ID / Name / NHI"
+              value={formSearchField}
+              disabled={choseExistingUser === true ? true : false}
+              onChange={(e) => setFormSearchField(e.target.value)}
+            />
+            <button
+              style={{
+                backgroundColor: "transparent",
+                border: "none",
+                cursor: "pointer",
+                marginTop: "10px",
+              }}
+              onClick={() => setRemoveExistingUser(true)}
+            >
+              {choseExistingUser && <X size={15} color="red" />}
+            </button>
+          </div>
+
           {filteredFormData.length === 0 || formSearchField === "" ? (
             <div></div>
           ) : (
@@ -112,6 +124,7 @@ const AppointmentForm = ({
                     cursor: "pointer",
                   }}
                   key={index}
+                  onClick={() => setExistingUser(data)}
                 >
                   <img
                     className="form-search-profile-picture__img"
@@ -146,6 +159,8 @@ const AppointmentForm = ({
               <input
                 className="form-details__input"
                 type="text"
+                value={firstName}
+                disabled={choseExistingUser === true ? true : false}
                 onChange={(e) => setFirstName(e.target.value)}
               />
               <p
@@ -163,6 +178,8 @@ const AppointmentForm = ({
               <input
                 className="form-details__input"
                 type="text"
+                value={lastName}
+                disabled={choseExistingUser === true ? true : false}
                 onChange={(e) => setLastName(e.target.value)}
               />
               <p
@@ -187,6 +204,8 @@ const AppointmentForm = ({
               <input
                 className="form-details__input"
                 type="text"
+                value={contactNum}
+                disabled={choseExistingUser === true ? true : false}
                 onChange={(e) => setContactNum(e.target.value)}
               />
               <p
@@ -204,6 +223,8 @@ const AppointmentForm = ({
               <input
                 className="form-details__input"
                 type="text"
+                value={email}
+                disabled={choseExistingUser === true ? true : false}
                 onChange={(e) => setEmail(e.target.value)}
               />
               <p
@@ -222,6 +243,8 @@ const AppointmentForm = ({
             <input
               className="form-address__input"
               type="text"
+              value={streetAddress}
+              disabled={choseExistingUser === true ? true : false}
               onChange={(e) => setStreetAddress(e.target.value)}
             />
             <p
@@ -232,20 +255,6 @@ const AppointmentForm = ({
               }}
             >
               Street Address
-            </p>
-            <input
-              className="form-address__input"
-              type="text"
-              onChange={(e) => setStreetAddressLine2(e.target.value)}
-            />
-            <p
-              style={{
-                fontSize: "10px",
-                fontWeight: "bold",
-                margin: "5px 0 0 16px",
-              }}
-            >
-              Street Address Line 2
             </p>
           </div>
           <div
@@ -259,6 +268,8 @@ const AppointmentForm = ({
               <input
                 className="form__input"
                 type="text"
+                value={city}
+                disabled={choseExistingUser === true ? true : false}
                 onChange={(e) => setCity(e.target.value)}
               />
               <p
@@ -275,6 +286,8 @@ const AppointmentForm = ({
               <input
                 className="form__input"
                 type="text"
+                value={zipCode}
+                disabled={choseExistingUser === true ? true : false}
                 onChange={(e) => setZipCode(e.target.value)}
               />
               <p
@@ -291,6 +304,8 @@ const AppointmentForm = ({
               <input
                 className="form__input"
                 type="text"
+                value={stateProvince}
+                disabled={choseExistingUser === true ? true : false}
                 onChange={(e) => setStateProvince(e.target.value)}
               />
               <p
@@ -323,6 +338,26 @@ const AppointmentForm = ({
               }}
             >
               Comments
+            </p>
+          </div>
+
+          <div style={{ marginLeft: "16px", marginTop: "2px" }}>
+            <input
+              className="form__input"
+              type="text"
+              placeholder="eg. vaccination"
+              value={eventAgenda}
+              onChange={(e) => setEventAgenda(e.target.value)}
+            />
+
+            <p
+              style={{
+                fontSize: "10px",
+                fontWeight: "bold",
+                marginTop: "5px",
+              }}
+            >
+              Appointment Agenda
             </p>
           </div>
         </div>
@@ -723,6 +758,7 @@ const AddEvent = ({ setOpenAddEventModal, setCalendarEvents }) => {
   const [month, setMonth] = useState(0);
   const [year, setYear] = useState(0);
   const [eventTime, setEventTime] = useState(0);
+  const [eventAgenda, setEventAgenda] = useState("");
 
   const handleSaveEventData = () => {
     setCalendarEvents((prevItems) => [
@@ -739,6 +775,7 @@ const AddEvent = ({ setOpenAddEventModal, setCalendarEvents }) => {
         StateProvince: stateProvince,
         StreetAddressLine2: streetAddressLine2,
         Comments: comments,
+        EventAgenda: eventAgenda,
         EventDay: day,
         EventMonth: month,
         EventYear: year,
@@ -766,6 +803,16 @@ const AddEvent = ({ setOpenAddEventModal, setCalendarEvents }) => {
             setStreetAddressLine2={setStreetAddressLine2}
             setContactNum={setContactNum}
             setComments={setComments}
+            setEventAgenda={setEventAgenda}
+            firstName={firstName}
+            lastName={lastName}
+            email={email}
+            streetAddress={streetAddress}
+            city={city}
+            zipCode={zipCode}
+            stateProvince={stateProvince}
+            contactNum={contactNum}
+            eventAgenda={eventAgenda}
           />
           <AvailableDatesCalendar
             setDay={setDay}
