@@ -29,15 +29,23 @@ const AppointmentPreviewCard = ({
         <p style={{ fontWeight: "bold", fontSize: "24px" }}>
           {appointmentCardData.FirstName} {appointmentCardData.LastName}
         </p>
-        <div style={{ marginTop: "10px" }}>
-          <p className="appointmentpreviewcard-card-contacts__text">
-            <Phone color="#515151" size={18} />{" "}
-            {appointmentCardData.ContactNumber}
-          </p>
-          <p className="appointmentpreviewcard-card-contacts__text">
-            <Envelope color="#515151" size={18} />
-            {appointmentCardData.EmailAddress}
-          </p>
+        <div style={{ marginTop: "10px", display: "flex" }}>
+          <div style={{ width: "50%" }}>
+            <p className="appointmentpreviewcard-card-contacts__text">
+              <Phone color="#515151" size={18} />{" "}
+              {appointmentCardData.ContactNumber}
+            </p>
+            <p className="appointmentpreviewcard-card-contacts__text">
+              <Envelope color="#515151" size={18} />
+              {appointmentCardData.EmailAddress}
+            </p>
+          </div>
+          <div>
+            <p>
+              {appointmentCardData.StreetAddress}, {appointmentCardData.City}{" "}
+              {appointmentCardData.Zip}
+            </p>
+          </div>
         </div>
         <div className="appointmentpreviewcard-card-subcontainer__wrapper">
           <div style={{ width: "50%", marginTop: "10px" }}>
