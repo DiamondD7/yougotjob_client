@@ -780,6 +780,7 @@ const AddEvent = ({ setOpenAddEventModal, setCalendarEvents }) => {
         EventMonth: month,
         EventYear: year,
         EventTime: eventTime,
+        Status: "Pending",
       },
     ]);
     setOpenAddEventModal(false);
