@@ -84,7 +84,21 @@ const AppointmentPreviewCard = ({
         >
           Back
         </button>
-        <button className="appointmentpreviewcard-card__btn">Go to</button>
+        <button
+          className={`appointmentpreviewcard-card__btn ${
+            appointmentCardData.Status === "Pending"
+              ? "btnPending"
+              : appointmentCardData.Status === "Completed"
+              ? "btnCompleted"
+              : ""
+          }`}
+        >
+          {appointmentCardData.Status === "Pending"
+            ? "Pending"
+            : appointmentCardData.Status === "Completed"
+            ? "Completed"
+            : "Default"}
+        </button>
       </div>
     </div>
   );
