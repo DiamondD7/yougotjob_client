@@ -509,7 +509,7 @@ const AvailableDatesCalendar = ({
             {days.map(
               (day, index) => (
                 days.splice(selectedMaxMonthDays),
-                (day < today.getDate() &&
+                (day <= today.getDate() &&
                   selectedMonth === months[today.getMonth()] &&
                   parseInt(selectedYear) === currentYear) ||
                 months.indexOf(selectedMonth) < //getting the index of selectedMonth from 0 to 11: 0 means Jan
