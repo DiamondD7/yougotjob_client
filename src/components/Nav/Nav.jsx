@@ -40,11 +40,7 @@ const Nav = ({ setDisplayed, fakeRole }) => {
               minimizedNav === true ? "dateMinimized" : ""
             }`}
           >
-            {minimizedNav === false ? (
-              <p>{date.toLocaleDateString("en-NZ")}</p>
-            ) : (
-              ""
-            )}
+            <p>Hauora Logo</p>
             <div>
               <button
                 className="nav-menu-arrow__button"
@@ -252,6 +248,13 @@ const Nav = ({ setDisplayed, fakeRole }) => {
               <button>
                 <SignOut size={20} color="#454545" />
               </button>
+              {minimizedNav === false ? (
+                <p className="nav-date__text">
+                  {date.toLocaleDateString("en-NZ")}
+                </p>
+              ) : (
+                ""
+              )}
             </li>
           </div>
         </ul>
