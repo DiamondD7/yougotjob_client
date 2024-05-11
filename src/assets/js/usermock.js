@@ -35,8 +35,7 @@ export const PatientResultData = [
   {
     NHI: "YBN777652",
     Date: "01/04/2024",
-    FirstNames: "Johnson Martin Leaso",
-    LastName: "Henderson",
+    FullName: "Johnson Martin Leaso",
     VisitType: "General Appointment",
     Subject: "Sore Jaw",
     Duration: "20",
@@ -48,8 +47,7 @@ export const PatientResultData = [
   {
     NHI: "TJB277652",
     Date: "25/03/2024",
-    FirstNames: "Aaron",
-    LastName: "Sierra",
+    FullName: "Aaron Sierra",
     VisitType: "Vaccination",
     Subject: "Chronic",
     Duration: "45",
@@ -61,8 +59,7 @@ export const PatientResultData = [
   {
     NHI: "TJB277652",
     Date: "25/03/2024",
-    FirstNames: "Aaron",
-    LastName: "Sierra",
+    FullName: "Aaron Sierra",
     VisitType: "Chronic care",
     Subject: "Chronic",
     Duration: "45",
@@ -74,8 +71,7 @@ export const PatientResultData = [
   {
     NHI: "TJB277652",
     Date: "25/03/2024",
-    FirstNames: "Aaron",
-    LastName: "Sierra",
+    FullName: "Aaron Sierra",
     VisitType: "Chronic care",
     Subject: "Chronic",
     Duration: "45",
@@ -87,8 +83,7 @@ export const PatientResultData = [
   {
     NHI: "TJB277652",
     Date: "25/03/2024",
-    FirstNames: "Aaron",
-    LastName: "Sierra",
+    FullName: "Aaron Sierra",
     VisitType: "Chronic care",
     Subject: "Chronic",
     Duration: "45",
@@ -100,8 +95,7 @@ export const PatientResultData = [
   {
     NHI: "TJB277652",
     Date: "25/03/2024",
-    FirstNames: "Aaron",
-    LastName: "Sierra",
+    FullName: "Aaron Sierra",
     VisitType: "Chronic care",
     Subject: "Chronic",
     Duration: "45",
@@ -113,8 +107,7 @@ export const PatientResultData = [
   {
     NHI: "TJB277652",
     Date: "25/03/2024",
-    FirstNames: "Aaron",
-    LastName: "Sierra",
+    FullName: "Aaron Sierra",
     VisitType: "Chronic care",
     Subject: "Chronic",
     Duration: "45",
@@ -126,8 +119,7 @@ export const PatientResultData = [
   {
     NHI: "TJB277652",
     Date: "25/03/2024",
-    FirstNames: "Aaron",
-    LastName: "Sierra",
+    FullName: "Aaron Sierra",
     VisitType: "Chronic care",
     Subject: "Chronic",
     Duration: "45",
@@ -139,8 +131,7 @@ export const PatientResultData = [
   {
     NHI: "TJB277652",
     Date: "25/03/2024",
-    FirstNames: "Aaron",
-    LastName: "Sierra",
+    FullName: "Aaron Sierra",
     VisitType: "Chronic care",
     Subject: "Chronic",
     Duration: "45",
@@ -152,8 +143,7 @@ export const PatientResultData = [
   {
     NHI: "TJB277652",
     Date: "25/03/2024",
-    FirstNames: "Aaron",
-    LastName: "Sierra",
+    FullName: "Aaron Sierra",
     VisitType: "Chronic care",
     Subject: "Chronic",
     Duration: "45",
@@ -165,8 +155,7 @@ export const PatientResultData = [
   {
     NHI: "TJB277652",
     Date: "25/03/2024",
-    FirstNames: "Aaron",
-    LastName: "Sierra",
+    FullName: "Aaron Sierra",
     VisitType: "Chronic care",
     Subject: "Chronic",
     Duration: "45",
@@ -179,8 +168,7 @@ export const PatientResultData = [
   {
     NHI: "TJB277652",
     Date: "25/03/2024",
-    FirstNames: "Aaron",
-    LastName: "Sierra",
+    FullName: "Aaron Sierra",
     VisitType: "Chronic care",
     Subject: "Chronic",
     Duration: "45",
@@ -192,8 +180,7 @@ export const PatientResultData = [
   {
     NHI: "TJB277652",
     Date: "25/03/2024",
-    FirstNames: "Aaron",
-    LastName: "Sierra",
+    FullName: "Aaron Sierra",
     VisitType: "Chronic care",
     Subject: "Chronic",
     Duration: "45",
@@ -205,8 +192,7 @@ export const PatientResultData = [
   {
     NHI: "TJB277652",
     Date: "25/03/2024",
-    FirstNames: "Aaron",
-    LastName: "Sierra",
+    FullName: "Aaron Sierra",
     VisitType: "Chronic care",
     Subject: "Chronic",
     Duration: "45",
@@ -218,8 +204,7 @@ export const PatientResultData = [
   {
     NHI: "TJB277652",
     Date: "25/03/2024",
-    FirstNames: "Aaron",
-    LastName: "Sierra",
+    FullName: "Aaron Sierra",
     VisitType: "Chronic care",
     Subject: "Chronic",
     Duration: "45",
@@ -231,8 +216,7 @@ export const PatientResultData = [
   {
     NHI: "TJB277652",
     Date: "25/03/2024",
-    FirstNames: "Aaron",
-    LastName: "Sierra",
+    FullName: "Aaron Sierra",
     VisitType: "Chronic care",
     Subject: "Chronic",
     Duration: "45",
@@ -245,8 +229,7 @@ export const PatientResultData = [
 
 export const CalendarEventMockData = [
   {
-    FirstName: "Jane",
-    LastName: "Doe",
+    FullName: "Jane Doe",
     ContactNumber: "021021021022",
     EmailAddress: "janiedoe@gmail.com",
     StreetAddress: "31 Jockston Road",
@@ -270,8 +253,7 @@ export const PatientMockData = [
     picture:
       "https://images.unsplash.com/photo-1682687982502-1529b3b33f85?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     nhi: "NHNX8438",
-    firstName: "Henry",
-    lastName: "Tood",
+    fullName: "Henry Tood",
     nationality: "Indian",
     dob: "28 Jan 1998",
     age: "25",
@@ -289,8 +271,7 @@ export const PatientMockData = [
     picture:
       "https://images.unsplash.com/photo-1705798543468-5b951da25e1e?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     nhi: "KJHN8438",
-    firstName: "Helen",
-    lastName: "Tood",
+    fullName: "Helen Tood",
     nationality: "Indian",
     dob: "2 Nov 1991",
     age: "32",
@@ -308,8 +289,7 @@ export const PatientMockData = [
     picture:
       "https://images.unsplash.com/photo-1699901853492-8bc942fc6a5c?q=80&w=1965&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     nhi: "CDEK8438",
-    firstName: "Jack",
-    lastName: "Armstrong",
+    fullName: "Jack Armstrong",
     nationality: "Kiwi",
     dob: "15 Aug 1997",
     age: "26",

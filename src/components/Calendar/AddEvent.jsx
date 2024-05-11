@@ -13,8 +13,7 @@ const AppointmentForm = ({
   setFormSearchField,
   formSearchField,
   setCalendarEvents,
-  setFirstName,
-  setLastName,
+  setFullName,
   setContactNum,
   setEmail,
   setCity,
@@ -23,7 +22,7 @@ const AppointmentForm = ({
   setStateProvince,
   setComments,
   setEventAgenda,
-  firstName,
+  fullName,
   lastName,
   contactNum,
   email,
@@ -35,8 +34,7 @@ const AppointmentForm = ({
 }) => {
   const filteredFormData = PatientMockData.filter(
     (data) =>
-      data.firstName.toLowerCase().includes(formSearchField.toLowerCase()) ||
-      data.lastName.toLowerCase().includes(formSearchField.toLowerCase()) ||
+      data.fullName.toLowerCase().includes(formSearchField.toLowerCase()) ||
       data.nhi.toLowerCase().includes(formSearchField.toLowerCase())
   );
 
@@ -46,8 +44,7 @@ const AppointmentForm = ({
   useEffect(() => {
     setFormSearchField("");
     setChoseExistingUser(false);
-    setFirstName("");
-    setLastName("");
+    setFullName("");
     setContactNum("");
     setEmail("");
     setCity("");
@@ -58,9 +55,8 @@ const AppointmentForm = ({
   }, [removeExistingUser === true]); //only run this when removeExistingUser is true.
 
   const setExistingUser = (data) => {
-    setFormSearchField(`${data.firstName} ${data.lastName}`);
-    setFirstName(data.firstName);
-    setLastName(data.lastName);
+    setFormSearchField(data.fullName);
+    setFullName(data.fullName);
     setContactNum(data.contactNumber);
     setEmail(data.email);
     setCity(data.city);
@@ -131,9 +127,7 @@ const AppointmentForm = ({
                     src={data.picture}
                     alt="profilepic"
                   />
-                  <p style={{ fontSize: "11px" }}>
-                    {data.firstName} {data.lastName}
-                  </p>
+                  <p style={{ fontSize: "11px" }}>{data.fullName}</p>
                   <p style={{ fontSize: "11px" }}>{data.nhi}</p>
                   <p style={{ fontSize: "11px" }}>{data.height}cm</p>
                   <p style={{ fontSize: "11px" }}>{data.weight}kg</p>
@@ -154,14 +148,14 @@ const AppointmentForm = ({
           <h4 style={{ textAlign: "center", marginBottom: "10px" }}>
             Create a new appointment
           </h4>
-          <div style={{ display: "flex" }}>
+          <div>
             <div>
               <input
-                className="form-details__input"
+                className="form-name__input"
                 type="text"
-                value={firstName}
+                value={fullName}
                 disabled={choseExistingUser === true ? true : false}
-                onChange={(e) => setFirstName(e.target.value)}
+                onChange={(e) => setFullName(e.target.value)}
               />
               <p
                 style={{
@@ -171,26 +165,7 @@ const AppointmentForm = ({
                   marginLeft: "16px",
                 }}
               >
-                First Name
-              </p>
-            </div>
-            <div>
-              <input
-                className="form-details__input"
-                type="text"
-                value={lastName}
-                disabled={choseExistingUser === true ? true : false}
-                onChange={(e) => setLastName(e.target.value)}
-              />
-              <p
-                style={{
-                  fontSize: "10px",
-                  fontWeight: "bold",
-                  marginTop: "5px",
-                  marginLeft: "16px",
-                }}
-              >
-                Last Name
+                Full Name
               </p>
             </div>
           </div>
@@ -319,11 +294,6 @@ const AppointmentForm = ({
               </p>
             </div>
           </div>
-          {/* <div>
-              <button className="form-checkavailabledate__btn">
-                Check available dates <Calendar size={14} />
-              </button>
-            </div> */}
           <div>
             <textarea
               className="form-comments__textarea"
@@ -744,8 +714,7 @@ const AvailableDatesCalendar = ({
 const AddEvent = ({ setOpenAddEventModal, setCalendarEvents }) => {
   const [formSearchField, setFormSearchField] = useState("");
 
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
+  const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [streetAddress, setStreetAddress] = useState("");
   const [city, setCity] = useState("");
@@ -765,8 +734,7 @@ const AddEvent = ({ setOpenAddEventModal, setCalendarEvents }) => {
       //adding objects in an array of objects (using prevItems)
       ...prevItems,
       {
-        FirstName: firstName,
-        LastName: lastName,
+        FullName: fullName,
         ContactNumber: contactNum,
         EmailAddress: email,
         StreetAddress: streetAddress,
@@ -794,8 +762,7 @@ const AddEvent = ({ setOpenAddEventModal, setCalendarEvents }) => {
             setFormSearchField={setFormSearchField}
             formSearchField={formSearchField}
             setCalendarEvents={setCalendarEvents}
-            setFirstName={setFirstName}
-            setLastName={setLastName}
+            setFullName={setFullName}
             setEmail={setEmail}
             setStreetAddress={setStreetAddress}
             setCity={setCity}
@@ -805,8 +772,7 @@ const AddEvent = ({ setOpenAddEventModal, setCalendarEvents }) => {
             setContactNum={setContactNum}
             setComments={setComments}
             setEventAgenda={setEventAgenda}
-            firstName={firstName}
-            lastName={lastName}
+            fullName={fullName}
             email={email}
             streetAddress={streetAddress}
             city={city}

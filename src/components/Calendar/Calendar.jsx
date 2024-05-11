@@ -27,7 +27,7 @@ const AppointmentPreviewCard = ({
       </h2>
       <div className="appointmentpreviewcard-card-container">
         <p style={{ fontWeight: "bold", fontSize: "24px" }}>
-          {appointmentCardData.FirstName} {appointmentCardData.LastName}
+          {appointmentCardData.FullName}
         </p>
         <div style={{ marginTop: "10px", display: "flex" }}>
           <div style={{ width: "50%" }}>

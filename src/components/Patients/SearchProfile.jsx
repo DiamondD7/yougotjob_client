@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { CaretRight, MagnifyingGlass, SmileySad } from "@phosphor-icons/react";
+import { PatientMockData } from "../../assets/js/usermock";
 
 import "../../styles/searchprofilestyles.css";
 const SearchProfile = ({
@@ -7,51 +8,6 @@ const SearchProfile = ({
   setFullProfileData,
   setOpenFullProfile,
 }) => {
-  const testProfile = [
-    {
-      id: 55,
-      picture:
-        "https://images.unsplash.com/photo-1682687982502-1529b3b33f85?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-      nhi: "NHNX8438",
-      firstName: "Henry",
-      lastName: "Tood",
-      nationality: "Indian",
-      dob: "28 Jan 1998",
-      age: "25",
-      height: "160",
-      weight: "60",
-      email: "henry@gmail.com",
-    },
-    {
-      id: 56,
-      picture:
-        "https://images.unsplash.com/photo-1705798543468-5b951da25e1e?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-      nhi: "KJHN8438",
-      firstName: "Helen",
-      lastName: "Tood",
-      nationality: "Indian",
-      dob: "2 Nov 1991",
-      age: "32",
-      height: "150",
-      weight: "60",
-      email: "helen@gmail.com",
-    },
-    {
-      id: 57,
-      picture:
-        "https://images.unsplash.com/photo-1699901853492-8bc942fc6a5c?q=80&w=1965&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-      nhi: "CDEK8438",
-      firstName: "Jack",
-      lastName: "Armstrong",
-      nationality: "Kiwi",
-      dob: "15 Aug 1997",
-      age: "26",
-      height: "180",
-      weight: "77",
-      email: "jackarm@gmail.com",
-    },
-  ];
-
   const openingFullProfileClick = (e, data) => {
     e.preventDefault();
     setFullProfileData(data);
@@ -59,10 +15,9 @@ const SearchProfile = ({
   };
 
   const ReturnSearchData = () => {
-    const filterData = testProfile.filter(
+    const filterData = PatientMockData.filter(
       (item) =>
-        item.firstName.toLowerCase().includes(searchField.toLowerCase()) ||
-        item.lastName.toLowerCase().includes(searchField.toLowerCase()) ||
+        item.fullName.toLowerCase().includes(searchField.toLowerCase()) ||
         item.nhi.toLowerCase().includes(searchField.toLowerCase())
     );
     if (searchField === "" || filterData.length === 0) {
