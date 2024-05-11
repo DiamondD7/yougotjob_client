@@ -95,7 +95,7 @@ const FilterResults = ({
 };
 
 const Results = () => {
-  const [updatedData, setUpdatedData] = useState([]);
+  const [updatedData, setUpdatedData] = useState(PatientResultData);
   const [openResult, setOpenResult] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [loadingTable, setLoadingTable] = useState(false);
@@ -105,13 +105,26 @@ const Results = () => {
   const [payment, setPayment] = useState("");
   const [triageLevel, setTriageLevel] = useState("");
 
+  const filtering = updatedData.filter(
+    (data) =>
+      data.FullName.toLowerCase().includes(searchField.toLowerCase()) ||
+      data.NHI.toLowerCase().includes(searchField.toLowerCase()) ||
+      data.Subject.toLowerCase().includes(searchField.toLowerCase()) ||
+      data.VisitType.toLowerCase().includes(searchField.toLowerCase()) ||
+      data.Status.toLowerCase().includes(searchField.toLowerCase()) ||
+      data.Payment.toLowerCase().includes(searchField.toLowerCase()) ||
+      data.TriageLevel.toLowerCase().includes(searchField.toLowerCase())
+  );
+
   let recordsPerPage = 12;
 
   let indexOFLastRecord = currentPage * recordsPerPage;
   let indexOfirstRecord = indexOFLastRecord - recordsPerPage;
-
   let paginationButtons = []; //setting initial value
-  let paginationLength = Math.ceil(PatientResultData.length / recordsPerPage);
+  let paginationLength = Math.ceil(
+    (searchField === "" ? PatientResultData.length : tesTest.length) /
+      recordsPerPage
+  );
 
   for (let i = 0; i < paginationLength; i++) {
     paginationButtons[i] = i; //populating the array based on the pages needed to fit all the data
@@ -164,65 +177,35 @@ const Results = () => {
                 </thead>
 
                 <tbody>
-                  {updatedData
-                    .filter(
-                      (data) =>
-                        data.FirstNames.toLowerCase().includes(
-                          searchField.toLowerCase()
-                        ) ||
-                        data.LastName.toLowerCase().includes(
-                          searchField.toLowerCase()
-                        ) ||
-                        data.NHI.toLowerCase().includes(
-                          searchField.toLowerCase()
-                        ) ||
-                        data.Subject.toLowerCase().includes(
-                          searchField.toLowerCase()
-                        ) ||
-                        data.VisitType.toLowerCase().includes(
-                          searchField.toLowerCase()
-                        ) ||
-                        data.Status.toLowerCase().includes(
-                          searchField.toLowerCase()
-                        ) ||
-                        data.Payment.toLowerCase().includes(
-                          searchField.toLowerCase()
-                        ) ||
-                        data.TriageLevel.toLowerCase().includes(
-                          searchField.toLowerCase()
-                        )
-                    )
-                    .map((data, index) => (
-                      <tr key={index}>
-                        <td>{data.NHI}</td>
-                        <td>{data.Date}</td>
-                        <td>
-                          {data.FirstNames} {data.LastName}
-                        </td>
-                        <td>{data.VisitType}</td>
-                        <td>{data.Subject}</td>
-                        <td>{data.Duration}</td>
-                        <td>{data.TriageLevel}</td>
-                        <td>{data.Comments}</td>
-                        <td
-                          style={
-                            data.Payment === "Paid"
-                              ? { color: "#9dcd5a" }
-                              : data.Payment === "Overdue"
-                              ? { color: "red" }
-                              : { color: "#d7c60f" }
-                          }
-                        >
-                          {data.Payment}
-                        </td>
-                        <td>{data.Status}</td>
-                        <td>
-                          <button onClick={() => setOpenResult(true)}>
-                            view
-                          </button>
-                        </td>
-                      </tr>
-                    ))}
+                  {filtering.map((data, index) => (
+                    <tr key={index}>
+                      <td>{data.NHI}</td>
+                      <td>{data.Date}</td>
+                      <td>{data.FullName}</td>
+                      <td>{data.VisitType}</td>
+                      <td>{data.Subject}</td>
+                      <td>{data.Duration}</td>
+                      <td>{data.TriageLevel}</td>
+                      <td>{data.Comments}</td>
+                      <td
+                        style={
+                          data.Payment === "Paid"
+                            ? { color: "#9dcd5a" }
+                            : data.Payment === "Overdue"
+                            ? { color: "red" }
+                            : { color: "#d7c60f" }
+                        }
+                      >
+                        {data.Payment}
+                      </td>
+                      <td>{data.Status}</td>
+                      <td>
+                        <button onClick={() => setOpenResult(true)}>
+                          view
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
                 </tbody>
               </table>
               <div
@@ -230,7 +213,6 @@ const Results = () => {
                   margin: "10px 0 0 50px",
                   width: "70%",
                   display: "flex",
-                  justifyContent: "center",
                 }}
               >
                 <button
@@ -267,7 +249,7 @@ const Results = () => {
               </div>
             </div>
           ) : (
-            <div>
+            <div style={{ position: "relative" }}>
               <CircleNotch size={32} className={"loading__icon"} />
             </div>
           )}
