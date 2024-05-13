@@ -105,7 +105,8 @@ const Results = () => {
   const [payment, setPayment] = useState("");
   const [triageLevel, setTriageLevel] = useState("");
 
-  const filtering = updatedData.filter(
+  const filtering = PatientResultData.filter(
+    //filters data
     (data) =>
       data.FullName.toLowerCase().includes(searchField.toLowerCase()) ||
       data.NHI.toLowerCase().includes(searchField.toLowerCase()) ||
@@ -122,7 +123,7 @@ const Results = () => {
   let indexOfirstRecord = indexOFLastRecord - recordsPerPage;
   let paginationButtons = []; //setting initial value
   let paginationLength = Math.ceil(
-    (searchField === "" ? PatientResultData.length : tesTest.length) /
+    (searchField === "" ? PatientResultData.length : filtering.length) /
       recordsPerPage
   );
 
@@ -133,12 +134,16 @@ const Results = () => {
   useEffect(() => {
     updateRecord(); //calling updateRecord when currentPage is updated
     setLoadingTable(false);
-  }, [currentPage]);
+  }, [currentPage, searchField]);
 
   const updateRecord = () => {
-    setUpdatedData(
-      PatientResultData.slice(indexOfirstRecord, indexOFLastRecord) //setting PatientResultData to updatedData when pages are changed.
-    );
+    if (searchField === "") {
+      setUpdatedData(
+        PatientResultData.slice(indexOfirstRecord, indexOFLastRecord) //setting PatientResultData to updatedData when pages are changed.
+      );
+    } else {
+      setUpdatedData(filtering.slice(indexOfirstRecord, indexOFLastRecord));
+    }
 
     setTimeout(() => {
       setLoadingTable(true);
@@ -177,7 +182,7 @@ const Results = () => {
                 </thead>
 
                 <tbody>
-                  {filtering.map((data, index) => (
+                  {updatedData.map((data, index) => (
                     <tr key={index}>
                       <td>{data.NHI}</td>
                       <td>{data.Date}</td>
