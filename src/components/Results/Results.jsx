@@ -100,6 +100,7 @@ const Results = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [loadingTable, setLoadingTable] = useState(false);
   const [searchField, setSearchField] = useState("");
+  const [isFiltering, setIsFiltering] = useState(false);
   const [visitType, setVisitType] = useState("");
   const [status, setStatus] = useState("");
   const [payment, setPayment] = useState("");
@@ -143,6 +144,7 @@ const Results = () => {
       );
     } else {
       setUpdatedData(filtering.slice(indexOfirstRecord, indexOFLastRecord));
+      setIsFiltering(true);
     }
 
     setTimeout(() => {
