@@ -225,6 +225,18 @@ export const PatientResultData = [
     Payment: "Paid",
     Status: "KK",
   },
+  {
+    NHI: "TJB277653",
+    Date: "25/03/2024",
+    FullName: "Jane Doe",
+    VisitType: "Chronic care",
+    Subject: "Chronic",
+    Duration: "45",
+    TriageLevel: "L2",
+    Comments: "",
+    Payment: "Paid",
+    Status: "KK",
+  },
 ];
 
 export const CalendarEventMockData = [
