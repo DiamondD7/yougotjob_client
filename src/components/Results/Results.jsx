@@ -100,7 +100,6 @@ const Results = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [loadingTable, setLoadingTable] = useState(false);
   const [searchField, setSearchField] = useState("");
-  const [isFiltering, setIsFiltering] = useState(false);
   const [visitType, setVisitType] = useState("");
   const [status, setStatus] = useState("");
   const [payment, setPayment] = useState("");
@@ -144,7 +143,11 @@ const Results = () => {
       );
     } else {
       setUpdatedData(filtering.slice(indexOfirstRecord, indexOFLastRecord));
-      setIsFiltering(true);
+
+      if (currentPage > paginationLength) {
+        //if currentPage is more than the paginationLength then make currentPage 1 so that user can see data.but this is temporary. will imprv this
+        setCurrentPage(1);
+      }
     }
 
     setTimeout(() => {
