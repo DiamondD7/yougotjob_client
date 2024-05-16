@@ -128,7 +128,7 @@ const Results = () => {
   );
 
   for (let i = 0; i < paginationLength; i++) {
-    paginationButtons[i] = i; //populating the array based on the pages needed to fit all the data
+    paginationButtons[i] = i; //populating the array based on the pages needed to fit all the data. make this better
   }
 
   useEffect(() => {
@@ -153,6 +153,18 @@ const Results = () => {
     setTimeout(() => {
       setLoadingTable(true);
     }, 2000);
+  };
+
+  const handleCaretPageChange = (leftOrRight) => {
+    if (leftOrRight === "right") {
+      if (currentPage !== paginationLength) {
+        setCurrentPage(currentPage + 1);
+      }
+    } else {
+      if (currentPage !== 1) {
+        setCurrentPage(currentPage - 1);
+      }
+    }
   };
 
   return (
@@ -232,6 +244,7 @@ const Results = () => {
                     cursor: "pointer",
                     padding: "0 10px",
                   }}
+                  onClick={() => handleCaretPageChange("left")}
                 >
                   <CaretLeft size={19} />
                 </button>
@@ -239,7 +252,9 @@ const Results = () => {
                   {paginationButtons.map((btn, index) => (
                     <button
                       key={index}
-                      className="result-table-pagination__button"
+                      className={`result-table-pagination__button ${
+                        btn + 1 === currentPage ? "paginationActive" : ""
+                      }`}
                       onClick={() => setCurrentPage(btn + 1)}
                     >
                       {btn + 1}
@@ -253,6 +268,7 @@ const Results = () => {
                     cursor: "pointer",
                     padding: "0 10px",
                   }}
+                  onClick={() => handleCaretPageChange("right")}
                 >
                   <CaretRight size={19} />
                 </button>
