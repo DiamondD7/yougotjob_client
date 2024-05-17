@@ -107,15 +107,22 @@ const Results = () => {
 
   const filtering = PatientResultData.filter(
     //filters data
-    (data) =>
-      data.FullName.toLowerCase().includes(searchField.toLowerCase()) ||
-      data.NHI.toLowerCase().includes(searchField.toLowerCase()) ||
-      data.Subject.toLowerCase().includes(searchField.toLowerCase()) ||
-      data.VisitType.toLowerCase().includes(searchField.toLowerCase()) ||
-      data.Status.toLowerCase().includes(searchField.toLowerCase()) ||
-      data.Payment.toLowerCase().includes(searchField.toLowerCase()) ||
-      data.TriageLevel.toLowerCase().includes(searchField.toLowerCase())
-  );
+    (data) => {
+      const filtered = searchField.toLowerCase();
+      const filteredVisitType =
+        data.VisitType.toLowerCase().includes(visitType);
+
+      return (
+        data.FullName.toLowerCase().includes(filtered) ||
+        data.NHI.toLowerCase().includes(filtered) ||
+        data.Subject.toLowerCase().includes(filtered) ||
+        data.VisitType.toLowerCase().includes(filtered) ||
+        data.Status.toLowerCase().includes(filtered) ||
+        data.Payment.toLowerCase().includes(filtered) ||
+        data.TriageLevel.toLowerCase().includes(filtered)
+      );
+    }
+  ); //TO DO
 
   let recordsPerPage = 12;
 
