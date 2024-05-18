@@ -10,6 +10,7 @@ import {
 
 import "../../styles/resultsstyles.css";
 const FilterResults = ({
+  searchField,
   setSearchField,
   setVisitType,
   setStatus,
@@ -109,17 +110,16 @@ const Results = () => {
     //filters data
     (data) => {
       const filtered = searchField.toLowerCase();
-      const filteredVisitType =
-        data.VisitType.toLowerCase().includes(visitType);
+      const filteredVisitType = visitType.toLowerCase();
 
       return (
-        data.FullName.toLowerCase().includes(filtered) ||
-        data.NHI.toLowerCase().includes(filtered) ||
-        data.Subject.toLowerCase().includes(filtered) ||
         data.VisitType.toLowerCase().includes(filtered) ||
         data.Status.toLowerCase().includes(filtered) ||
         data.Payment.toLowerCase().includes(filtered) ||
-        data.TriageLevel.toLowerCase().includes(filtered)
+        data.TriageLevel.toLowerCase().includes(filtered) ||
+        data.FullName.toLowerCase().includes(filtered) ||
+        data.NHI.toLowerCase().includes(filtered) ||
+        data.Subject.toLowerCase().includes(filtered)
       );
     }
   ); //TO DO
@@ -181,6 +181,7 @@ const Results = () => {
           <h2 style={{ margin: "10px 0 0 50px", fontSize: "26px" }}>Results</h2>
           <FilterResults
             setSearchField={setSearchField}
+            searchField={searchField}
             setVisitType={setVisitType}
             setStatus={setStatus}
             setPayment={setPayment}
