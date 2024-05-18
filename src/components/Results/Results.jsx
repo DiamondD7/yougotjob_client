@@ -46,7 +46,7 @@ const FilterResults = ({
           <h4 style={{ fontSize: "12px" }}>Visit Type</h4>
           <select
             className="filter-result__dropdown"
-            onChange={(e) => setSearchField(e.target.value)}
+            onChange={(e) => setVisitType(e.target.value)}
           >
             <option value="">All</option>
             <option>General Appointment</option>
@@ -58,7 +58,7 @@ const FilterResults = ({
           <h4 style={{ fontSize: "12px" }}>Status</h4>
           <select
             className="filter-result__dropdown"
-            onChange={(e) => setSearchField(e.target.value)}
+            onChange={(e) => setStatus(e.target.value)}
           >
             <option value="">All</option>
             <option>Pending</option>
@@ -70,7 +70,7 @@ const FilterResults = ({
           <h4 style={{ fontSize: "12px" }}>Payment</h4>
           <select
             className="filter-result__dropdown"
-            onChange={(e) => setSearchField(e.target.value)}
+            onChange={(e) => setPayment(e.target.value)}
           >
             <option value="">All</option>
             <option>Paid</option>
@@ -82,7 +82,7 @@ const FilterResults = ({
           <h4 style={{ fontSize: "12px" }}>Triage Level</h4>
           <select
             className="filter-result__dropdown"
-            onChange={(e) => setSearchField(e.target.value)}
+            onChange={(e) => setTriageLevel(e.target.value)}
           >
             <option value="">All</option>
             <option>L1</option>
@@ -105,24 +105,32 @@ const Results = () => {
   const [status, setStatus] = useState("");
   const [payment, setPayment] = useState("");
   const [triageLevel, setTriageLevel] = useState("");
+  const [filteredData, setFilteredData] = useState([]);
 
-  const filtering = PatientResultData.filter(
-    //filters data
-    (data) => {
-      const filtered = searchField.toLowerCase();
-      const filteredVisitType = visitType.toLowerCase();
+  // const filtering = () => {
+  //   const filtered = searchField.toLowerCase();
+  //   const filteredVisitType = visitType.toLowerCase();
+  //   const filteredStatus = status.toLowerCase();
+  //   const filteredPayment = payment.toLowerCase();
+  //   const filteredTriageLevel = triageLevel.toLowerCase();
 
-      return (
-        data.VisitType.toLowerCase().includes(filtered) ||
-        data.Status.toLowerCase().includes(filtered) ||
-        data.Payment.toLowerCase().includes(filtered) ||
-        data.TriageLevel.toLowerCase().includes(filtered) ||
-        data.FullName.toLowerCase().includes(filtered) ||
-        data.NHI.toLowerCase().includes(filtered) ||
-        data.Subject.toLowerCase().includes(filtered)
-      );
-    }
-  ); //TO DO
+  //   const filters = PatientResultData.filter(
+  //     //filters data
+  //     (data) => {
+  //       return (
+  //         (data.FullName.toLowerCase().includes(filtered) ||
+  //           data.NHI.toLowerCase().includes(filtered) ||
+  //           data.Subject.toLowerCase().includes(filtered)) &&
+  //         data.VisitType.toLowerCase().includes(filteredVisitType) &&
+  //         data.Status.toLowerCase().includes(filteredStatus) &&
+  //         data.Payment.toLowerCase().includes(filteredPayment) &&
+  //         data.TriageLevel.toLowerCase().includes(filteredTriageLevel)
+  //       );
+  //     }
+  //   );
+
+  //   setFilteredData(filters);
+  // }; //TO DO
 
   let recordsPerPage = 12;
 
@@ -130,8 +138,13 @@ const Results = () => {
   let indexOfirstRecord = indexOFLastRecord - recordsPerPage;
   let paginationButtons = []; //setting initial value
   let paginationLength = Math.ceil(
-    (searchField === "" ? PatientResultData.length : filtering.length) /
-      recordsPerPage
+    (searchField === "" &&
+    visitType === "" &&
+    status === "" &&
+    payment === "" &&
+    triageLevel === ""
+      ? PatientResultData.length
+      : filteredData.length) / recordsPerPage
   );
 
   for (let i = 0; i < paginationLength; i++) {
@@ -141,15 +154,41 @@ const Results = () => {
   useEffect(() => {
     updateRecord(); //calling updateRecord when currentPage is updated
     setLoadingTable(false);
-  }, [currentPage, searchField]);
+  }, [currentPage, searchField, visitType, status, payment, triageLevel]);
 
   const updateRecord = () => {
-    if (searchField === "") {
+    if (
+      searchField === "" &&
+      visitType === "" &&
+      status === "" &&
+      payment === "" &&
+      triageLevel === ""
+    ) {
       setUpdatedData(
         PatientResultData.slice(indexOfirstRecord, indexOFLastRecord) //setting PatientResultData to updatedData when pages are changed.
       );
     } else {
-      setUpdatedData(filtering.slice(indexOfirstRecord, indexOFLastRecord));
+      const filtered = searchField.toLowerCase();
+      const filteredVisitType = visitType.toLowerCase();
+      const filteredStatus = status.toLowerCase();
+      const filteredPayment = payment.toLowerCase();
+      const filteredTriageLevel = triageLevel.toLowerCase();
+      const filters = PatientResultData.filter(
+        //filters data
+        (data) => {
+          return (
+            (data.FullName.toLowerCase().includes(filtered) ||
+              data.NHI.toLowerCase().includes(filtered) ||
+              data.Subject.toLowerCase().includes(filtered)) &&
+            data.VisitType.toLowerCase().includes(filteredVisitType) &&
+            data.Status.toLowerCase().includes(filteredStatus) &&
+            data.Payment.toLowerCase().includes(filteredPayment) &&
+            data.TriageLevel.toLowerCase().includes(filteredTriageLevel)
+          );
+        }
+      );
+      setFilteredData(filters);
+      setUpdatedData(filters.slice(indexOfirstRecord, indexOFLastRecord));
 
       if (currentPage > paginationLength) {
         //if currentPage is more than the paginationLength then make currentPage 1 so that user can see data.but this is temporary. will imprv this
