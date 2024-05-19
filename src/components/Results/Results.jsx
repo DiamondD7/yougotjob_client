@@ -107,31 +107,6 @@ const Results = () => {
   const [triageLevel, setTriageLevel] = useState("");
   const [filteredData, setFilteredData] = useState([]);
 
-  // const filtering = () => {
-  //   const filtered = searchField.toLowerCase();
-  //   const filteredVisitType = visitType.toLowerCase();
-  //   const filteredStatus = status.toLowerCase();
-  //   const filteredPayment = payment.toLowerCase();
-  //   const filteredTriageLevel = triageLevel.toLowerCase();
-
-  //   const filters = PatientResultData.filter(
-  //     //filters data
-  //     (data) => {
-  //       return (
-  //         (data.FullName.toLowerCase().includes(filtered) ||
-  //           data.NHI.toLowerCase().includes(filtered) ||
-  //           data.Subject.toLowerCase().includes(filtered)) &&
-  //         data.VisitType.toLowerCase().includes(filteredVisitType) &&
-  //         data.Status.toLowerCase().includes(filteredStatus) &&
-  //         data.Payment.toLowerCase().includes(filteredPayment) &&
-  //         data.TriageLevel.toLowerCase().includes(filteredTriageLevel)
-  //       );
-  //     }
-  //   );
-
-  //   setFilteredData(filters);
-  // }; //TO DO
-
   let recordsPerPage = 12;
 
   let indexOFLastRecord = currentPage * recordsPerPage;
