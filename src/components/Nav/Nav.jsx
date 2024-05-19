@@ -9,7 +9,9 @@ import {
   Note,
   Chat,
   ChalkboardTeacher,
+  Folders,
   Gear,
+  Invoice,
   BookOpenText,
   House,
 } from "@phosphor-icons/react";
@@ -188,26 +190,57 @@ const Nav = ({ setDisplayed, fakeRole }) => {
             ""
           )}
 
+          {fakeRole === "General Practitioner" ? (
+            <li
+              className={minimizedNav === true ? "minimizednav-icons" : ""}
+              style={
+                activeDisplay === "records"
+                  ? { backgroundColor: "#D6E8FF" }
+                  : {}
+              }
+            >
+              <button
+                className={minimizedNav === true ? "btn-normal" : "icon-label"}
+                onClick={() => onClickDisplayed("records")}
+                style={
+                  minimizedNav === false
+                    ? activeDisplay === "records"
+                      ? { backgroundColor: "#D6E8FF" }
+                      : {}
+                    : {}
+                }
+              >
+                <Invoice size={20} color="#454545" />
+                &nbsp;
+                {minimizedNav === true ? "" : "Records"}
+              </button>
+            </li>
+          ) : (
+            ""
+          )}
+
           <li
             className={minimizedNav === true ? "minimizednav-icons" : ""}
             style={
-              activeDisplay === "support" ? { backgroundColor: "#D6E8FF" } : {}
+              activeDisplay === "documents"
+                ? { backgroundColor: "#D6E8FF" }
+                : {}
             }
           >
             <button
               className={minimizedNav === true ? "btn-normal" : "icon-label"}
-              onClick={() => onClickDisplayed("support")}
+              onClick={() => onClickDisplayed("documents")}
               style={
                 minimizedNav === false
-                  ? activeDisplay === "support"
+                  ? activeDisplay === "documents"
                     ? { backgroundColor: "#D6E8FF" }
                     : {}
                   : {}
               }
             >
-              <ChalkboardTeacher size={20} color="#454545" />
+              <Folders size={20} color="#454545" />
               &nbsp;
-              {minimizedNav === true ? "" : "Support"}
+              {minimizedNav === true ? "" : "Documents"}
             </button>
           </li>
           <li
@@ -227,7 +260,7 @@ const Nav = ({ setDisplayed, fakeRole }) => {
                   : {}
               }
             >
-              <BookOpenText size={20} color="#454545" />
+              <ChalkboardTeacher size={20} color="#454545" />
               &nbsp;
               {minimizedNav === true ? "" : "Learning"}
             </button>

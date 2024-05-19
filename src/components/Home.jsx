@@ -6,7 +6,6 @@ import "../styles/homestyles.css";
 const Home = () => {
   const [displayed, setDisplayed] = useState("dashboard");
 
-  console.log(displayed);
   return (
     <>
       <div className="main-display__wrapper">
