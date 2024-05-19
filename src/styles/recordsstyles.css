@@ -30,3 +30,32 @@
     font-size: 11px;
     cursor: pointer;
 }
+
+.records-invoice-container__wrapper{
+    padding: 10px;
+}
+
+.norecordsfound__text{
+    position: absolute;
+    top:33%;
+    left:50%;
+    transform: translate(-50%, -50%);
+
+    font-size: 30px;
+    color: rgba(0,0,0,0.3);
+}
+
+.status-outcome__text{
+    display: inline-block;
+    font-size: 11px;
+    background-color: #9dcd5a;
+    color: #f3f3f3;
+    border-radius: 3px;
+    padding: 0 6px;
+
+}
+
+.status-outcome__date{
+    font-size: 11px;
+    color: rgba(0,0,0,0.3);
+}
