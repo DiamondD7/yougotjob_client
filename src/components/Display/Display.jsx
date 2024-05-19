@@ -6,7 +6,8 @@ import Results from "../Results/Results";
 import PhysicianProfile from "../ProfileDepartment/PhysicianProfile";
 import Dashboard from "../Dashboard/Dashboard";
 import Learning from "../Learning/Learning";
-import Support from "../Support/Support";
+import Documents from "../Documents/Documents";
+import Records from "../Records/Records";
 
 import "../../styles/displaystyles.css";
 const Display = ({ displayed }) => {
@@ -21,14 +22,16 @@ const Display = ({ displayed }) => {
           <Communication />
         ) : displayed === "results" ? (
           <Results />
-        ) : displayed === "support" ? (
-          <Support />
+        ) : displayed === "documents" ? (
+          <Documents />
         ) : displayed === "learning" ? (
           <Learning />
         ) : displayed === "dashboard" ? (
           <Dashboard />
         ) : displayed === "profile" ? (
           <PhysicianProfile />
+        ) : displayed === "records" ? (
+          <Records />
         ) : (
           ""
         )}
