@@ -80,6 +80,18 @@
     cursor: pointer;
 }
 
+.feescharge-table__btn{
+    font-size: 11px;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+}
+
+.delete{
+    color: red;
+    margin-right: 10px;
+}
+
 /* ----------------------------PatientDetailsContainer */
 
 .patientdetails-container__wrapper{
@@ -87,4 +99,97 @@
     height: 100px;
     border: 1px solid rgba(0,0,0,0.050);
     
+}
+
+/* ----------------------------PractionerDetailsContainer */
+
+.practionerdetails-container__wrapper{
+    width: 500px;
+    height: 100px;
+    border: 1px solid rgba(0,0,0,0.050);
+    margin-top: 20px;
+}
+
+/* ----------------------------InvoicePaymentContainer */
+
+.feescharge-container__wrapper{
+    width: 900px;
+    border: 1px solid rgba(0,0,0,0.050);
+    margin-left: 50px;
+}
+
+.feescharge-container__table{
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+}
+
+.feescharge-container__table thead{
+    font-size: 12px;
+    border: 1px solid rgba(0,0,0,0.050);;
+}
+
+.feescharge-container__table thead tr th{
+    padding:5px
+}
+
+
+
+.feescharge-container__table tbody tr{
+    font-size: 11px;
+    border: 1px solid rgba(0,0,0,0.050);;
+}
+
+.feescharge-container__table tbody tr td{
+    padding:10px 5px;
+}
+
+.feescharge-table-addFee__btn{
+    background-color: transparent;
+    font-size: 10px;
+    text-transform: uppercase;
+    padding: 2px 10px;
+    border: 1px solid #9dcd5a;
+    border-radius: 5px;
+    cursor: pointer;
+    
+}
+
+.feescharge-table-addFee__btn:hover{
+    background-color: #9dcd5a;
+    color: #f3f3f3;
+    
+}
+
+
+/* ----------------------------PaymentDetailsContainer */
+
+.paymentdetails-container__wrapper{
+    width: 900px;
+    border: 1px solid rgba(0,0,0,0.050);
+    margin:30px 0 0 50px;
+}
+
+.payment-table__btn{
+    font-size: 11px;
+    padding: 1px 10px;
+    background-color: transparent;
+    border: 1px solid #9dcd5a;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.payment-table__btn:hover{
+    background-color: #9dcd5a;
+    color: #f3f3f3;
+}
+
+
+/* ----------------------------NotesContainer */
+.notes-container__wrapper{
+    width: 900px;
+    height: 200px;
+    border: 1px solid rgba(0,0,0,0.050);
+    margin:30px 0 0 50px;
+    overflow: auto;
 }
