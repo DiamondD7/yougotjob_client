@@ -10,6 +10,7 @@ import Documents from "../Documents/Documents";
 import Records from "../Records/Records";
 
 import "../../styles/displaystyles.css";
+import Settings from "../Settings/Settings";
 const Display = ({ displayed }) => {
   return (
     <>
@@ -32,6 +33,8 @@ const Display = ({ displayed }) => {
           <PhysicianProfile />
         ) : displayed === "records" ? (
           <Records />
+        ) : displayed === "settings" ? (
+          <Settings />
         ) : (
           ""
         )}

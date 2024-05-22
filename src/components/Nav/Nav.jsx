@@ -273,7 +273,7 @@ const Nav = ({ setDisplayed, fakeRole }) => {
               </button>
             </li>
             <li className="settings-btn">
-              <button>
+              <button onClick={() => onClickDisplayed("settings")}>
                 <Gear size={20} color="#454545" />
               </button>
             </li>
