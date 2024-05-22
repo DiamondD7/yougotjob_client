@@ -1,0 +1,19 @@
+.settings-nav-settings {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+
+.settings-nav-container__wrapper {
+  margin: 30px 0 0 30px;
+  list-style: none;
+}
+
+.settings-nav-container__wrapper li button {
+  font-size: 13px;
+  margin-top: 10px;
+
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+}
