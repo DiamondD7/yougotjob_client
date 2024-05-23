@@ -9,11 +9,16 @@
   list-style: none;
 }
 
-.settings-nav-container__wrapper li button {
+.settings-nav__btn {
   font-size: 13px;
   margin-top: 10px;
 
   background-color: transparent;
   border: none;
   cursor: pointer;
+}
+
+.activeDisplay {
+  color: #9dcd5a;
+  font-weight: 500;
 }
