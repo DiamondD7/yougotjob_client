@@ -5,8 +5,17 @@
 }
 
 .settings-nav-container__wrapper {
+  border-right: 1px solid rgba(0, 0, 0, 0.2);
   margin: 30px 0 0 30px;
+  padding-right: 90px;
+  height: 95vh;
   list-style: none;
+}
+
+.setting-contents-display-container__wrapper {
+  height: 870px;
+  width: 1460px;
+  overflow: auto;
 }
 
 .settings-nav__btn {
