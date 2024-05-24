@@ -1,5 +1,6 @@
 .account-profile__wrapper {
   width: 400px;
+  height: 200px;
   border: 1px solid rgba(0, 0, 0, 0.05);
   padding: 5px;
 }
@@ -34,4 +35,91 @@
   padding-left: 5px;
   font-size: 10px;
   color: #9dcd5a;
+}
+
+.account-profile-contactnums__wrapper {
+  width: 500px;
+  height: 170px;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  padding: 5px;
+}
+
+.contactnums-container__table {
+  width: 100%;
+  text-align: left;
+  font-size: 11px;
+  border-collapse: collapse;
+}
+
+.contactnums-container__table thead tr th {
+  padding: 5px 0;
+}
+
+.contactnums-container__table tbody tr td {
+  padding: 5px 0;
+}
+
+.contactnums-container__table tbody tr {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+}
+
+.contactnums-container__table button {
+  font-size: 11px;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.addnew-contact__btn {
+  font-size: 12px;
+  margin-top: 6px;
+  background-color: #9dcd5a;
+  color: #f3f3f3;
+  border: none;
+  border-radius: 2px;
+  padding: 2px 5px;
+  cursor: pointer;
+}
+
+/* ------------------------- */
+.account-timezone__wrapper {
+  width: 950px;
+  height: 200px;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  padding: 10px;
+}
+
+.account-timezone__input {
+  font-size: 12px;
+  padding: 5px;
+  width: 100%;
+  outline: none;
+  border: 1px solid rgba(0, 0, 0, 0.3);
+  background-color: transparent;
+}
+
+.account-date-format__select {
+  font-size: 12px;
+  width: 200px;
+  outline: none;
+  border: 1px solid rgba(0, 0, 0, 0.3);
+  background-color: transparent;
+}
+
+.account-time-format__select {
+  font-size: 12px;
+  width: 200px;
+  outline: none;
+  border: 1px solid rgba(0, 0, 0, 0.3);
+  background-color: transparent;
+}
+
+.account-timezonesetting-save__btn {
+  padding: 1px 10px;
+  font-size: 12px;
+  background-color: #9dcd5a;
+  color: #f3f3f3;
+  border-radius: 2px;
+  cursor: pointer;
+  border: none;
 }
