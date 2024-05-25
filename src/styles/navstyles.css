@@ -7,6 +7,15 @@
   border-bottom: 1px solid black;
 }
 
+.hauouralogonav {
+  position: relative;
+  top: -90px;
+  left: 0px;
+  width: 120px;
+  height: 120px;
+  z-index: 1;
+}
+
 .dateMinimized {
   border-bottom: none;
 }
