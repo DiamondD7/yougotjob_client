@@ -1,0 +1,20 @@
+.security-settings__wrapper {
+  width: 700px;
+  height: 150px;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  padding: 10px;
+  border-radius: 10px;
+}
+
+.security-settings-textheading__text {
+  font-size: 12px;
+  width: 300px;
+}
+
+.security-settings-enable__btn {
+  background-color: #0059ff;
+  color: #f3f3f3;
+  border: none;
+  border-radius: 5px;
+  padding: 1px 10px;
+}
