@@ -1,5 +1,5 @@
 .account-profile__wrapper {
-  width: 400px;
+  width: 500px;
   height: 200px;
   border: 1px solid rgba(0, 0, 0, 0.05);
   padding: 5px;
@@ -9,26 +9,35 @@
   font-size: 12px;
 }
 
-.profilename {
-  font-size: 18px;
+.profileheader {
+  font-size: 14px;
   font-weight: bold;
 }
 
 .profiledetails {
+  color: rgba(0, 0, 0, 0.3);
+  font-weight: bold;
+  width: 110px;
+}
+
+.profilelabel {
   color: rgba(0, 0, 0, 0.6);
+  width: 110px;
 }
 
 .address {
+  color: rgba(0, 0, 0, 0.6);
   margin-top: 10px;
-
-  font-size: 13px;
-  font-weight: bold;
+  font-size: 12px;
 }
 
 .addressdetails {
-  color: rgba(0, 0, 0, 0.6);
+  color: rgba(0, 0, 0, 0.3);
+  font-weight: bold;
   margin: 3px 0 0 0;
   list-style: none;
+  font-size: 12px;
+  width: 220px;
 }
 
 .address-primary {
