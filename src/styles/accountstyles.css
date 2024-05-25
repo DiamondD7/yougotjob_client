@@ -41,6 +41,15 @@
   width: 220px;
 }
 
+.account-profile-edit__btn {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
 /* -------------------------------- */
 
 .account-profile-certification__wrapper {
@@ -130,7 +139,7 @@
 }
 
 /* ------------------------- */
-.account-timezone__wrapper {
+.account-timezone-edit__wrapper {
   width: 950px;
   height: 200px;
   border: 1px solid rgba(0, 0, 0, 0.05);
@@ -174,4 +183,45 @@
   border-radius: 2px;
   cursor: pointer;
   border: none;
+}
+
+.account-timezonesetting-cancel_btn {
+  padding: 1px 10px;
+  font-size: 12px;
+  background-color: transparent;
+  border-radius: 2px;
+  cursor: pointer;
+  border: none;
+}
+
+/* --------------------------------------------- */
+
+.account-timezone__wrapper {
+  width: 500px;
+  height: 200px;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  padding: 10px;
+  border-radius: 10px;
+}
+
+.account-timezone-edit__btn {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.account-timezone__text {
+  font-size: 12px;
+}
+
+.timezonelabel {
+  color: rgba(0, 0, 0, 0.6);
+}
+
+.timezonedetails {
+  color: rgba(0, 0, 0, 0.3);
+  font-weight: bold;
 }
