@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Pencil, Trash } from "@phosphor-icons/react";
 
 import "../../styles/accountstyles.css";
@@ -12,14 +12,8 @@ const Profile = () => {
             <p className="account-profile__text profileheader">
               Personal information
             </p>
-            <button
-              style={{
-                backgroundColor: "transparent",
-                border: "none",
-                cursor: "pointer",
-              }}
-            >
-              <Pencil size={13} /> Edit
+            <button className="account-profile-edit__btn">
+              <Pencil size={15} /> Edit
             </button>
           </div>
 
@@ -133,7 +127,7 @@ const Certifications = () => {
                       View
                     </a>
                   </td>
-                  <td>
+                  <td style={{ display: "flex", gap: "5px" }}>
                     <button>
                       <Pencil size={15} />
                     </button>
@@ -177,10 +171,10 @@ const Contacts = () => {
                   <td>henryrawr@gmail.com</td>
                   <td style={{ display: "flex", gap: "5px" }}>
                     <button>
-                      <Pencil size={12} />
+                      <Pencil size={15} />
                     </button>
                     <button>
-                      <Trash size={12} />
+                      <Trash size={15} />
                     </button>
                   </td>
                 </tr>
@@ -195,56 +189,138 @@ const Contacts = () => {
 };
 
 const TimezonesSettings = () => {
-  return (
-    <div>
-      <h3 style={{ color: "#9dcd5a", fontWeight: "bold" }}>
-        Timezone Settings
-      </h3>
-      <div className="account-timezone__wrapper">
-        <div>
-          <h5>Country</h5>
-          <input
-            type="text"
-            className="account-timezone__input"
-            value="New Zealand"
-          />
-        </div>
-        <div style={{ marginTop: "10px" }}>
-          <h5>Timezone</h5>
-          <input
-            type="text"
-            className="account-timezone__input"
-            value="Pacific/Auckland"
-          />
-        </div>
-        <div style={{ marginTop: "20px" }}>
-          <div
-            style={{
-              display: "flex",
-              gap: "50px",
-            }}
-          >
-            <div>
-              <h5>Date format</h5>
-              <select className="account-date-format__select">
-                <option value=""></option>
-                <option value="DD/MM/YYYY">DD/MM/YYYY</option>
-                <option value="MM/DD/YYYY">MM/DD/YYYY</option>
-              </select>
-            </div>
+  const [editActive, setEditActive] = useState(false);
 
-            <div>
-              <h5>Time format</h5>
-              <select className="account-time-format__select">
-                <option value=""></option>
-                <option value={true}>12-hour</option>
-                <option value={false}>24-hour</option>
-              </select>
+  const TimezoneEdit = () => {
+    return (
+      <div>
+        <div className="account-timezone-edit__wrapper">
+          <div>
+            <h5>Country</h5>
+            <input
+              type="text"
+              className="account-timezone__input"
+              value="New Zealand"
+            />
+          </div>
+          <div style={{ marginTop: "10px" }}>
+            <h5>Timezone</h5>
+            <input
+              type="text"
+              className="account-timezone__input"
+              value="Pacific/Auckland"
+            />
+          </div>
+          <div style={{ marginTop: "20px" }}>
+            <div
+              style={{
+                display: "flex",
+                gap: "50px",
+              }}
+            >
+              <div>
+                <h5>Date format</h5>
+                <select className="account-date-format__select">
+                  <option value=""></option>
+                  <option value="DD/MM/YYYY">DD/MM/YYYY</option>
+                  <option value="MM/DD/YYYY">MM/DD/YYYY</option>
+                </select>
+              </div>
+
+              <div>
+                <h5>Time format</h5>
+                <select className="account-time-format__select">
+                  <option value=""></option>
+                  <option value={true}>12-hour</option>
+                  <option value={false}>24-hour</option>
+                </select>
+              </div>
             </div>
           </div>
         </div>
+        <button
+          className="account-timezonesetting-cancel_btn"
+          onClick={() => setEditActive(false)}
+        >
+          Cancel
+        </button>
+        <button className="account-timezonesetting-save__btn">Save</button>
       </div>
-      <button className="account-timezonesetting-save__btn">Save</button>
+    );
+  };
+  return (
+    <div>
+      <h3 style={{ color: "#9dcd5a", fontWeight: "bold" }}>Timezone</h3>
+      {editActive === false ? (
+        <div className="account-timezone__wrapper">
+          <div style={{ display: "flex", justifyContent: "space-between" }}>
+            <p className="account-profile__text profileheader">
+              Timezone/Date preference
+            </p>
+            <button
+              className="account-timezone-edit__btn"
+              onClick={() => setEditActive(true)}
+            >
+              <Pencil size={15} />
+              Edit
+            </button>
+          </div>
+          <div style={{ width: "57%" }}>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                marginTop: "20px",
+              }}
+            >
+              <p className="account-timezone__text timezonelabel">Country</p>
+              <p className="account-timezone__text timezonedetails">
+                New Zealand
+              </p>
+            </div>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                marginTop: "10px",
+              }}
+            >
+              <p className="account-timezone__text timezonelabel">Timezone</p>
+              <p className="account-timezone__text timezonedetails">
+                Pacific/Auckland
+              </p>
+            </div>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                marginTop: "10px",
+              }}
+            >
+              <p className="account-timezone__text timezonelabel">
+                Date Format
+              </p>
+              <p className="account-timezone__text timezonedetails">
+                DD/MM/YYYY
+              </p>
+            </div>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                marginTop: "10px",
+              }}
+            >
+              <p className="account-timezone__text timezonelabel">
+                Time Format
+              </p>
+              <p className="account-timezone__text timezonedetails">24-Hour</p>
+            </div>
+          </div>
+        </div>
+      ) : (
+        <TimezoneEdit />
+      )}
     </div>
   );
 };
