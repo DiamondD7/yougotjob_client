@@ -2,7 +2,8 @@
   width: 500px;
   height: 200px;
   border: 1px solid rgba(0, 0, 0, 0.05);
-  padding: 5px;
+  padding: 10px;
+  border-radius: 10px;
 }
 
 .account-profile__text {
@@ -40,11 +41,55 @@
   width: 220px;
 }
 
+/* -------------------------------- */
+
+.account-profile-certification__wrapper {
+  width: 880px;
+  height: 170px;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  padding: 10px;
+  border-radius: 10px;
+}
+
+.certification-container__table {
+  width: 100%;
+  text-align: left;
+  font-size: 11px;
+  border-collapse: collapse;
+}
+
+.certification-container__table thead tr th {
+  padding: 5px;
+}
+
+.certification-container__table tbody tr td {
+  padding: 5px;
+}
+
+.certification-container__table tbody tr {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+}
+
+.certification-container__table button {
+  font-size: 11px;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.certificationheader {
+  font-size: 14px;
+  font-weight: bold;
+}
+
+/* -------------------------------- */
+
 .account-profile-contactnums__wrapper {
   width: 500px;
   height: 170px;
   border: 1px solid rgba(0, 0, 0, 0.05);
-  padding: 5px;
+  padding: 10px;
+  border-radius: 10px;
 }
 
 .contactnums-container__table {
@@ -90,6 +135,7 @@
   height: 200px;
   border: 1px solid rgba(0, 0, 0, 0.05);
   padding: 10px;
+  border-radius: 10px;
 }
 
 .account-timezone__input {
@@ -99,6 +145,7 @@
   outline: none;
   border: 1px solid rgba(0, 0, 0, 0.3);
   background-color: transparent;
+  border-radius: 5px;
 }
 
 .account-date-format__select {
@@ -107,6 +154,7 @@
   outline: none;
   border: 1px solid rgba(0, 0, 0, 0.3);
   background-color: transparent;
+  border-radius: 5px;
 }
 
 .account-time-format__select {
@@ -114,6 +162,7 @@
   width: 200px;
   outline: none;
   border: 1px solid rgba(0, 0, 0, 0.3);
+  border-radius: 5px;
   background-color: transparent;
 }
 

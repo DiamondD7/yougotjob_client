@@ -5,8 +5,8 @@ import "../../styles/accountstyles.css";
 const Profile = () => {
   return (
     <div>
-      <h2 style={{ color: "#9dcd5a", fontWeight: "bold" }}>Profile</h2>
-      <div style={{ display: "flex", gap: "50px" }}>
+      <h3 style={{ color: "#9dcd5a", fontWeight: "bold" }}>Profile</h3>
+      <div style={{ display: "flex", gap: "20px" }}>
         <div className="account-profile__wrapper">
           <div style={{ display: "flex", justifyContent: "space-between" }}>
             <p className="account-profile__text profileheader">
@@ -87,6 +87,66 @@ const Profile = () => {
             </ul>
           </div>
         </div>
+
+        <Certifications />
+      </div>
+    </div>
+  );
+};
+
+const Certifications = () => {
+  return (
+    <div>
+      <div>
+        <div className="account-profile-certification__wrapper">
+          <div style={{ overflow: "auto", height: "150px" }}>
+            <p className="account-profile__text certificationheader">
+              Certifications
+            </p>
+            <table className="certification-container__table">
+              <thead>
+                <tr>
+                  <th>Certification Name</th>
+                  <th>Issuing Organization</th>
+                  <th>Date Issued</th>
+                  <th>Expiration Date</th>
+                  <th>Certification ID</th>
+                  <th>Certification Level</th>
+                  <th>Description</th>
+                  <th>Attachments</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Certified Data Professional</td>
+                  <td>Data Management Association (DAMA)</td>
+                  <td>2023-04-15</td>
+                  <td>2026-04-14</td>
+                  <td>CDP-123456</td>
+                  <td>Advanced</td>
+                  <td>
+                    Certification for data management and data governance.
+                  </td>
+                  <td>
+                    <a href="certificate.pdf" target="_blank">
+                      View
+                    </a>
+                  </td>
+                  <td>
+                    <button>
+                      <Pencil size={15} />
+                    </button>
+                    <button>
+                      <Trash size={15} />
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <button className="addnew-contact__btn">Add new certification</button>
       </div>
     </div>
   );
@@ -96,7 +156,7 @@ const Contacts = () => {
   return (
     <div>
       <div>
-        <h2 style={{ color: "#9dcd5a", fontWeight: "bold" }}>Contacts</h2>
+        <h3 style={{ color: "#9dcd5a", fontWeight: "bold" }}>Contacts</h3>
         <div className="account-profile-contactnums__wrapper">
           <div style={{ marginTop: "10px", overflow: "auto", height: "130px" }}>
             <table className="contactnums-container__table">
@@ -137,9 +197,9 @@ const Contacts = () => {
 const TimezonesSettings = () => {
   return (
     <div>
-      <h2 style={{ color: "#9dcd5a", fontWeight: "bold" }}>
+      <h3 style={{ color: "#9dcd5a", fontWeight: "bold" }}>
         Timezone Settings
-      </h2>
+      </h3>
       <div className="account-timezone__wrapper">
         <div>
           <h5>Country</h5>
