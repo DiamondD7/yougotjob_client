@@ -29,13 +29,57 @@ const Settings = () => {
           </li>
           <li>
             <button
-              value="payments"
+              value="security"
               onClick={(e) => setActiveDisplay(e.target.value)}
               className={`settings-nav__btn ${
-                activeDisplay === "payments" ? "activeDisplay" : ""
+                activeDisplay === "security" ? "activeDisplay" : ""
               }`}
             >
-              Payments
+              Security
+            </button>
+          </li>
+          <li>
+            <button
+              value="notifications"
+              onClick={(e) => setActiveDisplay(e.target.value)}
+              className={`settings-nav__btn ${
+                activeDisplay === "notifications" ? "activeDisplay" : ""
+              }`}
+            >
+              Notifications
+            </button>
+          </li>
+          <li>
+            <button
+              value="language"
+              onClick={(e) => setActiveDisplay(e.target.value)}
+              className={`settings-nav__btn ${
+                activeDisplay === "language" ? "activeDisplay" : ""
+              }`}
+            >
+              Language
+            </button>
+          </li>
+          <li>
+            <button
+              value="billing"
+              onClick={(e) => setActiveDisplay(e.target.value)}
+              className={`settings-nav__btn ${
+                activeDisplay === "billing" ? "activeDisplay" : ""
+              }`}
+            >
+              Billing
+            </button>
+          </li>
+          <li>
+            <button
+              value="dataex"
+              onClick={(e) => setActiveDisplay(e.target.value)}
+              className={`settings-nav__btn ${
+                activeDisplay === "dataex" ? "activeDisplay" : ""
+              }`}
+            >
+              Data Export
             </button>
           </li>
           <li>
