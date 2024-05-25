@@ -15,6 +15,7 @@ import {
   BookOpenText,
   House,
 } from "@phosphor-icons/react";
+import NavLogo from "../../assets/img/HauoraNav.png";
 
 import "../../styles/navstyles.css";
 
@@ -42,7 +43,11 @@ const Nav = ({ setDisplayed, fakeRole }) => {
               minimizedNav === true ? "dateMinimized" : ""
             }`}
           >
-            <p>Hauora Logo</p>
+            {minimizedNav === false ? (
+              <img src={NavLogo} className="hauouralogonav" alt="hauora logo" />
+            ) : (
+              ""
+            )}
             <div>
               <button
                 className="nav-menu-arrow__button"
