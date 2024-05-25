@@ -3,6 +3,7 @@ import { Gear } from "@phosphor-icons/react";
 
 import "../../styles/settingsstyles.css";
 import Account from "./Account";
+import Security from "./Security";
 const Settings = () => {
   const [activeDisplay, setActiveDisplay] = useState("");
 
@@ -106,7 +107,13 @@ const Settings = () => {
           </li>
         </ul>
         <div style={{ marginTop: "50px" }}>
-          {activeDisplay === "account" ? <Account /> : ""}
+          {activeDisplay === "account" ? (
+            <Account />
+          ) : activeDisplay === "security" ? (
+            <Security />
+          ) : (
+            ""
+          )}
         </div>
       </div>
     </div>
