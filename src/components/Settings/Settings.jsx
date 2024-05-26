@@ -4,6 +4,7 @@ import { Gear } from "@phosphor-icons/react";
 import "../../styles/settingsstyles.css";
 import Account from "./Account";
 import Security from "./Security";
+import Notifications from "./Notifications";
 const Settings = () => {
   const [activeDisplay, setActiveDisplay] = useState("");
 
@@ -111,6 +112,8 @@ const Settings = () => {
             <Account />
           ) : activeDisplay === "security" ? (
             <Security />
+          ) : activeDisplay === "notifications" ? (
+            <Notifications />
           ) : (
             ""
           )}
