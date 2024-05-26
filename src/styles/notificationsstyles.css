@@ -1,0 +1,29 @@
+.security-notification__wrapper {
+  width: 700px;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  padding: 10px;
+  border-radius: 10px;
+}
+
+.security-notification-subtexts__text {
+  font-size: 12px;
+}
+.security-notification-bodytext__text {
+  font-size: 12px;
+  width: 300px;
+}
+
+.security-notification-textheader__text {
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.security-settings-enable__btn {
+  height: 25px;
+  background-color: #9dcd5a;
+  color: #f3f3f3;
+  border: none;
+  border-radius: 5px;
+  padding: 1px 10px;
+  cursor: pointer;
+}
