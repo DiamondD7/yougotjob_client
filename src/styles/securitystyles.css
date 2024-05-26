@@ -1,6 +1,5 @@
 .security-settings__wrapper {
   width: 700px;
-  height: 150px;
   border: 1px solid rgba(0, 0, 0, 0.05);
   padding: 10px;
   border-radius: 10px;
@@ -8,13 +7,113 @@
 
 .security-settings-textheading__text {
   font-size: 12px;
-  width: 300px;
+  width: 500px;
 }
 
 .security-settings-enable__btn {
-  background-color: #0059ff;
+  height: 25px;
+  background-color: #9dcd5a;
   color: #f3f3f3;
   border: none;
   border-radius: 5px;
   padding: 1px 10px;
+  cursor: pointer;
+}
+
+.security-settings-smsrecovery__text {
+  font-size: 12px;
+  font-weight: bold;
+}
+.security-settings-smsnumber__text {
+  font-size: 12px;
+}
+
+.security-settings-setup__btn {
+  font-weight: 12px;
+  font-weight: bold;
+  border: none;
+  background-color: transparent;
+  padding: 1px 10px;
+  cursor: pointer;
+}
+
+.security-settings-emailrecovery__text {
+  font-size: 12px;
+  font-weight: bold;
+}
+.security-settings-emaildetail__text {
+  font-size: 12px;
+}
+
+.security-settings__wrapper {
+  width: 700px;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  padding: 10px;
+  border-radius: 10px;
+}
+
+.security-password__text {
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.security-password-textheading__text {
+  font-size: 12px;
+  margin-top: 10px;
+  width: 500px;
+}
+
+.security-password-rules__wrapper {
+  width: 170px;
+  height: 200px;
+  border-radius: 5px;
+  background-color: #cff29f;
+  padding: 10px;
+}
+
+.security-password-input {
+  width: 300px;
+  outline: none;
+  padding: 0 5px;
+  border-radius: 5px;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+}
+
+.security-password-input__text {
+  margin-top: 10px;
+  font-size: 12px;
+  font-weight: bold;
+  color: rgba(0, 0, 0, 0.3);
+}
+
+.security-password-change__btn {
+  margin-top: 10px;
+  padding: 1px 10px;
+  background-color: #9dcd5a;
+  color: #f3f3f3;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.security-password-cancelchange__btn {
+  margin: 10px 10px 0 0;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.security-password-rules__text {
+  font-size: 11px;
+  margin-top: 10px;
+  color: rgba(0, 0, 0, 0.6);
+}
+
+.security-password-rules-lists {
+  margin-top: 10px;
+  font-size: 11px;
+  margin-left: 20px;
+}
+.security-password-rules-lists li {
+  color: rgba(0, 0, 0, 0.6);
 }
