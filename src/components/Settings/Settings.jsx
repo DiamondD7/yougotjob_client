@@ -5,6 +5,7 @@ import "../../styles/settingsstyles.css";
 import Account from "./Account";
 import Security from "./Security";
 import Notifications from "./Notifications";
+import Billing from "./Billing";
 const Settings = () => {
   const [activeDisplay, setActiveDisplay] = useState("");
 
@@ -114,6 +115,8 @@ const Settings = () => {
             <Security />
           ) : activeDisplay === "notifications" ? (
             <Notifications />
+          ) : activeDisplay === "billing" ? (
+            <Billing />
           ) : (
             ""
           )}
