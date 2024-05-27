@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 
 import "../../styles/notificationsstyles.css";
 const Notifications = () => {
+  const [enabledBtn, setEnabledBtn] = useState(false);
   return (
     <div>
       <h3 style={{ color: "#9dcd5a", fontWeight: "bold" }}>Notifications</h3>
@@ -27,7 +28,14 @@ const Notifications = () => {
             </p>
           </div>
           <div>
-            <button className="security-settings-enable__btn">Enable</button>
+            <button
+              className={`security-settings-enable__btn ${
+                enabledBtn === true ? "disabledNotif" : ""
+              }`}
+              onClick={() => setEnabledBtn(!enabledBtn)}
+            >
+              {enabledBtn === true ? "Disable" : "Enable"}
+            </button>
           </div>
         </div>
         <div
