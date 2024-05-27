@@ -1,0 +1,17 @@
+.settings-billing__wrapper {
+  width: 700px;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  padding: 10px;
+  border-radius: 10px;
+}
+
+.setting-billing-label__text {
+  font-size: 12px;
+}
+
+.setting-billing-name__text {
+  padding: 3px 0;
+  font-size: 12px;
+  font-weight: bold;
+  color: rgba(0, 0, 0, 0.3);
+}
