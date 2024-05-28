@@ -74,17 +74,7 @@ const Settings = () => {
               Billing
             </button>
           </li>
-          <li>
-            <button
-              value="dataex"
-              onClick={(e) => setActiveDisplay(e.target.value)}
-              className={`settings-nav__btn ${
-                activeDisplay === "dataex" ? "activeDisplay" : ""
-              }`}
-            >
-              Data Export
-            </button>
-          </li>
+
           <li>
             <button
               value="privacy"
