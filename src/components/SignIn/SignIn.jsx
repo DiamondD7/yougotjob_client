@@ -1,10 +1,42 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { AddHealthPractitionerUser } from "../../assets/js/serverApi";
 
 import "../../styles/signinstyles.css";
 const SignIn = () => {
   const [signUpClicked, setSignUpClicked] = useState(false);
+  const [loggedInUser, setLoggedInUser] = useState([]);
+  const [registrationNumber, setRegistrationNumber] = useState("");
+  const [fullName, setFullName] = useState("");
+  const [emailAddress, setEmailAddress] = useState("");
+  const [password, setPassword] = useState("");
 
+  var today = new Date();
+  const HandlingSignUp = (e) => {
+    e.preventDefault();
+    fetch(AddHealthPractitionerUser, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify({
+        RegistrationNumber: registrationNumber,
+        FullName: fullName,
+        EmailAddress: emailAddress,
+        Role: "Practitioner",
+        UserPassword: password,
+        DOB: today,
+        EmailRecovery: "",
+        Mobile: "",
+        MobileRecovery: "",
+        Certifications: [],
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+      });
+  };
   return (
     <div className="signin__wrapper">
       <div className="logo"></div>
@@ -39,14 +71,30 @@ const SignIn = () => {
       ) : (
         <div className="signinform-container__wrapper">
           <h1>Sign up</h1>
-          <form>
+          <form onSubmit={HandlingSignUp}>
             <div>
-              <input type="text" placeholder="Registration Number" />
-              <input type="text" placeholder="Full Name" />
+              <input
+                type="text"
+                placeholder="Registration Number"
+                onChange={(e) => setRegistrationNumber(e.target.value)}
+              />
+              <input
+                type="text"
+                placeholder="Full Name"
+                onChange={(e) => setFullName(e.target.value)}
+              />
             </div>
-            <input type="text" placeholder="Email" />
+            <input
+              type="text"
+              placeholder="Email"
+              onChange={(e) => setEmailAddress(e.target.value)}
+            />
             <br />
-            <input type="password" placeholder="Password" />
+            <input
+              type="password"
+              placeholder="Password"
+              onChange={(e) => setPassword(e.target.value)}
+            />
             <div style={{ display: "flex", justifyContent: "center" }}>
               <p className="termsofuse__text">
                 By signing up to create an account: I accept Terms of Use and
@@ -55,7 +103,7 @@ const SignIn = () => {
             </div>
             <br />
             <br />
-            <button>Submit</button>
+            <button type="submit">Submit</button>
           </form>
         </div>
       )}
