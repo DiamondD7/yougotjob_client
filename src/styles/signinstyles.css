@@ -80,3 +80,17 @@
 .contact-number__text{
     color: rgba(0, 0, 0, 0.35);
 }
+
+.signin-signup__btn{
+    color: #9DCD5A;
+    cursor: pointer;
+    background-color: transparent;
+    border: none;
+}
+
+/* ----------------------------------------- */
+
+.termsofuse__text{
+    font-size: 12px;
+    width: 60%;
+}
