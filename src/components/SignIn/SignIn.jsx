@@ -1,10 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { AddHealthPractitionerUser } from "../../assets/js/serverApi";
+import {
+  AddHealthPractitionerUser,
+  GetaHealthPractitioner,
+  CheckPassword,
+} from "../../assets/js/serverApi";
 
 import "../../styles/signinstyles.css";
-const SignIn = () => {
+const SignIn = ({ setUserLogged }) => {
   const [signUpClicked, setSignUpClicked] = useState(false);
-  const [loggedInUser, setLoggedInUser] = useState([]);
+  const [loggedInUserId, setLoggedInUserId] = useState(0);
   const [registrationNumber, setRegistrationNumber] = useState("");
   const [fullName, setFullName] = useState("");
   const [emailAddress, setEmailAddress] = useState("");
@@ -37,6 +41,51 @@ const SignIn = () => {
         console.log(data);
       });
   };
+
+  const [signinEmailAddress, setSigninEmailAddress] = useState("");
+  const [signinPassword, setSigninPassword] = useState("");
+  const [checkedPassword, setCheckedPassword] = useState(false);
+
+  useState(() => {
+    fetch(`${GetaHealthPractitioner}/${localStorage.getItem("id")}`)
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+      });
+  }, [checkedPassword === true]);
+
+  const handleCheckPass = (e) => {
+    e.preventDefault();
+    fetch(CheckPassword, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify({
+        EmailAddress: signinEmailAddress,
+        UserPassword: signinPassword,
+        RegistrationNumber: "",
+        FullName: "",
+        Role: "",
+        DOB: today,
+        EmailRecovery: "",
+        Mobile: "",
+        MobileRecovery: "",
+        Certifications: [],
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+        setUserLogged(data, true); //setData and auth
+        setCheckedPassword(true);
+        localStorage.setItem("id", data.id);
+      })
+      .catch((err) => {
+        console.log(err); //error
+      });
+  };
   return (
     <div className="signin__wrapper">
       <div className="logo"></div>
@@ -44,11 +93,19 @@ const SignIn = () => {
         <div className="signinform-container__wrapper">
           <h1>Sign in</h1>
           <form>
-            <input type="text" placeholder="Username" />
+            <input
+              type="text"
+              placeholder="Email"
+              onChange={(e) => setSigninEmailAddress(e.target.value)}
+            />
             <br />
-            <input type="password" placeholder="Password" />
+            <input
+              type="password"
+              placeholder="Password"
+              onChange={(e) => setSigninPassword(e.target.value)}
+            />
             <br />
-            <button>Submit</button>
+            <button onClick={handleCheckPass}>Submit</button>
           </form>
           <p>or</p>
           <br />
