@@ -6,6 +6,7 @@ import PatientsHome from "./components/HomeDepartments/PatientsHome";
 import { Route, Routes } from "react-router-dom";
 
 import "./App.css";
+import { useEffect, useState } from "react";
 
 function App() {
   const fakeUser = {
@@ -33,24 +34,40 @@ function App() {
     fakeRole = "Patients";
   }
 
+  const [userLogged, setUserLogged] = useState(false);
+  const [userLoggedData, setUserLoggedData] = useState([]);
+
+  useEffect(() => {
+    localData();
+  }, [userLogged]);
+  const localData = (data, localdat) => {
+    localStorage.setItem("auth", localdat);
+    setUserLogged(data);
+  };
+
   return (
     <>
       <>
         <Routes>
-          <Route path="/" element={<SignIn />} />
-          {/* <Route path="/home" element={<Home />} /> */}
-          <Route
-            path="/home"
-            element={
-              fakeRole === "Receptionist" ? (
-                <Receptionist fakeRole={fakeRole} />
-              ) : fakeRole === "General Practitioner" ? (
-                <GeneralPractioner fakeRole={fakeRole} />
-              ) : (
-                <PatientsHome />
-              )
-            }
-          />
+          {userLogged === undefined ? (
+            <Route
+              path="/"
+              element={<SignIn setUserLogged={setUserLogged} />}
+            />
+          ) : (
+            <Route
+              path="/home"
+              element={
+                fakeRole === "Receptionist" ? (
+                  <Receptionist fakeRole={fakeRole} />
+                ) : fakeRole === "General Practitioner" ? (
+                  <GeneralPractioner fakeRole={fakeRole} />
+                ) : (
+                  <PatientsHome />
+                )
+              }
+            />
+          )}
         </Routes>
       </>
     </>
