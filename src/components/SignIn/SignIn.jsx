@@ -47,10 +47,10 @@ const SignIn = ({ setUserLogged }) => {
   const [checkedPassword, setCheckedPassword] = useState(false);
 
   useState(() => {
-    fetch(`${GetaHealthPractitioner}/${localStorage.getItem("id")}`)
+    fetch(`${GetaHealthPractitioner}/${sessionStorage.getItem("id")}`)
       .then((res) => res.json())
       .then((data) => {
-        console.log(data);
+        console.log(data); //get the logged in user's data here.
       });
   }, [checkedPassword === true]);
 
@@ -80,7 +80,7 @@ const SignIn = ({ setUserLogged }) => {
         console.log(data);
         setUserLogged(data, true); //setData and auth
         setCheckedPassword(true);
-        localStorage.setItem("id", data.id);
+        sessionStorage.setItem("id", data.id); //setting id in the local storage
       })
       .catch((err) => {
         console.log(err); //error
