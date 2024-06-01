@@ -12,6 +12,8 @@ const SignIn = ({ setUserLogged }) => {
   const [fullName, setFullName] = useState("");
   const [emailAddress, setEmailAddress] = useState("");
   const [password, setPassword] = useState("");
+  const [errorSignupMessage, setErrorSignupMessage] = useState("");
+  const [isError, setIsError] = useState(false);
 
   var today = new Date();
   const HandlingSignUp = (e) => {
@@ -37,8 +39,22 @@ const SignIn = ({ setUserLogged }) => {
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log(data);
+        if (data.returnStatus.status === false) {
+          setIsError(true); //setting error to be true
+          setErrorSignupMessage(data.returnStatus.message); //error message for the client to see
+        } else {
+          console.log(data);
+          validateError(); //calling function to set the error back to false once the user succeeded
+          setSignUpClicked(false); //going back to the sign in container after successfully signing up
+        }
+      })
+      .catch((err) => {
+        console.log(err);
       });
+  };
+
+  const validateError = () => {
+    setIsError(false);
   };
 
   const [signinEmailAddress, setSigninEmailAddress] = useState("");
@@ -47,11 +63,13 @@ const SignIn = ({ setUserLogged }) => {
   const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
-    fetch(`${GetaHealthPractitioner}/${sessionStorage.getItem("id")}`)
-      .then((res) => res.json())
-      .then((data) => {
-        console.log(data); //get the logged in user's data here.
-      });
+    if (checkedPassword === true) {
+      fetch(`${GetaHealthPractitioner}/${sessionStorage.getItem("id")}`)
+        .then((res) => res.json())
+        .then((data) => {
+          console.log(data); //get the logged in user's data here.
+        });
+    }
   }, [checkedPassword]);
 
   const handleCheckPass = (e) => {
@@ -114,7 +132,12 @@ const SignIn = ({ setUserLogged }) => {
               onChange={(e) => setSigninPassword(e.target.value)}
             />
             <br />
-            <button onClick={handleCheckPass}>Submit</button>
+            <button
+              className="signup-signin-submit__btn"
+              onClick={handleCheckPass}
+            >
+              Submit
+            </button>
           </form>
           <p>or</p>
           <br />
@@ -137,7 +160,14 @@ const SignIn = ({ setUserLogged }) => {
       ) : (
         <div className="signinform-container__wrapper">
           <h1>Sign up</h1>
-          <form onSubmit={HandlingSignUp}>
+          {isError === true ? (
+            <p className="signinform-errormessage__text">
+              {errorSignupMessage}
+            </p>
+          ) : (
+            ""
+          )}
+          <form onSubmit={(e) => HandlingSignUp(e)}>
             <div>
               <input
                 type="text"
@@ -169,7 +199,16 @@ const SignIn = ({ setUserLogged }) => {
             </div>
             <br />
             <br />
-            <button type="submit">Submit</button>
+            <button className="signup-signin-submit__btn" type="submit">
+              Submit
+            </button>
+            <br />
+            <button
+              className="signup-back__btn"
+              onClick={() => setSignUpClicked(false)}
+            >
+              Back
+            </button>
           </form>
         </div>
       )}
