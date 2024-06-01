@@ -1,96 +1,102 @@
-.signin__wrapper{
-    width: 100vw;
-    height: 100vh;
-    background-color: #EFF6FF;
+.signin__wrapper {
+  width: 100vw;
+  height: 100vh;
+  background-color: #eff6ff;
 }
 
-.logo{
-    background-image: url(../assets/img/Hauora.png);
-    height: 500px;
-    width: 500px;
-    
-    position: absolute;
-    top:10%;
-    left:50%;
-    transform: translate(-50%, -50%);
+.logo {
+  background-image: url(../assets/img/Hauora.png);
+  height: 500px;
+  width: 500px;
+
+  position: absolute;
+  top: 10%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 
+.signinform-container__wrapper {
+  height: 65%;
+  width: 30%;
 
-.signinform-container__wrapper{
-    height: 65%;
-    width: 30%;
-
-    background-color: #E5F0FF;
-    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
-    border-radius: 20px;
-    position: absolute;
-    top:50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    padding: 10px;
+  background-color: #e5f0ff;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  border-radius: 20px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 10px;
 }
 
-.signinform-container__wrapper h1{
-    text-align: center;
-    letter-spacing: 1px;
-    margin-bottom: 30px;
+.signinform-container__wrapper h1 {
+  text-align: center;
+  letter-spacing: 1px;
+  margin-bottom: 30px;
 }
 
-.signinform-container__wrapper form{
-    text-align: center;
+.signinform-errormessage__text {
+  color: red;
+  font-weight: bold;
+  padding: 5px;
+  font-size: 12px;
 }
 
-.signinform-container__wrapper input{
-    width: 60%;
-    font-size: 12px;
-    letter-spacing: 1px;
-    border-radius: 10px;
-    padding: 10px;
-    border: none;
-    background-color: rgba(0, 0, 0, 0.1);
-    margin-bottom: 10px;
+.signinform-container__wrapper form {
+  text-align: center;
 }
 
-.signinform-container__wrapper form button{
-    width: 60%;
-    font-size: 10px;
-    padding: 3px 0;
-    margin-top: 20px;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    cursor: pointer;
-
-    color: #f3f3f3;
-    border-radius: 5px;
-    background-color: #9DCD5A;
-    border: none;
+.signinform-container__wrapper input {
+  width: 60%;
+  font-size: 12px;
+  letter-spacing: 1px;
+  border-radius: 10px;
+  padding: 10px;
+  border: none;
+  background-color: rgba(0, 0, 0, 0.1);
+  margin-bottom: 10px;
 }
 
-.signinform-container__wrapper p{
-    margin-top: 30px;
-    text-align: center;
+.signinform-container__wrapper form button {
+  width: 60%;
+  font-size: 10px;
+  padding: 3px 0;
+  margin-top: 20px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  cursor: pointer;
+
+  color: #f3f3f3;
+  border-radius: 5px;
+  background-color: #9dcd5a;
+  border: none;
 }
 
-.signinform-container__wrapper h2{
-    font-size: 18px;
-    color: rgba(0, 0, 0, 0.5);
-    text-align: center;
+.signinform-container__wrapper p {
+  margin-top: 30px;
+  text-align: center;
 }
 
-.contact-number__text{
-    color: rgba(0, 0, 0, 0.35);
+.signinform-container__wrapper h2 {
+  font-size: 18px;
+  color: rgba(0, 0, 0, 0.5);
+  text-align: center;
 }
 
-.signin-signup__btn{
-    color: #9DCD5A;
-    cursor: pointer;
-    background-color: transparent;
-    border: none;
+.contact-number__text {
+  color: rgba(0, 0, 0, 0.35);
+}
+
+.signin-signup__btn {
+  color: #9dcd5a;
+  cursor: pointer;
+  background-color: transparent;
+  border: none;
 }
 
 /* ----------------------------------------- */
 
-.termsofuse__text{
-    font-size: 12px;
-    width: 60%;
+.termsofuse__text {
+  font-size: 12px;
+  width: 60%;
 }

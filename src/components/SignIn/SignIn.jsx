@@ -8,7 +8,6 @@ import {
 import "../../styles/signinstyles.css";
 const SignIn = ({ setUserLogged }) => {
   const [signUpClicked, setSignUpClicked] = useState(false);
-  const [loggedInUserId, setLoggedInUserId] = useState(0);
   const [registrationNumber, setRegistrationNumber] = useState("");
   const [fullName, setFullName] = useState("");
   const [emailAddress, setEmailAddress] = useState("");
@@ -45,14 +44,15 @@ const SignIn = ({ setUserLogged }) => {
   const [signinEmailAddress, setSigninEmailAddress] = useState("");
   const [signinPassword, setSigninPassword] = useState("");
   const [checkedPassword, setCheckedPassword] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
-  useState(() => {
+  useEffect(() => {
     fetch(`${GetaHealthPractitioner}/${sessionStorage.getItem("id")}`)
       .then((res) => res.json())
       .then((data) => {
         console.log(data); //get the logged in user's data here.
       });
-  }, [checkedPassword === true]);
+  }, [checkedPassword]);
 
   const handleCheckPass = (e) => {
     e.preventDefault();
@@ -77,10 +77,16 @@ const SignIn = ({ setUserLogged }) => {
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log(data);
-        setUserLogged(data, true); //setData and auth
-        setCheckedPassword(true);
-        sessionStorage.setItem("id", data.id); //setting id in the local storage
+        if (data.returnStatus.status === false) {
+          //checking if the status from the error is false or true
+          console.log(data.returnStatus.message); //error message
+          setErrorMessage(data.returnStatus.message);
+        } else {
+          console.log(data);
+          setUserLogged(data, true); //setData and auth
+          setCheckedPassword(true);
+          sessionStorage.setItem("id", data.id); //setting id in the local storage
+        }
       })
       .catch((err) => {
         console.log(err); //error
@@ -93,6 +99,9 @@ const SignIn = ({ setUserLogged }) => {
         <div className="signinform-container__wrapper">
           <h1>Sign in</h1>
           <form>
+            {errorMessage && (
+              <p className="signinform-errormessage__text">{errorMessage}</p>
+            )}
             <input
               type="text"
               placeholder="Email"
