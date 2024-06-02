@@ -111,6 +111,10 @@ const SignIn = ({ localData }) => {
         console.log(err); //error
       });
   };
+
+  useEffect(() => {
+    sessionStorage.setItem("id", 0); //reset id in the session
+  }, []);
   return (
     <div className="signin__wrapper">
       <div className="logo"></div>
