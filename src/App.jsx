@@ -37,36 +37,31 @@ function App() {
   const [userLogged, setUserLogged] = useState(false);
   const [userLoggedData, setUserLoggedData] = useState([]);
 
-  useEffect(() => {
-    localData();
-  }, [userLogged]);
-  const localData = (data, localdat) => {
-    localStorage.setItem("auth", localdat);
-    setUserLogged(data);
+  const localData = (data) => {
+    sessionStorage.setItem("auth", true);
+    setUserLoggedData(data.returnStatus.userDetails);
   };
+
+  console.log(userLoggedData);
 
   return (
     <>
       <>
         <Routes>
-          {userLogged === undefined ? (
-            <Route
-              path="/"
-              element={<SignIn setUserLogged={setUserLogged} />}
-            />
-          ) : (
+          <Route path="/" element={<SignIn localData={localData} />} />
+
+          {sessionStorage.getItem("auth") === "true" ? (
             <Route
               path="/home"
               element={
-                fakeRole === "Receptionist" ? (
-                  <Receptionist fakeRole={fakeRole} />
-                ) : fakeRole === "General Practitioner" ? (
-                  <GeneralPractioner fakeRole={fakeRole} />
-                ) : (
-                  <PatientsHome />
-                )
+                <GeneralPractioner
+                  userLoggedData={userLoggedData}
+                  setUserLoggedData={setUserLoggedData}
+                />
               }
             />
+          ) : (
+            ""
           )}
         </Routes>
       </>
