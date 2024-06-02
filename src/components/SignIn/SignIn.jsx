@@ -4,9 +4,10 @@ import {
   GetaHealthPractitioner,
   CheckPassword,
 } from "../../assets/js/serverApi";
+import { Link, useNavigate } from "react-router-dom";
 
 import "../../styles/signinstyles.css";
-const SignIn = ({ setUserLogged }) => {
+const SignIn = ({ localData }) => {
   const [signUpClicked, setSignUpClicked] = useState(false);
   const [registrationNumber, setRegistrationNumber] = useState("");
   const [fullName, setFullName] = useState("");
@@ -72,6 +73,7 @@ const SignIn = ({ setUserLogged }) => {
     }
   }, [checkedPassword]);
 
+  const navigate = useNavigate();
   const handleCheckPass = (e) => {
     e.preventDefault();
     fetch(CheckPassword, {
@@ -100,10 +102,9 @@ const SignIn = ({ setUserLogged }) => {
           console.log(data.returnStatus.message); //error message
           setErrorMessage(data.returnStatus.message);
         } else {
-          console.log(data);
-          setUserLogged(data, true); //setData and auth
+          localData(data); //setData and auth
           setCheckedPassword(true);
-          sessionStorage.setItem("id", data.id); //setting id in the local storage
+          navigate("/home");
         }
       })
       .catch((err) => {
@@ -132,12 +133,13 @@ const SignIn = ({ setUserLogged }) => {
               onChange={(e) => setSigninPassword(e.target.value)}
             />
             <br />
-            <button
-              className="signup-signin-submit__btn"
+            <Link
+              className="signin-submit__btn"
               onClick={handleCheckPass}
+              to="/home"
             >
               Submit
-            </button>
+            </Link>
           </form>
           <p>or</p>
           <br />

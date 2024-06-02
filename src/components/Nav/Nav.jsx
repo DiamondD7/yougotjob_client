@@ -18,8 +18,9 @@ import {
 import NavLogo from "../../assets/img/HauoraNav.png";
 
 import "../../styles/navstyles.css";
+import { Link } from "react-router-dom";
 
-const Nav = ({ setDisplayed, fakeRole }) => {
+const Nav = ({ setDisplayed, userLoggedData, setUserLoggedData }) => {
   const [minimizedNav, setMinimizedNav] = useState(false);
   const [activeDisplay, setActiveDisplay] = useState("dashboard");
 
@@ -83,8 +84,8 @@ const Nav = ({ setDisplayed, fakeRole }) => {
               {minimizedNav === true ? "" : "Dashboard"}
             </button>
           </li>
-          {fakeRole === "Receptionist" ||
-          fakeRole === "General Practitioner" ? (
+          {userLoggedData.role === "Receptionist" ||
+          userLoggedData.role === "Practitioner" ? (
             <li
               className={minimizedNav === true ? "minimizednav-icons" : ""}
               style={
@@ -112,8 +113,8 @@ const Nav = ({ setDisplayed, fakeRole }) => {
           ) : (
             ""
           )}
-          {fakeRole === "Receptionist" ||
-          fakeRole === "General Practitioner" ? (
+          {userLoggedData.role === "Receptionist" ||
+          userLoggedData.role === "General Practitioner" ? (
             <li
               className={minimizedNav === true ? "minimizednav-icons" : ""}
               style={
@@ -166,7 +167,7 @@ const Nav = ({ setDisplayed, fakeRole }) => {
             </button>
           </li> */}
 
-          {fakeRole === "General Practitioner" ? (
+          {userLoggedData.role === "Practitioner" ? (
             <li
               className={minimizedNav === true ? "minimizednav-icons" : ""}
               style={
@@ -195,7 +196,7 @@ const Nav = ({ setDisplayed, fakeRole }) => {
             ""
           )}
 
-          {fakeRole === "General Practitioner" ? (
+          {userLoggedData.role === "Practitioner" ? (
             <li
               className={minimizedNav === true ? "minimizednav-icons" : ""}
               style={
@@ -283,8 +284,15 @@ const Nav = ({ setDisplayed, fakeRole }) => {
               </button>
             </li>
             <li className="logout-btn">
-              <button>
-                <SignOut size={20} color="#454545" />
+              <button
+                onClick={() => {
+                  sessionStorage.setItem("auth", false);
+                  setUserLoggedData([]);
+                }}
+              >
+                <Link to="/">
+                  <SignOut size={20} color="#454545" />
+                </Link>
               </button>
               {minimizedNav === false ? (
                 <p className="nav-date__text">
