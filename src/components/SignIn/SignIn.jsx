@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import {
   AddHealthPractitionerUser,
   GetaHealthPractitioner,
+  CheckRegistration,
   CheckPassword,
 } from "../../assets/js/serverApi";
 import { Link, useNavigate } from "react-router-dom";
@@ -16,12 +17,16 @@ const SignIn = ({ localData }) => {
   const [password, setPassword] = useState("");
   const [errorSignupMessage, setErrorSignupMessage] = useState("");
   const [isError, setIsError] = useState(false);
+  const [isErrorRegistration, setIsErrorRegistration] = useState(false);
+  const [errorRegistrationMessage, setErrorRegistrationMessage] =
+    useState(false);
   const [isLoadingSignUp, setIsLoadingSignUp] = useState(false);
 
   var today = new Date();
-  const HandlingSignUp = (e) => {
+  const handlingSignUp = (e) => {
     e.preventDefault();
     setIsLoadingSignUp(true);
+    setIsErrorRegistration(false);
     setTimeout(() => {
       fetch(AddHealthPractitionerUser, {
         method: "POST",
@@ -49,9 +54,8 @@ const SignIn = ({ localData }) => {
             setIsError(true); //setting error to be true
             setErrorSignupMessage(data.returnStatus.message); //error message for the client to see
           } else {
-            console.log(data);
-            validateError(); //calling function to set the error back to false once the user succeeded
-            setSignUpClicked(false); //going back to the sign in container after successfully signing up
+            console.log(data); //DELETE
+            handleBackButton(); //called to restart values
           }
         })
         .catch((err) => {
@@ -60,13 +64,59 @@ const SignIn = ({ localData }) => {
     }, 3000);
   };
 
-  const validateError = () => {
+  const handlingCheckRegistration = (e) => {
+    e.preventDefault();
     setIsError(false);
+    fetch(CheckRegistration, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify({
+        RegistrationNumber: registrationNumber,
+        FullName: fullName,
+        EmailAddress: emailAddress,
+        Role: "Practitioner",
+        UserPassword: password,
+        DOB: today,
+        EmailRecovery: "",
+        Mobile: "",
+        MobileRecovery: "",
+        Certifications: [],
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setIsLoadingSignUp(false);
+        if (data.returnStatus.status === false) {
+          setIsErrorRegistration(true); //setting error to be true
+          setErrorRegistrationMessage(data.returnStatus.message); //error message for the client to see
+        } else {
+          console.log(data); //DELETE
+          handlingSignUp(e);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
+
+  const handleBackButton = () => {
+    //handlingBackButton when going back
+    //and called this in the handlingSignUp to restart all values
+    setSignUpClicked(false);
+    setIsError(false);
+    setIsErrorRegistration(false);
+    setFullName("");
+    setRegistrationNumber("");
+    setEmailAddress("");
+  };
+
+  // ------------------------------------------------------------------------------
 
   const [signinEmailAddress, setSigninEmailAddress] = useState("");
   const [signinPassword, setSigninPassword] = useState("");
-  const [checkedPassword, setCheckedPassword] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [isLoadingSignIn, setIsLoadingSignIn] = useState(false);
 
@@ -187,6 +237,13 @@ const SignIn = ({ localData }) => {
           ) : (
             ""
           )}
+          {isErrorRegistration === true ? (
+            <p className="signinform-errormessage__text">
+              {errorRegistrationMessage}
+            </p>
+          ) : (
+            ""
+          )}
           {isLoadingSignUp === true ? (
             <div>
               <CircleNotch
@@ -196,22 +253,25 @@ const SignIn = ({ localData }) => {
               />
             </div>
           ) : (
-            <form onSubmit={(e) => HandlingSignUp(e)}>
+            <form onSubmit={handlingCheckRegistration}>
               <div>
                 <input
                   type="text"
                   placeholder="Registration Number"
+                  value={registrationNumber}
                   onChange={(e) => setRegistrationNumber(e.target.value)}
                 />
                 <input
                   type="text"
                   placeholder="Full Name"
+                  value={fullName}
                   onChange={(e) => setFullName(e.target.value)}
                 />
               </div>
               <input
                 type="text"
                 placeholder="Email"
+                value={emailAddress}
                 onChange={(e) => setEmailAddress(e.target.value)}
               />
               <br />
@@ -232,10 +292,7 @@ const SignIn = ({ localData }) => {
                 Submit
               </button>
               <br />
-              <button
-                className="signup-back__btn"
-                onClick={() => setSignUpClicked(false)}
-              >
+              <button className="signup-back__btn" onClick={handleBackButton}>
                 Back
               </button>
             </form>
