@@ -46,7 +46,7 @@
   text-align: center;
 }
 
-.signinform-container__wrapper input {
+.signin-signup-form__input {
   width: 60%;
   font-size: 12px;
   letter-spacing: 1px;
@@ -55,6 +55,10 @@
   border: none;
   background-color: rgba(0, 0, 0, 0.1);
   margin-bottom: 10px;
+}
+
+.notvalidpwd {
+  border: 1px solid red;
 }
 
 .signup-signin-submit__btn {
@@ -148,4 +152,18 @@
   100% {
     transform: rotate(360deg);
   }
+}
+
+.password-notmatch__wrapper p {
+  margin: 0 0 0 114px;
+  text-align: start;
+  font-size: 10px;
+  color: red;
+}
+
+.passworderrornotvalid__wrapper p {
+  margin: 0;
+  text-align: center;
+  font-size: 10px;
+  color: red;
 }

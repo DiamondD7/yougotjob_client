@@ -10,23 +10,48 @@ import { CircleNotch } from "@phosphor-icons/react";
 
 import "../../styles/signinstyles.css";
 const SignIn = ({ localData }) => {
+  const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
   const [signUpClicked, setSignUpClicked] = useState(false);
   const [registrationNumber, setRegistrationNumber] = useState("");
   const [fullName, setFullName] = useState("");
   const [emailAddress, setEmailAddress] = useState("");
   const [password, setPassword] = useState("");
+  const [matchPwd, setMatchPwd] = useState("");
+  const [validPwdMatch, setValidPwdMatch] = useState(true);
+  const [validPwd, setValidPwd] = useState("");
+
   const [errorSignupMessage, setErrorSignupMessage] = useState("");
   const [isError, setIsError] = useState(false);
   const [isErrorRegistration, setIsErrorRegistration] = useState(false);
   const [errorRegistrationMessage, setErrorRegistrationMessage] =
     useState(false);
   const [isLoadingSignUp, setIsLoadingSignUp] = useState(false);
-
+  const [isErrrorPwd, setIsErrorPwd] = useState(false);
   var today = new Date();
+
+  useEffect(() => {
+    setValidPwd(PWD_REGEX.test(password));
+    if (PWD_REGEX.test(password) === true) {
+      setIsErrorPwd(false);
+    }
+    const match = password === matchPwd;
+    setValidPwdMatch(match);
+  }, [password, matchPwd]);
+
   const handlingSignUp = (e) => {
     e.preventDefault();
+    const isPwdValid = PWD_REGEX.test(password);
+    if (!validPwdMatch) {
+      console.log("Password do not match");
+      return;
+    }
+    if (!isPwdValid) {
+      setIsErrorPwd(true);
+      return;
+    }
     setIsLoadingSignUp(true);
     setIsErrorRegistration(false);
+
     setTimeout(() => {
       fetch(AddHealthPractitionerUser, {
         method: "POST",
@@ -108,9 +133,12 @@ const SignIn = ({ localData }) => {
     setSignUpClicked(false);
     setIsError(false);
     setIsErrorRegistration(false);
+    setIsErrorPwd(false);
     setFullName("");
     setRegistrationNumber("");
     setEmailAddress("");
+    setPassword("");
+    setMatchPwd("");
   };
 
   // ------------------------------------------------------------------------------
@@ -188,12 +216,14 @@ const SignIn = ({ localData }) => {
                   </p>
                 )}
                 <input
+                  className="signin-signup-form__input"
                   type="text"
                   placeholder="Email"
                   onChange={(e) => setSigninEmailAddress(e.target.value)}
                 />
                 <br />
                 <input
+                  className="signin-signup-form__input"
                   type="password"
                   placeholder="Password"
                   onChange={(e) => setSigninPassword(e.target.value)}
@@ -259,27 +289,60 @@ const SignIn = ({ localData }) => {
                   type="text"
                   placeholder="Registration Number"
                   value={registrationNumber}
+                  className="signin-signup-form__input"
                   onChange={(e) => setRegistrationNumber(e.target.value)}
                 />
                 <input
                   type="text"
                   placeholder="Full Name"
                   value={fullName}
+                  className="signin-signup-form__input"
                   onChange={(e) => setFullName(e.target.value)}
                 />
               </div>
               <input
+                required
                 type="text"
                 placeholder="Email"
                 value={emailAddress}
+                className="signin-signup-form__input"
                 onChange={(e) => setEmailAddress(e.target.value)}
               />
               <br />
+              <div>
+                {isErrrorPwd === true ? (
+                  <div className="passworderrornotvalid__wrapper">
+                    <p>password is not valid</p>
+                  </div>
+                ) : (
+                  ""
+                )}
+                <input
+                  required
+                  type="password"
+                  placeholder="Password"
+                  onChange={(e) => setPassword(e.target.value)}
+                  className={`signin-signup-form__input ${
+                    validPwd === false && password.length !== 0
+                      ? "notvalidpwd"
+                      : ""
+                  }`}
+                />
+              </div>
               <input
+                required
                 type="password"
-                placeholder="Password"
-                onChange={(e) => setPassword(e.target.value)}
+                placeholder="Confirm password"
+                className="signin-signup-form__input"
+                onChange={(e) => setMatchPwd(e.target.value)}
               />
+              {validPwdMatch === false && matchPwd.length !== 0 ? (
+                <div className="password-notmatch__wrapper">
+                  <p>Password do not match !</p>
+                </div>
+              ) : (
+                ""
+              )}
               <div style={{ display: "flex", justifyContent: "center" }}>
                 <p className="termsofuse__text">
                   By signing up to create an account: I accept Terms of Use and
