@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Pencil, Trash } from "@phosphor-icons/react";
+import { GetaHealthPractitioner } from "../../assets/js/serverApi";
 
 import "../../styles/accountstyles.css";
-const Profile = () => {
+const Profile = ({ loggedUserData }) => {
   return (
     <div>
       <h3 style={{ color: "#9dcd5a", fontWeight: "bold" }}>Profile</h3>
@@ -31,7 +32,7 @@ const Profile = () => {
             </div>
             <div>
               <p className="account-profile__text profiledetails">
-                Mahichit Sharma
+                {loggedUserData.fullName}
               </p>
             </div>
           </div>
@@ -47,7 +48,7 @@ const Profile = () => {
             <p className="account-profile__text profilelabel">Phone</p>
 
             <p className="account-profile__text profiledetails">
-              021-02102-021
+              {loggedUserData.mobile}
             </p>
           </div>
           <div
@@ -55,13 +56,12 @@ const Profile = () => {
               marginTop: "10px",
               display: "flex",
               justifyContent: "space-between",
-              gap: "100px",
               width: "300px",
             }}
           >
             <p className="account-profile__text profilelabel">Email Address</p>
             <p className="account-profile__text profiledetails">
-              sharma@gmail.com
+              {loggedUserData.emailAddress}
             </p>
           </div>
           <div
@@ -326,10 +326,19 @@ const TimezonesSettings = () => {
 };
 
 const Account = () => {
+  const [loggedUserData, setLoggedUserData] = useState([]);
+  useEffect(() => {
+    const id = parseInt(sessionStorage.getItem("id"));
+    fetch(`${GetaHealthPractitioner}/${id}`)
+      .then((res) => res.json())
+      .then((data) => {
+        setLoggedUserData(data);
+      });
+  }, []);
   return (
     <div>
       <div className="setting-contents-display-container__wrapper">
-        <Profile />
+        <Profile loggedUserData={loggedUserData} />
         <br />
         <br />
         <Contacts />
