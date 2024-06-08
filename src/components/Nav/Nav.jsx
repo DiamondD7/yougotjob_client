@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Calendar,
   Users,
@@ -16,13 +16,15 @@ import {
   House,
 } from "@phosphor-icons/react";
 import NavLogo from "../../assets/img/HauoraNav.png";
+import { Link } from "react-router-dom";
+import { GetaHealthPractitioner } from "../../assets/js/serverApi";
 
 import "../../styles/navstyles.css";
-import { Link } from "react-router-dom";
 
-const Nav = ({ setDisplayed, userLoggedData, setUserLoggedData }) => {
+const Nav = ({ setDisplayed }) => {
   const [minimizedNav, setMinimizedNav] = useState(false);
   const [activeDisplay, setActiveDisplay] = useState("dashboard");
+  const [userLoggedData, setUserLoggedData] = useState([]);
 
   const onClickDisplayed = (display) => {
     setDisplayed(display);
@@ -30,6 +32,15 @@ const Nav = ({ setDisplayed, userLoggedData, setUserLoggedData }) => {
   };
 
   let date = new Date();
+
+  useEffect(() => {
+    const id = parseInt(sessionStorage.getItem("id"));
+    fetch(`${GetaHealthPractitioner}/${id}`)
+      .then((res) => res.json())
+      .then((data) => {
+        setUserLoggedData(data);
+      });
+  }, []);
 
   return (
     <>
@@ -287,7 +298,6 @@ const Nav = ({ setDisplayed, userLoggedData, setUserLoggedData }) => {
               <button
                 onClick={() => {
                   sessionStorage.setItem("auth", false);
-                  setUserLoggedData([]);
                 }}
               >
                 <Link to="/">

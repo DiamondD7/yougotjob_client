@@ -11,23 +11,24 @@ import {
   MapPin,
   Video,
 } from "@phosphor-icons/react";
+import { GetaHealthPractitioner } from "../../assets/js/serverApi";
 
 import "../../styles/physicianprofilestyles.css";
-const HeaderProfile = () => {
+const HeaderProfile = ({ loggedUser }) => {
   return (
     <div>
       <div className="profile-details__wrapper">
         <div style={{ display: "flex", gap: "10px" }}>
-          <img
+          {/* <img
             className="profile-doctor-picture"
             src="https://plus.unsplash.com/premium_photo-1661764878654-3d0fc2eefcca?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
             alt="doctor-picture"
-          />
+          /> */}
           <div>
             <p style={{ fontSize: "20px", fontWeight: "bold" }}>
-              Dr. Mahichit Sharma
+              {loggedUser.fullName}
             </p>
-            <p>General Practioner</p>
+            <p>{loggedUser.role}</p>
             <div style={{ marginTop: "10px" }}>
               <div className="physician-profile-sub-details__wrapper">
                 <GraduationCap size={17} color="rgba(0,0,0,0.5)" />
@@ -39,11 +40,11 @@ const HeaderProfile = () => {
               </div>
               <div className="physician-profile-sub-details__wrapper">
                 <Envelope size={17} color="rgba(0,0,0,0.5)" />
-                <p style={{ fontSize: "13px" }}>mahichitsharma@clinic.com</p>
+                <p style={{ fontSize: "13px" }}>{loggedUser.emailAddress}</p>
               </div>
               <div className="physician-profile-sub-details__wrapper">
                 <Phone size={17} color="rgba(0,0,0,0.5)" />
-                <p style={{ fontSize: "13px" }}>02102102124</p>
+                <p style={{ fontSize: "13px" }}>{loggedUser.mobile}</p>
               </div>
 
               <button className="btnclear physician-profile-allinfo__btn">
@@ -286,10 +287,19 @@ const BodyProfile = () => {
 };
 
 const PhysicianProfile = () => {
+  const [loggedUser, setLoggedUser] = useState({});
+  useEffect(() => {
+    const id = parseInt(sessionStorage.getItem("id")); //parsed session id to int
+    fetch(`${GetaHealthPractitioner}/${id}`)
+      .then((res) => res.json())
+      .then((data) => {
+        setLoggedUser(data);
+      });
+  }, []);
   return (
     <div>
       <div>
-        <HeaderProfile />
+        <HeaderProfile loggedUser={loggedUser} />
       </div>
 
       <div>
