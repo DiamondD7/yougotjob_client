@@ -72,11 +72,11 @@ const SummaryCards = () => {
             <h5>Next appointment</h5>
           </div>
           <div className="dashboard-patient-card__wrapper">
-            <img
+            {/* <img
               src="https://images.unsplash.com/photo-1521119989659-a83eee488004?q=80&w=1923&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
               alt="test-picture"
               className="dashboard-card-profilepic"
-            />
+            /> */}
             <div>
               <h3>Aaron Sierra</h3>
               <label className="patient-card-id__label">ID:30004997</label>
@@ -104,11 +104,11 @@ const SummaryCards = () => {
             <h5>Previous appointment</h5>
           </div>
           <div className="dashboard-patient-card__wrapper">
-            <img
+            {/* <img
               src="https://images.unsplash.com/photo-1521119989659-a83eee488004?q=80&w=1923&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
               alt="test-picture"
               className="dashboard-card-profilepic"
-            />
+            /> */}
             <div>
               <h3>John Doe</h3>
               <label className="patient-card-id__label">ID:54004987</label>

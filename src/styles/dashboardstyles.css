@@ -27,14 +27,14 @@
   margin-left: 10px;
 }
 
-.dashboard-card-profilepic {
+/* .dashboard-card-profilepic {
   height: 70px;
   width: 70px;
   margin-right: 5px;
   border-radius: 50px;
   object-fit: cover;
   object-position: center center;
-}
+} */
 
 .patient-card-id__label {
   font-size: 12px;
@@ -44,7 +44,7 @@
 .dashboard-patient-card__wrapper {
   display: flex;
   align-items: center;
-  /* background-color: #9DCD5A; */
+  padding-left: 10px;
 }
 
 .dashboard-patient-card-details-h2-schedule {
