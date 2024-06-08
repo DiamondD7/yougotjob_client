@@ -3,7 +3,7 @@ import Nav from "../Nav/Nav";
 import Display from "../Display/Display";
 
 import "../../styles/homestyles.css";
-const GeneralPractioner = ({ userLoggedData, setUserLoggedData }) => {
+const GeneralPractioner = () => {
   const [displayed, setDisplayed] = useState("dashboard");
   return (
     <>
@@ -11,8 +11,6 @@ const GeneralPractioner = ({ userLoggedData, setUserLoggedData }) => {
         <>
           <Nav
             setDisplayed={setDisplayed}
-            userLoggedData={userLoggedData}
-            setUserLoggedData={setUserLoggedData}
           />
         </>
         <>

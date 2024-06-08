@@ -9,13 +9,11 @@ import "./App.css";
 import { useEffect, useState } from "react";
 
 function App() {
-  const [userLogged, setUserLogged] = useState(false);
   const [userLoggedData, setUserLoggedData] = useState([]);
 
   const localData = (data) => {
     sessionStorage.setItem("auth", true);
     sessionStorage.setItem("id", data.returnStatus.userDetails.id);
-    setUserLoggedData(data.returnStatus.userDetails);
   };
 
   return (
@@ -26,15 +24,7 @@ function App() {
         </Routes>
         {sessionStorage.getItem("auth") === "true" ? (
           <Routes>
-            <Route
-              path="/home"
-              element={
-                <GeneralPractioner
-                  userLoggedData={userLoggedData}
-                  setUserLoggedData={setUserLoggedData}
-                />
-              }
-            />
+            <Route path="/home" element={<GeneralPractioner />} />
           </Routes>
         ) : (
           ""
