@@ -225,3 +225,13 @@
   color: rgba(0, 0, 0, 0.3);
   font-weight: bold;
 }
+
+/* ------------------------------------------------------- */
+.contactnums-container__table input {
+  font-size: 11px;
+  width: 90%;
+}
+
+.save-contact__btn {
+  color: #9dcd5a;
+}

@@ -147,43 +147,104 @@ const Certifications = () => {
 };
 
 const Contacts = () => {
+  const [addNewContact, setAddNewContact] = useState(false);
   return (
     <div>
       <div>
         <h3 style={{ color: "#9dcd5a", fontWeight: "bold" }}>Contacts</h3>
+
         <div className="account-profile-contactnums__wrapper">
-          <div style={{ marginTop: "10px", overflow: "auto", height: "130px" }}>
-            <table className="contactnums-container__table">
-              <thead>
-                <tr>
-                  <th>Name</th>
-                  <th>Number</th>
-                  <th>Relationship</th>
-                  <th>Email</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>Mr Henry Sharma</td>
-                  <td>022022022022</td>
-                  <td>Father</td>
-                  <td>henryrawr@gmail.com</td>
-                  <td style={{ display: "flex", gap: "5px" }}>
-                    <button>
-                      <Pencil size={15} />
-                    </button>
-                    <button>
-                      <Trash size={15} />
-                    </button>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
+          {addNewContact === false ? (
+            <div
+              style={{ marginTop: "10px", overflow: "auto", height: "130px" }}
+            >
+              <table className="contactnums-container__table">
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Number</th>
+                    <th>Relationship</th>
+                    <th>Email</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Mr Henry Sharma</td>
+                    <td>022022022022</td>
+                    <td>Father</td>
+                    <td>henryrawr@gmail.com</td>
+                    <td style={{ display: "flex", gap: "5px" }}>
+                      <button>
+                        <Pencil size={15} />
+                      </button>
+                      <button>
+                        <Trash size={15} />
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          ) : (
+            <AddNewContact addNewContact={addNewContact} />
+          )}
         </div>
-        <button className="addnew-contact__btn">Add new contact</button>
+        <button
+          className="addnew-contact__btn"
+          onClick={() => setAddNewContact(!addNewContact)}
+        >
+          {addNewContact === false ? "Add new contact" : "Cancel"}
+        </button>
       </div>
+    </div>
+  );
+};
+
+const AddNewContact = ({ addNewContact }) => {
+  return (
+    <div className="addnewcontact__wrapper">
+      <table className="contactnums-container__table">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Number</th>
+            <th>Relationship</th>
+            <th>Email</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>
+              <input type="text" placeholder="Name" />
+            </td>
+            <td>
+              <input type="text" placeholder="Number" />
+            </td>
+            <td>
+              <input type="text" placeholder="Relationship" />
+            </td>
+            <td>
+              <input type="text" placeholder="Email" />
+            </td>
+            {addNewContact === false ? (
+              <td style={{ display: "flex", gap: "5px" }}>
+                <button>
+                  <Pencil size={15} />
+                </button>
+                <button>
+                  <Trash size={15} />
+                </button>
+              </td>
+            ) : (
+              <td>
+                <button className="save-contact__btn">Save</button>
+              </td>
+            )}
+          </tr>
+        </tbody>
+      </table>
     </div>
   );
 };
