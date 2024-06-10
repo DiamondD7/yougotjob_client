@@ -1,6 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { Pencil, Trash } from "@phosphor-icons/react";
-import { GetaHealthPractitioner } from "../../assets/js/serverApi";
+import {
+  GetaHealthPractitioner,
+  CreateContact,
+  GetEmergencyContact,
+  DeleteContact,
+} from "../../assets/js/serverApi";
 
 import "../../styles/accountstyles.css";
 const Profile = ({ loggedUserData }) => {
@@ -148,6 +153,31 @@ const Certifications = () => {
 
 const Contacts = () => {
   const [addNewContact, setAddNewContact] = useState(false);
+  const [emergencyContacts, setEmergencyContacts] = useState([]);
+
+  useEffect(() => {
+    const id = parseInt(sessionStorage.getItem("id"));
+    fetch(`${GetEmergencyContact}/${id}`)
+      .then((res) => res.json())
+      .then((res) => {
+        setEmergencyContacts(res.returnStatus.data);
+      });
+  }, [emergencyContacts]);
+
+  const deleteHandleContact = (e, id) => {
+    e.preventDefault();
+    fetch(`${DeleteContact}/${id}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        console.log(res); //logging result
+      });
+  };
   return (
     <div>
       <div>
@@ -169,25 +199,32 @@ const Contacts = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <td>Mr Henry Sharma</td>
-                    <td>022022022022</td>
-                    <td>Father</td>
-                    <td>henryrawr@gmail.com</td>
-                    <td style={{ display: "flex", gap: "5px" }}>
-                      <button>
-                        <Pencil size={15} />
-                      </button>
-                      <button>
-                        <Trash size={15} />
-                      </button>
-                    </td>
-                  </tr>
+                  {emergencyContacts.map((data, index) => (
+                    <tr key={index}>
+                      <td>{data.contactName}</td>
+                      <td>{data.contactMobile}</td>
+                      <td>{data.contactRelationship}</td>
+                      <td>{data.contactEmailAddress}</td>
+                      <td style={{ display: "flex", gap: "5px" }}>
+                        <button>
+                          <Pencil size={15} />
+                        </button>
+                        <button
+                          onClick={(e) => deleteHandleContact(e, data.id)}
+                        >
+                          <Trash size={15} />
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
                 </tbody>
               </table>
             </div>
           ) : (
-            <AddNewContact addNewContact={addNewContact} />
+            <AddNewContact
+              addNewContact={addNewContact}
+              setAddNewContact={setAddNewContact}
+            />
           )}
         </div>
         <button
@@ -201,7 +238,34 @@ const Contacts = () => {
   );
 };
 
-const AddNewContact = ({ addNewContact }) => {
+const AddNewContact = ({ addNewContact, setAddNewContact }) => {
+  const [formName, setFormName] = useState("");
+  const [formNumber, setFormNumber] = useState("");
+  const [formRelationship, setFormRelationship] = useState("");
+  const [formEmailAddress, setFormEmailAddress] = useState("");
+
+  const addedContact = (e) => {
+    e.preventDefault();
+    const id = parseInt(sessionStorage.getItem("id"));
+    fetch(CreateContact, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify({
+        PractitionerId: id,
+        ContactName: formName,
+        ContactMobile: formNumber,
+        ContactRelationship: formRelationship,
+        ContactEmailAddress: formEmailAddress,
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setAddNewContact(false);
+      });
+  };
   return (
     <div className="addnewcontact__wrapper">
       <table className="contactnums-container__table">
@@ -217,16 +281,32 @@ const AddNewContact = ({ addNewContact }) => {
         <tbody>
           <tr>
             <td>
-              <input type="text" placeholder="Name" />
+              <input
+                type="text"
+                placeholder="Name"
+                onChange={(e) => setFormName(e.target.value)}
+              />
             </td>
             <td>
-              <input type="text" placeholder="Number" />
+              <input
+                type="text"
+                placeholder="Number"
+                onChange={(e) => setFormNumber(e.target.value)}
+              />
             </td>
             <td>
-              <input type="text" placeholder="Relationship" />
+              <input
+                type="text"
+                placeholder="Relationship"
+                onChange={(e) => setFormRelationship(e.target.value)}
+              />
             </td>
             <td>
-              <input type="text" placeholder="Email" />
+              <input
+                type="text"
+                placeholder="Email"
+                onChange={(e) => setFormEmailAddress(e.target.value)}
+              />
             </td>
             {addNewContact === false ? (
               <td style={{ display: "flex", gap: "5px" }}>
@@ -239,7 +319,9 @@ const AddNewContact = ({ addNewContact }) => {
               </td>
             ) : (
               <td>
-                <button className="save-contact__btn">Save</button>
+                <button className="save-contact__btn" onClick={addedContact}>
+                  Save
+                </button>
               </td>
             )}
           </tr>
