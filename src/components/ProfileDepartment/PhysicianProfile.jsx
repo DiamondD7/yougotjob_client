@@ -31,14 +31,6 @@ const HeaderProfile = ({ loggedUser }) => {
             <p>{loggedUser.role}</p>
             <div style={{ marginTop: "10px" }}>
               <div className="physician-profile-sub-details__wrapper">
-                <GraduationCap size={17} color="rgba(0,0,0,0.5)" />
-                <p style={{ fontSize: "13px" }}>Phd in Medicine </p>
-              </div>
-              <div className="physician-profile-sub-details__wrapper">
-                <MapPin size={17} color="rgba(0,0,0,0.5)" />
-                <p style={{ fontSize: "13px" }}>Epsom Medical Centre </p>
-              </div>
-              <div className="physician-profile-sub-details__wrapper">
                 <Envelope size={17} color="rgba(0,0,0,0.5)" />
                 <p style={{ fontSize: "13px" }}>{loggedUser.emailAddress}</p>
               </div>
