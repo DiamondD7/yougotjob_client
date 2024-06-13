@@ -12,7 +12,7 @@ function App() {
   const [userLoggedData, setUserLoggedData] = useState([]);
 
   const localData = (data) => {
-    sessionStorage.setItem("auth", true);
+    sessionStorage.setItem("auth", "true");
     sessionStorage.setItem("id", data.returnStatus.userDetails.id);
   };
 
@@ -22,7 +22,7 @@ function App() {
         <Routes>
           <Route path="/" element={<SignIn localData={localData} />} />
         </Routes>
-        {sessionStorage.getItem("auth") === "true" ? (
+        {sessionStorage.getItem("auth") !== "true" ? (
           <Routes>
             <Route path="/home" element={<GeneralPractioner />} />
           </Routes>

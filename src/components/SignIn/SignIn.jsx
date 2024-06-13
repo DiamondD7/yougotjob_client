@@ -191,6 +191,7 @@ const SignIn = ({ localData }) => {
   };
 
   useEffect(() => {
+    sessionStorage.setItem("auth", "false");
     sessionStorage.setItem("id", 0); //reset id in the session
   }, []);
   return (
