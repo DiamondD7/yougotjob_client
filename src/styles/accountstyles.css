@@ -235,3 +235,10 @@
 .save-contact__btn {
   color: #9dcd5a;
 }
+
+/* ------------------------------------------------------ */
+
+.certification-container__table input {
+  font-size: 11px;
+  width: 90%;
+}
