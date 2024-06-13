@@ -169,7 +169,6 @@ const SignIn = ({ localData }) => {
           EmailRecovery: "",
           Mobile: "",
           MobileRecovery: "",
-          Certifications: [],
         }),
       })
         .then((res) => res.json())

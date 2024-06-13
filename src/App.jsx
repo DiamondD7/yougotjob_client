@@ -22,7 +22,7 @@ function App() {
         <Routes>
           <Route path="/" element={<SignIn localData={localData} />} />
         </Routes>
-        {sessionStorage.getItem("auth") !== "true" ? (
+        {sessionStorage.getItem("id") !== 0 ? (
           <Routes>
             <Route path="/home" element={<GeneralPractioner />} />
           </Routes>
