@@ -9,7 +9,10 @@ import {
   AddCertification,
   AddCertficateAttachements,
   GetTheAttachement,
+  RemoveCertification,
+  UpdateCertification,
 } from "../../assets/js/serverApi";
+import moment from "moment";
 
 import "../../styles/accountstyles.css";
 const Profile = ({ loggedUserData }) => {
@@ -98,18 +101,50 @@ const Profile = ({ loggedUserData }) => {
 };
 
 const Certifications = () => {
-  const [openFormCert, setOpenFormCert] = useState(false);
+  const [openFormCert, setOpenFormCert] = useState(false); //opens form to add cert
+  const [openUpdateFormCert, setOpenUpdateFormCert] = useState(false);
+  const [updateData, setUpdateData] = useState([]);
+  const [loadData, setLoadData] = useState(false); //for refreshing page
   const [certData, setCertData] = useState([]);
 
-  useState(() => {
+  const handleUpdateForm = (e, data) => {
+    e.preventDefault();
+    setOpenUpdateFormCert(true);
+    setUpdateData(data);
+  };
+
+  useEffect(() => {
     const id = parseInt(sessionStorage.getItem("id"));
     fetch(`${GetCertification}/${id}`)
       .then((res) => res.json())
       .then((res) => {
         setCertData(res.returnStatus.data);
+        setLoadData(false); //setting back to default state false
       });
-  }, [certData]); //does not refresh when certData changes????
+  }, [loadData]); //reference loadData to refresh data.
 
+  const handleDeleteData = (e, data) => {
+    e.preventDefault();
+
+    fetch(`${RemoveCertification}/${data.id}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+        setLoadData(true); //setting true so that it detects changes. for refreshing container/data
+      });
+  };
+
+  const formatDateFunction = (str) => {
+    const formattedDate = moment(str).format("DD-MM-YYYY");
+    return <td>{formattedDate}</td>;
+  };
+  const formatDate = new Date(); //to format the dates to become readable
   return (
     <div>
       <div>
@@ -118,7 +153,7 @@ const Certifications = () => {
             <p className="account-profile__text certificationheader">
               Certifications
             </p>
-            {openFormCert === false ? (
+            {openFormCert === false && openUpdateFormCert === false ? (
               <div>
                 <table className="certification-container__table">
                   <thead>
@@ -138,31 +173,18 @@ const Certifications = () => {
                       <tr key={index}>
                         <td>{data.certificationName}</td>
                         <td>{data.issuingOrganisation}</td>
-                        <td>{data.dateIssued}</td>
-                        <td>{data.expirationDate}</td>
+                        <td>{formatDateFunction(data.dateIssued)}</td>
+                        <td>{formatDateFunction(data.expirationDate)}</td>
                         <td>{data.certificationLevel}</td>
-                        <td>{data.certificationDescription}</td>
                         <td>
-                          {/* <button
-                          onClick={() =>
-                            getCertAttachment(data.certificationId)
-                          }
-                        >
-                          open
-                        </button>
-                        {viewAttachement === true
-                          ? certAttachment.map((data, index) => (
-                              <div key={index}>
-                                <a
-                                  href={data.data}
-                                  target="_blank"
-                                  rel="noreferrer"
-                                >
-                                  View
-                                </a>
-                              </div>
-                            ))
-                          : ""} */}
+                          {data.certificationDescription.length < 10
+                            ? data.certificationDescription
+                            : `${data.certificationDescription.substring(
+                                0,
+                                10
+                              )}...`}
+                        </td>
+                        <td>
                           <a
                             href={`${GetTheAttachement}/${data.certificationId}`}
                             target="_blank"
@@ -172,10 +194,10 @@ const Certifications = () => {
                           </a>
                         </td>
                         <td style={{ display: "flex", gap: "5px" }}>
-                          <button>
+                          <button onClick={(e) => handleUpdateForm(e, data)}>
                             <Pencil size={15} />
                           </button>
-                          <button>
+                          <button onClick={(e) => handleDeleteData(e, data)}>
                             <Trash size={15} />
                           </button>
                         </td>
@@ -185,28 +207,63 @@ const Certifications = () => {
                 </table>
               </div>
             ) : (
-              <AddNewCertifications setOpenFormCert={setOpenFormCert} />
+              <AddNewCertifications
+                certData={certData}
+                setLoadData={setLoadData}
+                setOpenFormCert={setOpenFormCert}
+                openUpdateFormCert={openUpdateFormCert}
+                setOpenUpdateFormCert={setOpenUpdateFormCert}
+                updateData={updateData}
+              />
             )}
           </div>
         </div>
-        <button
-          className="addnew-contact__btn"
-          onClick={() => setOpenFormCert(!openFormCert)}
-        >
-          {openFormCert === true ? "Cancel" : "Add new certification"}
-        </button>
+        {openUpdateFormCert === true ? (
+          <button
+            className="addnew-contact__btn"
+            onClick={() => setOpenUpdateFormCert(false)}
+          >
+            Cancel
+          </button>
+        ) : (
+          <button
+            className="addnew-contact__btn"
+            onClick={() => setOpenFormCert(!openFormCert)}
+          >
+            {openFormCert === true ? "Cancel" : "Add new certification"}
+          </button>
+        )}
       </div>
     </div>
   );
 };
 
-const AddNewCertifications = ({ setOpenFormCert }) => {
-  const [certName, setCertName] = useState("");
-  const [certOrganisation, setCertOrganisation] = useState("");
-  const [certIssued, setCertIssued] = useState("");
-  const [certExpirationDate, setCertExpirationDate] = useState("");
-  const [certLevel, setCertLevel] = useState("");
-  const [certDescription, setCertDescription] = useState("");
+const AddNewCertifications = ({
+  certData,
+  setOpenFormCert,
+  setLoadData,
+  openUpdateFormCert,
+  setOpenUpdateFormCert,
+  updateData,
+}) => {
+  const [certName, setCertName] = useState(
+    openUpdateFormCert === true ? updateData.certificationName : ""
+  );
+  const [certOrganisation, setCertOrganisation] = useState(
+    openUpdateFormCert === true ? updateData.issuingOrganisation : ""
+  );
+  const [certIssued, setCertIssued] = useState(
+    openUpdateFormCert === true ? updateData.dateIssued : ""
+  );
+  const [certExpirationDate, setCertExpirationDate] = useState(
+    openUpdateFormCert === true ? updateData.expirationDate : ""
+  );
+  const [certLevel, setCertLevel] = useState(
+    openUpdateFormCert === true ? updateData.certificationLevel : ""
+  );
+  const [certDescription, setCertDescription] = useState(
+    openUpdateFormCert === true ? updateData.certificationDescription : ""
+  );
   const [certFile, setCertFile] = useState(null);
 
   const handleAddCert = (e, formId) => {
@@ -232,6 +289,7 @@ const AddNewCertifications = ({ setOpenFormCert }) => {
       .then((data) => {
         console.log(data);
         setOpenFormCert(false);
+        setLoadData(true);
       });
   };
 
@@ -254,6 +312,36 @@ const AddNewCertifications = ({ setOpenFormCert }) => {
         handleAddCert(e, data.returnStatus.dataId);
       });
   };
+
+  const handleUpdateDetails = (e) => {
+    e.preventDefault();
+    fetch(`${UpdateCertification}/${updateData.id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify({
+        CertificationName: certName,
+        IssuingOrganisation: certOrganisation,
+        DateIssued: certIssued,
+        ExpirationDate: certExpirationDate,
+        CertificationLevel: certLevel,
+        CertificationDescription: certDescription,
+      }),
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        setOpenUpdateFormCert(false);
+        setLoadData(true);
+      });
+  };
+
+  const formatDateFunction = (str) => {
+    const formattedDate = moment(str).format("DD-MM-YYYY");
+    return <td>{formattedDate}</td>;
+  };
+  const formatDate = new Date();
   return (
     <div>
       <table className="certification-container__table">
@@ -270,64 +358,172 @@ const AddNewCertifications = ({ setOpenFormCert }) => {
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>
-              <input
-                type="text"
-                placeholder="Certification Name"
-                onChange={(e) => setCertName(e.target.value)}
-              />
-            </td>
-            <td>
-              <input
-                type="text"
-                placeholder="Issuing Organisation"
-                onChange={(e) => setCertOrganisation(e.target.value)}
-              />
-            </td>
-            <td>
-              <input
-                type="date"
-                placeholder="Date Issued"
-                onChange={(e) => setCertIssued(e.target.value)}
-              />
-            </td>
-            <td>
-              <input
-                type="date"
-                placeholder="Expiration Date"
-                onChange={(e) =>
-                  setCertExpirationDate(
-                    e.target.value !== "" ? e.target.value : null
-                  )
-                }
-              />
-            </td>
+          {certData.map((data, index) => (
+            <tr key={index}>
+              {data.id === updateData.id && openUpdateFormCert === true ? ( //checking if the data id and the chosen id to update is equal then
+                //use input in the <td></td> otherwise just display read-only data
+                <td>
+                  <input
+                    type="text"
+                    value={certName}
+                    placeholder="Certification Name"
+                    onChange={(e) => setCertName(e.target.value)}
+                  />
+                </td>
+              ) : (
+                <td>{data.certificationName}</td>
+              )}
+              {data.id === updateData.id && openUpdateFormCert === true ? ( //checking if the data id and the chosen id to update is equal then
+                //use input in the <td></td> otherwise just display read-only data
+                <td>
+                  <input
+                    type="text"
+                    value={certOrganisation}
+                    placeholder="Issuing Organisation"
+                    onChange={(e) => setCertOrganisation(e.target.value)}
+                  />
+                </td>
+              ) : (
+                <td>{data.issuingOrganisation}</td>
+              )}
+              {data.id === updateData.id && openUpdateFormCert === true ? ( //checking if the data id and the chosen id to update is equal then
+                //use input in the <td></td> otherwise just display read-only data
+                <td>
+                  <input
+                    type="date"
+                    value={formatDate.toLocaleDateString("en-nz", certIssued)}
+                    placeholder="Date Issued"
+                    onChange={(e) => setCertIssued(e.target.value)}
+                  />
+                </td>
+              ) : (
+                <td>{formatDateFunction(data.dateIssued)}</td>
+              )}
+              {data.id === updateData.id && openUpdateFormCert === true ? ( //checking if the data id and the chosen id to update is equal then
+                //use input in the <td></td> otherwise just display read-only data
+                <td>
+                  <input
+                    type="date"
+                    value={formatDateFunction(certExpirationDate)}
+                    placeholder="Expiration Date"
+                    onChange={(e) =>
+                      setCertExpirationDate(
+                        e.target.value !== "" ? e.target.value : null
+                      )
+                    }
+                  />
+                </td>
+              ) : (
+                <td>{formatDateFunction(data.expirationDate)}</td>
+              )}
+              {data.id === updateData.id && openUpdateFormCert === true ? ( //checking if the data id and the chosen id to update is equal then
+                //use input in the <td></td> otherwise just display read-only data
+                <td>
+                  <input
+                    type="text"
+                    value={certLevel}
+                    placeholder="Certification Level"
+                    onChange={(e) => setCertLevel(e.target.value)}
+                  />
+                </td>
+              ) : (
+                <td>{data.certificationLevel}</td>
+              )}
+              {data.id === updateData.id && openUpdateFormCert === true ? ( //checking if the data id and the chosen id to update is equal then
+                //use input in the <td></td> otherwise just display read-only data
+                <td>
+                  <input
+                    type="text"
+                    value={certDescription}
+                    placeholder="Description"
+                    onChange={(e) => setCertDescription(e.target.value)}
+                  />
+                </td>
+              ) : (
+                <td>{data.certificationDescription}</td>
+              )}
+              <td></td>
+              <td>
+                {data.id === updateData.id && openUpdateFormCert === true ? ( //checking if the data id and the chosen id to update is equal then
+                  //use add <button></button> otherwise just non
+                  <button onClick={(e) => handleUpdateDetails(e)}>
+                    Update
+                  </button>
+                ) : (
+                  ""
+                )}
+              </td>
+            </tr>
+          ))}
+          {openUpdateFormCert === true ? (
+            ""
+          ) : (
+            <tr>
+              <td>
+                <input
+                  type="text"
+                  value={certName}
+                  placeholder="Certification Name"
+                  onChange={(e) => setCertName(e.target.value)}
+                />
+              </td>
+              <td>
+                <input
+                  type="text"
+                  value={certOrganisation}
+                  placeholder="Issuing Organisation"
+                  onChange={(e) => setCertOrganisation(e.target.value)}
+                />
+              </td>
+              <td>
+                <input
+                  type="date"
+                  value={certIssued}
+                  placeholder="Date Issued"
+                  onChange={(e) => setCertIssued(e.target.value)}
+                />
+              </td>
+              <td>
+                <input
+                  type="date"
+                  value={certExpirationDate}
+                  placeholder="Expiration Date"
+                  onChange={(e) =>
+                    setCertExpirationDate(
+                      e.target.value !== "" ? e.target.value : null
+                    )
+                  }
+                />
+              </td>
 
-            <td>
-              <input
-                type="text"
-                placeholder="Certification Level"
-                onChange={(e) => setCertLevel(e.target.value)}
-              />
-            </td>
-            <td>
-              <input
-                type="text"
-                placeholder="Description"
-                onChange={(e) => setCertDescription(e.target.value)}
-              />
-            </td>
-            <td>
-              <input
-                type="file"
-                onChange={(e) => setCertFile(e.target.files[0])}
-              />
-            </td>
-            <td style={{ display: "flex", gap: "5px" }}>
-              <button onClick={handleAddFile}>Save</button>
-            </td>
-          </tr>
+              <td>
+                <input
+                  type="text"
+                  value={certLevel}
+                  placeholder="Certification Level"
+                  onChange={(e) => setCertLevel(e.target.value)}
+                />
+              </td>
+              <td>
+                <input
+                  type="text"
+                  value={certDescription}
+                  placeholder="Description"
+                  onChange={(e) => setCertDescription(e.target.value)}
+                />
+              </td>
+              <td>
+                <input
+                  className="addnewcert-attachment__input"
+                  type="file"
+                  onChange={(e) => setCertFile(e.target.files[0])}
+                />
+              </td>
+              <td style={{ display: "flex", gap: "5px" }}>
+                <button onClick={handleAddFile}>Save</button>
+              </td>
+            </tr>
+          )}
         </tbody>
       </table>
     </div>
@@ -337,6 +533,7 @@ const AddNewCertifications = ({ setOpenFormCert }) => {
 const Contacts = () => {
   const [addNewContact, setAddNewContact] = useState(false);
   const [emergencyContacts, setEmergencyContacts] = useState([]);
+  const [loadData, setLoadData] = useState(false);
 
   useEffect(() => {
     const id = parseInt(sessionStorage.getItem("id"));
@@ -344,8 +541,9 @@ const Contacts = () => {
       .then((res) => res.json())
       .then((res) => {
         setEmergencyContacts(res.returnStatus.data);
+        setLoadData(false);
       });
-  }, [emergencyContacts]);
+  }, []);
 
   const deleteHandleContact = (e, id) => {
     e.preventDefault();
@@ -407,6 +605,7 @@ const Contacts = () => {
             <AddNewContact
               emergencyContacts={emergencyContacts}
               addNewContact={addNewContact}
+              setLoadData={setLoadData}
               setAddNewContact={setAddNewContact}
             />
           )}
@@ -425,6 +624,7 @@ const Contacts = () => {
 const AddNewContact = ({
   emergencyContacts,
   addNewContact,
+  setLoadData,
   setAddNewContact,
 }) => {
   const [formName, setFormName] = useState("");
@@ -452,6 +652,7 @@ const AddNewContact = ({
       .then((res) => res.json())
       .then((data) => {
         setAddNewContact(false);
+        setLoadData(true);
       });
   };
   return (
