@@ -11,6 +11,7 @@ import {
   GetTheAttachement,
   RemoveCertification,
   UpdateCertification,
+  UpdateCertificationAttachment,
 } from "../../assets/js/serverApi";
 import moment from "moment";
 
@@ -337,6 +338,36 @@ const AddNewCertifications = ({
       });
   };
 
+  const handleUpdateCertAttachment = (e) => {
+    e.preventDefault();
+    const fileData = new FormData();
+    fileData.append("file", certFile); //certification attachment file stream
+
+    if (fileData != null) {
+      //if fileData is not empty/null
+      //HTTP PUT
+      fetch(`${UpdateCertificationAttachment}/${updateData.certificationId}`, {
+        method: "PUT",
+        headers: {
+          Accept: "application/json",
+        },
+        body: fileData,
+      })
+        .then((res) => res.json())
+        .then((res) => {
+          console.log(res);
+          //Call handleUpdateDetails func
+          handleUpdateDetails(e);
+        })
+        .catch((ex) => {
+          throw ex;
+        });
+    } else {
+      //if file is empty, then just only call update the details function.
+      handleUpdateDetails(e);
+    }
+  };
+
   const formatDateFunction = (str) => {
     const formattedDate = moment(str).format("DD-MM-YYYY");
     return <td>{formattedDate}</td>;
@@ -442,11 +473,32 @@ const AddNewCertifications = ({
               ) : (
                 <td>{data.certificationDescription}</td>
               )}
-              <td></td>
+
+              {data.id === updateData.id && openUpdateFormCert === true ? ( //checking if the data id and the chosen id to update is equal then
+                //use input in the <td></td> otherwise just display read-only data
+                <td>
+                  <input
+                    className="addnewcert-attachment__input"
+                    type="file"
+                    onChange={(e) => setCertFile(e.target.files[0])}
+                  />
+                </td>
+              ) : (
+                <td>
+                  <a
+                    href={`${GetTheAttachement}/${updateData.certificationId}`}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    View
+                  </a>
+                </td>
+              )}
+
               <td>
                 {data.id === updateData.id && openUpdateFormCert === true ? ( //checking if the data id and the chosen id to update is equal then
                   //use add <button></button> otherwise just non
-                  <button onClick={(e) => handleUpdateDetails(e)}>
+                  <button onClick={(e) => handleUpdateCertAttachment(e)}>
                     Update
                   </button>
                 ) : (
