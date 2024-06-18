@@ -422,7 +422,7 @@ const AddNewCertifications = ({
                 <td>
                   <input
                     type="date"
-                    value={formatDate.toLocaleDateString("en-nz", certIssued)}
+                    value={certIssued}
                     placeholder="Date Issued"
                     onChange={(e) => setCertIssued(e.target.value)}
                   />
@@ -435,7 +435,7 @@ const AddNewCertifications = ({
                 <td>
                   <input
                     type="date"
-                    value={formatDateFunction(certExpirationDate)}
+                    value={certExpirationDate}
                     placeholder="Expiration Date"
                     onChange={(e) =>
                       setCertExpirationDate(
