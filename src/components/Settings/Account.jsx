@@ -584,6 +584,8 @@ const AddNewCertifications = ({
 
 const Contacts = () => {
   const [addNewContact, setAddNewContact] = useState(false);
+  const [updateContact, setUpdateContact] = useState(false);
+  const [updateContactData, setUpdateContactData] = useState([]);
   const [emergencyContacts, setEmergencyContacts] = useState([]);
   const [loadData, setLoadData] = useState(false);
 
@@ -595,7 +597,7 @@ const Contacts = () => {
         setEmergencyContacts(res.returnStatus.data);
         setLoadData(false);
       });
-  }, []);
+  }, [loadData]);
 
   const deleteHandleContact = (e, id) => {
     e.preventDefault();
@@ -609,15 +611,23 @@ const Contacts = () => {
       .then((res) => res.json())
       .then((res) => {
         console.log(res); //logging result
+        setLoadData(true);
       });
   };
+
+  const handleUpdateContact = (e, data) => {
+    e.preventDefault();
+    setUpdateContact(!updateContact);
+    setUpdateContactData(data);
+  };
+
   return (
     <div>
       <div>
         <h3 style={{ color: "#9dcd5a", fontWeight: "bold" }}>Contacts</h3>
 
         <div className="account-profile-contactnums__wrapper">
-          {addNewContact === false ? (
+          {addNewContact === false && updateContact === false ? (
             <div
               style={{ marginTop: "10px", overflow: "auto", height: "130px" }}
             >
@@ -639,7 +649,7 @@ const Contacts = () => {
                       <td>{data.contactRelationship}</td>
                       <td>{data.contactEmailAddress}</td>
                       <td style={{ display: "flex", gap: "5px" }}>
-                        <button>
+                        <button onClick={(e) => handleUpdateContact(e, data)}>
                           <Pencil size={15} />
                         </button>
                         <button
@@ -659,15 +669,28 @@ const Contacts = () => {
               addNewContact={addNewContact}
               setLoadData={setLoadData}
               setAddNewContact={setAddNewContact}
+              updateContactData={updateContactData}
+              updateContact={updateContact}
             />
           )}
         </div>
-        <button
-          className="addnew-contact__btn"
-          onClick={() => setAddNewContact(!addNewContact)}
-        >
-          {addNewContact === false ? "Add new contact" : "Cancel"}
-        </button>
+        {updateContact === true ? (
+          <button
+            className="addnew-contact__btn"
+            onClick={() => setUpdateContact(!updateContact)}
+          >
+            Cancel
+          </button>
+        ) : (
+          <button
+            className="addnew-contact__btn"
+            onClick={() => setAddNewContact(!addNewContact)}
+          >
+            {addNewContact === false && updateContact === false
+              ? "Add new contact"
+              : "Cancel"}
+          </button>
+        )}
       </div>
     </div>
   );
@@ -678,11 +701,21 @@ const AddNewContact = ({
   addNewContact,
   setLoadData,
   setAddNewContact,
+  updateContactData,
+  updateContact,
 }) => {
-  const [formName, setFormName] = useState("");
-  const [formNumber, setFormNumber] = useState("");
-  const [formRelationship, setFormRelationship] = useState("");
-  const [formEmailAddress, setFormEmailAddress] = useState("");
+  const [formName, setFormName] = useState(
+    updateContact === true ? updateContactData.contactName : ""
+  );
+  const [formNumber, setFormNumber] = useState(
+    updateContact === true ? updateContactData.contactMobile : ""
+  );
+  const [formRelationship, setFormRelationship] = useState(
+    updateContact === true ? updateContactData.contactRelationship : ""
+  );
+  const [formEmailAddress, setFormEmailAddress] = useState(
+    updateContact === true ? updateContactData.contactEmailAddress : ""
+  );
 
   const addedContact = (e) => {
     e.preventDefault();
@@ -722,59 +755,116 @@ const AddNewContact = ({
         <tbody>
           {emergencyContacts.map((data, index) => (
             <tr key={index}>
-              <td>{data.contactName}</td>
-              <td>{data.contactMobile}</td>
-              <td>{data.contactRelationship}</td>
-              <td>{data.contactEmailAddress}</td>
+              {updateContactData.id === data.id && updateContact === true ? (
+                <td>
+                  <input
+                    type="text"
+                    placeholder="Name"
+                    value={formName}
+                    onChange={(e) => setFormName(e.target.value)}
+                  />
+                </td>
+              ) : (
+                <td>{data.contactName}</td>
+              )}
+              {updateContactData.id === data.id && updateContact === true ? (
+                <td>
+                  <input
+                    type="text"
+                    placeholder="Number"
+                    value={formNumber}
+                    onChange={(e) => setFormNumber(e.target.value)}
+                  />
+                </td>
+              ) : (
+                <td>{data.contactMobile}</td>
+              )}
+              {updateContactData.id === data.id && updateContact === true ? (
+                <td>
+                  <input
+                    type="text"
+                    placeholder="Relationship"
+                    value={formRelationship}
+                    onChange={(e) => setFormRelationship(e.target.value)}
+                  />
+                </td>
+              ) : (
+                <td>{data.contactRelationship}</td>
+              )}
+              {updateContactData.id === data.id && updateContact === true ? (
+                <td>
+                  <input
+                    type="text"
+                    placeholder="Email"
+                    value={formEmailAddress}
+                    onChange={(e) => setFormEmailAddress(e.target.value)}
+                  />
+                </td>
+              ) : (
+                <td>{data.contactEmailAddress}</td>
+              )}
+              {updateContactData.id === data.id && updateContact === true ? (
+                <td>
+                  <button className="save-contact__btn" onClick={addedContact}>
+                    Update
+                  </button>
+                </td>
+              ) : (
+                ""
+              )}
               <td style={{ display: "flex", gap: "5px" }}></td>
             </tr>
           ))}
-          <tr>
-            <td>
-              <input
-                type="text"
-                placeholder="Name"
-                onChange={(e) => setFormName(e.target.value)}
-              />
-            </td>
-            <td>
-              <input
-                type="text"
-                placeholder="Number"
-                onChange={(e) => setFormNumber(e.target.value)}
-              />
-            </td>
-            <td>
-              <input
-                type="text"
-                placeholder="Relationship"
-                onChange={(e) => setFormRelationship(e.target.value)}
-              />
-            </td>
-            <td>
-              <input
-                type="text"
-                placeholder="Email"
-                onChange={(e) => setFormEmailAddress(e.target.value)}
-              />
-            </td>
-            {addNewContact === false ? (
-              <td style={{ display: "flex", gap: "5px" }}>
-                <button>
-                  <Pencil size={15} />
-                </button>
-                <button>
-                  <Trash size={15} />
-                </button>
-              </td>
-            ) : (
+          {addNewContact === true && updateContact === false ? (
+            <tr>
               <td>
-                <button className="save-contact__btn" onClick={addedContact}>
-                  Save
-                </button>
+                <input
+                  type="text"
+                  placeholder="Name"
+                  onChange={(e) => setFormName(e.target.value)}
+                />
               </td>
-            )}
-          </tr>
+              <td>
+                <input
+                  type="text"
+                  placeholder="Number"
+                  onChange={(e) => setFormNumber(e.target.value)}
+                />
+              </td>
+              <td>
+                <input
+                  type="text"
+                  placeholder="Relationship"
+                  onChange={(e) => setFormRelationship(e.target.value)}
+                />
+              </td>
+              <td>
+                <input
+                  type="text"
+                  placeholder="Email"
+                  onChange={(e) => setFormEmailAddress(e.target.value)}
+                />
+              </td>
+              {addNewContact === false && updateContact === false ? (
+                <td style={{ display: "flex", gap: "5px" }}>
+                  <button>
+                    <Pencil size={15} />
+                  </button>
+                  <button>
+                    <Trash size={15} />
+                  </button>
+                </td>
+              ) : (
+                <td>
+                  <button className="save-contact__btn" onClick={addedContact}>
+                    Save
+                  </button>
+                </td>
+              )}
+            </tr>
+          ) : (
+            ""
+          )}
         </tbody>
       </table>
     </div>
