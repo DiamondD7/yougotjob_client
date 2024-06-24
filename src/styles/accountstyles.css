@@ -63,6 +63,15 @@
   gap: 5px;
 }
 
+.profile-update__btn {
+  background-color: #9dcd5a;
+  color: #f3f3f3;
+  border: none;
+  border-radius: 2px;
+  padding: 2px 5px;
+  cursor: pointer;
+}
+
 .address-input {
   width: 153px;
   font-size: 12px;
