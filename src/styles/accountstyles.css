@@ -32,13 +32,26 @@
   font-size: 12px;
 }
 
+.address-wrapper {
+  display: flex;
+  align-items: start;
+  width: 385px;
+  gap: 109px;
+}
+
+.editaddress__wrapper {
+  display: flex;
+  align-items: start;
+  width: 385px;
+  gap: 65px;
+}
+
 .addressdetails {
   color: rgba(0, 0, 0, 0.3);
   font-weight: bold;
-  margin: 3px 0 0 0;
-  list-style: none;
+  margin: 10px 0 0 0;
   font-size: 12px;
-  width: 220px;
+  width: 100px;
 }
 
 .account-profile-edit__btn {
@@ -50,6 +63,16 @@
   gap: 5px;
 }
 
+.address-input {
+  width: 153px;
+  font-size: 12px;
+  margin: 10px 0 0 0;
+}
+
+.update-details__input {
+  font-size: 12px;
+  width: 153px;
+}
 /* -------------------------------- */
 
 .account-profile-certification__wrapper {

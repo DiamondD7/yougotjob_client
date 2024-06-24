@@ -18,6 +18,7 @@ import moment from "moment";
 
 import "../../styles/accountstyles.css";
 const Profile = ({ loggedUserData }) => {
+  const [openEdit, setOpenEdit] = useState(false);
   return (
     <div>
       <h3 style={{ color: "#9dcd5a", fontWeight: "bold" }}>Profile</h3>
@@ -27,8 +28,18 @@ const Profile = ({ loggedUserData }) => {
             <p className="account-profile__text profileheader">
               Personal information
             </p>
-            <button className="account-profile-edit__btn">
-              <Pencil size={15} /> Edit
+            <button
+              className="account-profile-edit__btn"
+              onClick={() => setOpenEdit(!openEdit)}
+            >
+              {openEdit === false ? (
+                <>
+                  <Pencil size={15} />
+                  Edit
+                </>
+              ) : (
+                "Cancel"
+              )}
             </button>
           </div>
 
@@ -45,9 +56,17 @@ const Profile = ({ loggedUserData }) => {
               <p className="account-profile__text profilelabel">Name</p>
             </div>
             <div>
-              <p className="account-profile__text profiledetails">
-                {loggedUserData.fullName}
-              </p>
+              {openEdit === false ? (
+                <p className="account-profile__text profiledetails">
+                  {loggedUserData.fullName}
+                </p>
+              ) : (
+                <input
+                  className="update-details__input"
+                  type="text"
+                  placeholder="Full Name"
+                />
+              )}
             </div>
           </div>
 
@@ -61,9 +80,17 @@ const Profile = ({ loggedUserData }) => {
           >
             <p className="account-profile__text profilelabel">Phone</p>
 
-            <p className="account-profile__text profiledetails">
-              {loggedUserData.mobile}
-            </p>
+            {openEdit === false ? (
+              <p className="account-profile__text profiledetails">
+                {loggedUserData.mobile}
+              </p>
+            ) : (
+              <input
+                className="update-details__input"
+                type="text"
+                placeholder="Phone"
+              />
+            )}
           </div>
           <div
             style={{
@@ -74,25 +101,34 @@ const Profile = ({ loggedUserData }) => {
             }}
           >
             <p className="account-profile__text profilelabel">Email Address</p>
-            <p className="account-profile__text profiledetails">
-              {loggedUserData.emailAddress}
-            </p>
+            {openEdit === false ? (
+              <p className="account-profile__text profiledetails">
+                {loggedUserData.emailAddress}
+              </p>
+            ) : (
+              <input
+                className="update-details__input"
+                type="text"
+                placeholder="Email Address"
+              />
+            )}
           </div>
           <div
-            style={{
-              display: "flex",
-              alignItems: "start",
-              width: "410px",
-              justifyContent: "space-between",
-            }}
+            className={
+              openEdit === false ? "address-wrapper" : "editaddress__wrapper"
+            }
           >
             <p className="account-profile__text address">Home Address</p>
-            <ul style={{ paddingTop: "10px" }}>
-              <li className="account-profile__text addressdetails">
-                <p className="addressdetails">1/88 Hunters Drive,</p> Auckland
-                2330{" "}
-              </li>
-            </ul>
+
+            {openEdit === false ? (
+              <p className="addressdetails"></p>
+            ) : (
+              <input
+                className="address-input"
+                type="text"
+                placeholder="Home Address"
+              />
+            )}
           </div>
         </div>
 
