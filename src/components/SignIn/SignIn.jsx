@@ -164,6 +164,7 @@ const SignIn = ({ localData }) => {
           UserPassword: signinPassword,
           RegistrationNumber: "",
           FullName: "",
+          HomeAddress: "",
           Role: "",
           DOB: today,
           EmailRecovery: "",

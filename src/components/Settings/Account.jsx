@@ -13,12 +13,43 @@ import {
   UpdateCertification,
   UpdateCertificationAttachment,
   UpdateEmergencyContact,
+  UpdateHealthPractitionerData,
 } from "../../assets/js/serverApi";
 import moment from "moment";
 
 import "../../styles/accountstyles.css";
-const Profile = ({ loggedUserData }) => {
+const Profile = ({ loggedUserData, setLoadData }) => {
   const [openEdit, setOpenEdit] = useState(false);
+  const [profileDetails, setProfileDetails] = useState([]);
+  const [fullName, setFullName] = useState("");
+  const [mobilePhone, setMobilePhone] = useState("");
+  const [emailAddress, setEmailAddress] = useState("");
+  const [homeAddress, setHomeAddress] = useState("");
+
+  const updatePersonalInformation = (e) => {
+    e.preventDefault();
+    const id = parseInt(sessionStorage.getItem("id"));
+    fetch(`${UpdateHealthPractitionerData}/${id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify({
+        FullName: fullName,
+        Mobile: mobilePhone,
+        EmailAddress: emailAddress,
+        HomeAddress: homeAddress,
+      }),
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        console.log(res); //delete c.log
+        setOpenEdit(false);
+        setLoadData(true);
+      });
+  };
+
   return (
     <div>
       <h3 style={{ color: "#9dcd5a", fontWeight: "bold" }}>Profile</h3>
@@ -28,19 +59,31 @@ const Profile = ({ loggedUserData }) => {
             <p className="account-profile__text profileheader">
               Personal information
             </p>
-            <button
-              className="account-profile-edit__btn"
-              onClick={() => setOpenEdit(!openEdit)}
-            >
-              {openEdit === false ? (
-                <>
-                  <Pencil size={15} />
-                  Edit
-                </>
+            <div style={{ display: "flex", gap: "10px" }}>
+              <button
+                className="account-profile-edit__btn"
+                onClick={() => setOpenEdit(!openEdit)}
+              >
+                {openEdit === false ? (
+                  <>
+                    <Pencil size={15} />
+                    Edit
+                  </>
+                ) : (
+                  "Cancel"
+                )}
+              </button>
+              {openEdit === true ? (
+                <button
+                  className="profile-update__btn"
+                  onClick={(e) => updatePersonalInformation(e)}
+                >
+                  Update
+                </button>
               ) : (
-                "Cancel"
+                ""
               )}
-            </button>
+            </div>
           </div>
 
           <div
@@ -64,7 +107,8 @@ const Profile = ({ loggedUserData }) => {
                 <input
                   className="update-details__input"
                   type="text"
-                  placeholder="Full Name"
+                  value={fullName}
+                  onChange={(e) => setFullName(e.target.value)}
                 />
               )}
             </div>
@@ -88,7 +132,8 @@ const Profile = ({ loggedUserData }) => {
               <input
                 className="update-details__input"
                 type="text"
-                placeholder="Phone"
+                value={mobilePhone}
+                onChange={(e) => setMobilePhone(e.target.value)}
               />
             )}
           </div>
@@ -109,7 +154,8 @@ const Profile = ({ loggedUserData }) => {
               <input
                 className="update-details__input"
                 type="text"
-                placeholder="Email Address"
+                value={emailAddress}
+                onChange={(e) => setEmailAddress(e.target.value)}
               />
             )}
           </div>
@@ -121,12 +167,13 @@ const Profile = ({ loggedUserData }) => {
             <p className="account-profile__text address">Home Address</p>
 
             {openEdit === false ? (
-              <p className="addressdetails"></p>
+              <p className="addressdetails">{loggedUserData.homeAddress}</p>
             ) : (
               <input
                 className="address-input"
                 type="text"
-                placeholder="Home Address"
+                value={homeAddress}
+                onChange={(e) => setHomeAddress(e.target.value)}
               />
             )}
           </div>
@@ -1086,18 +1133,21 @@ const TimezonesSettings = () => {
 
 const Account = () => {
   const [loggedUserData, setLoggedUserData] = useState([]);
+
+  const [loadData, setLoadData] = useState(false);
   useEffect(() => {
     const id = parseInt(sessionStorage.getItem("id"));
     fetch(`${GetaHealthPractitioner}/${id}`)
       .then((res) => res.json())
       .then((data) => {
         setLoggedUserData(data);
+        setLoadData(false);
       });
-  }, []);
+  }, [loadData]);
   return (
     <div>
       <div className="setting-contents-display-container__wrapper">
-        <Profile loggedUserData={loggedUserData} />
+        <Profile loggedUserData={loggedUserData} setLoadData={setLoadData} />
         <br />
         <br />
         <Contacts />
