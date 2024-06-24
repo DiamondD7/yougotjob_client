@@ -12,6 +12,7 @@ import {
   RemoveCertification,
   UpdateCertification,
   UpdateCertificationAttachment,
+  UpdateEmergencyContact,
 } from "../../assets/js/serverApi";
 import moment from "moment";
 
@@ -670,6 +671,7 @@ const Contacts = () => {
               setLoadData={setLoadData}
               setAddNewContact={setAddNewContact}
               updateContactData={updateContactData}
+              setUpdateContact={setUpdateContact}
               updateContact={updateContact}
             />
           )}
@@ -702,20 +704,32 @@ const AddNewContact = ({
   setLoadData,
   setAddNewContact,
   updateContactData,
+  setUpdateContact,
   updateContact,
 }) => {
   const [formName, setFormName] = useState(
     updateContact === true ? updateContactData.contactName : ""
   );
+  //if the user decide to update the contactData the state's initial value is 'updateContactData.contactName' if the user did not decide to
+  //update a data then just use an initial value of "".
+
   const [formNumber, setFormNumber] = useState(
     updateContact === true ? updateContactData.contactMobile : ""
   );
+  //if the user decide to update the contactData the state's initial value is 'updateContactData.contactMobile' if the user did not decide to
+  //update a data then just use an initial value of "".
+
   const [formRelationship, setFormRelationship] = useState(
     updateContact === true ? updateContactData.contactRelationship : ""
   );
+  //if the user decide to update the contactData the state's initial value is 'updateContactData.contactRelationship' if the user did not decide to
+  //update a data then just use an initial value of "".
+
   const [formEmailAddress, setFormEmailAddress] = useState(
     updateContact === true ? updateContactData.contactEmailAddress : ""
   );
+  //if the user decide to update the contactData the state's initial value is 'updateContactData.contactEmailAddress' if the user did not decide to
+  //update a data then just use an initial value of "".
 
   const addedContact = (e) => {
     e.preventDefault();
@@ -736,8 +750,31 @@ const AddNewContact = ({
     })
       .then((res) => res.json())
       .then((data) => {
-        setAddNewContact(false);
-        setLoadData(true);
+        setAddNewContact(false); //setting the state to false to go back to the default view of the table
+        setLoadData(true); //setting the state to true so that it will refresh the data in the useEffect when something gets changed.
+      });
+  };
+
+  const updateEmergencyContact = () => {
+    fetch(`${UpdateEmergencyContact}/${updateContactData.id}`, {
+      //getting the id from the table when clicking update icon (pencil icon)
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify({
+        ContactName: formName,
+        ContactMobile: formNumber,
+        ContactRelationship: formRelationship,
+        ContactEmailAddress: formEmailAddress,
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data.returnStatus.message); //delete c.log
+        setUpdateContact(false); //setting the state to false to go back to the default view of the table
+        setLoadData(true); //setting the state to true so that it will refresh the data in the useEffect when something gets changed.
       });
   };
   return (
@@ -805,7 +842,10 @@ const AddNewContact = ({
               )}
               {updateContactData.id === data.id && updateContact === true ? (
                 <td>
-                  <button className="save-contact__btn" onClick={addedContact}>
+                  <button
+                    className="save-contact__btn"
+                    onClick={updateEmergencyContact}
+                  >
                     Update
                   </button>
                 </td>
