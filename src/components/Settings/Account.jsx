@@ -20,11 +20,14 @@ import moment from "moment";
 import "../../styles/accountstyles.css";
 const Profile = ({ loggedUserData, setLoadData }) => {
   const [openEdit, setOpenEdit] = useState(false);
-  const [profileDetails, setProfileDetails] = useState([]);
-  const [fullName, setFullName] = useState("");
-  const [mobilePhone, setMobilePhone] = useState("");
-  const [emailAddress, setEmailAddress] = useState("");
-  const [homeAddress, setHomeAddress] = useState("");
+  const [fullName, setFullName] = useState(loggedUserData.fullName || ""); //if loggedUserData is refreshed then use the original value else use ""
+  const [mobilePhone, setMobilePhone] = useState(loggedUserData.mobile || "");
+  const [emailAddress, setEmailAddress] = useState(
+    loggedUserData.emailAddress || ""
+  );
+  const [homeAddress, setHomeAddress] = useState(
+    loggedUserData.homeAddress || ""
+  );
 
   const updatePersonalInformation = (e) => {
     e.preventDefault();
@@ -50,6 +53,18 @@ const Profile = ({ loggedUserData, setLoadData }) => {
       });
   };
 
+  const handleOpeningEdit = () => {
+    //handles when cancelling/opening edit.
+    setOpenEdit(!openEdit);
+    if (openEdit === true) {
+      //if the openEdit is true (which means when the user cancels updating then it will refresh the values to its original value/initial value)
+      setFullName(loggedUserData.fullName);
+      setMobilePhone(loggedUserData.mobile);
+      setEmailAddress(loggedUserData.emailAddress);
+      setHomeAddress(loggedUserData.homeAddress);
+    }
+  };
+
   return (
     <div>
       <h3 style={{ color: "#9dcd5a", fontWeight: "bold" }}>Profile</h3>
@@ -62,7 +77,7 @@ const Profile = ({ loggedUserData, setLoadData }) => {
             <div style={{ display: "flex", gap: "10px" }}>
               <button
                 className="account-profile-edit__btn"
-                onClick={() => setOpenEdit(!openEdit)}
+                onClick={handleOpeningEdit}
               >
                 {openEdit === false ? (
                   <>
@@ -1135,19 +1150,25 @@ const Account = () => {
   const [loggedUserData, setLoggedUserData] = useState([]);
 
   const [loadData, setLoadData] = useState(false);
+  const [loadDetails, setLoadDetails] = useState(false);
   useEffect(() => {
     const id = parseInt(sessionStorage.getItem("id"));
     fetch(`${GetaHealthPractitioner}/${id}`)
       .then((res) => res.json())
       .then((data) => {
-        setLoggedUserData(data);
+        setLoggedUserData(data); //sets data of the current user
         setLoadData(false);
+        setLoadDetails(true); //loading all details to display in the update section of the profile information
       });
   }, [loadData]);
+
   return (
     <div>
       <div className="setting-contents-display-container__wrapper">
-        <Profile loggedUserData={loggedUserData} setLoadData={setLoadData} />
+        {loadDetails && (
+          <Profile loggedUserData={loggedUserData} setLoadData={setLoadData} />
+        )}
+
         <br />
         <br />
         <Contacts />
