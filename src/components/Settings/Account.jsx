@@ -15,6 +15,7 @@ import {
   UpdateEmergencyContact,
   UpdateHealthPractitionerData,
   UpdatesTimePreference,
+  GetATimePreference,
 } from "../../assets/js/serverApi";
 import moment from "moment";
 import momtimezone from "moment-timezone";
@@ -1013,6 +1014,19 @@ const AddNewContact = ({
 
 const TimezonesSettings = () => {
   const [editActive, setEditActive] = useState(false);
+  const [loadData, setLoadData] = useState(false);
+  const [editData, setEditData] = useState([]);
+
+  useEffect(() => {
+    const id = parseInt(sessionStorage.getItem("id"));
+    fetch(`${GetATimePreference}/${id}`)
+      .then((res) => res.json())
+      .then((res) => {
+        console.log(res);
+        setLoadData(false);
+        setEditData(res.returnStatus.data);
+      });
+  }, [loadData]);
   return (
     <div>
       <h3 style={{ color: "#9dcd5a", fontWeight: "bold" }}>Timezone</h3>
@@ -1040,7 +1054,7 @@ const TimezonesSettings = () => {
             >
               <p className="account-timezone__text timezonelabel">Country</p>
               <p className="account-timezone__text timezonedetails">
-                New Zealand
+                {editData.country}
               </p>
             </div>
             <div
@@ -1052,7 +1066,7 @@ const TimezonesSettings = () => {
             >
               <p className="account-timezone__text timezonelabel">Timezone</p>
               <p className="account-timezone__text timezonedetails">
-                Pacific/Auckland
+                {editData.timeZone}
               </p>
             </div>
             <div
@@ -1066,7 +1080,7 @@ const TimezonesSettings = () => {
                 Date Format
               </p>
               <p className="account-timezone__text timezonedetails">
-                DD/MM/YYYY
+                {editData.dateFormat}
               </p>
             </div>
             <div
@@ -1079,22 +1093,28 @@ const TimezonesSettings = () => {
               <p className="account-timezone__text timezonelabel">
                 Time Format
               </p>
-              <p className="account-timezone__text timezonedetails">24-Hour</p>
+              <p className="account-timezone__text timezonedetails">
+                {editData.timeFormat}
+              </p>
             </div>
           </div>
         </div>
       ) : (
-        <TimezoneEdit setEditActive={setEditActive} />
+        <TimezoneEdit
+          setEditActive={setEditActive}
+          setLoadData={setLoadData}
+          editData={editData}
+        />
       )}
     </div>
   );
 };
 
-const TimezoneEdit = ({ setEditActive }) => {
-  const [dateFormat, setDateFormat] = useState("");
-  const [timeFormat, setTimeFormat] = useState("");
-  const [country, setCountry] = useState("");
-  const [timeZone, setTimeZone] = useState("");
+const TimezoneEdit = ({ setEditActive, setLoadData, editData }) => {
+  const [dateFormat, setDateFormat] = useState(editData.dateFormat || "");
+  const [timeFormat, setTimeFormat] = useState(editData.timeFormat || "");
+  const [country, setCountry] = useState(editData.country || "");
+  const [timeZone, setTimeZone] = useState(editData.timeZone || "");
 
   const updateTimeZone = (e) => {
     e.preventDefault();
@@ -1116,6 +1136,8 @@ const TimezoneEdit = ({ setEditActive }) => {
       .then((res) => res.json())
       .then((res) => {
         console.log(res);
+        setEditActive(false);
+        setLoadData(true);
       });
   };
   return (
@@ -1158,7 +1180,9 @@ const TimezoneEdit = ({ setEditActive }) => {
                 className="account-date-format__select"
                 onChange={(e) => setDateFormat(e.target.value)}
               >
-                <option value="">{dateFormat}</option>
+                <option value="" style={{ display: "none" }}>
+                  {dateFormat}
+                </option>
                 <option value="DD/MM/YYYY">DD/MM/YYYY</option>
                 <option value="MM/DD/YYYY">MM/DD/YYYY</option>
               </select>
@@ -1170,7 +1194,9 @@ const TimezoneEdit = ({ setEditActive }) => {
                 className="account-time-format__select"
                 onChange={(e) => setTimeFormat(e.target.value)}
               >
-                <option value="">{timeFormat}</option>
+                <option value="" style={{ display: "none" }}>
+                  {timeFormat === "hh:mm A" ? "12-hour" : "24-hour"}
+                </option>
                 <option value="hh:mm A">12-hour</option>
                 <option value="HH:mm">24-hour</option>
               </select>
