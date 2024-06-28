@@ -1012,7 +1012,7 @@ const AddNewContact = ({
   );
 };
 
-const TimezonesSettings = () => {
+const TimezonesSettings = ({ setEditChanges }) => {
   const [editActive, setEditActive] = useState(false);
   const [loadData, setLoadData] = useState(false);
   const [editData, setEditData] = useState([]);
@@ -1104,17 +1104,23 @@ const TimezonesSettings = () => {
           setEditActive={setEditActive}
           setLoadData={setLoadData}
           editData={editData}
+          setEditChanges={setEditChanges}
         />
       )}
     </div>
   );
 };
 
-const TimezoneEdit = ({ setEditActive, setLoadData, editData }) => {
-  const [dateFormat, setDateFormat] = useState(editData.dateFormat || "");
-  const [timeFormat, setTimeFormat] = useState(editData.timeFormat || "");
-  const [country, setCountry] = useState(editData.country || "");
-  const [timeZone, setTimeZone] = useState(editData.timeZone || "");
+const TimezoneEdit = ({
+  setEditActive,
+  setLoadData,
+  editData,
+  setEditChanges,
+}) => {
+  const [dateFormat, setDateFormat] = useState(editData?.dateFormat || "");
+  const [timeFormat, setTimeFormat] = useState(editData?.timeFormat || "");
+  const [country, setCountry] = useState(editData?.country || "");
+  const [timeZone, setTimeZone] = useState(editData?.timeZone || "");
 
   const updateTimeZone = (e) => {
     e.preventDefault();
@@ -1138,6 +1144,7 @@ const TimezoneEdit = ({ setEditActive, setLoadData, editData }) => {
         console.log(res);
         setEditActive(false);
         setLoadData(true);
+        setEditChanges(true);
       });
   };
   return (
@@ -1220,7 +1227,7 @@ const TimezoneEdit = ({ setEditActive, setLoadData, editData }) => {
   );
 };
 
-const Account = () => {
+const Account = ({ setEditChanges }) => {
   const [loggedUserData, setLoggedUserData] = useState([]);
 
   const [loadData, setLoadData] = useState(false);
@@ -1248,7 +1255,7 @@ const Account = () => {
         <Contacts />
         <br />
         <br />
-        <TimezonesSettings />
+        <TimezonesSettings setEditChanges={setEditChanges} />
       </div>
     </div>
   );
