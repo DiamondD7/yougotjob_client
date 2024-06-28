@@ -24,6 +24,7 @@ const Nav = ({ setDisplayed, dateSettings }) => {
   const [minimizedNav, setMinimizedNav] = useState(false);
   const [activeDisplay, setActiveDisplay] = useState("dashboard");
   const [userLoggedData, setUserLoggedData] = useState([]);
+  const [seconds, setSeconds] = useState(0);
 
   const onClickDisplayed = (display) => {
     setDisplayed(display);
@@ -39,6 +40,49 @@ const Nav = ({ setDisplayed, dateSettings }) => {
       });
   }, []);
 
+  // ----------------------------------------------------DATETIME UPDATING LOGIC EVERY 60s---------------------------------------------------------
+  const [currentTime, setCurrentTime] = useState(
+    moment()
+      .tz(dateSettings.timeZone)
+      .format(`${dateSettings.dateFormat} ${dateSettings.timeFormat}`)
+  );
+
+  useEffect(() => {
+    // Function to update the time
+    const updateCurrentTime = () => {
+      setCurrentTime(
+        moment()
+          .tz(dateSettings.timeZone)
+          .format(`${dateSettings.dateFormat} ${dateSettings.timeFormat}`)
+      );
+    };
+
+    // Update the time initially when the component mounts
+    updateCurrentTime();
+
+    // Calculate the delay until the next minute
+    const now = moment();
+    const delay = (60 - now.seconds()) * 1000; //eg. output: if the now.seconds() is 30s and the diff 60s - 30s = 30s * 100 which will get you (30000)
+
+    // Set a timeout to update the time at the start of the next minute
+    const timeoutId = setTimeout(() => {
+      updateCurrentTime();
+
+      // Set an interval to update the time every minute
+      const intervalId = setInterval(updateCurrentTime, 60000);
+      // Clear the interval when the component unmounts
+      return () => clearInterval(intervalId);
+    }, delay);
+
+    // Clear the timeout when the component unmounts
+    return () => clearTimeout(timeoutId);
+  }, [dateSettings.timeZone, dateSettings.dateFormat, dateSettings.timeFormat]);
+
+  // ---------------------------------------------------------------END-------------------------------------------------------------------------------
+
+  const getDateTime = () => {
+    return <p className="nav-date__text">{currentTime}</p>;
+  };
   return (
     <>
       <div
@@ -301,17 +345,7 @@ const Nav = ({ setDisplayed, dateSettings }) => {
                   <SignOut size={20} color="#454545" />
                 </Link>
               </button>
-              {minimizedNav === false ? (
-                <p className="nav-date__text">
-                  {moment()
-                    .tz(dateSettings.timeZone)
-                    .format(
-                      `${dateSettings.dateFormat} ${dateSettings.timeFormat}`
-                    )}
-                </p>
-              ) : (
-                ""
-              )}
+              {minimizedNav === false ? getDateTime() : ""}
             </li>
           </div>
         </ul>

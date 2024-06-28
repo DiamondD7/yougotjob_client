@@ -24,7 +24,7 @@ const SummaryCards = () => {
   const [minutes, setMinutes] = useState(0);
   const [seconds, setSeconds] = useState(0);
 
-  const [inputDate, setInputDate] = useState("20 Jun 2024 20:00:00");
+  const [inputDate, setInputDate] = useState("7 Jul 2024 20:00"); //can be changed to mm/dd/yyyy
   const [currentDate, setCurrentDate] = useState(inputDate);
 
   //handles countdown
