@@ -14,8 +14,10 @@ import {
   UpdateCertificationAttachment,
   UpdateEmergencyContact,
   UpdateHealthPractitionerData,
+  UpdatesTimePreference,
 } from "../../assets/js/serverApi";
 import moment from "moment";
+import momtimezone from "moment-timezone";
 
 import "../../styles/accountstyles.css";
 const Profile = ({ loggedUserData, setLoadData }) => {
@@ -1011,64 +1013,6 @@ const AddNewContact = ({
 
 const TimezonesSettings = () => {
   const [editActive, setEditActive] = useState(false);
-
-  const TimezoneEdit = () => {
-    return (
-      <div>
-        <div className="account-timezone-edit__wrapper">
-          <div>
-            <h5>Country</h5>
-            <input
-              type="text"
-              className="account-timezone__input"
-              value="New Zealand"
-            />
-          </div>
-          <div style={{ marginTop: "10px" }}>
-            <h5>Timezone</h5>
-            <input
-              type="text"
-              className="account-timezone__input"
-              value="Pacific/Auckland"
-            />
-          </div>
-          <div style={{ marginTop: "20px" }}>
-            <div
-              style={{
-                display: "flex",
-                gap: "50px",
-              }}
-            >
-              <div>
-                <h5>Date format</h5>
-                <select className="account-date-format__select">
-                  <option value=""></option>
-                  <option value="DD/MM/YYYY">DD/MM/YYYY</option>
-                  <option value="MM/DD/YYYY">MM/DD/YYYY</option>
-                </select>
-              </div>
-
-              <div>
-                <h5>Time format</h5>
-                <select className="account-time-format__select">
-                  <option value=""></option>
-                  <option value={true}>12-hour</option>
-                  <option value={false}>24-hour</option>
-                </select>
-              </div>
-            </div>
-          </div>
-        </div>
-        <button
-          className="account-timezonesetting-cancel_btn"
-          onClick={() => setEditActive(false)}
-        >
-          Cancel
-        </button>
-        <button className="account-timezonesetting-save__btn">Save</button>
-      </div>
-    );
-  };
   return (
     <div>
       <h3 style={{ color: "#9dcd5a", fontWeight: "bold" }}>Timezone</h3>
@@ -1140,8 +1084,112 @@ const TimezonesSettings = () => {
           </div>
         </div>
       ) : (
-        <TimezoneEdit />
+        <TimezoneEdit setEditActive={setEditActive} />
       )}
+    </div>
+  );
+};
+
+const TimezoneEdit = ({ setEditActive }) => {
+  const [dateFormat, setDateFormat] = useState("");
+  const [timeFormat, setTimeFormat] = useState("");
+  const [country, setCountry] = useState("");
+  const [timeZone, setTimeZone] = useState("");
+
+  const updateTimeZone = (e) => {
+    e.preventDefault();
+    const id = parseInt(sessionStorage.getItem("id"));
+    fetch(`${UpdatesTimePreference}/${id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify({
+        PractitionerId: id,
+        DateFormat: dateFormat,
+        TimeFormat: timeFormat,
+        Country: country,
+        TimeZone: timeZone,
+      }),
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        console.log(res);
+      });
+  };
+  return (
+    <div>
+      <div className="account-timezone-edit__wrapper">
+        <div>
+          <h5>Country</h5>
+          <input
+            type="text"
+            className="account-timezone__input"
+            value={country}
+            onChange={(e) => setCountry(e.target.value)}
+          />
+        </div>
+        <div style={{ marginTop: "10px" }}>
+          <h5>Timezone</h5>
+
+          <select
+            className="account-timezone__input"
+            value={timeZone}
+            onChange={(e) => setTimeZone(e.target.value)}
+          >
+            {momtimezone.tz.names().map((tz) => (
+              <option key={tz} value={tz}>
+                {tz}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div style={{ marginTop: "20px" }}>
+          <div
+            style={{
+              display: "flex",
+              gap: "50px",
+            }}
+          >
+            <div>
+              <h5>Date format</h5>
+              <select
+                className="account-date-format__select"
+                onChange={(e) => setDateFormat(e.target.value)}
+              >
+                <option value="">{dateFormat}</option>
+                <option value="DD/MM/YYYY">DD/MM/YYYY</option>
+                <option value="MM/DD/YYYY">MM/DD/YYYY</option>
+              </select>
+            </div>
+
+            <div>
+              <h5>Time format</h5>
+              <select
+                className="account-time-format__select"
+                onChange={(e) => setTimeFormat(e.target.value)}
+              >
+                <option value="">{timeFormat}</option>
+                <option value="hh:mm A">12-hour</option>
+                <option value="HH:mm">24-hour</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+      <button
+        className="account-timezonesetting-cancel_btn"
+        onClick={() => setEditActive(false)}
+      >
+        Cancel
+      </button>
+      <button
+        className="account-timezonesetting-save__btn"
+        onClick={(e) => updateTimeZone(e)}
+      >
+        Save
+      </button>
     </div>
   );
 };
