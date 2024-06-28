@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import {
   Calendar,
   Users,
-  Briefcase,
   SignOut,
   List,
   User,
@@ -12,16 +11,16 @@ import {
   Folders,
   Gear,
   Invoice,
-  BookOpenText,
   House,
 } from "@phosphor-icons/react";
 import NavLogo from "../../assets/img/HauoraNav.png";
 import { Link } from "react-router-dom";
 import { GetaHealthPractitioner } from "../../assets/js/serverApi";
+import moment from "moment-timezone";
 
 import "../../styles/navstyles.css";
 
-const Nav = ({ setDisplayed }) => {
+const Nav = ({ setDisplayed, dateSettings }) => {
   const [minimizedNav, setMinimizedNav] = useState(false);
   const [activeDisplay, setActiveDisplay] = useState("dashboard");
   const [userLoggedData, setUserLoggedData] = useState([]);
@@ -30,8 +29,6 @@ const Nav = ({ setDisplayed }) => {
     setDisplayed(display);
     setActiveDisplay(display);
   };
-
-  let date = new Date();
 
   useEffect(() => {
     const id = parseInt(sessionStorage.getItem("id"));
@@ -306,7 +303,11 @@ const Nav = ({ setDisplayed }) => {
               </button>
               {minimizedNav === false ? (
                 <p className="nav-date__text">
-                  {date.toLocaleDateString("en-NZ")}
+                  {moment()
+                    .tz(dateSettings.timeZone)
+                    .format(
+                      `${dateSettings.dateFormat} ${dateSettings.timeFormat}`
+                    )}
                 </p>
               ) : (
                 ""

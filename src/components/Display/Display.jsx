@@ -11,7 +11,7 @@ import Records from "../Records/Records";
 
 import "../../styles/displaystyles.css";
 import Settings from "../Settings/Settings";
-const Display = ({ displayed }) => {
+const Display = ({ displayed, setEditChanges }) => {
   return (
     <>
       <div className="display__wrapper">
@@ -34,7 +34,7 @@ const Display = ({ displayed }) => {
         ) : displayed === "records" ? (
           <Records />
         ) : displayed === "settings" ? (
-          <Settings />
+          <Settings setEditChanges={setEditChanges} /> //setEditChanges will change the time on the Nav from changing it in the Settings/Account
         ) : (
           ""
         )}
