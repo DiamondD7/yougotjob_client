@@ -1144,7 +1144,7 @@ const TimezoneEdit = ({
         console.log(res);
         setEditActive(false);
         setLoadData(true);
-        setEditChanges(true);
+        setEditChanges(true); //changes to true so that the useEffect in the nav component will run to update the date/time
       });
   };
   return (
