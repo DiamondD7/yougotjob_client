@@ -7,6 +7,7 @@ import {
   User,
   Note,
   Chat,
+  ChatCenteredText,
   ChalkboardTeacher,
   Folders,
   Gear,
@@ -194,7 +195,7 @@ const Nav = ({ setDisplayed, dateSettings }) => {
           ) : (
             ""
           )}
-          {/* <li
+          <li
             className={minimizedNav === true ? "minimizednav-icons" : ""}
             style={
               activeDisplay === "communication"
@@ -213,11 +214,11 @@ const Nav = ({ setDisplayed, dateSettings }) => {
                   : {}
               }
             >
-              <Chat size={20} color="#454545" />
+              <ChatCenteredText size={20} color="#454545" />
               &nbsp;
               {minimizedNav === true ? "" : "Communication"}
             </button>
-          </li> */}
+          </li>
 
           {userLoggedData.role === "Practitioner" ? (
             <li
