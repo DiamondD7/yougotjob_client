@@ -9,9 +9,126 @@ import { Link, useNavigate } from "react-router-dom";
 import { CircleNotch } from "@phosphor-icons/react";
 
 import "../../styles/signinstyles.css";
+
+const SignUpOptions = ({
+  setSignupOptionsClicked,
+  setPatientOption,
+  setHealthPractitionerOption,
+}) => {
+  return (
+    <div className="signin__wrapper">
+      <div className="signupform-options-container__wrapper">
+        <h2 className="signupas-title">Sign up as</h2>
+        <div className="signup-options__wrapper">
+          <button
+            className="signup-options__btns"
+            onClick={() => setPatientOption(true)}
+          >
+            Patient
+          </button>
+          <button
+            className="signup-options__btns"
+            onClick={() => setHealthPractitionerOption(true)}
+          >
+            General Practitioner
+          </button>
+          <button className="signup-options__btns">Nurse</button>
+          <button className="signup-options__btns">Therapist</button>
+          <button className="signup-options__btns">Audiologist</button>
+          <button className="signup-options__btns">Acupuncturist</button>
+          <button className="signup-options__btns">Chiropractor</button>
+          <button className="signup-options__btns">Midwife</button>
+          <button className="signup-options__btns">Nutritionists</button>
+          <button className="signup-options__btns">Health Coaches</button>
+          <button className="signup-options__btns">Personal Trainers</button>
+          <button className="signup-options__btns">Pilates Instructors</button>
+        </div>
+        <button
+          className="signup-options-back__btn"
+          onClick={() => setSignupOptionsClicked(false)}
+        >
+          Back
+        </button>
+      </div>
+    </div>
+  );
+};
+
+const PatientSignUp = ({ setPatientOption }) => {
+  return (
+    <div>
+      <div className="signupform-options-container__wrapper">
+        <h1 style={{ textAlign: "center" }}>Patient Sign up</h1>
+        <br />
+        <form className="signup-form">
+          <input
+            className="signin-signup-form__input"
+            type="text"
+            placeholder="NHI"
+          />
+          <input
+            className="signin-signup-form__input"
+            type="text"
+            placeholder="Full name"
+          />
+          <input
+            required
+            className="signin-signup-form__input"
+            type="text"
+            placeholder="Email"
+          />
+          <input
+            required
+            className="signin-signup-form__input"
+            type="password"
+            placeholder="Password"
+          />
+          <input
+            required
+            type="password"
+            placeholder="Confirm password"
+            className="signin-signup-form__input"
+          />
+        </form>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            textAlign: "center",
+          }}
+        >
+          <p className="termsofuse__text">
+            By signing up to create an account: I accept Terms of Use and
+            Privacy Policy
+          </p>
+        </div>
+        <br />
+        <div style={{ textAlign: "center" }}>
+          <button className="signup-signin-submit__btn" type="submit">
+            Submit
+          </button>
+          <button
+            className="signup-back__btn"
+            onClick={() => setPatientOption(false)}
+          >
+            Back
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 const SignIn = ({ localData }) => {
+  // SIGNUP-OPTIONS
+  const [patientOption, setPatientOption] = useState(false);
+  const [healthPractitionerOption, setHealthPractitionerOption] =
+    useState(false);
+  // SIGNUP-OPTIONS
+
   const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
   const [signUpClicked, setSignUpClicked] = useState(false);
+  const [signupOptionsClicked, setSignupOptionsClicked] = useState(false);
   const [registrationNumber, setRegistrationNumber] = useState("");
   const [fullName, setFullName] = useState("");
   const [emailAddress, setEmailAddress] = useState("");
@@ -130,7 +247,7 @@ const SignIn = ({ localData }) => {
   const handleBackButton = () => {
     //handlingBackButton when going back
     //and called this in the handlingSignUp to restart all values
-    setSignUpClicked(false);
+    setHealthPractitionerOption(false);
     setIsError(false);
     setIsErrorRegistration(false);
     setIsErrorPwd(false);
@@ -197,7 +314,7 @@ const SignIn = ({ localData }) => {
   return (
     <div className="signin__wrapper">
       <div className="logo"></div>
-      {signUpClicked === false ? (
+      {signupOptionsClicked === false ? (
         <div className="signinform-container__wrapper">
           <h1>Sign in</h1>
           {isLoadingSignIn === true ? (
@@ -244,7 +361,7 @@ const SignIn = ({ localData }) => {
               <div style={{ textAlign: "center" }}>
                 <button
                   className="signin-signup__btn"
-                  onClick={() => setSignUpClicked(true)}
+                  onClick={() => setSignupOptionsClicked(true)}
                 >
                   Sign up here
                 </button>
@@ -259,107 +376,127 @@ const SignIn = ({ localData }) => {
           )}
         </div>
       ) : (
-        <div className="signinform-container__wrapper">
-          <h1>Sign up</h1>
-          {isError === true ? (
-            <p className="signinform-errormessage__text">
-              {errorSignupMessage}
-            </p>
+        <div>
+          <SignUpOptions
+            setSignupOptionsClicked={setSignupOptionsClicked}
+            setPatientOption={setPatientOption}
+            setHealthPractitionerOption={setHealthPractitionerOption}
+          />
+          {patientOption === true ? (
+            <PatientSignUp setPatientOption={setPatientOption} />
           ) : (
             ""
           )}
-          {isErrorRegistration === true ? (
-            <p className="signinform-errormessage__text">
-              {errorRegistrationMessage}
-            </p>
-          ) : (
-            ""
-          )}
-          {isLoadingSignUp === true ? (
-            <div>
-              <CircleNotch
-                size={26}
-                color="#202020"
-                className={"loading-icon"}
-              />
-            </div>
-          ) : (
-            <form onSubmit={handlingCheckRegistration}>
-              <div>
-                <input
-                  type="text"
-                  placeholder="Registration Number"
-                  value={registrationNumber}
-                  className="signin-signup-form__input"
-                  onChange={(e) => setRegistrationNumber(e.target.value)}
-                />
-                <input
-                  type="text"
-                  placeholder="Full Name"
-                  value={fullName}
-                  className="signin-signup-form__input"
-                  onChange={(e) => setFullName(e.target.value)}
-                />
-              </div>
-              <input
-                required
-                type="text"
-                placeholder="Email"
-                value={emailAddress}
-                className="signin-signup-form__input"
-                onChange={(e) => setEmailAddress(e.target.value)}
-              />
-              <br />
-              <div>
-                {isErrrorPwd === true ? (
-                  <div className="passworderrornotvalid__wrapper">
-                    <p>password is not valid</p>
-                  </div>
-                ) : (
-                  ""
-                )}
-                <input
-                  required
-                  type="password"
-                  placeholder="Password"
-                  onChange={(e) => setPassword(e.target.value)}
-                  className={`signin-signup-form__input ${
-                    validPwd === false && password.length !== 0
-                      ? "notvalidpwd"
-                      : ""
-                  }`}
-                />
-              </div>
-              <input
-                required
-                type="password"
-                placeholder="Confirm password"
-                className="signin-signup-form__input"
-                onChange={(e) => setMatchPwd(e.target.value)}
-              />
-              {validPwdMatch === false && matchPwd.length !== 0 ? (
-                <div className="password-notmatch__wrapper">
-                  <p>Password do not match !</p>
-                </div>
+
+          {healthPractitionerOption === true ? (
+            <div className="signinform-container__wrapper">
+              <h1>Sign up</h1>
+              {isError === true ? (
+                <p className="signinform-errormessage__text">
+                  {errorSignupMessage}
+                </p>
               ) : (
                 ""
               )}
-              <div style={{ display: "flex", justifyContent: "center" }}>
-                <p className="termsofuse__text">
-                  By signing up to create an account: I accept Terms of Use and
-                  Privacy Policy
+              {isErrorRegistration === true ? (
+                <p className="signinform-errormessage__text">
+                  {errorRegistrationMessage}
                 </p>
-              </div>
-              <br />
-              <br />
-              <button className="signup-signin-submit__btn" type="submit">
-                Submit
-              </button>
-              <br />
-              <button className="signup-back__btn" onClick={handleBackButton}>
-                Back
-              </button>
-            </form>
+              ) : (
+                ""
+              )}
+              {isLoadingSignUp === true ? (
+                <div>
+                  <CircleNotch
+                    size={26}
+                    color="#202020"
+                    className={"loading-icon"}
+                  />
+                </div>
+              ) : (
+                <form onSubmit={handlingCheckRegistration}>
+                  <div>
+                    <input
+                      type="text"
+                      placeholder="Registration Number"
+                      value={registrationNumber}
+                      className="signin-signup-form__input"
+                      onChange={(e) => setRegistrationNumber(e.target.value)}
+                    />
+                    <input
+                      type="text"
+                      placeholder="Full Name"
+                      value={fullName}
+                      className="signin-signup-form__input"
+                      onChange={(e) => setFullName(e.target.value)}
+                    />
+                  </div>
+                  <input
+                    required
+                    type="text"
+                    placeholder="Email"
+                    value={emailAddress}
+                    className="signin-signup-form__input"
+                    onChange={(e) => setEmailAddress(e.target.value)}
+                  />
+                  <br />
+                  <div>
+                    {isErrrorPwd === true ? (
+                      <div className="passworderrornotvalid__wrapper">
+                        <p>password is not valid</p>
+                      </div>
+                    ) : (
+                      ""
+                    )}
+                    <input
+                      required
+                      type="password"
+                      placeholder="Password"
+                      onChange={(e) => setPassword(e.target.value)}
+                      className={`signin-signup-form__input ${
+                        validPwd === false && password.length !== 0
+                          ? "notvalidpwd"
+                          : ""
+                      }`}
+                    />
+                  </div>
+                  <input
+                    required
+                    type="password"
+                    placeholder="Confirm password"
+                    className="signin-signup-form__input"
+                    onChange={(e) => setMatchPwd(e.target.value)}
+                  />
+                  {validPwdMatch === false && matchPwd.length !== 0 ? (
+                    <div className="password-notmatch__wrapper">
+                      <p>Password do not match !</p>
+                    </div>
+                  ) : (
+                    ""
+                  )}
+                  <div style={{ display: "flex", justifyContent: "center" }}>
+                    <p className="termsofuse__text">
+                      By signing up to create an account: I accept Terms of Use
+                      and Privacy Policy
+                    </p>
+                  </div>
+                  <br />
+                  <br />
+                  <button className="signup-signin-submit__btn" type="submit">
+                    Submit
+                  </button>
+                  <br />
+                  <button
+                    className="signup-back__btn"
+                    onClick={handleBackButton}
+                  >
+                    Back
+                  </button>
+                </form>
+              )}
+            </div>
+          ) : (
+            ""
           )}
         </div>
       )}
