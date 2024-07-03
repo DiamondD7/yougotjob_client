@@ -366,10 +366,7 @@ const SignIn = ({ localData }) => {
                   Sign up here
                 </button>
               </div>
-              <br />
-              <br />
-              <br />
-              <br />
+
               <p>Contact</p>
               <p className="contact-number__text">0800-5553-4340</p>
             </div>
