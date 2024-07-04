@@ -296,6 +296,47 @@
   .signup-options__wrapper {
     grid-template-columns: repeat(4, 22%);
   }
+
+  .dashboard-cards__wrapper {
+    width: 190px;
+    font-size: 12px;
+  }
+
+  .notes__wrapper {
+    width: 300px;
+    font-size: 12px;
+  }
+
+  .dashboard-graph__wrapper {
+    width: 413px;
+  }
+
+  .weekly-schedule-container__wrapper {
+    margin-left: 50px;
+  }
+
+  .weekly-container__wrapper {
+    width: 350px;
+  }
+
+  .days-daily__wrapper p {
+    font-size: 10px;
+  }
+  .weekly-calendar-month-header__text {
+    font-size: 17px;
+  }
+
+  .days-daily__wrapper h4 {
+    font-size: 15px;
+  }
+
+  .continue-learning-container__wrapper {
+    width: 250px;
+  }
+
+  .continue-learning-container__wrapper h3 {
+    font-size: 11px;
+  }
 }
 
 @media (max-width: 1200px) {
