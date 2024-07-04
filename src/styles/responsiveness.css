@@ -175,6 +175,18 @@
     width: 440px;
   }
 
+  .dashboard-invoice-table thead th {
+    padding: 10px;
+    text-align: start;
+    font-size: 13px;
+  }
+
+  .dashboard-invoice-table tbody tr td {
+    padding: 10px;
+    text-align: start;
+    font-size: 11px;
+  }
+
   .continue-learning-container__wrapper {
     width: 300px;
   }
