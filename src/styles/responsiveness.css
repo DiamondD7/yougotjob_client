@@ -172,7 +172,15 @@
   }
 
   /* ------------------------------CALENDAR------------------------------------ */
+
+  .result-table__table {
+    width: 90%;
+    margin: 10px 0 0 50px;
+    border-collapse: collapse;
+    font-size: 10px;
+  }
 }
+
 @media (max-width: 1600px) {
   .signin-submit__btn {
     padding: 3px 120px;
