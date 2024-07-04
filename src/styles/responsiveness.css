@@ -179,6 +179,20 @@
     border-collapse: collapse;
     font-size: 10px;
   }
+
+  /* -----------------------------LEARNING------------------------------------- */
+  .learning-results__wrapper {
+    grid-template-columns: repeat(5, 200px);
+  }
+
+  .learning-modules__wrapper {
+    width: 200px;
+  }
+
+  .learning-module__img {
+    width: 200px;
+  }
+  /* -----------------------------LEARNING------------------------------------- */
 }
 
 @media (max-width: 1600px) {
@@ -386,6 +400,20 @@
   .continue-learning-container__wrapper h3 {
     font-size: 11px;
   }
+
+  /* -----------------------------LEARNING------------------------------------- */
+  .learning-results__wrapper {
+    grid-template-columns: repeat(3, 200px);
+  }
+
+  .learning-modules__wrapper {
+    width: 200px;
+  }
+
+  .learning-module__img {
+    width: 200px;
+  }
+  /* -----------------------------LEARNING------------------------------------- */
 }
 
 @media (max-width: 1200px) {
