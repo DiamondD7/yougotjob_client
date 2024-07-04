@@ -239,6 +239,43 @@
   .signin-submit__btn {
     padding: 3px 100px;
   }
+
+  /* ------------------------------CALENDAR------------------------------------ */
+  .calendar-grid__wrapper {
+    grid-template-columns: repeat(7, 120px);
+    grid-template-rows: repeat(6, 100px);
+  }
+
+  .calendar-grid-day__wrapper {
+    height: 100px;
+    width: 120px;
+  }
+
+  .daysOfWeek__wrapper label:nth-child(1) {
+    margin-right: 110px;
+  }
+
+  .daysOfWeek__wrapper label:nth-child(2) {
+    margin-right: 115px;
+  }
+
+  .daysOfWeek__wrapper label:nth-child(3) {
+    margin-right: 110px;
+  }
+
+  .daysOfWeek__wrapper label:nth-child(4) {
+    margin-right: 115px;
+  }
+
+  .daysOfWeek__wrapper label:nth-child(5) {
+    margin-right: 115px;
+  }
+
+  .daysOfWeek__wrapper label:nth-child(6) {
+    margin-right: 115px;
+  }
+
+  /* ------------------------------CALENDAR------------------------------------ */
 }
 @media (max-width: 1300px) {
   .signup-options__btns {
@@ -264,6 +301,45 @@
   .signup-options__wrapper {
     gap: 5px;
   }
+}
+
+@media (max-width: 1200px) {
+  /* ------------------------------CALENDAR------------------------------------ */
+  .calendar-grid__wrapper {
+    grid-template-columns: repeat(7, 90px);
+    grid-template-rows: repeat(6, 100px);
+  }
+
+  .calendar-grid-day__wrapper {
+    height: 100px;
+    width: 90px;
+  }
+
+  .daysOfWeek__wrapper label:nth-child(1) {
+    margin-right: 80px;
+  }
+
+  .daysOfWeek__wrapper label:nth-child(2) {
+    margin-right: 85px;
+  }
+
+  .daysOfWeek__wrapper label:nth-child(3) {
+    margin-right: 80px;
+  }
+
+  .daysOfWeek__wrapper label:nth-child(4) {
+    margin-right: 85px;
+  }
+
+  .daysOfWeek__wrapper label:nth-child(5) {
+    margin-right: 85px;
+  }
+
+  .daysOfWeek__wrapper label:nth-child(6) {
+    margin-right: 85px;
+  }
+
+  /* ------------------------------CALENDAR------------------------------------ */
 }
 @media (max-width: 800px) {
   .signin-submit__btn {
