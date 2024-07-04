@@ -99,6 +99,17 @@
     color: rgba(0, 0, 0, 0.5);
   }
   /* ------------------------------CALENDAR------------------------------------ */
+
+  /* --------------------------------COMMUNICATION------------------------------- */
+  .convo-container__wrapper {
+    width: 1000px;
+  }
+
+  .textbox-message {
+    max-width: 1000px;
+    min-width: 1000px;
+  }
+  /* --------------------------------COMMUNICATION------------------------------- */
 }
 
 @media (max-width: 1750px) {
@@ -161,7 +172,15 @@
   }
 
   /* ------------------------------CALENDAR------------------------------------ */
+
+  .result-table__table {
+    width: 90%;
+    margin: 10px 0 0 50px;
+    border-collapse: collapse;
+    font-size: 10px;
+  }
 }
+
 @media (max-width: 1600px) {
   .signin-submit__btn {
     padding: 3px 120px;
@@ -173,6 +192,18 @@
 
   .dashboard-invoice-container__wrapper {
     width: 440px;
+  }
+
+  .dashboard-invoice-table thead th {
+    padding: 10px;
+    text-align: start;
+    font-size: 13px;
+  }
+
+  .dashboard-invoice-table tbody tr td {
+    padding: 10px;
+    text-align: start;
+    font-size: 11px;
   }
 
   .continue-learning-container__wrapper {
@@ -233,12 +264,79 @@
   }
 
   /* ------------------------------CALENDAR------------------------------------ */
+
+  /* --------------------------------COMMUNICATION------------------------------- */
+  .convo-container__wrapper {
+    height: 70vh;
+    width: 900px;
+  }
+
+  .textbox-message {
+    max-width: 900px;
+    min-width: 900px;
+  }
+
+  .recieved-message__wrapper {
+    width: 400px;
+  }
+
+  .user-message__wrapper {
+    width: 400px;
+  }
+  /* --------------------------------COMMUNICATION------------------------------- */
 }
 
 @media (max-width: 1400px) {
   .signin-submit__btn {
     padding: 3px 100px;
   }
+
+  /* ------------------------------CALENDAR------------------------------------ */
+  .calendar-grid__wrapper {
+    grid-template-columns: repeat(7, 120px);
+    grid-template-rows: repeat(6, 100px);
+  }
+
+  .calendar-grid-day__wrapper {
+    height: 100px;
+    width: 120px;
+  }
+
+  .daysOfWeek__wrapper label:nth-child(1) {
+    margin-right: 110px;
+  }
+
+  .daysOfWeek__wrapper label:nth-child(2) {
+    margin-right: 115px;
+  }
+
+  .daysOfWeek__wrapper label:nth-child(3) {
+    margin-right: 110px;
+  }
+
+  .daysOfWeek__wrapper label:nth-child(4) {
+    margin-right: 115px;
+  }
+
+  .daysOfWeek__wrapper label:nth-child(5) {
+    margin-right: 115px;
+  }
+
+  .daysOfWeek__wrapper label:nth-child(6) {
+    margin-right: 115px;
+  }
+
+  /* ------------------------------CALENDAR------------------------------------ */
+
+  /* --------------------------------COMMUNICATION------------------------------- */
+  .communication-profiles__wrapper {
+    height: 100vh;
+    width: 150px;
+
+    padding: 5px 0 0 10px;
+    overflow: auto;
+  }
+  /* --------------------------------COMMUNICATION------------------------------- */
 }
 @media (max-width: 1300px) {
   .signup-options__btns {
@@ -246,6 +344,47 @@
   }
   .signup-options__wrapper {
     grid-template-columns: repeat(4, 22%);
+  }
+
+  .dashboard-cards__wrapper {
+    width: 190px;
+    font-size: 12px;
+  }
+
+  .notes__wrapper {
+    width: 300px;
+    font-size: 12px;
+  }
+
+  .dashboard-graph__wrapper {
+    width: 413px;
+  }
+
+  .weekly-schedule-container__wrapper {
+    margin-left: 50px;
+  }
+
+  .weekly-container__wrapper {
+    width: 350px;
+  }
+
+  .days-daily__wrapper p {
+    font-size: 10px;
+  }
+  .weekly-calendar-month-header__text {
+    font-size: 17px;
+  }
+
+  .days-daily__wrapper h4 {
+    font-size: 15px;
+  }
+
+  .continue-learning-container__wrapper {
+    width: 250px;
+  }
+
+  .continue-learning-container__wrapper h3 {
+    font-size: 11px;
   }
 }
 
@@ -264,6 +403,45 @@
   .signup-options__wrapper {
     gap: 5px;
   }
+}
+
+@media (max-width: 1200px) {
+  /* ------------------------------CALENDAR------------------------------------ */
+  .calendar-grid__wrapper {
+    grid-template-columns: repeat(7, 90px);
+    grid-template-rows: repeat(6, 100px);
+  }
+
+  .calendar-grid-day__wrapper {
+    height: 100px;
+    width: 90px;
+  }
+
+  .daysOfWeek__wrapper label:nth-child(1) {
+    margin-right: 80px;
+  }
+
+  .daysOfWeek__wrapper label:nth-child(2) {
+    margin-right: 85px;
+  }
+
+  .daysOfWeek__wrapper label:nth-child(3) {
+    margin-right: 80px;
+  }
+
+  .daysOfWeek__wrapper label:nth-child(4) {
+    margin-right: 85px;
+  }
+
+  .daysOfWeek__wrapper label:nth-child(5) {
+    margin-right: 85px;
+  }
+
+  .daysOfWeek__wrapper label:nth-child(6) {
+    margin-right: 85px;
+  }
+
+  /* ------------------------------CALENDAR------------------------------------ */
 }
 @media (max-width: 800px) {
   .signin-submit__btn {

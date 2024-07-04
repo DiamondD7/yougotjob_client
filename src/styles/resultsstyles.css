@@ -1,3 +1,8 @@
+.result-table__h2 {
+  font-size: 15px;
+  margin: 10px 0 0 50px;
+}
+
 .filter-result__wrapper {
   width: 90%;
   margin: 10px 0 20px 50px;
@@ -80,7 +85,7 @@
   color: #9dcd5a;
 }
 
-.paginationActive{
+.paginationActive {
   color: #f3f3f3;
   border-radius: 50px;
   padding: 3px 10px;

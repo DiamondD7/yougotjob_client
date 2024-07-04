@@ -192,7 +192,7 @@ const Results = () => {
     <div>
       {openResult === false ? (
         <div>
-          <h2 style={{ margin: "10px 0 0 50px", fontSize: "26px" }}>Results</h2>
+          {/* <h2 className="result-table__h2">Results</h2> */}
           <FilterResults
             setSearchField={setSearchField}
             searchField={searchField}

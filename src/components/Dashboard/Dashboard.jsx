@@ -669,11 +669,7 @@ const Dashboard = () => {
         >
           <InvoiceContainer />
         </div>
-        <div
-          style={{
-            marginLeft: "115px",
-          }}
-        >
+        <div className="weekly-schedule-container__wrapper">
           <WeeklyScheduleContainer />
         </div>
       </div>

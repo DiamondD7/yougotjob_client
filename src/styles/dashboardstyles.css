@@ -204,6 +204,10 @@
   border-radius: 50%;
 }
 
+.weekly-schedule-container__wrapper {
+  margin-left: 115px;
+}
+
 .weekly-container__wrapper {
   margin: 20px 115px 0 0;
 
