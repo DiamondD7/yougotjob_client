@@ -99,6 +99,17 @@
     color: rgba(0, 0, 0, 0.5);
   }
   /* ------------------------------CALENDAR------------------------------------ */
+
+  /* --------------------------------COMMUNICATION------------------------------- */
+  .convo-container__wrapper {
+    width: 1000px;
+  }
+
+  .textbox-message {
+    max-width: 1000px;
+    min-width: 1000px;
+  }
+  /* --------------------------------COMMUNICATION------------------------------- */
 }
 
 @media (max-width: 1750px) {
@@ -245,6 +256,26 @@
   }
 
   /* ------------------------------CALENDAR------------------------------------ */
+
+  /* --------------------------------COMMUNICATION------------------------------- */
+  .convo-container__wrapper {
+    height: 70vh;
+    width: 900px;
+  }
+
+  .textbox-message {
+    max-width: 900px;
+    min-width: 900px;
+  }
+
+  .recieved-message__wrapper {
+    width: 400px;
+  }
+
+  .user-message__wrapper {
+    width: 400px;
+  }
+  /* --------------------------------COMMUNICATION------------------------------- */
 }
 
 @media (max-width: 1400px) {
@@ -288,6 +319,16 @@
   }
 
   /* ------------------------------CALENDAR------------------------------------ */
+
+  /* --------------------------------COMMUNICATION------------------------------- */
+  .communication-profiles__wrapper {
+    height: 100vh;
+    width: 150px;
+
+    padding: 5px 0 0 10px;
+    overflow: auto;
+  }
+  /* --------------------------------COMMUNICATION------------------------------- */
 }
 @media (max-width: 1300px) {
   .signup-options__btns {
