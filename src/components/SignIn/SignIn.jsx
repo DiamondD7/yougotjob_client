@@ -63,9 +63,12 @@ const PatientSignUp = ({ setPatientOption }) => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [matchedPw, setMatchedPw] = useState(false);
+  const [validPw, setValidPw] = useState(false);
+  const [emailNhiError, setEmailNhiError] = useState(false);
 
   const handleAddPatient = (e) => {
     e.preventDefault();
+    const role = "Patient";
     fetch(AddPatient, {
       method: "POST",
       headers: {
@@ -73,7 +76,8 @@ const PatientSignUp = ({ setPatientOption }) => {
         Accept: "application/json",
       },
       body: JSON.stringify({
-        Nhi: nhi,
+        NHI: nhi,
+        Role: role,
         FullName: fullName,
         EmailAddress: email,
         Password: password,
@@ -82,20 +86,27 @@ const PatientSignUp = ({ setPatientOption }) => {
       .then((res) => res.json())
       .then((res) => {
         console.log(res);
-        setPatientOption(false);
+        if (res.returnStatus.status !== false) {
+          setPatientOption(false);
+          setEmailNhiError(false);
+        } else {
+          setEmailNhiError(true);
+        }
       });
   };
 
   useEffect(() => {
     const match = PWD_REGEX.test(password);
-    if (
-      password !== confirmPassword ||
-      password.length <= 0 ||
-      match === false
-    ) {
+    if (password !== confirmPassword || password.length <= 0) {
       setMatchedPw(false);
     } else {
       setMatchedPw(true);
+    }
+
+    if (match === false) {
+      setValidPw(false);
+    } else {
+      setValidPw(true);
     }
   }, [password, confirmPassword]);
   return (
@@ -103,7 +114,14 @@ const PatientSignUp = ({ setPatientOption }) => {
       <div className="signupform-options-container__wrapper">
         <h1 style={{ textAlign: "center" }}>Patient Sign up</h1>
         <br />
-        <form className="signup-form">
+        <form className="signup-form" onSubmit={handleAddPatient}>
+          <p
+            className={
+              emailNhiError === true ? "emailtaken-error" : "error-default"
+            }
+          >
+            Email/NHI already registered
+          </p>
           <input
             className="signin-signup-form__input"
             type="text"
@@ -138,47 +156,54 @@ const PatientSignUp = ({ setPatientOption }) => {
             onChange={(e) => setConfirmPassword(e.target.value)}
           />
           <p
+            className={validPw === false ? "pwd-validate-error" : "pwd-default"}
+          >
+            8 to 24 characters. Must include uppercase and lowercase letters, a
+            number and a special character. <br />
+            Allowed special characters: ! @ # $ %
+          </p>
+          <p
             className={
               password !== confirmPassword ? "pwd-donotmatch" : "pwd-default"
             }
           >
             Password do not match!
           </p>
+
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              textAlign: "center",
+            }}
+          >
+            <p className="termsofuse__text">
+              By signing up to create an account: I accept Terms of Use and
+              Privacy Policy
+            </p>
+          </div>
+          <br />
+          <div style={{ textAlign: "center" }}>
+            <button
+              className="signup-signin-submit__btn"
+              style={
+                matchedPw === false
+                  ? { cursor: "default", backgroundColor: "red" }
+                  : { cursor: "pointer" }
+              }
+              disabled={matchedPw === false ? true : false}
+              type="submit"
+            >
+              Submit
+            </button>
+            <button
+              className="signup-back__btn"
+              onClick={() => setPatientOption(false)}
+            >
+              Back
+            </button>
+          </div>
         </form>
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            textAlign: "center",
-          }}
-        >
-          <p className="termsofuse__text">
-            By signing up to create an account: I accept Terms of Use and
-            Privacy Policy
-          </p>
-        </div>
-        <br />
-        <div style={{ textAlign: "center" }}>
-          <button
-            className="signup-signin-submit__btn"
-            style={
-              matchedPw === false
-                ? { cursor: "default", backgroundColor: "red" }
-                : { cursor: "pointer" }
-            }
-            disabled={matchedPw === false ? true : false}
-            type="submit"
-            onClick={(e) => handleAddPatient(e)}
-          >
-            Submit
-          </button>
-          <button
-            className="signup-back__btn"
-            onClick={() => setPatientOption(false)}
-          >
-            Back
-          </button>
-        </div>
       </div>
     </div>
   );
