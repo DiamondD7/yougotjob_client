@@ -67,6 +67,7 @@ const PatientSignUp = ({ setPatientOption }) => {
 
   const handleAddPatient = (e) => {
     e.preventDefault();
+    const role = "Patient";
     fetch(AddPatient, {
       method: "POST",
       headers: {
@@ -74,7 +75,8 @@ const PatientSignUp = ({ setPatientOption }) => {
         Accept: "application/json",
       },
       body: JSON.stringify({
-        Nhi: nhi,
+        NHI: nhi,
+        Role: role,
         FullName: fullName,
         EmailAddress: email,
         Password: password,
@@ -83,7 +85,9 @@ const PatientSignUp = ({ setPatientOption }) => {
       .then((res) => res.json())
       .then((res) => {
         console.log(res);
-        setPatientOption(false);
+        if (res.returnStatus.status !== false) {
+          setPatientOption(false);
+        }
       });
   };
 
@@ -106,7 +110,7 @@ const PatientSignUp = ({ setPatientOption }) => {
       <div className="signupform-options-container__wrapper">
         <h1 style={{ textAlign: "center" }}>Patient Sign up</h1>
         <br />
-        <form className="signup-form">
+        <form className="signup-form" onSubmit={handleAddPatient}>
           <input
             className="signin-signup-form__input"
             type="text"
@@ -154,41 +158,41 @@ const PatientSignUp = ({ setPatientOption }) => {
           >
             Password do not match!
           </p>
+
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              textAlign: "center",
+            }}
+          >
+            <p className="termsofuse__text">
+              By signing up to create an account: I accept Terms of Use and
+              Privacy Policy
+            </p>
+          </div>
+          <br />
+          <div style={{ textAlign: "center" }}>
+            <button
+              className="signup-signin-submit__btn"
+              style={
+                matchedPw === false
+                  ? { cursor: "default", backgroundColor: "red" }
+                  : { cursor: "pointer" }
+              }
+              disabled={matchedPw === false ? true : false}
+              type="submit"
+            >
+              Submit
+            </button>
+            <button
+              className="signup-back__btn"
+              onClick={() => setPatientOption(false)}
+            >
+              Back
+            </button>
+          </div>
         </form>
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            textAlign: "center",
-          }}
-        >
-          <p className="termsofuse__text">
-            By signing up to create an account: I accept Terms of Use and
-            Privacy Policy
-          </p>
-        </div>
-        <br />
-        <div style={{ textAlign: "center" }}>
-          <button
-            className="signup-signin-submit__btn"
-            style={
-              matchedPw === false
-                ? { cursor: "default", backgroundColor: "red" }
-                : { cursor: "pointer" }
-            }
-            disabled={matchedPw === false ? true : false}
-            type="submit"
-            onClick={(e) => handleAddPatient(e)}
-          >
-            Submit
-          </button>
-          <button
-            className="signup-back__btn"
-            onClick={() => setPatientOption(false)}
-          >
-            Back
-          </button>
-        </div>
       </div>
     </div>
   );
