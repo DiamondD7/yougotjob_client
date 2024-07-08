@@ -229,6 +229,15 @@
 }
 
 /* ------------------------------------------------------------Patient Sign Up */
+.error-default {
+  display: none;
+}
+
+.emailtaken-error {
+  display: block;
+  color: red;
+  font-size: 12px;
+}
 
 .pwd-default {
   display: none;

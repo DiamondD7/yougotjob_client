@@ -64,6 +64,7 @@ const PatientSignUp = ({ setPatientOption }) => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [matchedPw, setMatchedPw] = useState(false);
   const [validPw, setValidPw] = useState(false);
+  const [emailTakenError, setEmailTakenError] = useState(false);
 
   const handleAddPatient = (e) => {
     e.preventDefault();
@@ -87,6 +88,9 @@ const PatientSignUp = ({ setPatientOption }) => {
         console.log(res);
         if (res.returnStatus.status !== false) {
           setPatientOption(false);
+          setEmailTakenError(false);
+        } else {
+          setEmailTakenError(true);
         }
       });
   };
@@ -111,6 +115,13 @@ const PatientSignUp = ({ setPatientOption }) => {
         <h1 style={{ textAlign: "center" }}>Patient Sign up</h1>
         <br />
         <form className="signup-form" onSubmit={handleAddPatient}>
+          <p
+            className={
+              emailTakenError === true ? "emailtaken-error" : "error-default"
+            }
+          >
+            Email already taken
+          </p>
           <input
             className="signin-signup-form__input"
             type="text"
