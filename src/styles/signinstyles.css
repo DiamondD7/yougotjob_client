@@ -234,6 +234,13 @@
   display: none;
 }
 
+.pwd-validate-error {
+  display: block;
+  font-size: 12px;
+  color: red;
+  margin-bottom: 10px;
+}
+
 .pwd-donotmatch {
   display: block;
   color: red;

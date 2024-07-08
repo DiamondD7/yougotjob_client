@@ -63,6 +63,7 @@ const PatientSignUp = ({ setPatientOption }) => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [matchedPw, setMatchedPw] = useState(false);
+  const [validPw, setValidPw] = useState(false);
 
   const handleAddPatient = (e) => {
     e.preventDefault();
@@ -88,14 +89,16 @@ const PatientSignUp = ({ setPatientOption }) => {
 
   useEffect(() => {
     const match = PWD_REGEX.test(password);
-    if (
-      password !== confirmPassword ||
-      password.length <= 0 ||
-      match === false
-    ) {
+    if (password !== confirmPassword || password.length <= 0) {
       setMatchedPw(false);
     } else {
       setMatchedPw(true);
+    }
+
+    if (match === false) {
+      setValidPw(false);
+    } else {
+      setValidPw(true);
     }
   }, [password, confirmPassword]);
   return (
@@ -137,6 +140,13 @@ const PatientSignUp = ({ setPatientOption }) => {
             className="signin-signup-form__input"
             onChange={(e) => setConfirmPassword(e.target.value)}
           />
+          <p
+            className={validPw === false ? "pwd-validate-error" : "pwd-default"}
+          >
+            8 to 24 characters. Must include uppercase and lowercase letters, a
+            number and a special character. <br />
+            Allowed special characters: ! @ # $ %
+          </p>
           <p
             className={
               password !== confirmPassword ? "pwd-donotmatch" : "pwd-default"
