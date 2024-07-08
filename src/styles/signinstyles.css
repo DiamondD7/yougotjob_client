@@ -229,3 +229,13 @@
 }
 
 /* ------------------------------------------------------------Patient Sign Up */
+
+.pwd-default {
+  display: none;
+}
+
+.pwd-donotmatch {
+  display: block;
+  color: red;
+  font-size: 12px;
+}

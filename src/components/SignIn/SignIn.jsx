@@ -4,6 +4,7 @@ import {
   GetaHealthPractitioner,
   CheckRegistration,
   CheckPassword,
+  AddPatient,
 } from "../../assets/js/serverApi";
 import { Link, useNavigate } from "react-router-dom";
 import { CircleNotch } from "@phosphor-icons/react";
@@ -55,6 +56,48 @@ const SignUpOptions = ({
 };
 
 const PatientSignUp = ({ setPatientOption }) => {
+  const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
+  const [nhi, setNhi] = useState("");
+  const [fullName, setFullName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [matchedPw, setMatchedPw] = useState(false);
+
+  const handleAddPatient = (e) => {
+    e.preventDefault();
+    fetch(AddPatient, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify({
+        Nhi: nhi,
+        FullName: fullName,
+        EmailAddress: email,
+        Password: password,
+      }),
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        console.log(res);
+        setPatientOption(false);
+      });
+  };
+
+  useEffect(() => {
+    const match = PWD_REGEX.test(password);
+    if (
+      password !== confirmPassword ||
+      password.length <= 0 ||
+      match === false
+    ) {
+      setMatchedPw(false);
+    } else {
+      setMatchedPw(true);
+    }
+  }, [password, confirmPassword]);
   return (
     <div>
       <div className="signupform-options-container__wrapper">
@@ -65,30 +108,42 @@ const PatientSignUp = ({ setPatientOption }) => {
             className="signin-signup-form__input"
             type="text"
             placeholder="NHI"
+            onChange={(e) => setNhi(e.target.value)}
           />
           <input
             className="signin-signup-form__input"
             type="text"
             placeholder="Full name"
+            onChange={(e) => setFullName(e.target.value)}
           />
           <input
             required
             className="signin-signup-form__input"
             type="text"
             placeholder="Email"
+            onChange={(e) => setEmail(e.target.value)}
           />
           <input
             required
             className="signin-signup-form__input"
             type="password"
             placeholder="Password"
+            onChange={(e) => setPassword(e.target.value)}
           />
           <input
             required
             type="password"
             placeholder="Confirm password"
             className="signin-signup-form__input"
+            onChange={(e) => setConfirmPassword(e.target.value)}
           />
+          <p
+            className={
+              password !== confirmPassword ? "pwd-donotmatch" : "pwd-default"
+            }
+          >
+            Password do not match!
+          </p>
         </form>
         <div
           style={{
@@ -104,7 +159,17 @@ const PatientSignUp = ({ setPatientOption }) => {
         </div>
         <br />
         <div style={{ textAlign: "center" }}>
-          <button className="signup-signin-submit__btn" type="submit">
+          <button
+            className="signup-signin-submit__btn"
+            style={
+              matchedPw === false
+                ? { cursor: "default", backgroundColor: "red" }
+                : { cursor: "pointer" }
+            }
+            disabled={matchedPw === false ? true : false}
+            type="submit"
+            onClick={(e) => handleAddPatient(e)}
+          >
             Submit
           </button>
           <button
