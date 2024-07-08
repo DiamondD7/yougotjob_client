@@ -64,7 +64,7 @@ const PatientSignUp = ({ setPatientOption }) => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [matchedPw, setMatchedPw] = useState(false);
   const [validPw, setValidPw] = useState(false);
-  const [emailTakenError, setEmailTakenError] = useState(false);
+  const [emailNhiError, setEmailNhiError] = useState(false);
 
   const handleAddPatient = (e) => {
     e.preventDefault();
@@ -88,9 +88,9 @@ const PatientSignUp = ({ setPatientOption }) => {
         console.log(res);
         if (res.returnStatus.status !== false) {
           setPatientOption(false);
-          setEmailTakenError(false);
+          setEmailNhiError(false);
         } else {
-          setEmailTakenError(true);
+          setEmailNhiError(true);
         }
       });
   };
@@ -117,10 +117,10 @@ const PatientSignUp = ({ setPatientOption }) => {
         <form className="signup-form" onSubmit={handleAddPatient}>
           <p
             className={
-              emailTakenError === true ? "emailtaken-error" : "error-default"
+              emailNhiError === true ? "emailtaken-error" : "error-default"
             }
           >
-            Email already taken
+            Email/NHI already registered
           </p>
           <input
             className="signin-signup-form__input"
