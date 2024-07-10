@@ -188,7 +188,11 @@ const PatientSignUp = ({ setPatientOption }) => {
               className="signup-signin-submit__btn"
               style={
                 matchedPw === false
-                  ? { cursor: "default", backgroundColor: "red" }
+                  ? {
+                      cursor: "default",
+                      backgroundColor: "transparent",
+                      color: "rgba(0,0,0,0.5)",
+                    }
                   : { cursor: "pointer" }
               }
               disabled={matchedPw === false ? true : false}
