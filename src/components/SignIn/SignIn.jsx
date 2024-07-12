@@ -5,6 +5,7 @@ import {
   CheckRegistration,
   CheckPassword,
   AddPatient,
+  CheckPatientPassword,
 } from "../../assets/js/serverApi";
 import { Link, useNavigate } from "react-router-dom";
 import { CircleNotch } from "@phosphor-icons/react";
