@@ -214,7 +214,7 @@ const PatientSignUp = ({ setPatientOption }) => {
   );
 };
 
-const GeneralPracitionerSignUp = ({ localData, today }) => {
+const GeneralPracitionerSignIn = ({ localData, today }) => {
   const [signinEmailAddress, setSigninEmailAddress] = useState("");
   const [signinPassword, setSigninPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
@@ -262,11 +262,6 @@ const GeneralPracitionerSignUp = ({ localData, today }) => {
     }, 3000);
   };
 
-  useEffect(() => {
-    sessionStorage.setItem("auth", "false");
-    sessionStorage.setItem("id", 0); //reset id in the session
-  }, []);
-
   return (
     <div>
       <div className="signin__wrapper">
@@ -274,6 +269,120 @@ const GeneralPracitionerSignUp = ({ localData, today }) => {
 
         <div className="signinform-container__wrapper">
           <h1>General Pracitioner</h1>
+          {isLoadingSignIn === true ? (
+            <div>
+              <CircleNotch
+                size={26}
+                color="#202020"
+                className={"loading-icon"}
+              />
+            </div>
+          ) : (
+            <div>
+              <form>
+                {errorMessage && (
+                  <p className="signinform-errormessage__text">
+                    {errorMessage}
+                  </p>
+                )}
+                <input
+                  className="signin-signup-form__input"
+                  type="text"
+                  placeholder="Email"
+                  onChange={(e) => setSigninEmailAddress(e.target.value)}
+                />
+                <br />
+                <input
+                  className="signin-signup-form__input"
+                  type="password"
+                  placeholder="Password"
+                  onChange={(e) => setSigninPassword(e.target.value)}
+                />
+                <br />
+                <Link
+                  className="signin-submit__btn"
+                  onClick={handleCheckPass}
+                  to="/home"
+                >
+                  Submit
+                </Link>
+                <button
+                  className="signup-back__btn"
+                  onClick={() => {
+                    window.location.reload();
+                  }}
+                >
+                  back
+                </button>
+              </form>
+
+              <p>Contact</p>
+              <p className="contact-number__text">0800-5553-4340</p>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const PatientSignIn = ({ localData, today }) => {
+  const [signinEmailAddress, setSigninEmailAddress] = useState("");
+  const [signinPassword, setSigninPassword] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
+  const [isLoadingSignIn, setIsLoadingSignIn] = useState(false);
+
+  const navigate = useNavigate();
+  const handleCheckPass = (e) => {
+    e.preventDefault();
+    setIsLoadingSignIn(true);
+    setTimeout(() => {
+      fetch(CheckPatientPassword, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({
+          EmailAddress: signinEmailAddress,
+          Password: signinPassword,
+          NHI: "",
+          FullName: "",
+          HomeAddress: "",
+          Role: "",
+          DOB: today,
+          EmailRecovery: "",
+          MobileNumber: "",
+          Nationality: "",
+          Height: null,
+          Weight: null,
+        }),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.returnStatus.status === false) {
+            //checking if the status from the error is false or true
+            console.log(data.returnStatus.message); //error message
+            setErrorMessage(data.returnStatus.message);
+          } else {
+            localData(data); //setData and auth
+            navigate("/home");
+          }
+          setIsLoadingSignIn(false);
+        })
+        .catch((err) => {
+          console.log(err); //error
+        });
+    }, 3000);
+  };
+
+  return (
+    <div>
+      <div className="signin__wrapper">
+        <div className="logo"></div>
+
+        <div className="signinform-container__wrapper">
+          <h1>Patient</h1>
           {isLoadingSignIn === true ? (
             <div>
               <CircleNotch
@@ -479,8 +588,17 @@ const SignIn = ({ localData }) => {
     if (role === "General Practitioner") {
       setOptionClicked(true);
       setComponent("General Pracitioner");
+    } else if (role === "Patient") {
+      setOptionClicked(true);
+      setComponent("Patient");
     }
   };
+
+  useEffect(() => {
+    sessionStorage.setItem("auth", "false");
+    sessionStorage.setItem("id", 0); //reset id in the session
+    sessionStorage.setItem("role", undefined);
+  }, []);
   return (
     <div>
       <div className="signin__wrapper">
@@ -489,7 +607,11 @@ const SignIn = ({ localData }) => {
         {optionClicked === true ? (
           <div>
             {component === "General Pracitioner" && (
-              <GeneralPracitionerSignUp localData={localData} today={today} />
+              <GeneralPracitionerSignIn localData={localData} today={today} />
+            )}
+
+            {component === "Patient" && (
+              <PatientSignIn localData={localData} today={today} />
             )}
           </div>
         ) : (
