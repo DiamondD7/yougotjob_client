@@ -273,7 +273,7 @@ const GeneralPracitionerSignUp = ({ localData, today }) => {
         <div className="logo"></div>
 
         <div className="signinform-container__wrapper">
-          <h1>Sign in</h1>
+          <h1>General Pracitioner</h1>
           {isLoadingSignIn === true ? (
             <div>
               <CircleNotch
@@ -311,6 +311,14 @@ const GeneralPracitionerSignUp = ({ localData, today }) => {
                 >
                   Submit
                 </Link>
+                <button
+                  className="signup-back__btn"
+                  onClick={() => {
+                    window.location.reload();
+                  }}
+                >
+                  back
+                </button>
               </form>
 
               <p>Contact</p>
