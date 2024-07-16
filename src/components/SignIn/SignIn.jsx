@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import {
   AddHealthPractitionerUser,
   GetaHealthPractitioner,
+  AddTimePreference,
   CheckRegistration,
   CheckPassword,
   AddPatient,
@@ -476,6 +477,27 @@ const SignIn = ({ localData }) => {
     setValidPwdMatch(match);
   }, [password, matchPwd]);
 
+  const handleAddInitialTimePref = (id) => {
+    fetch(AddTimePreference, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify({
+        PractitionerId: id,
+        Country: "New Zealand",
+        DateFormat: "DD/MM/YYYY",
+        TimeFormat: "hh:mm A",
+        TimeZone: "Pacific/Auckland",
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+      });
+  };
+
   const handlingSignUp = (e) => {
     e.preventDefault();
     const isPwdValid = PWD_REGEX.test(password);
@@ -517,6 +539,7 @@ const SignIn = ({ localData }) => {
             setIsError(true); //setting error to be true
             setErrorSignupMessage(data.returnStatus.message); //error message for the client to see
           } else {
+            handleAddInitialTimePref(data.returnStatus.id);
             console.log(data); //DELETE
             handleBackButton(); //called to restart values
           }
