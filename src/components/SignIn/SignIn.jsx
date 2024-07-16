@@ -7,6 +7,7 @@ import {
   CheckPassword,
   AddPatient,
   CheckPatientPassword,
+  AddPatientDateTime,
 } from "../../assets/js/serverApi";
 import { Link, useNavigate } from "react-router-dom";
 import { CircleNotch } from "@phosphor-icons/react";
@@ -68,6 +69,27 @@ const PatientSignUp = ({ setPatientOption }) => {
   const [validPw, setValidPw] = useState(false);
   const [emailNhiError, setEmailNhiError] = useState(false);
 
+  const handlePatientDateTime = (id) => {
+    fetch(AddPatientDateTime, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify({
+        PatientId: id,
+        Country: "New Zealand",
+        DateFormat: "DD/MM/YYYY",
+        TimeFormat: "hh:mm A",
+        TimeZone: "Pacific/Auckland",
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+      });
+  };
+
   const handleAddPatient = (e) => {
     e.preventDefault();
     const role = "Patient";
@@ -89,6 +111,7 @@ const PatientSignUp = ({ setPatientOption }) => {
       .then((res) => {
         console.log(res);
         if (res.returnStatus.status !== false) {
+          handlePatientDateTime(res.returnStatus.id);
           setPatientOption(false);
           setEmailNhiError(false);
         } else {

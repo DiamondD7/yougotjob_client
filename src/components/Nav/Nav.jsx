@@ -48,6 +48,7 @@ const Nav = ({ setDisplayed, dateSettings }) => {
       .format(`${dateSettings.dateFormat} ${dateSettings.timeFormat}`)
   );
 
+  console.log(currentTime);
   useEffect(() => {
     // Function to update the time
     const updateCurrentTime = () => {
