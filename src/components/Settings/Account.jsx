@@ -16,6 +16,10 @@ import {
   UpdateHealthPractitionerData,
   UpdatesTimePreference,
   GetATimePreference,
+  GetPatient,
+  GetAPatientDateTime,
+  AddPatientDateTime,
+  UpdatePatientDateTime,
 } from "../../assets/js/serverApi";
 import moment from "moment";
 import momtimezone from "moment-timezone";
@@ -1019,13 +1023,24 @@ const TimezonesSettings = ({ setEditChanges }) => {
 
   useEffect(() => {
     const id = parseInt(sessionStorage.getItem("id"));
-    fetch(`${GetATimePreference}/${id}`)
-      .then((res) => res.json())
-      .then((res) => {
-        console.log(res);
-        setLoadData(false);
-        setEditData(res.returnStatus.data);
-      });
+    const role = sessionStorage.getItem("role");
+    if (role === "Practitioner") {
+      fetch(`${GetATimePreference}/${id}`)
+        .then((res) => res.json())
+        .then((res) => {
+          console.log(res);
+          setLoadData(false);
+          setEditData(res.returnStatus.data);
+        });
+    } else if (role === "Patient") {
+      fetch(`${GetAPatientDateTime}/${id}`)
+        .then((res) => res.json())
+        .then((data) => {
+          console.log(data);
+          setLoadData(false);
+          setEditData(data.returnStatus.data);
+        });
+    }
   }, [loadData]);
   return (
     <div>
@@ -1125,27 +1140,52 @@ const TimezoneEdit = ({
   const updateTimeZone = (e) => {
     e.preventDefault();
     const id = parseInt(sessionStorage.getItem("id"));
-    fetch(`${UpdatesTimePreference}/${id}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-      body: JSON.stringify({
-        PractitionerId: id,
-        DateFormat: dateFormat,
-        TimeFormat: timeFormat,
-        Country: country,
-        TimeZone: timeZone,
-      }),
-    })
-      .then((res) => res.json())
-      .then((res) => {
-        console.log(res);
-        setEditActive(false);
-        setLoadData(true);
-        setEditChanges(true); //changes to true so that the useEffect in the nav component will run to update the date/time
-      });
+    const role = sessionStorage.getItem("role");
+    if (role === "Practitioner") {
+      fetch(`${UpdatesTimePreference}/${id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({
+          PractitionerId: id,
+          DateFormat: dateFormat,
+          TimeFormat: timeFormat,
+          Country: country,
+          TimeZone: timeZone,
+        }),
+      })
+        .then((res) => res.json())
+        .then((res) => {
+          console.log(res);
+          setEditActive(false);
+          setLoadData(true);
+          setEditChanges(true); //changes to true so that the useEffect in the nav component will run to update the date/time
+        });
+    } else if (role === "Patient") {
+      fetch(`${UpdatePatientDateTime}/${id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({
+          PatientId: id,
+          DateFormat: dateFormat,
+          TimeFormat: timeFormat,
+          Country: country,
+          TimeZone: timeZone,
+        }),
+      })
+        .then((res) => res.json())
+        .then((res) => {
+          console.log(res);
+          setEditActive(false);
+          setLoadData(true);
+          setEditChanges(true); //changes to true so that the useEffect in the nav component will run to update the date/time
+        });
+    }
   };
   return (
     <div>
@@ -1234,13 +1274,24 @@ const Account = ({ setEditChanges }) => {
   const [loadDetails, setLoadDetails] = useState(false);
   useEffect(() => {
     const id = parseInt(sessionStorage.getItem("id"));
-    fetch(`${GetaHealthPractitioner}/${id}`)
-      .then((res) => res.json())
-      .then((data) => {
-        setLoggedUserData(data); //sets data of the current user
-        setLoadData(false);
-        setLoadDetails(true); //loading all details to display in the update section of the profile information
-      });
+    const role = sessionStorage.getItem("role");
+    if (role === "Practitioner") {
+      fetch(`${GetaHealthPractitioner}/${id}`)
+        .then((res) => res.json())
+        .then((data) => {
+          setLoggedUserData(data); //sets data of the current user
+          setLoadData(false);
+          setLoadDetails(true); //loading all details to display in the update section of the profile information
+        });
+    } else if (role === "Patient") {
+      fetch(`${GetPatient}/${id}`)
+        .then((res) => res.json())
+        .then((data) => {
+          setLoggedUserData(data);
+          setLoadData(false);
+          setLoadDetails(true);
+        });
+    }
   }, [loadData]);
 
   return (
