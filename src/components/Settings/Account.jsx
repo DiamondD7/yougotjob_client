@@ -16,6 +16,14 @@ import {
   UpdateHealthPractitionerData,
   UpdatesTimePreference,
   GetATimePreference,
+  GetPatient,
+  GetAPatientDateTime,
+  UpdatePatientDateTime,
+  UpdatePatient,
+  GetPatientEmergencyContact,
+  AddPatientEmergencyContact,
+  UpdatePatientEmergencyContact,
+  DeletePatientEmergencyContact,
 } from "../../assets/js/serverApi";
 import moment from "moment";
 import momtimezone from "moment-timezone";
@@ -24,7 +32,9 @@ import "../../styles/accountstyles.css";
 const Profile = ({ loggedUserData, setLoadData }) => {
   const [openEdit, setOpenEdit] = useState(false);
   const [fullName, setFullName] = useState(loggedUserData.fullName || ""); //if loggedUserData is refreshed then use the original value else use ""
-  const [mobilePhone, setMobilePhone] = useState(loggedUserData.mobile || "");
+  const [mobilePhone, setMobilePhone] = useState(
+    loggedUserData.mobile || loggedUserData.mobileNumber || ""
+  );
   const [emailAddress, setEmailAddress] = useState(
     loggedUserData.emailAddress || ""
   );
@@ -35,25 +45,47 @@ const Profile = ({ loggedUserData, setLoadData }) => {
   const updatePersonalInformation = (e) => {
     e.preventDefault();
     const id = parseInt(sessionStorage.getItem("id"));
-    fetch(`${UpdateHealthPractitionerData}/${id}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-      body: JSON.stringify({
-        FullName: fullName,
-        Mobile: mobilePhone,
-        EmailAddress: emailAddress,
-        HomeAddress: homeAddress,
-      }),
-    })
-      .then((res) => res.json())
-      .then((res) => {
-        console.log(res); //delete c.log
-        setOpenEdit(false);
-        setLoadData(true);
-      });
+    const role = sessionStorage.getItem("role");
+    if (role === "Practitioner") {
+      fetch(`${UpdateHealthPractitionerData}/${id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({
+          FullName: fullName,
+          Mobile: mobilePhone,
+          EmailAddress: emailAddress,
+          HomeAddress: homeAddress,
+        }),
+      })
+        .then((res) => res.json())
+        .then((res) => {
+          console.log(res); //delete c.log
+          setOpenEdit(false);
+          setLoadData(true);
+        });
+    } else if (role === "Patient") {
+      fetch(`${UpdatePatient}/${id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({
+          FullName: fullName,
+          MobileNumber: mobilePhone,
+          EmailAddress: emailAddress,
+          HomeAddress: homeAddress,
+        }),
+      })
+        .then((res) => res.json())
+        .then((res) => {
+          setOpenEdit(false);
+          setLoadData(true);
+        });
+    }
   };
 
   const handleOpeningEdit = () => {
@@ -144,7 +176,7 @@ const Profile = ({ loggedUserData, setLoadData }) => {
 
             {openEdit === false ? (
               <p className="account-profile__text profiledetails">
-                {loggedUserData.mobile}
+                {loggedUserData.mobile || loggedUserData.mobileNumber}
               </p>
             ) : (
               <input
@@ -693,28 +725,54 @@ const Contacts = () => {
 
   useEffect(() => {
     const id = parseInt(sessionStorage.getItem("id"));
-    fetch(`${GetEmergencyContact}/${id}`)
-      .then((res) => res.json())
-      .then((res) => {
-        setEmergencyContacts(res.returnStatus.data);
-        setLoadData(false);
-      });
+    const role = sessionStorage.getItem("role");
+    if (role === "Practitioner") {
+      fetch(`${GetEmergencyContact}/${id}`)
+        .then((res) => res.json())
+        .then((res) => {
+          setEmergencyContacts(res.returnStatus.data);
+          setLoadData(false);
+        });
+    } else if (role === "Patient") {
+      fetch(`${GetPatientEmergencyContact}/${id}`)
+        .then((res) => res.json())
+        .then((res) => {
+          setEmergencyContacts(res.returnStatus.data);
+          setLoadData(false);
+        });
+    }
   }, [loadData]);
 
   const deleteHandleContact = (e, id) => {
     e.preventDefault();
-    fetch(`${DeleteContact}/${id}`, {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-    })
-      .then((res) => res.json())
-      .then((res) => {
-        console.log(res); //logging result
-        setLoadData(true);
-      });
+    const role = sessionStorage.getItem("role");
+    if (role === "Practitioner") {
+      fetch(`${DeleteContact}/${id}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+      })
+        .then((res) => res.json())
+        .then((res) => {
+          console.log(res); //logging result
+          setLoadData(true);
+        });
+    } else if (role === "Patient") {
+      fetch(`${DeletePatientEmergencyContact}/${id}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+      })
+        .then((res) => res.json())
+        .then((res) => {
+          console.log(res); //logging result
+          setLoadData(true);
+        });
+    }
   };
 
   const handleUpdateContact = (e, data) => {
@@ -835,48 +893,95 @@ const AddNewContact = ({
   const addedContact = (e) => {
     e.preventDefault();
     const id = parseInt(sessionStorage.getItem("id"));
-    fetch(CreateContact, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-      body: JSON.stringify({
-        PractitionerId: id,
-        ContactName: formName,
-        ContactMobile: formNumber,
-        ContactRelationship: formRelationship,
-        ContactEmailAddress: formEmailAddress,
-      }),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        setAddNewContact(false); //setting the state to false to go back to the default view of the table
-        setLoadData(true); //setting the state to true so that it will refresh the data in the useEffect when something gets changed.
-      });
+    const role = sessionStorage.getItem("role");
+    if (role === "Practitioner") {
+      fetch(CreateContact, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({
+          PractitionerId: id,
+          ContactName: formName,
+          ContactMobile: formNumber,
+          ContactRelationship: formRelationship,
+          ContactEmailAddress: formEmailAddress,
+        }),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          setAddNewContact(false); //setting the state to false to go back to the default view of the table
+          setLoadData(true); //setting the state to true so that it will refresh the data in the useEffect when something gets changed.
+        });
+    } else if (role === "Patient") {
+      fetch(AddPatientEmergencyContact, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({
+          PatientId: id,
+          ContactName: formName,
+          ContactMobile: formNumber,
+          ContactRelationship: formRelationship,
+          ContactEmailAddress: formEmailAddress,
+        }),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          setAddNewContact(false); //setting the state to false to go back to the default view of the table
+          setLoadData(true); //setting the state to true so that it will refresh the data in the useEffect when something gets changed.
+        });
+    }
   };
 
   const updateEmergencyContact = () => {
-    fetch(`${UpdateEmergencyContact}/${updateContactData.id}`, {
-      //getting the id from the table when clicking update icon (pencil icon)
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-      body: JSON.stringify({
-        ContactName: formName,
-        ContactMobile: formNumber,
-        ContactRelationship: formRelationship,
-        ContactEmailAddress: formEmailAddress,
-      }),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        console.log(data.returnStatus.message); //delete c.log
-        setUpdateContact(false); //setting the state to false to go back to the default view of the table
-        setLoadData(true); //setting the state to true so that it will refresh the data in the useEffect when something gets changed.
-      });
+    const role = sessionStorage.getItem("role");
+    if (role === "Practitioner") {
+      fetch(`${UpdateEmergencyContact}/${updateContactData.id}`, {
+        //getting the id from the table when clicking update icon (pencil icon)
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({
+          ContactName: formName,
+          ContactMobile: formNumber,
+          ContactRelationship: formRelationship,
+          ContactEmailAddress: formEmailAddress,
+        }),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          console.log(data.returnStatus.message); //delete c.log
+          setUpdateContact(false); //setting the state to false to go back to the default view of the table
+          setLoadData(true); //setting the state to true so that it will refresh the data in the useEffect when something gets changed.
+        });
+    } else if (role === "Patient") {
+      fetch(`${UpdatePatientEmergencyContact}/${updateContactData.id}`, {
+        //getting the id from the table when clicking update icon (pencil icon)
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({
+          ContactName: formName,
+          ContactMobile: formNumber,
+          ContactRelationship: formRelationship,
+          ContactEmailAddress: formEmailAddress,
+        }),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          console.log(data.returnStatus.message); //delete c.log
+          setUpdateContact(false); //setting the state to false to go back to the default view of the table
+          setLoadData(true); //setting the state to true so that it will refresh the data in the useEffect when something gets changed.
+        });
+    }
   };
   return (
     <div className="addnewcontact__wrapper">
@@ -1019,13 +1124,24 @@ const TimezonesSettings = ({ setEditChanges }) => {
 
   useEffect(() => {
     const id = parseInt(sessionStorage.getItem("id"));
-    fetch(`${GetATimePreference}/${id}`)
-      .then((res) => res.json())
-      .then((res) => {
-        console.log(res);
-        setLoadData(false);
-        setEditData(res.returnStatus.data);
-      });
+    const role = sessionStorage.getItem("role");
+    if (role === "Practitioner") {
+      fetch(`${GetATimePreference}/${id}`)
+        .then((res) => res.json())
+        .then((res) => {
+          console.log(res);
+          setLoadData(false);
+          setEditData(res.returnStatus.data);
+        });
+    } else if (role === "Patient") {
+      fetch(`${GetAPatientDateTime}/${id}`)
+        .then((res) => res.json())
+        .then((data) => {
+          console.log(data);
+          setLoadData(false);
+          setEditData(data.returnStatus.data);
+        });
+    }
   }, [loadData]);
   return (
     <div>
@@ -1125,27 +1241,52 @@ const TimezoneEdit = ({
   const updateTimeZone = (e) => {
     e.preventDefault();
     const id = parseInt(sessionStorage.getItem("id"));
-    fetch(`${UpdatesTimePreference}/${id}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-      body: JSON.stringify({
-        PractitionerId: id,
-        DateFormat: dateFormat,
-        TimeFormat: timeFormat,
-        Country: country,
-        TimeZone: timeZone,
-      }),
-    })
-      .then((res) => res.json())
-      .then((res) => {
-        console.log(res);
-        setEditActive(false);
-        setLoadData(true);
-        setEditChanges(true); //changes to true so that the useEffect in the nav component will run to update the date/time
-      });
+    const role = sessionStorage.getItem("role");
+    if (role === "Practitioner") {
+      fetch(`${UpdatesTimePreference}/${id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({
+          PractitionerId: id,
+          DateFormat: dateFormat,
+          TimeFormat: timeFormat,
+          Country: country,
+          TimeZone: timeZone,
+        }),
+      })
+        .then((res) => res.json())
+        .then((res) => {
+          console.log(res);
+          setEditActive(false);
+          setLoadData(true);
+          setEditChanges(true); //changes to true so that the useEffect in the nav component will run to update the date/time
+        });
+    } else if (role === "Patient") {
+      fetch(`${UpdatePatientDateTime}/${id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({
+          PatientId: id,
+          DateFormat: dateFormat,
+          TimeFormat: timeFormat,
+          Country: country,
+          TimeZone: timeZone,
+        }),
+      })
+        .then((res) => res.json())
+        .then((res) => {
+          console.log(res);
+          setEditActive(false);
+          setLoadData(true);
+          setEditChanges(true); //changes to true so that the useEffect in the nav component will run to update the date/time
+        });
+    }
   };
   return (
     <div>
@@ -1234,13 +1375,24 @@ const Account = ({ setEditChanges }) => {
   const [loadDetails, setLoadDetails] = useState(false);
   useEffect(() => {
     const id = parseInt(sessionStorage.getItem("id"));
-    fetch(`${GetaHealthPractitioner}/${id}`)
-      .then((res) => res.json())
-      .then((data) => {
-        setLoggedUserData(data); //sets data of the current user
-        setLoadData(false);
-        setLoadDetails(true); //loading all details to display in the update section of the profile information
-      });
+    const role = sessionStorage.getItem("role");
+    if (role === "Practitioner") {
+      fetch(`${GetaHealthPractitioner}/${id}`)
+        .then((res) => res.json())
+        .then((data) => {
+          setLoggedUserData(data); //sets data of the current user
+          setLoadData(false);
+          setLoadDetails(true); //loading all details to display in the update section of the profile information
+        });
+    } else if (role === "Patient") {
+      fetch(`${GetPatient}/${id}`)
+        .then((res) => res.json())
+        .then((data) => {
+          setLoggedUserData(data);
+          setLoadData(false);
+          setLoadDetails(true);
+        });
+    }
   }, [loadData]);
 
   return (
