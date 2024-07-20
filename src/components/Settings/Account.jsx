@@ -229,7 +229,9 @@ const Profile = ({ loggedUserData, setLoadData }) => {
           </div>
         </div>
 
-        <Certifications />
+        {sessionStorage.getItem("role") === "Practitioner" && (
+          <Certifications />
+        )}
       </div>
     </div>
   );
