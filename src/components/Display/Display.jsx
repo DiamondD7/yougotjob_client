@@ -11,7 +11,9 @@ import Records from "../Records/Records";
 
 import "../../styles/displaystyles.css";
 import Settings from "../Settings/Settings";
+import DashboardPatient from "../Dashboard/DashboardPatient";
 const Display = ({ displayed, setEditChanges }) => {
+  const role = sessionStorage.getItem("role");
   return (
     <>
       <div className="display__wrapper">
@@ -27,8 +29,10 @@ const Display = ({ displayed, setEditChanges }) => {
           <Documents />
         ) : displayed === "learning" ? (
           <Learning />
-        ) : displayed === "dashboard" ? (
+        ) : displayed === "dashboard" && role === "Practitioner" ? (
           <Dashboard />
+        ) : displayed === "dashboard" && role === "Patient" ? (
+          <DashboardPatient />
         ) : displayed === "profile" ? (
           <PhysicianProfile />
         ) : displayed === "records" ? (
