@@ -6,6 +6,20 @@
   box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px,
     rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
 }
+.recent-diagnosis__wrapper {
+  height: 260px;
+  width: 450px;
+
+  margin-top: 20px;
+  box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px,
+    rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
+  overflow: auto;
+}
+
+.recent-diagnosis__wrapper h5 {
+  padding: 10px;
+  color: rgba(0, 0, 0, 0.5);
+}
 
 .dashboard-card-title__wrapper {
   display: flex;
@@ -16,4 +30,21 @@
   display: flex;
   align-items: center;
   padding-left: 10px;
+}
+
+.recent-diagnosis__table {
+  font-size: 12px;
+  border-collapse: collapse;
+}
+.recent-diagnosis__table thead tr th,
+.recent-diagnosis__table tbody tr td {
+  padding: 8px;
+  text-align: start;
+}
+
+.recent-diagnosis-btn {
+  border: none;
+  background-color: transparent;
+  color: #9dcd5a;
+  cursor: pointer;
 }

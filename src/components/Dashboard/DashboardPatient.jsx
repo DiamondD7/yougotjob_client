@@ -123,11 +123,46 @@ const SummaryCards = () => {
   );
 };
 
+const RecentDiagnosis = () => {
+  return (
+    <div>
+      <div className="recent-diagnosis__wrapper">
+        <h5>Recent Diagnosis</h5>
+        <table className="recent-diagnosis__table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Diagnosis</th>
+              <th>Practitioner</th>
+              <th>Date</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr>
+              <td>1</td>
+              <td>Broken Tendon</td>
+              <td>Dr. Johnson</td>
+              <td>02/11/2023</td>
+              <td>
+                <button className="recent-diagnosis-btn">view</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+};
+
 const DashboardPatient = () => {
   return (
     <div>
       <div style={{ display: "flex" }}>
         <SummaryCards />
+      </div>
+      <div style={{ padding: "10px" }}>
+        <RecentDiagnosis />
       </div>
     </div>
   );
