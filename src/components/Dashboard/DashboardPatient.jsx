@@ -223,6 +223,80 @@ const PreferredPractitioner = () => {
   );
 };
 
+const InvoiceContainer = () => {
+  const testinvoice = [
+    {
+      Date: "23/02/2024",
+      Code: 3445,
+      Description: "Short Consultation",
+      Tax: 0.0,
+      Total: 76.0,
+    },
+    {
+      Date: "23/02/2024",
+      Code: 3445,
+      Description: "Short Consultation",
+      Tax: 0.0,
+      Total: 76.0,
+    },
+    {
+      Date: "23/02/2024",
+      Code: 3445,
+      Description: "Short Consultation",
+      Tax: 0.0,
+      Total: 76.0,
+    },
+    {
+      Date: "23/02/2024",
+      Code: 3445,
+      Description: "Short Consultation",
+      Tax: 0.0,
+      Total: 76.0,
+    },
+    {
+      Date: "23/02/2024",
+      Code: 3445,
+      Description: "Short Consultation",
+      Tax: 0.0,
+      Total: 76.0,
+    },
+  ];
+
+  return (
+    <div>
+      <div className="patientdashboard-invoice-container__wrapper">
+        <table className="patientdashboard-invoice-table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Date</th>
+              <th>Invoice Code</th>
+              <th>Description</th>
+              <th>Tax</th>
+              <th>Total</th>
+            </tr>
+          </thead>
+          <tbody>
+            {testinvoice.map((data, index) => (
+              <tr key={index}>
+                <td>{index + 1}</td>
+                <td>{data.Date}</td>
+                <td>{data.Code}</td>
+                <td>{data.Description}</td>
+                <td>${data.Tax}</td>
+                <td>${data.Total}</td>
+                <td>
+                  <button className="btnclear">view</button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+};
+
 const DashboardPatient = () => {
   return (
     <div>
@@ -232,6 +306,9 @@ const DashboardPatient = () => {
       <div style={{ display: "flex", gap: "10px", padding: "10px" }}>
         <RecentDiagnosis />
         <PreferredPractitioner />
+      </div>
+      <div style={{ padding: "10px" }}>
+        <InvoiceContainer />
       </div>
     </div>
   );
