@@ -48,3 +48,63 @@
   color: #9dcd5a;
   cursor: pointer;
 }
+
+.preferred-practitioner__wrapper {
+  height: 260px;
+  width: 250px;
+
+  margin-top: 20px;
+  box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px,
+    rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
+
+  text-align: center;
+}
+
+.preferred-practitioner-h5-title {
+  text-align: start;
+  padding: 10px;
+  color: rgba(0, 0, 0, 0.5);
+}
+
+.preferred-practitioner-details__wrapper {
+  display: inline-block;
+  margin-top: 10px;
+}
+
+.preferred-practitioner-id__text {
+  text-align: start;
+  font-size: 12px;
+}
+
+.preferred-practitioner-total-appointment__wrapper {
+  padding: 5px 10px;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.preferred-practitioner-total-appointment-result {
+  width: 83px;
+  padding: 5px 10px;
+  border-radius: 5px;
+  background-color: #9dcd5a;
+  color: #f3f3f3;
+}
+
+.preferred-practitioner-recent-appointment__wrapper {
+  margin-top: 20px;
+  padding: 5px 10px;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.preferred-practitioner-recent-appointment-result {
+  width: 83px;
+  padding: 5px 10px;
+  border-radius: 5px;
+  background-color: #9dcd5a;
+  color: #f3f3f3;
+}
