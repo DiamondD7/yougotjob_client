@@ -123,11 +123,115 @@ const SummaryCards = () => {
   );
 };
 
+const RecentDiagnosis = () => {
+  return (
+    <div>
+      <div className="recent-diagnosis__wrapper">
+        <h5>Recent Diagnosis</h5>
+        <table className="recent-diagnosis__table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Diagnosis</th>
+              <th>Practitioner</th>
+              <th>Date</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr>
+              <td>1</td>
+              <td>Broken Tendon</td>
+              <td>Dr. Johnson</td>
+              <td>02/11/2023</td>
+              <td>
+                <button className="recent-diagnosis-btn">view</button>
+              </td>
+            </tr>
+            <tr>
+              <td>2</td>
+              <td>Broken Heart</td>
+              <td>Dr. Sharma</td>
+              <td>02/11/2023</td>
+              <td>
+                <button className="recent-diagnosis-btn">view</button>
+              </td>
+            </tr>
+            <tr>
+              <td>3</td>
+              <td>Bahog Ilok</td>
+              <td>Dr. Johnson</td>
+              <td>02/11/2023</td>
+              <td>
+                <button className="recent-diagnosis-btn">view</button>
+              </td>
+            </tr>
+            <tr>
+              <td>4</td>
+              <td>Bayot</td>
+              <td>Dr. Sharma</td>
+              <td>02/11/2023</td>
+              <td>
+                <button className="recent-diagnosis-btn">view</button>
+              </td>
+            </tr>
+            <tr>
+              <td>5</td>
+              <td>Pulled Achilles</td>
+              <td>Dr. Sharma</td>
+              <td>02/11/2023</td>
+              <td>
+                <button className="recent-diagnosis-btn">view</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+};
+
+const PreferredPractitioner = () => {
+  return (
+    <div className="preferred-practitioner__wrapper">
+      <h5 className="preferred-practitioner-h5-title">
+        Preferred Practitioner
+      </h5>
+      <div className="preferred-practitioner-details__wrapper">
+        <h3>Dr. Mahachit Sharma</h3>
+        <p className="preferred-practitioner-id__text">ID: 800976543</p>
+      </div>
+
+      <div>
+        <div className="preferred-practitioner-recent-appointment__wrapper">
+          <h5>Recent Appointment</h5>
+
+          <p className="preferred-practitioner-recent-appointment-result">
+            01/07/2024
+          </p>
+        </div>
+        <div className="preferred-practitioner-total-appointment__wrapper">
+          <h5>Recent Appointment</h5>
+          <p className="preferred-practitioner-total-appointment-result">13</p>
+        </div>
+        <div className="preferred-practitioner-total-appointment__wrapper">
+          <h5>Total Appointment</h5>
+          <p className="preferred-practitioner-total-appointment-result">13</p>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 const DashboardPatient = () => {
   return (
     <div>
       <div style={{ display: "flex" }}>
         <SummaryCards />
+      </div>
+      <div style={{ display: "flex", gap: "10px", padding: "10px" }}>
+        <RecentDiagnosis />
+        <PreferredPractitioner />
       </div>
     </div>
   );

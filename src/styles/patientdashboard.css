@@ -6,6 +6,20 @@
   box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px,
     rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
 }
+.recent-diagnosis__wrapper {
+  height: 260px;
+  width: 450px;
+
+  margin-top: 20px;
+  box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px,
+    rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
+  overflow: auto;
+}
+
+.recent-diagnosis__wrapper h5 {
+  padding: 10px;
+  color: rgba(0, 0, 0, 0.5);
+}
 
 .dashboard-card-title__wrapper {
   display: flex;
@@ -16,4 +30,81 @@
   display: flex;
   align-items: center;
   padding-left: 10px;
+}
+
+.recent-diagnosis__table {
+  font-size: 12px;
+  border-collapse: collapse;
+}
+.recent-diagnosis__table thead tr th,
+.recent-diagnosis__table tbody tr td {
+  padding: 8px;
+  text-align: start;
+}
+
+.recent-diagnosis-btn {
+  border: none;
+  background-color: transparent;
+  color: #9dcd5a;
+  cursor: pointer;
+}
+
+.preferred-practitioner__wrapper {
+  height: 260px;
+  width: 250px;
+
+  margin-top: 20px;
+  box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px,
+    rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
+
+  text-align: center;
+}
+
+.preferred-practitioner-h5-title {
+  text-align: start;
+  padding: 10px;
+  color: rgba(0, 0, 0, 0.5);
+}
+
+.preferred-practitioner-details__wrapper {
+  display: inline-block;
+  margin-top: 10px;
+}
+
+.preferred-practitioner-id__text {
+  text-align: start;
+  font-size: 12px;
+}
+
+.preferred-practitioner-total-appointment__wrapper {
+  padding: 5px 10px;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.preferred-practitioner-total-appointment-result {
+  width: 83px;
+  padding: 5px 10px;
+  border-radius: 5px;
+  background-color: #9dcd5a;
+  color: #f3f3f3;
+}
+
+.preferred-practitioner-recent-appointment__wrapper {
+  margin-top: 20px;
+  padding: 5px 10px;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.preferred-practitioner-recent-appointment-result {
+  width: 83px;
+  padding: 5px 10px;
+  border-radius: 5px;
+  background-color: #9dcd5a;
+  color: #f3f3f3;
 }
