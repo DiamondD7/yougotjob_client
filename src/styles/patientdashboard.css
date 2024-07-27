@@ -140,3 +140,46 @@
 .patientdashboard-invoice-table tbody tr:nth-child(even) {
   background-color: #d6e8ff;
 }
+
+.prescription-container__wrapper {
+  margin-top: 20px;
+
+  width: 710px;
+  height: 260px;
+  overflow: auto;
+  box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px,
+    rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
+}
+
+.prescription-h5__text {
+  padding: 10px;
+  color: rgba(0, 0, 0, 0.5);
+}
+
+.prescription-table__wrapper {
+  overflow: auto;
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.prescription-table__wrapper thead th {
+  padding: 10px;
+  text-align: start;
+}
+
+.prescription-table__wrapper tbody tr td {
+  padding: 10px;
+  text-align: start;
+  font-size: 14px;
+}
+
+.prescription-table__wrapper tbody tr:nth-child(odd) {
+  background-color: #e5f0ff;
+}
+.prescription-table__wrapper tbody tr:nth-child(even) {
+  background-color: #d6e8ff;
+}
+
+.prescription-pending__btn {
+  color: #d7c60f;
+}
