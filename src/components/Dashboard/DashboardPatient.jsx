@@ -118,6 +118,20 @@ const SummaryCards = () => {
             </p>
           </div>
         </div>
+        <div className="dashboard-cards__wrapper">
+          <div className="dashboard-card-title__wrapper">
+            <div>
+              <ChatCenteredText size={19} color="#9DCD5A" />
+            </div>
+            <h5>Messages</h5>
+          </div>
+          <div style={{ textAlign: "center", marginTop: "30px" }}>
+            <EnvelopeOpen size={25} color="rgba(0,0,0,0.4)" />
+            <p style={{ color: "rgba(0,0,0,0.3)", fontSize: "13px" }}>
+              No new messages
+            </p>
+          </div>
+        </div>
       </div>
     </div>
   );
@@ -297,6 +311,87 @@ const InvoiceContainer = () => {
   );
 };
 
+const PrescriptionContainer = () => {
+  return (
+    <div>
+      <div className="prescription-container__wrapper">
+        <h5 className="prescription-h5__text">Prescription</h5>
+        <div className="prescription-table-container__wrapper">
+          <table className="prescription-table__wrapper">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Date</th>
+                <th>Medicine(s)</th>
+                <th>Prescribed by</th>
+                <th>Dispensed by</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>1</td>
+                <td>26/06/2024</td>
+                <td>Otrivin Plus</td>
+                <td>Dr. Johnson</td>
+                <td>Haleon Jackson</td>
+                <td className="prescription-pending__btn">pending</td>
+                <td>
+                  <button className="btnclear">view</button>
+                </td>
+              </tr>
+              <tr>
+                <td>2</td>
+                <td>2/05/2024</td>
+                <td>Codral PSE</td>
+                <td>Dr. Johnson</td>
+                <td>Haleon Jackson</td>
+                <td>paid</td>
+                <td>
+                  <button className="btnclear">view</button>
+                </td>
+              </tr>
+              <tr>
+                <td>2</td>
+                <td>2/05/2024</td>
+                <td>Codral PSE</td>
+                <td>Dr. Johnson</td>
+                <td>Haleon Jackson</td>
+                <td>paid</td>
+                <td>
+                  <button className="btnclear">view</button>
+                </td>
+              </tr>
+              <tr>
+                <td>2</td>
+                <td>2/05/2024</td>
+                <td>Codral PSE</td>
+                <td>Dr. Johnson</td>
+                <td>Haleon Jackson</td>
+                <td>paid</td>
+                <td>
+                  <button className="btnclear">view</button>
+                </td>
+              </tr>
+              <tr>
+                <td>2</td>
+                <td>2/05/2024</td>
+                <td>Codral PSE</td>
+                <td>Dr. Johnson</td>
+                <td>Haleon Jackson</td>
+                <td>paid</td>
+                <td>
+                  <button className="btnclear">view</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 const DashboardPatient = () => {
   return (
     <div>
@@ -306,6 +401,7 @@ const DashboardPatient = () => {
       <div style={{ display: "flex", gap: "10px", padding: "10px" }}>
         <RecentDiagnosis />
         <PreferredPractitioner />
+        <PrescriptionContainer />
       </div>
       <div style={{ padding: "10px" }}>
         <InvoiceContainer />
