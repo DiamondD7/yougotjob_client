@@ -26,6 +26,10 @@
   align-items: center;
   padding: 10px;
 }
+
+.dashboard-card-title__wrapper h5 {
+  color: rgba(0, 0, 0, 0.5);
+}
 .dashboard-patient-card__wrapper {
   display: flex;
   align-items: center;
