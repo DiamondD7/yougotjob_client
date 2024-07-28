@@ -661,7 +661,7 @@ const Dashboard = () => {
           <ContinueLearningContainer />
         </div>
       </div>
-      <div>
+      <div style={{ display: "flex" }}>
         <div
           style={{
             margin: "20px 0 0 20px",
