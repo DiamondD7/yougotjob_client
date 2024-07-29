@@ -393,6 +393,62 @@ const PrescriptionContainer = () => {
   );
 };
 
+const TestResults = () => {
+  return (
+    <div>
+      <table className="tables-chosen-table__wrapper">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Invoice Id</th>
+            <th>Test</th>
+            <th>Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1</td>
+            <td>960078</td>
+            <td>Blood Test</td>
+            <td>29/04/2024</td>
+            <td>
+              <button className="btnclear">view</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  );
+};
+
+const Immunisations = () => {
+  return (
+    <div>
+      <table className="tables-chosen-table__wrapper">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Invoice Id</th>
+            <th>Type</th>
+            <th>Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1</td>
+            <td>253999</td>
+            <td>Flu Immunisation</td>
+            <td>2/01/2024</td>
+            <td>
+              <button className="btnclear">view</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  );
+};
+
 const TablesContainer = () => {
   const [chosenTopic, setChosenTopic] = useState("Test results");
   return (
@@ -431,6 +487,10 @@ const TablesContainer = () => {
           >
             Lab results
           </button>
+        </div>
+        <div>
+          {chosenTopic === "Test results" ? <TestResults /> : ""}
+          {chosenTopic === "Immunisations" ? <Immunisations /> : ""}
         </div>
       </div>
     </div>
