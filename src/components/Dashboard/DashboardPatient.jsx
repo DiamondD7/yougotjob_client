@@ -279,6 +279,7 @@ const InvoiceContainer = () => {
   return (
     <div>
       <div className="patientdashboard-invoice-container__wrapper">
+        <h5 className="patientdashboard-invoice-h5__text">Invoice</h5>
         <table className="patientdashboard-invoice-table">
           <thead>
             <tr>
@@ -392,6 +393,50 @@ const PrescriptionContainer = () => {
   );
 };
 
+const TablesContainer = () => {
+  const [chosenTopic, setChosenTopic] = useState("Test results");
+  return (
+    <div>
+      <div className="tables-container__wrapper">
+        <div className="tables-header-btns__wrapper">
+          <button
+            className={`tables-headers__btns ${
+              chosenTopic === "Test results" ? "chosenBtn" : ""
+            }`}
+            onClick={() => setChosenTopic("Test results")}
+          >
+            Test results
+          </button>
+          <button
+            className={`tables-headers__btns ${
+              chosenTopic === "Immunisations" ? "chosenBtn" : ""
+            }`}
+            onClick={() => setChosenTopic("Immunisations")}
+          >
+            Immunisations
+          </button>
+          <button
+            className={`tables-headers__btns ${
+              chosenTopic === "Vaccinations" ? "chosenBtn" : ""
+            }`}
+            onClick={() => setChosenTopic("Vaccinations")}
+          >
+            Vaccinations
+          </button>
+          <button
+            className={`tables-headers__btns ${
+              chosenTopic === "Lab results" ? "chosenBtn" : ""
+            }`}
+            onClick={() => setChosenTopic("Lab results")}
+          >
+            Lab results
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 const DashboardPatient = () => {
   return (
     <div>
@@ -403,8 +448,9 @@ const DashboardPatient = () => {
         <PreferredPractitioner />
         <PrescriptionContainer />
       </div>
-      <div style={{ padding: "10px" }}>
+      <div style={{ padding: "10px", display: "flex", gap: "10px" }}>
         <InvoiceContainer />
+        <TablesContainer />
       </div>
     </div>
   );

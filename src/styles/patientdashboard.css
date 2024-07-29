@@ -122,6 +122,11 @@
     rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
 }
 
+.patientdashboard-invoice-h5__text {
+  padding: 10px;
+  color: rgba(0, 0, 0, 0.5);
+}
+
 .patientdashboard-invoice-table {
   width: 100%;
   border-collapse: collapse;
@@ -186,4 +191,30 @@
 
 .prescription-pending__btn {
   color: #d7c60f;
+}
+
+.tables-container__wrapper {
+  margin-top: 20px;
+  width: 710px;
+  height: 230px;
+  overflow: auto;
+  box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px,
+    rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
+}
+
+.tables-header-btns__wrapper {
+  display: flex;
+  justify-content: space-evenly;
+  background-color: rgba(0, 0, 0, 0.02);
+}
+
+.tables-headers__btns {
+  cursor: pointer;
+  padding: 2px 48px;
+  background-color: transparent;
+  border: none;
+}
+
+.chosenBtn {
+  border-bottom: 1px solid #9dcd5a;
 }
