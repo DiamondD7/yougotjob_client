@@ -279,6 +279,7 @@ const InvoiceContainer = () => {
   return (
     <div>
       <div className="patientdashboard-invoice-container__wrapper">
+        <h5 className="patientdashboard-invoice-h5__text">Invoice</h5>
         <table className="patientdashboard-invoice-table">
           <thead>
             <tr>
@@ -392,6 +393,110 @@ const PrescriptionContainer = () => {
   );
 };
 
+const TestResults = () => {
+  return (
+    <div>
+      <table className="tables-chosen-table__wrapper">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Invoice Id</th>
+            <th>Test</th>
+            <th>Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1</td>
+            <td>960078</td>
+            <td>Blood Test</td>
+            <td>29/04/2024</td>
+            <td>
+              <button className="btnclear">view</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  );
+};
+
+const Immunisations = () => {
+  return (
+    <div>
+      <table className="tables-chosen-table__wrapper">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Invoice Id</th>
+            <th>Type</th>
+            <th>Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1</td>
+            <td>253999</td>
+            <td>Flu Immunisation</td>
+            <td>2/01/2024</td>
+            <td>
+              <button className="btnclear">view</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  );
+};
+
+const TablesContainer = () => {
+  const [chosenTopic, setChosenTopic] = useState("Test results");
+  return (
+    <div>
+      <div className="tables-container__wrapper">
+        <div className="tables-header-btns__wrapper">
+          <button
+            className={`tables-headers__btns ${
+              chosenTopic === "Test results" ? "chosenBtn" : ""
+            }`}
+            onClick={() => setChosenTopic("Test results")}
+          >
+            Test results
+          </button>
+          <button
+            className={`tables-headers__btns ${
+              chosenTopic === "Immunisations" ? "chosenBtn" : ""
+            }`}
+            onClick={() => setChosenTopic("Immunisations")}
+          >
+            Immunisations
+          </button>
+          <button
+            className={`tables-headers__btns ${
+              chosenTopic === "Vaccinations" ? "chosenBtn" : ""
+            }`}
+            onClick={() => setChosenTopic("Vaccinations")}
+          >
+            Vaccinations
+          </button>
+          <button
+            className={`tables-headers__btns ${
+              chosenTopic === "Lab results" ? "chosenBtn" : ""
+            }`}
+            onClick={() => setChosenTopic("Lab results")}
+          >
+            Lab results
+          </button>
+        </div>
+        <div>
+          {chosenTopic === "Test results" ? <TestResults /> : ""}
+          {chosenTopic === "Immunisations" ? <Immunisations /> : ""}
+        </div>
+      </div>
+    </div>
+  );
+};
+
 const DashboardPatient = () => {
   return (
     <div>
@@ -403,8 +508,9 @@ const DashboardPatient = () => {
         <PreferredPractitioner />
         <PrescriptionContainer />
       </div>
-      <div style={{ padding: "10px" }}>
+      <div style={{ padding: "10px", display: "flex", gap: "10px" }}>
         <InvoiceContainer />
+        <TablesContainer />
       </div>
     </div>
   );
