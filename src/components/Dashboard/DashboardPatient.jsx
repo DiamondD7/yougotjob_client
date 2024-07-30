@@ -449,6 +449,34 @@ const Immunisations = () => {
   );
 };
 
+const LabResulls = () => {
+  return (
+    <div>
+      <table className="tables-chosen-table__wrapper">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Invoice Id</th>
+            <th>Type</th>
+            <th>Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1</td>
+            <td>443299</td>
+            <td>X-ray</td>
+            <td>2/22/2024</td>
+            <td>
+              <button className="btnclear">view</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  );
+};
+
 const TablesContainer = () => {
   const [chosenTopic, setChosenTopic] = useState("Test results");
   return (
@@ -491,6 +519,7 @@ const TablesContainer = () => {
         <div>
           {chosenTopic === "Test results" ? <TestResults /> : ""}
           {chosenTopic === "Immunisations" ? <Immunisations /> : ""}
+          {chosenTopic === "Lab results" ? <LabResulls /> : ""}
         </div>
       </div>
     </div>
