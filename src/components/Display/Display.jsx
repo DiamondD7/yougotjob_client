@@ -12,6 +12,10 @@ import Records from "../Records/Records";
 import "../../styles/displaystyles.css";
 import Settings from "../Settings/Settings";
 import DashboardPatient from "../Dashboard/DashboardPatient";
+import LabResults from "../PatientNAVS/LabResults";
+import TestResults from "../PatientNAVS/TestResults";
+import Immunisation from "../PatientNAVS/Immunisation";
+import Prescriptions from "../PatientNAVS/Prescriptions";
 const Display = ({ displayed, setEditChanges }) => {
   const role = sessionStorage.getItem("role");
   return (
@@ -39,6 +43,14 @@ const Display = ({ displayed, setEditChanges }) => {
           <Records />
         ) : displayed === "settings" ? (
           <Settings setEditChanges={setEditChanges} /> //setEditChanges will change the time on the Nav from changing it in the Settings/Account
+        ) : displayed === "lab results" ? (
+          <LabResults />
+        ) : displayed === "test results" ? (
+          <TestResults />
+        ) : displayed === "immunisation" ? (
+          <Immunisation />
+        ) : displayed === "prescriptions" ? (
+          <Prescriptions />
         ) : (
           ""
         )}
