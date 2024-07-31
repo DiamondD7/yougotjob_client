@@ -6,7 +6,10 @@ import {
   List,
   User,
   Note,
-  Chat,
+  Stethoscope,
+  Heartbeat,
+  Prescription,
+  Syringe,
   ChatCenteredText,
   ChalkboardTeacher,
   Folders,
@@ -16,30 +19,356 @@ import {
 } from "@phosphor-icons/react";
 import NavLogo from "../../assets/img/HauoraNav.png";
 import { Link } from "react-router-dom";
-import { GetaHealthPractitioner } from "../../assets/js/serverApi";
 import moment from "moment-timezone";
 
 import "../../styles/navstyles.css";
 
+const NavPractitioner = ({ activeDisplay, minimizedNav, onClickDisplayed }) => {
+  return (
+    <>
+      <li
+        className={minimizedNav === true ? "minimizednav-icons" : ""}
+        style={
+          activeDisplay === "dashboard" ? { backgroundColor: "#D6E8FF" } : {}
+        }
+      >
+        <button
+          className={minimizedNav === true ? "btn-normal" : "icon-label"}
+          onClick={() => onClickDisplayed("dashboard")}
+          style={
+            minimizedNav === false
+              ? activeDisplay === "dashboard"
+                ? { backgroundColor: "#D6E8FF" }
+                : {}
+              : {}
+          }
+        >
+          <House size={20} color="#454545" />
+          &nbsp;
+          {minimizedNav === true ? "" : "Dashboard"}
+        </button>
+      </li>
+      <li
+        className={minimizedNav === true ? "minimizednav-icons" : ""}
+        style={
+          activeDisplay === "calendar" ? { backgroundColor: "#D6E8FF" } : {}
+        }
+      >
+        <button
+          className={minimizedNav === true ? "btn-normal" : "icon-label"}
+          onClick={() => onClickDisplayed("calendar")}
+          style={
+            minimizedNav === false
+              ? activeDisplay === "calendar"
+                ? { backgroundColor: "#D6E8FF" }
+                : {}
+              : {}
+          }
+        >
+          <Calendar size={20} color="#454545" />
+          &nbsp;
+          {minimizedNav === true ? "" : "Calendar"}
+        </button>
+      </li>
+
+      <li
+        className={minimizedNav === true ? "minimizednav-icons" : ""}
+        style={
+          activeDisplay === "patients" ? { backgroundColor: "#D6E8FF" } : {}
+        }
+      >
+        <button
+          className={minimizedNav === true ? "btn-normal" : "icon-label"}
+          onClick={() => onClickDisplayed("patients")}
+          style={
+            minimizedNav === false
+              ? activeDisplay === "patients"
+                ? { backgroundColor: "#D6E8FF" }
+                : {}
+              : {}
+          }
+        >
+          <Users size={20} color="#454545" />
+          &nbsp;
+          {minimizedNav === true ? "" : "Patients"}
+        </button>
+      </li>
+
+      <li
+        className={minimizedNav === true ? "minimizednav-icons" : ""}
+        style={
+          activeDisplay === "communication"
+            ? { backgroundColor: "#D6E8FF" }
+            : {}
+        }
+      >
+        <button
+          className={minimizedNav === true ? "btn-normal" : "icon-label"}
+          onClick={() => onClickDisplayed("communication")}
+          style={
+            minimizedNav === false
+              ? activeDisplay === "communication"
+                ? { backgroundColor: "#D6E8FF" }
+                : {}
+              : {}
+          }
+        >
+          <ChatCenteredText size={20} color="#454545" />
+          &nbsp;
+          {minimizedNav === true ? "" : "Communication"}
+        </button>
+      </li>
+
+      <li
+        className={minimizedNav === true ? "minimizednav-icons" : ""}
+        style={
+          activeDisplay === "results" ? { backgroundColor: "#D6E8FF" } : {}
+        }
+      >
+        <button
+          className={minimizedNav === true ? "btn-normal" : "icon-label"}
+          onClick={() => onClickDisplayed("results")}
+          style={
+            minimizedNav === false
+              ? activeDisplay === "results"
+                ? { backgroundColor: "#D6E8FF" }
+                : {}
+              : {}
+          }
+        >
+          <Note size={20} color="#454545" />
+          &nbsp;
+          {minimizedNav === true ? "" : "Results"}
+        </button>
+      </li>
+
+      <li
+        className={minimizedNav === true ? "minimizednav-icons" : ""}
+        style={
+          activeDisplay === "records" ? { backgroundColor: "#D6E8FF" } : {}
+        }
+      >
+        <button
+          className={minimizedNav === true ? "btn-normal" : "icon-label"}
+          onClick={() => onClickDisplayed("records")}
+          style={
+            minimizedNav === false
+              ? activeDisplay === "records"
+                ? { backgroundColor: "#D6E8FF" }
+                : {}
+              : {}
+          }
+        >
+          <Invoice size={20} color="#454545" />
+          &nbsp;
+          {minimizedNav === true ? "" : "Records"}
+        </button>
+      </li>
+
+      <li
+        className={minimizedNav === true ? "minimizednav-icons" : ""}
+        style={
+          activeDisplay === "documents" ? { backgroundColor: "#D6E8FF" } : {}
+        }
+      >
+        <button
+          className={minimizedNav === true ? "btn-normal" : "icon-label"}
+          onClick={() => onClickDisplayed("documents")}
+          style={
+            minimizedNav === false
+              ? activeDisplay === "documents"
+                ? { backgroundColor: "#D6E8FF" }
+                : {}
+              : {}
+          }
+        >
+          <Folders size={20} color="#454545" />
+          &nbsp;
+          {minimizedNav === true ? "" : "Documents"}
+        </button>
+      </li>
+
+      <li
+        className={minimizedNav === true ? "minimizednav-icons" : ""}
+        style={
+          activeDisplay === "learning" ? { backgroundColor: "#D6E8FF" } : {}
+        }
+      >
+        <button
+          className={minimizedNav === true ? "btn-normal" : "icon-label"}
+          onClick={() => onClickDisplayed("learning")}
+          style={
+            minimizedNav === false
+              ? activeDisplay === "learning"
+                ? { backgroundColor: "#D6E8FF" }
+                : {}
+              : {}
+          }
+        >
+          <ChalkboardTeacher size={20} color="#454545" />
+          &nbsp;
+          {minimizedNav === true ? "" : "Learning"}
+        </button>
+      </li>
+    </>
+  );
+};
+
+const NavPatient = ({ minimizedNav, activeDisplay, onClickDisplayed }) => {
+  return (
+    <>
+      <li
+        className={minimizedNav === true ? "minimizednav-icons" : ""}
+        style={
+          activeDisplay === "dashboard" ? { backgroundColor: "#D6E8FF" } : {}
+        }
+      >
+        <button
+          className={minimizedNav === true ? "btn-normal" : "icon-label"}
+          onClick={() => onClickDisplayed("dashboard")}
+          style={
+            minimizedNav === false
+              ? activeDisplay === "dashboard"
+                ? { backgroundColor: "#D6E8FF" }
+                : {}
+              : {}
+          }
+        >
+          <House size={20} color="#454545" />
+          &nbsp;
+          {minimizedNav === true ? "" : "Dashboard"}
+        </button>
+      </li>
+
+      <li
+        className={minimizedNav === true ? "minimizednav-icons" : ""}
+        style={
+          activeDisplay === "communication"
+            ? { backgroundColor: "#D6E8FF" }
+            : {}
+        }
+      >
+        <button
+          className={minimizedNav === true ? "btn-normal" : "icon-label"}
+          onClick={() => onClickDisplayed("communication")}
+          style={
+            minimizedNav === false
+              ? activeDisplay === "communication"
+                ? { backgroundColor: "#D6E8FF" }
+                : {}
+              : {}
+          }
+        >
+          <ChatCenteredText size={20} color="#454545" />
+          &nbsp;
+          {minimizedNav === true ? "" : "Communication"}
+        </button>
+      </li>
+      <li
+        className={minimizedNav === true ? "minimizednav-icons" : ""}
+        style={
+          activeDisplay === "prescriptions"
+            ? { backgroundColor: "#D6E8FF" }
+            : {}
+        }
+      >
+        <button
+          className={minimizedNav === true ? "btn-normal" : "icon-label"}
+          onClick={() => onClickDisplayed("prescriptions")}
+          style={
+            minimizedNav === false
+              ? activeDisplay === "prescriptions"
+                ? { backgroundColor: "#D6E8FF" }
+                : {}
+              : {}
+          }
+        >
+          <Prescription size={20} color="#454545" />
+          &nbsp;
+          {minimizedNav === true ? "" : "Prescriptions"}
+        </button>
+      </li>
+      <li
+        className={minimizedNav === true ? "minimizednav-icons" : ""}
+        style={
+          activeDisplay === "immunisation" ? { backgroundColor: "#D6E8FF" } : {}
+        }
+      >
+        <button
+          className={minimizedNav === true ? "btn-normal" : "icon-label"}
+          onClick={() => onClickDisplayed("immunisation")}
+          style={
+            minimizedNav === false
+              ? activeDisplay === "immunisation"
+                ? { backgroundColor: "#D6E8FF" }
+                : {}
+              : {}
+          }
+        >
+          <Syringe size={20} color="#454545" />
+          &nbsp;
+          {minimizedNav === true ? "" : "Immunisations"}
+        </button>
+      </li>
+
+      <li
+        className={minimizedNav === true ? "minimizednav-icons" : ""}
+        style={
+          activeDisplay === "lab results" ? { backgroundColor: "#D6E8FF" } : {}
+        }
+      >
+        <button
+          className={minimizedNav === true ? "btn-normal" : "icon-label"}
+          onClick={() => onClickDisplayed("test results")}
+          style={
+            minimizedNav === false
+              ? activeDisplay === "test results"
+                ? { backgroundColor: "#D6E8FF" }
+                : {}
+              : {}
+          }
+        >
+          <Stethoscope size={20} color="#454545" />
+          &nbsp;
+          {minimizedNav === true ? "" : "Test results"}
+        </button>
+      </li>
+      <li
+        className={minimizedNav === true ? "minimizednav-icons" : ""}
+        style={
+          activeDisplay === "lab results" ? { backgroundColor: "#D6E8FF" } : {}
+        }
+      >
+        <button
+          className={minimizedNav === true ? "btn-normal" : "icon-label"}
+          onClick={() => onClickDisplayed("lab results")}
+          style={
+            minimizedNav === false
+              ? activeDisplay === "lab results"
+                ? { backgroundColor: "#D6E8FF" }
+                : {}
+              : {}
+          }
+        >
+          <Heartbeat size={20} color="#454545" />
+          &nbsp;
+          {minimizedNav === true ? "" : "Lab results"}
+        </button>
+      </li>
+    </>
+  );
+};
+
 const Nav = ({ setDisplayed, dateSettings }) => {
+  const role = sessionStorage.getItem("role");
   const [minimizedNav, setMinimizedNav] = useState(false);
   const [activeDisplay, setActiveDisplay] = useState("dashboard");
-  const [userLoggedData, setUserLoggedData] = useState([]);
   const [seconds, setSeconds] = useState(0);
 
   const onClickDisplayed = (display) => {
     setDisplayed(display);
     setActiveDisplay(display);
   };
-
-  useEffect(() => {
-    const id = parseInt(sessionStorage.getItem("id"));
-    fetch(`${GetaHealthPractitioner}/${id}`)
-      .then((res) => res.json())
-      .then((data) => {
-        setUserLoggedData(data);
-      });
-  }, []);
 
   // ----------------------------------------------------DATETIME UPDATING LOGIC EVERY 60s---------------------------------------------------------
   const [currentTime, setCurrentTime] = useState(
@@ -84,6 +413,7 @@ const Nav = ({ setDisplayed, dateSettings }) => {
   const getDateTime = () => {
     return <p className="nav-date__text">{currentTime}</p>;
   };
+
   return (
     <>
       <div
@@ -113,217 +443,25 @@ const Nav = ({ setDisplayed, dateSettings }) => {
           </div>
         </div>
         <ul>
-          <li
-            className={minimizedNav === true ? "minimizednav-icons" : ""}
-            style={
-              activeDisplay === "dashboard"
-                ? { backgroundColor: "#D6E8FF" }
-                : {}
-            }
-          >
-            <button
-              className={minimizedNav === true ? "btn-normal" : "icon-label"}
-              onClick={() => onClickDisplayed("dashboard")}
-              style={
-                minimizedNav === false
-                  ? activeDisplay === "dashboard"
-                    ? { backgroundColor: "#D6E8FF" }
-                    : {}
-                  : {}
-              }
-            >
-              <House size={20} color="#454545" />
-              &nbsp;
-              {minimizedNav === true ? "" : "Dashboard"}
-            </button>
-          </li>
-          {userLoggedData.role === "Receptionist" ||
-          userLoggedData.role === "Practitioner" ? (
-            <li
-              className={minimizedNav === true ? "minimizednav-icons" : ""}
-              style={
-                activeDisplay === "calendar"
-                  ? { backgroundColor: "#D6E8FF" }
-                  : {}
-              }
-            >
-              <button
-                className={minimizedNav === true ? "btn-normal" : "icon-label"}
-                onClick={() => onClickDisplayed("calendar")}
-                style={
-                  minimizedNav === false
-                    ? activeDisplay === "calendar"
-                      ? { backgroundColor: "#D6E8FF" }
-                      : {}
-                    : {}
-                }
-              >
-                <Calendar size={20} color="#454545" />
-                &nbsp;
-                {minimizedNav === true ? "" : "Calendar"}
-              </button>
-            </li>
-          ) : (
-            ""
-          )}
-          {userLoggedData.role === "Receptionist" ||
-          userLoggedData.role === "General Practitioner" ? (
-            <li
-              className={minimizedNav === true ? "minimizednav-icons" : ""}
-              style={
-                activeDisplay === "patients"
-                  ? { backgroundColor: "#D6E8FF" }
-                  : {}
-              }
-            >
-              <button
-                className={minimizedNav === true ? "btn-normal" : "icon-label"}
-                onClick={() => onClickDisplayed("patients")}
-                style={
-                  minimizedNav === false
-                    ? activeDisplay === "patients"
-                      ? { backgroundColor: "#D6E8FF" }
-                      : {}
-                    : {}
-                }
-              >
-                <Users size={20} color="#454545" />
-                &nbsp;
-                {minimizedNav === true ? "" : "Patients"}
-              </button>
-            </li>
-          ) : (
-            ""
-          )}
-          <li
-            className={minimizedNav === true ? "minimizednav-icons" : ""}
-            style={
-              activeDisplay === "communication"
-                ? { backgroundColor: "#D6E8FF" }
-                : {}
-            }
-          >
-            <button
-              className={minimizedNav === true ? "btn-normal" : "icon-label"}
-              onClick={() => onClickDisplayed("communication")}
-              style={
-                minimizedNav === false
-                  ? activeDisplay === "communication"
-                    ? { backgroundColor: "#D6E8FF" }
-                    : {}
-                  : {}
-              }
-            >
-              <ChatCenteredText size={20} color="#454545" />
-              &nbsp;
-              {minimizedNav === true ? "" : "Communication"}
-            </button>
-          </li>
-
-          {userLoggedData.role === "Practitioner" ? (
-            <li
-              className={minimizedNav === true ? "minimizednav-icons" : ""}
-              style={
-                activeDisplay === "results"
-                  ? { backgroundColor: "#D6E8FF" }
-                  : {}
-              }
-            >
-              <button
-                className={minimizedNav === true ? "btn-normal" : "icon-label"}
-                onClick={() => onClickDisplayed("results")}
-                style={
-                  minimizedNav === false
-                    ? activeDisplay === "results"
-                      ? { backgroundColor: "#D6E8FF" }
-                      : {}
-                    : {}
-                }
-              >
-                <Note size={20} color="#454545" />
-                &nbsp;
-                {minimizedNav === true ? "" : "Results"}
-              </button>
-            </li>
+          {role === "Practitioner" ? (
+            <NavPractitioner
+              activeDisplay={activeDisplay}
+              minimizedNav={minimizedNav}
+              onClickDisplayed={onClickDisplayed}
+            />
           ) : (
             ""
           )}
 
-          {userLoggedData.role === "Practitioner" ? (
-            <li
-              className={minimizedNav === true ? "minimizednav-icons" : ""}
-              style={
-                activeDisplay === "records"
-                  ? { backgroundColor: "#D6E8FF" }
-                  : {}
-              }
-            >
-              <button
-                className={minimizedNav === true ? "btn-normal" : "icon-label"}
-                onClick={() => onClickDisplayed("records")}
-                style={
-                  minimizedNav === false
-                    ? activeDisplay === "records"
-                      ? { backgroundColor: "#D6E8FF" }
-                      : {}
-                    : {}
-                }
-              >
-                <Invoice size={20} color="#454545" />
-                &nbsp;
-                {minimizedNav === true ? "" : "Records"}
-              </button>
-            </li>
+          {role === "Patient" ? (
+            <NavPatient
+              activeDisplay={activeDisplay}
+              minimizedNav={minimizedNav}
+              onClickDisplayed={onClickDisplayed}
+            />
           ) : (
             ""
           )}
-
-          <li
-            className={minimizedNav === true ? "minimizednav-icons" : ""}
-            style={
-              activeDisplay === "documents"
-                ? { backgroundColor: "#D6E8FF" }
-                : {}
-            }
-          >
-            <button
-              className={minimizedNav === true ? "btn-normal" : "icon-label"}
-              onClick={() => onClickDisplayed("documents")}
-              style={
-                minimizedNav === false
-                  ? activeDisplay === "documents"
-                    ? { backgroundColor: "#D6E8FF" }
-                    : {}
-                  : {}
-              }
-            >
-              <Folders size={20} color="#454545" />
-              &nbsp;
-              {minimizedNav === true ? "" : "Documents"}
-            </button>
-          </li>
-          <li
-            className={minimizedNav === true ? "minimizednav-icons" : ""}
-            style={
-              activeDisplay === "learning" ? { backgroundColor: "#D6E8FF" } : {}
-            }
-          >
-            <button
-              className={minimizedNav === true ? "btn-normal" : "icon-label"}
-              onClick={() => onClickDisplayed("learning")}
-              style={
-                minimizedNav === false
-                  ? activeDisplay === "learning"
-                    ? { backgroundColor: "#D6E8FF" }
-                    : {}
-                  : {}
-              }
-            >
-              <ChalkboardTeacher size={20} color="#454545" />
-              &nbsp;
-              {minimizedNav === true ? "" : "Learning"}
-            </button>
-          </li>
           <br />
           <div className="navigation-bottom-icons__wrapper">
             <li className="profile-btn">
