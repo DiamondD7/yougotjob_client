@@ -314,7 +314,7 @@ const NavPatient = ({ minimizedNav, activeDisplay, onClickDisplayed }) => {
       <li
         className={minimizedNav === true ? "minimizednav-icons" : ""}
         style={
-          activeDisplay === "lab results" ? { backgroundColor: "#D6E8FF" } : {}
+          activeDisplay === "test results" ? { backgroundColor: "#D6E8FF" } : {}
         }
       >
         <button
