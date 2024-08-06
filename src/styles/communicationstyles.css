@@ -26,9 +26,21 @@
 }
 
 .search-details__wrapper {
+}
+
+.search-details__btns {
+  cursor: pointer;
+  background-color: transparent;
+  border: none;
+
   display: flex;
   justify-content: space-between;
   padding: 5px;
+  width: 100%;
+}
+
+.search-details__btns:hover {
+  background-color: rgba(0, 0, 0, 0.05);
 }
 
 .search-details__wrapper p {
