@@ -1,8 +1,33 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { CircleNotch } from "@phosphor-icons/react";
+import { GetHealthPractitionerData } from "../../assets/js/serverApi";
 
 import "../../styles/communicationstyles.css";
 const Communication = () => {
   //add the background highlight when clicked once i have data.
+  const [searchData, setSearchData] = useState([]);
+  const [searchLoad, setSearchLoad] = useState(true);
+  const [searchField, setSearchField] = useState("");
+
+  useEffect(() => {
+    if (searchField.length > 0) {
+      fetch(GetHealthPractitionerData)
+        .then((res) => res.json())
+        .then((data) => {
+          setTimeout(() => {
+            setSearchLoad(false);
+          }, 3000);
+          setSearchData(data);
+        });
+    } else {
+      setSearchLoad(true); //set the loading to true after clearing the searchField or if the searchField is empty
+      return;
+    }
+  }, [searchField]);
+
+  const filteredData = searchData.filter((data) =>
+    data.fullName.toLowerCase().includes(searchField.toLowerCase())
+  );
   return (
     <div>
       <div className="communication-container__wrapper">
@@ -11,14 +36,48 @@ const Communication = () => {
             className="search-profile__input"
             type="text"
             placeholder="search"
+            onChange={(e) => setSearchField(e.target.value)}
           />
 
-          <button className="profile-label__wrapper">Aaron Sierra</button>
+          {searchField && (
+            <div className="search-container__wrapper">
+              {filteredData.length <= 0 ? (
+                <p className="nothing-to-show__text">nothing to show</p>
+              ) : (
+                ""
+              )}
+              {filteredData.map((data, index) => (
+                <div className="search-details__wrapper" key={index}>
+                  {searchLoad === true ? (
+                    <div
+                      style={{
+                        textAlign: "center",
+                        width: "100%",
+                        marginTop: "60px",
+                      }}
+                    >
+                      <CircleNotch
+                        size={15}
+                        className={"communication-loading__icon"}
+                      />
+                    </div>
+                  ) : (
+                    <>
+                      <p>{data.fullName}</p>
+                      <p>#{data.registrationNumber}</p>
+                    </>
+                  )}
+                </div>
+              ))}
+            </div>
+          )}
+
+          {/* <button className="profile-label__wrapper">Aaron Sierra</button>
 
           <button className="profile-label__wrapper">Dr. Raeann Sierra</button>
           <button className="profile-label__wrapper">Mikel Sierra</button>
 
-          <button className="profile-label__wrapper">Sean Sierra</button>
+          <button className="profile-label__wrapper">Sean Sierra</button> */}
         </div>
 
         <div>
