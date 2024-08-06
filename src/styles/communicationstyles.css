@@ -11,6 +11,46 @@
   overflow: auto;
 }
 
+.search-container__wrapper {
+  height: 20%;
+  background-color: white;
+  border: 1px solid rgba(0, 0, 0, 0.4);
+  margin-top: 10px;
+  overflow: auto;
+}
+
+.nothing-to-show__text {
+  font-size: 13px;
+  padding: 5px;
+  color: rgba(0, 0, 0, 0.5);
+}
+
+.search-details__wrapper {
+}
+
+.search-details__btns {
+  cursor: pointer;
+  background-color: transparent;
+  border: none;
+
+  display: flex;
+  justify-content: space-between;
+  padding: 5px;
+  width: 100%;
+}
+
+.search-details__btns:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.search-details__wrapper p {
+  font-size: 13px;
+}
+
+.communication-loading__icon {
+  animation: loadingAnimation 1s infinite linear;
+}
+
 .convo-details__wrapper {
   display: flex;
   align-items: center;
