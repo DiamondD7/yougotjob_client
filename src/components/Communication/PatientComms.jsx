@@ -46,30 +46,29 @@ const PatientComms = () => {
               ) : (
                 ""
               )}
-              {filteredData.map((data, index) => (
-                <div className="search-details__wrapper" key={index}>
-                  {searchLoad === true ? (
-                    <div
-                      style={{
-                        textAlign: "center",
-                        width: "100%",
-                        marginTop: "60px",
-                      }}
-                    >
-                      <CircleNotch
-                        size={15}
-                        className={"communication-loading__icon"}
-                      />
-                    </div>
-                  ) : (
-                    <>
-                      <button className="search-details__btns">
-                        <p>{data.fullName}</p> <p>{data.registrationNumber}</p>
-                      </button>
-                    </>
-                  )}
+              {searchLoad === false ? (
+                filteredData.map((data, index) => (
+                  <div className="search-details__wrapper" key={index}>
+                    <button className="search-details__btns">
+                      <p>Dr.{data.fullName}</p>{" "}
+                      <p>#{data.registrationNumber}</p>
+                    </button>
+                  </div>
+                ))
+              ) : (
+                <div
+                  style={{
+                    textAlign: "center",
+                    width: "100%",
+                    marginTop: "60px",
+                  }}
+                >
+                  <CircleNotch
+                    size={15}
+                    className={"communication-loading__icon"}
+                  />
                 </div>
-              ))}
+              )}
             </div>
           )}
 
