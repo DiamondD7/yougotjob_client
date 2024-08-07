@@ -1,14 +1,191 @@
 import React, { useEffect, useState } from "react";
 import { CircleNotch } from "@phosphor-icons/react";
-import { GetHealthPractitionerData } from "../../assets/js/serverApi";
+import {
+  GetHealthPractitionerData,
+  GetSpecificChatMessage,
+  GetSpecificChatHistory,
+  AddChatHistory,
+  AddChatMessage,
+} from "../../assets/js/serverApi";
 
 import "../../styles/communicationstyles.css";
+const ChatConvo = ({ chosenConvo, chatId, setChatId }) => {
+  const [chatData, setChatData] = useState([]);
+  const [chatHistoryId, setChatHistoryId] = useState(chatId);
+  const [sentMessage, setSentMessage] = useState(false);
+  const [messageField, setMessageField] = useState("");
+
+  useEffect(() => {
+    fetch(GetSpecificChatMessage, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify(chatId),
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        console.log(res);
+        setChatData(res.returnStatus.data);
+        setSentMessage(false);
+      });
+  }, [sentMessage, chatId]);
+
+  const handleAddChatConvo = () => {
+    //adds chatconvo for new chats
+    const id = parseInt(sessionStorage.getItem("id"));
+    const dateNow = new Date();
+    fetch(AddChatHistory, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify({
+        UserInitiatorId: id,
+        UserRecipientId: chosenConvo.id,
+        Name: chosenConvo.fullName,
+        Created: dateNow.toISOString(),
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.returnStatus.status === true) {
+          handleAddChatMessage(data.returnStatus.chatId);
+          setChatId(data.returnStatus.chatId);
+        }
+      });
+  };
+
+  const handleAddChatMessage = (e, chatHistoryId) => {
+    e.preventDefault();
+    const id = parseInt(sessionStorage.getItem("id"));
+    const dateNow = new Date();
+    fetch(AddChatMessage, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify({
+        ChatHistoryId: chatHistoryId,
+        UserId: id,
+        message: messageField,
+        CreatedAt: dateNow.toISOString(),
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data); //delete log
+        setSentMessage(true);
+      });
+  };
+
+  return (
+    <div>
+      <div className="convo-details__wrapper">
+        <h3>Dr {chosenConvo.fullName || chosenConvo.name}</h3>
+      </div>
+      <div className="convo-container__wrapper">
+        {chatId === 0 ? (
+          <div>
+            <h1>No Conversation yet</h1>
+          </div>
+        ) : (
+          <div>
+            {chatData.map((items, index) => (
+              <p key={items.id}>{items.message}</p>
+            ))}
+          </div>
+        )}
+        {/* <div className="recieved-message-container__wrapper">
+                <div className="recieved-message__wrapper">
+                  <p>
+                    Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ut
+                    ipsam distinctio assumenda maxime nobis, laborum alias
+                    facilis blanditiis doloribus excepturi ea, similique, libero
+                    dicta minima inventore sit ipsum perferendis tempora. Lorem
+                    ipsum dolor sit amet consectetur adipisicing elit. Eligendi
+                    repudiandae nostrum reiciendis nemo non quia doloribus,
+                    cupiditate deserunt. Minus itaque quis eveniet vitae
+                    excepturi porro, error enim cumque mollitia reiciendis.
+                  </p>
+                </div>
+                <label className="message-timestamp">12:30 PM</label>
+              </div>
+              <div className="user-message-container__wrapper">
+                <label className="message-timestamp">12:33 PM</label>
+                <div className="user-message__wrapper">
+                  <p>
+                    Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ut
+                    ipsam distinctio assumenda maxime nobis, laborum alias
+                    facilis blanditiis doloribus excepturi ea, similique, libero
+                    dicta minima inventore sit ipsum perferendis tempora. Lorem
+                    ipsum dolor sit amet consectetur adipisicing elit. Eligendi
+                    repudiandae nostrum reiciendis nemo non quia doloribus,
+                    cupiditate deserunt. Minus itaque quis eveniet vitae
+                    excepturi porro, error enim cumque mollitia reiciendis.
+                  </p>
+                </div>
+              </div>
+              <div className="recieved-message-container__wrapper">
+                <div className="recieved-message__wrapper">
+                  <p>
+                    Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ut
+                    ipsam distinctio assumenda maxime nobis, laborum alias
+                    facilis blanditiis doloribus excepturi ea, similique, libero
+                    dicta minima inventore sit ipsum perferendis tempora. Lorem
+                    ipsum dolor sit amet consectetur adipisicing elit. Eligendi
+                    repudiandae nostrum reiciendis nemo non quia doloribus,
+                    cupiditate deserunt. Minus itaque quis eveniet vitae
+                    excepturi porro, error enim cumque mollitia reiciendis.
+                  </p>
+                </div>
+                <div>
+                  <label className="message-timestamp">12:38 PM</label>
+                </div>
+              </div> */}
+      </div>
+      <textarea
+        className="textbox-message"
+        placeholder="Write your message here..."
+        onChange={(e) => setMessageField(e.target.value)}
+      ></textarea>
+      <br />
+      {chatId === 0 ? (
+        <button className="send-btn" onClick={handleAddChatConvo}>
+          first message
+        </button>
+      ) : (
+        <button
+          className="send-btn"
+          onClick={(e) => handleAddChatMessage(e, chatId)}
+        >
+          send
+        </button>
+      )}
+    </div>
+  );
+};
+
 const PatientComms = () => {
   //add the background highlight when clicked once i have data.
   const [searchData, setSearchData] = useState([]);
   const [searchLoad, setSearchLoad] = useState(true);
   const [searchField, setSearchField] = useState("");
   const [chosenConvo, setChosenConvo] = useState([]);
+  const [chatId, setChatId] = useState(0);
+  const [existingChats, setExistingChats] = useState([]);
+
+  useEffect(() => {
+    const id = parseInt(sessionStorage.getItem("id"));
+    fetch(`${GetSpecificChatHistory}/${id}`)
+      .then((res) => res.json())
+      .then((res) => {
+        setExistingChats(res.returnStatus.data);
+      });
+  }, [chatId]);
 
   useEffect(() => {
     if (searchField.length > 0) {
@@ -34,6 +211,12 @@ const PatientComms = () => {
     setSearchField("");
     setChosenConvo(data);
   };
+
+  const handleOpenExistingConvo = (data) => {
+    setChosenConvo(data);
+    setChatId(data.id);
+  };
+
   return (
     <div>
       <div className="communication-container__wrapper">
@@ -82,9 +265,17 @@ const PatientComms = () => {
             </div>
           )}
 
-          {/* <button className="profile-label__wrapper">Aaron Sierra</button>
+          {existingChats.map((items, index) => (
+            <button
+              className="profile-label__wrapper"
+              key={index}
+              onClick={() => handleOpenExistingConvo(items)}
+            >
+              {items.name}
+            </button>
+          ))}
 
-          <button className="profile-label__wrapper">Dr. Raeann Sierra</button>
+          {/* <button className="profile-label__wrapper">Dr. Raeann Sierra</button>
           <button className="profile-label__wrapper">Mikel Sierra</button>
 
           <button className="profile-label__wrapper">Sean Sierra</button> */}
@@ -94,64 +285,11 @@ const PatientComms = () => {
           <div></div>
         ) : (
           <div>
-            <div className="convo-details__wrapper">
-              <h3>Dr {chosenConvo.fullName}</h3>
-            </div>
-            <div className="convo-container__wrapper">
-              {/* <div className="recieved-message-container__wrapper">
-                <div className="recieved-message__wrapper">
-                  <p>
-                    Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ut
-                    ipsam distinctio assumenda maxime nobis, laborum alias
-                    facilis blanditiis doloribus excepturi ea, similique, libero
-                    dicta minima inventore sit ipsum perferendis tempora. Lorem
-                    ipsum dolor sit amet consectetur adipisicing elit. Eligendi
-                    repudiandae nostrum reiciendis nemo non quia doloribus,
-                    cupiditate deserunt. Minus itaque quis eveniet vitae
-                    excepturi porro, error enim cumque mollitia reiciendis.
-                  </p>
-                </div>
-                <label className="message-timestamp">12:30 PM</label>
-              </div>
-              <div className="user-message-container__wrapper">
-                <label className="message-timestamp">12:33 PM</label>
-                <div className="user-message__wrapper">
-                  <p>
-                    Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ut
-                    ipsam distinctio assumenda maxime nobis, laborum alias
-                    facilis blanditiis doloribus excepturi ea, similique, libero
-                    dicta minima inventore sit ipsum perferendis tempora. Lorem
-                    ipsum dolor sit amet consectetur adipisicing elit. Eligendi
-                    repudiandae nostrum reiciendis nemo non quia doloribus,
-                    cupiditate deserunt. Minus itaque quis eveniet vitae
-                    excepturi porro, error enim cumque mollitia reiciendis.
-                  </p>
-                </div>
-              </div>
-              <div className="recieved-message-container__wrapper">
-                <div className="recieved-message__wrapper">
-                  <p>
-                    Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ut
-                    ipsam distinctio assumenda maxime nobis, laborum alias
-                    facilis blanditiis doloribus excepturi ea, similique, libero
-                    dicta minima inventore sit ipsum perferendis tempora. Lorem
-                    ipsum dolor sit amet consectetur adipisicing elit. Eligendi
-                    repudiandae nostrum reiciendis nemo non quia doloribus,
-                    cupiditate deserunt. Minus itaque quis eveniet vitae
-                    excepturi porro, error enim cumque mollitia reiciendis.
-                  </p>
-                </div>
-                <div>
-                  <label className="message-timestamp">12:38 PM</label>
-                </div>
-              </div> */}
-            </div>
-            <textarea
-              className="textbox-message"
-              placeholder="Write your message here..."
-            ></textarea>
-            <br />
-            <button className="send-btn">send</button>
+            <ChatConvo
+              chosenConvo={chosenConvo}
+              chatId={chatId}
+              setChatId={setChatId}
+            />
           </div>
         )}
       </div>
