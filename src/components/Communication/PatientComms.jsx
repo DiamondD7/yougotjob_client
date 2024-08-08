@@ -15,7 +15,7 @@ const ChatConvo = ({ chosenConvo, chatId, setChatId }) => {
   const [chatHistoryId, setChatHistoryId] = useState(chatId);
   const [sentMessage, setSentMessage] = useState(false);
   const [messageField, setMessageField] = useState("");
-  const readableDate = new Date();
+  const today = new Date();
 
   useEffect(() => {
     fetch(GetSpecificChatMessage, {
@@ -95,8 +95,10 @@ const ChatConvo = ({ chosenConvo, chatId, setChatId }) => {
     const readableTime = new Date(date).toLocaleTimeString();
     return readableTime;
   };
+
   const handleReadableDateFormat = (date) => {
     const readableDate = new Date(date).toLocaleDateString();
+
     return readableDate;
   };
 
@@ -112,23 +114,7 @@ const ChatConvo = ({ chosenConvo, chatId, setChatId }) => {
           </div>
         ) : (
           <>
-            <div>
-              {chatData.map((items) =>
-                items.userId !== currentUserId ? (
-                  <div
-                    className="recieved-message-container__wrapper"
-                    key={items.id}
-                  >
-                    <div className="recieved-message__wrapper">
-                      <p>{items.message}</p>
-                    </div>
-                    <label className="message-timestamp">12:30 PM</label>
-                  </div>
-                ) : (
-                  ""
-                )
-              )}
-
+            <>
               {chatData.map((items) =>
                 items.userId === currentUserId ? (
                   <div
@@ -143,10 +129,20 @@ const ChatConvo = ({ chosenConvo, chatId, setChatId }) => {
                     </div>
                   </div>
                 ) : (
-                  ""
+                  <div
+                    className="recieved-message-container__wrapper"
+                    key={items.id}
+                  >
+                    <div className="recieved-message__wrapper">
+                      <p>{items.message}</p>
+                    </div>
+                    <label className="message-timestamp">
+                      {handleReadableTimeFormat(items.createdAt)}
+                    </label>
+                  </div>
                 )
               )}
-            </div>
+            </>
             {/* <div className="recieved-message-container__wrapper">
               <div className="recieved-message__wrapper">
                 <p>
