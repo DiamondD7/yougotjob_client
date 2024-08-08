@@ -66,6 +66,9 @@
   padding: 3px 5px;
   margin-top: 5px;
 }
+.message-datestamp {
+  font-size: 10px;
+}
 
 .message-timestamp {
   font-size: 10px;
