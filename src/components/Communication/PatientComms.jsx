@@ -10,10 +10,12 @@ import {
 
 import "../../styles/communicationstyles.css";
 const ChatConvo = ({ chosenConvo, chatId, setChatId }) => {
+  const currentUserId = parseInt(sessionStorage.getItem("id"));
   const [chatData, setChatData] = useState([]);
   const [chatHistoryId, setChatHistoryId] = useState(chatId);
   const [sentMessage, setSentMessage] = useState(false);
   const [messageField, setMessageField] = useState("");
+  const readableDate = new Date();
 
   useEffect(() => {
     fetch(GetSpecificChatMessage, {
@@ -62,6 +64,13 @@ const ChatConvo = ({ chosenConvo, chatId, setChatId }) => {
     e.preventDefault();
     const id = parseInt(sessionStorage.getItem("id"));
     const dateNow = new Date();
+
+    const localISOTime = new Date(
+      dateNow.getTime() - dateNow.getTimezoneOffset() * 60000
+    )
+      .toISOString()
+      .slice(0, -1); // Remove the 'Z' in example: 2024-08-08T12:34:56.789Z which indicates UTC.
+
     fetch(AddChatMessage, {
       method: "POST",
       headers: {
@@ -72,7 +81,7 @@ const ChatConvo = ({ chosenConvo, chatId, setChatId }) => {
         ChatHistoryId: chatHistoryId,
         UserId: id,
         message: messageField,
-        CreatedAt: dateNow.toISOString(),
+        CreatedAt: localISOTime,
       }),
     })
       .then((res) => res.json())
@@ -80,6 +89,15 @@ const ChatConvo = ({ chosenConvo, chatId, setChatId }) => {
         console.log(data); //delete log
         setSentMessage(true);
       });
+  };
+
+  const handleReadableTimeFormat = (date) => {
+    const readableTime = new Date(date).toLocaleTimeString();
+    return readableTime;
+  };
+  const handleReadableDateFormat = (date) => {
+    const readableDate = new Date(date).toLocaleDateString();
+    return readableDate;
   };
 
   return (
@@ -93,60 +111,63 @@ const ChatConvo = ({ chosenConvo, chatId, setChatId }) => {
             <h1>No Conversation yet</h1>
           </div>
         ) : (
-          <div>
-            {chatData.map((items, index) => (
-              <p key={items.id}>{items.message}</p>
-            ))}
-          </div>
+          <>
+            <div>
+              {chatData.map((items) =>
+                items.userId !== currentUserId ? (
+                  <div
+                    className="recieved-message-container__wrapper"
+                    key={items.id}
+                  >
+                    <div className="recieved-message__wrapper">
+                      <p>{items.message}</p>
+                    </div>
+                    <label className="message-timestamp">12:30 PM</label>
+                  </div>
+                ) : (
+                  ""
+                )
+              )}
+
+              {chatData.map((items) =>
+                items.userId === currentUserId ? (
+                  <div
+                    className="user-message-container__wrapper"
+                    key={items.id}
+                  >
+                    <label className="message-timestamp">
+                      {handleReadableTimeFormat(items.createdAt)}
+                    </label>
+                    <div className="user-message__wrapper">
+                      <p>{items.message}</p>
+                    </div>
+                  </div>
+                ) : (
+                  ""
+                )
+              )}
+            </div>
+            {/* <div className="recieved-message-container__wrapper">
+              <div className="recieved-message__wrapper">
+                <p>
+                  Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ut
+                  ipsam distinctio assumenda maxime nobis, laborum alias facilis
+                  blanditiis doloribus excepturi ea, similique, libero dicta
+                  minima inventore sit ipsum perferendis tempora. Lorem ipsum
+                  dolor sit amet consectetur adipisicing elit. Eligendi
+                  repudiandae nostrum reiciendis nemo non quia doloribus,
+                  cupiditate deserunt. Minus itaque quis eveniet vitae excepturi
+                  porro, error enim cumque mollitia reiciendis.
+                </p>
+              </div>
+              <div>
+                <label className="message-timestamp">12:38 PM</label>
+              </div>
+            </div> */}
+          </>
         )}
-        {/* <div className="recieved-message-container__wrapper">
-                <div className="recieved-message__wrapper">
-                  <p>
-                    Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ut
-                    ipsam distinctio assumenda maxime nobis, laborum alias
-                    facilis blanditiis doloribus excepturi ea, similique, libero
-                    dicta minima inventore sit ipsum perferendis tempora. Lorem
-                    ipsum dolor sit amet consectetur adipisicing elit. Eligendi
-                    repudiandae nostrum reiciendis nemo non quia doloribus,
-                    cupiditate deserunt. Minus itaque quis eveniet vitae
-                    excepturi porro, error enim cumque mollitia reiciendis.
-                  </p>
-                </div>
-                <label className="message-timestamp">12:30 PM</label>
-              </div>
-              <div className="user-message-container__wrapper">
-                <label className="message-timestamp">12:33 PM</label>
-                <div className="user-message__wrapper">
-                  <p>
-                    Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ut
-                    ipsam distinctio assumenda maxime nobis, laborum alias
-                    facilis blanditiis doloribus excepturi ea, similique, libero
-                    dicta minima inventore sit ipsum perferendis tempora. Lorem
-                    ipsum dolor sit amet consectetur adipisicing elit. Eligendi
-                    repudiandae nostrum reiciendis nemo non quia doloribus,
-                    cupiditate deserunt. Minus itaque quis eveniet vitae
-                    excepturi porro, error enim cumque mollitia reiciendis.
-                  </p>
-                </div>
-              </div>
-              <div className="recieved-message-container__wrapper">
-                <div className="recieved-message__wrapper">
-                  <p>
-                    Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ut
-                    ipsam distinctio assumenda maxime nobis, laborum alias
-                    facilis blanditiis doloribus excepturi ea, similique, libero
-                    dicta minima inventore sit ipsum perferendis tempora. Lorem
-                    ipsum dolor sit amet consectetur adipisicing elit. Eligendi
-                    repudiandae nostrum reiciendis nemo non quia doloribus,
-                    cupiditate deserunt. Minus itaque quis eveniet vitae
-                    excepturi porro, error enim cumque mollitia reiciendis.
-                  </p>
-                </div>
-                <div>
-                  <label className="message-timestamp">12:38 PM</label>
-                </div>
-              </div> */}
       </div>
+
       <textarea
         className="textbox-message"
         placeholder="Write your message here..."
