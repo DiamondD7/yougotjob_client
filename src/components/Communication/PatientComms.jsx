@@ -9,6 +9,7 @@ import {
 } from "../../assets/js/serverApi";
 
 import "../../styles/communicationstyles.css";
+
 const ChatConvo = ({ chosenConvo, chatId, setChatId }) => {
   const currentUserId = parseInt(sessionStorage.getItem("id"));
   const [chatData, setChatData] = useState([]);
@@ -102,6 +103,41 @@ const ChatConvo = ({ chosenConvo, chatId, setChatId }) => {
     return readableDate;
   };
 
+  const mappingData = chatData.map((items, index) => {
+    const nextItem = chatData[index + 1];
+    return (
+      <div key={items.id}>
+        {handleReadableDateFormat(items.createdAt) !==
+          today.toLocaleDateString() &&
+        handleReadableDateFormat(items.createdAt) !==
+          handleReadableDateFormat(nextItem?.createdAt) ? (
+          <p className="message-timestamp">
+            {handleReadableDateFormat(items.createdAt)}
+          </p>
+        ) : null}
+
+        {items.userId === currentUserId ? (
+          <div className="user-message-container__wrapper">
+            <label className="message-timestamp">
+              {handleReadableTimeFormat(items.createdAt)}
+            </label>
+            <div className="user-message__wrapper">
+              <p>{items.message}</p>
+            </div>
+          </div>
+        ) : (
+          <div className="recieved-message-container__wrapper" key={items.id}>
+            <div className="recieved-message__wrapper">
+              <p>{items.message}</p>
+            </div>
+            <label className="message-timestamp">
+              {handleReadableTimeFormat(items.createdAt)}
+            </label>
+          </div>
+        )}
+      </div>
+    );
+  });
   return (
     <div>
       <div className="convo-details__wrapper">
@@ -115,33 +151,41 @@ const ChatConvo = ({ chosenConvo, chatId, setChatId }) => {
         ) : (
           <>
             <>
-              {chatData.map((items) =>
-                items.userId === currentUserId ? (
-                  <div
-                    className="user-message-container__wrapper"
-                    key={items.id}
-                  >
-                    <label className="message-timestamp">
-                      {handleReadableTimeFormat(items.createdAt)}
-                    </label>
-                    <div className="user-message__wrapper">
-                      <p>{items.message}</p>
+              {mappingData}
+              {/* {chatData.map((items, index) => (
+                <div key={items.id}>
+                  {handleReadableDateFormat(items.createdAt) !==
+                  today.toLocaleDateString() ? (
+                    <p className="message-timestamp">
+                      {handleReadableDateFormat(items.createdAt)}
+                    </p>
+                  ) : (
+                    <p className="message-timestamp">today</p>
+                  )}
+                  {items.userId === currentUserId ? (
+                    <div className="user-message-container__wrapper">
+                      <label className="message-timestamp">
+                        {handleReadableTimeFormat(items.createdAt)}
+                      </label>
+                      <div className="user-message__wrapper">
+                        <p>{items.message}</p>
+                      </div>
                     </div>
-                  </div>
-                ) : (
-                  <div
-                    className="recieved-message-container__wrapper"
-                    key={items.id}
-                  >
-                    <div className="recieved-message__wrapper">
-                      <p>{items.message}</p>
+                  ) : (
+                    <div
+                      className="recieved-message-container__wrapper"
+                      key={items.id}
+                    >
+                      <div className="recieved-message__wrapper">
+                        <p>{items.message}</p>
+                      </div>
+                      <label className="message-timestamp">
+                        {handleReadableTimeFormat(items.createdAt)}
+                      </label>
                     </div>
-                    <label className="message-timestamp">
-                      {handleReadableTimeFormat(items.createdAt)}
-                    </label>
-                  </div>
-                )
-              )}
+                  )}
+                </div>
+              ))} */}
             </>
             {/* <div className="recieved-message-container__wrapper">
               <div className="recieved-message__wrapper">
