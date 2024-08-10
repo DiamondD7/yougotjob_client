@@ -97,7 +97,7 @@ const ChatConvo = ({ chosenConvo, chatId, setChatId }) => {
   };
 
   const handleReadableDateFormat = (date) => {
-    const readableDate = new Date(date).toLocaleDateString();
+    const readableDate = new Date(date).toLocaleDateString("en-NZ");
 
     return readableDate;
   };
