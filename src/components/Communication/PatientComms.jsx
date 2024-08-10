@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { CircleNotch } from "@phosphor-icons/react";
 import {
   GetHealthPractitionerData,
@@ -16,6 +16,13 @@ const ChatConvo = ({ chosenConvo, chatId, setChatId }) => {
   const [sentMessage, setSentMessage] = useState(false);
   const [messageField, setMessageField] = useState("");
   const today = new Date();
+  const divScroll = useRef(null);
+
+  useEffect(() => {
+    if (divScroll.current) {
+      divScroll.current.scrollTop = divScroll.current.scrollHeight;
+    }
+  }, [chatData, sentMessage]);
 
   useEffect(() => {
     fetch(GetSpecificChatMessage, {
@@ -88,6 +95,7 @@ const ChatConvo = ({ chosenConvo, chatId, setChatId }) => {
       .then((data) => {
         console.log(data); //delete log
         setSentMessage(true);
+        setMessageField("");
       });
   };
 
@@ -97,7 +105,7 @@ const ChatConvo = ({ chosenConvo, chatId, setChatId }) => {
   };
 
   const handleReadableDateFormat = (date) => {
-    const readableDate = new Date(date).toLocaleDateString();
+    const readableDate = new Date(date).toLocaleDateString("en-NZ");
 
     return readableDate;
   };
@@ -108,7 +116,7 @@ const ChatConvo = ({ chosenConvo, chatId, setChatId }) => {
     return (
       <div key={items.id}>
         {handleReadableDateFormat(items.createdAt) !== //if the current item.createdAt is not equal today then dont use "today"
-          today.toLocaleDateString() &&
+          today.toLocaleDateString("en-NZ") &&
         today.toLocaleDateString() !==
           handleReadableDateFormat(nextItem?.createdAt) ? ( // if todays date is not equal to the nextItem's date
           handleReadableDateFormat(items?.createdAt) ===
@@ -116,7 +124,7 @@ const ChatConvo = ({ chosenConvo, chatId, setChatId }) => {
             ""
           ) : (
             //else return the date of the convo
-            <p className="message-timestamp">
+            <p className="message-datestamp">
               {handleReadableDateFormat(items.createdAt)}
             </p>
           )
@@ -125,7 +133,7 @@ const ChatConvo = ({ chosenConvo, chatId, setChatId }) => {
           ""
         ) : (
           //else if the item is equal the todays date, then return "today"
-          <p className="message-timestamp">today</p>
+          <p className="message-datestamp">today</p>
         )}
 
         {items.userId === currentUserId ? (
@@ -155,7 +163,7 @@ const ChatConvo = ({ chosenConvo, chatId, setChatId }) => {
       <div className="convo-details__wrapper">
         <h3>Dr {chosenConvo.fullName || chosenConvo.name}</h3>
       </div>
-      <div className="convo-container__wrapper">
+      <div className="convo-container__wrapper" ref={divScroll}>
         {chatData.length <= 0 ? (
           <div>
             <h1>No Conversation yet</h1>
@@ -168,6 +176,7 @@ const ChatConvo = ({ chosenConvo, chatId, setChatId }) => {
       <textarea
         className="textbox-message"
         placeholder="Write your message here..."
+        value={messageField}
         onChange={(e) => setMessageField(e.target.value)}
       ></textarea>
       <br />
@@ -293,11 +302,6 @@ const PatientComms = () => {
               {items.name}
             </button>
           ))}
-
-          {/* <button className="profile-label__wrapper">Dr. Raeann Sierra</button>
-          <button className="profile-label__wrapper">Mikel Sierra</button>
-
-          <button className="profile-label__wrapper">Sean Sierra</button> */}
         </div>
 
         {chosenConvo.length <= 0 ? (
