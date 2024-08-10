@@ -41,7 +41,8 @@ const ChatConvo = ({ chosenConvo, chatId, setChatId }) => {
       });
   }, [sentMessage, chatId]);
 
-  const handleAddChatConvo = () => {
+  const handleAddChatConvo = (e) => {
+    e.preventDefault();
     //adds chatconvo for new chats
     const id = parseInt(sessionStorage.getItem("id"));
     const dateNow = new Date();
@@ -61,7 +62,7 @@ const ChatConvo = ({ chosenConvo, chatId, setChatId }) => {
       .then((res) => res.json())
       .then((data) => {
         if (data.returnStatus.status === true) {
-          handleAddChatMessage(data.returnStatus.chatId);
+          handleAddChatMessage(e, data.returnStatus.chatId);
           setChatId(data.returnStatus.chatId);
         }
       });
@@ -180,8 +181,8 @@ const ChatConvo = ({ chosenConvo, chatId, setChatId }) => {
         onChange={(e) => setMessageField(e.target.value)}
       ></textarea>
       <br />
-      {chatId === 0 ? (
-        <button className="send-btn" onClick={handleAddChatConvo}>
+      {chatData.length <= 0 ? (
+        <button className="send-btn" onClick={(e) => handleAddChatConvo(e)}>
           first message
         </button>
       ) : (
