@@ -8,7 +8,7 @@
   width: 1300px;
   margin-top: 5px;
   padding: 10px;
-  overflow: auto;
+  overflow: scroll;
 }
 
 .search-container__wrapper {
