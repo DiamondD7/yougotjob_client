@@ -13,7 +13,6 @@ import "../../styles/communicationstyles.css";
 const ChatConvo = ({ chosenConvo, chatId, setChatId }) => {
   const currentUserId = parseInt(sessionStorage.getItem("id"));
   const [chatData, setChatData] = useState([]);
-  const [chatHistoryId, setChatHistoryId] = useState(chatId);
   const [sentMessage, setSentMessage] = useState(false);
   const [messageField, setMessageField] = useState("");
   const today = new Date();
@@ -105,16 +104,29 @@ const ChatConvo = ({ chosenConvo, chatId, setChatId }) => {
 
   const mappingData = chatData.map((items, index) => {
     const nextItem = chatData[index + 1];
+    const prevs = chatData[index - 1];
     return (
       <div key={items.id}>
-        {handleReadableDateFormat(items.createdAt) !==
+        {handleReadableDateFormat(items.createdAt) !== //if the current item.createdAt is not equal today then dont use "today"
           today.toLocaleDateString() &&
-        handleReadableDateFormat(items.createdAt) !==
-          handleReadableDateFormat(nextItem?.createdAt) ? (
-          <p className="message-timestamp">
-            {handleReadableDateFormat(items.createdAt)}
-          </p>
-        ) : null}
+        today.toLocaleDateString() !==
+          handleReadableDateFormat(nextItem?.createdAt) ? ( // if todays date is not equal to the nextItem's date
+          handleReadableDateFormat(items?.createdAt) ===
+          handleReadableDateFormat(prevs?.createdAt) ? ( //if the current createdAt is equal to the previous then just return nothing
+            ""
+          ) : (
+            //else return the date of the convo
+            <p className="message-timestamp">
+              {handleReadableDateFormat(items.createdAt)}
+            </p>
+          )
+        ) : handleReadableDateFormat(items?.createdAt) ===
+          handleReadableDateFormat(prevs?.createdAt) ? ( //if the current item.createdAt is equal to the previous then return nothing
+          ""
+        ) : (
+          //else if the item is equal the todays date, then return "today"
+          <p className="message-timestamp">today</p>
+        )}
 
         {items.userId === currentUserId ? (
           <div className="user-message-container__wrapper">
@@ -144,67 +156,12 @@ const ChatConvo = ({ chosenConvo, chatId, setChatId }) => {
         <h3>Dr {chosenConvo.fullName || chosenConvo.name}</h3>
       </div>
       <div className="convo-container__wrapper">
-        {chatId === 0 ? (
+        {chatData.length <= 0 ? (
           <div>
             <h1>No Conversation yet</h1>
           </div>
         ) : (
-          <>
-            <>
-              {mappingData}
-              {/* {chatData.map((items, index) => (
-                <div key={items.id}>
-                  {handleReadableDateFormat(items.createdAt) !==
-                  today.toLocaleDateString() ? (
-                    <p className="message-timestamp">
-                      {handleReadableDateFormat(items.createdAt)}
-                    </p>
-                  ) : (
-                    <p className="message-timestamp">today</p>
-                  )}
-                  {items.userId === currentUserId ? (
-                    <div className="user-message-container__wrapper">
-                      <label className="message-timestamp">
-                        {handleReadableTimeFormat(items.createdAt)}
-                      </label>
-                      <div className="user-message__wrapper">
-                        <p>{items.message}</p>
-                      </div>
-                    </div>
-                  ) : (
-                    <div
-                      className="recieved-message-container__wrapper"
-                      key={items.id}
-                    >
-                      <div className="recieved-message__wrapper">
-                        <p>{items.message}</p>
-                      </div>
-                      <label className="message-timestamp">
-                        {handleReadableTimeFormat(items.createdAt)}
-                      </label>
-                    </div>
-                  )}
-                </div>
-              ))} */}
-            </>
-            {/* <div className="recieved-message-container__wrapper">
-              <div className="recieved-message__wrapper">
-                <p>
-                  Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ut
-                  ipsam distinctio assumenda maxime nobis, laborum alias facilis
-                  blanditiis doloribus excepturi ea, similique, libero dicta
-                  minima inventore sit ipsum perferendis tempora. Lorem ipsum
-                  dolor sit amet consectetur adipisicing elit. Eligendi
-                  repudiandae nostrum reiciendis nemo non quia doloribus,
-                  cupiditate deserunt. Minus itaque quis eveniet vitae excepturi
-                  porro, error enim cumque mollitia reiciendis.
-                </p>
-              </div>
-              <div>
-                <label className="message-timestamp">12:38 PM</label>
-              </div>
-            </div> */}
-          </>
+          <>{mappingData}</> //handles the date stamp of the convo
         )}
       </div>
 
@@ -271,6 +228,7 @@ const PatientComms = () => {
   const handleOpenConvo = (data) => {
     setSearchField("");
     setChosenConvo(data);
+    setChatId(data.id);
   };
 
   const handleOpenExistingConvo = (data) => {
