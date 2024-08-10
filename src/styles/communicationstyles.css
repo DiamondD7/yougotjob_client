@@ -67,6 +67,9 @@
   margin-top: 5px;
 }
 .message-datestamp {
+  font-weight: bold;
+  width: 100%;
+  text-align: center;
   font-size: 10px;
 }
 
@@ -84,7 +87,7 @@
 
 .recieved-message__wrapper {
   /* no height */
-  width: 550px;
+  width: 400px;
   background-color: rgba(157, 205, 90, 0.3);
   padding: 20px;
   border-radius: 50px;
@@ -105,7 +108,7 @@
 
 .user-message__wrapper {
   /* no height */
-  width: 550px;
+  width: 400px;
   background-color: #9dcd5a;
   padding: 20px;
   border-radius: 50px;

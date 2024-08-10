@@ -116,7 +116,7 @@ const ChatConvo = ({ chosenConvo, chatId, setChatId }) => {
             ""
           ) : (
             //else return the date of the convo
-            <p className="message-timestamp">
+            <p className="message-datestamp">
               {handleReadableDateFormat(items.createdAt)}
             </p>
           )
@@ -125,7 +125,7 @@ const ChatConvo = ({ chosenConvo, chatId, setChatId }) => {
           ""
         ) : (
           //else if the item is equal the todays date, then return "today"
-          <p className="message-timestamp">today</p>
+          <p className="message-datestamp">today</p>
         )}
 
         {items.userId === currentUserId ? (
@@ -293,11 +293,6 @@ const PatientComms = () => {
               {items.name}
             </button>
           ))}
-
-          {/* <button className="profile-label__wrapper">Dr. Raeann Sierra</button>
-          <button className="profile-label__wrapper">Mikel Sierra</button>
-
-          <button className="profile-label__wrapper">Sean Sierra</button> */}
         </div>
 
         {chosenConvo.length <= 0 ? (
