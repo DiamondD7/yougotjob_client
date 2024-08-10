@@ -180,7 +180,7 @@ const ChatConvo = ({ chosenConvo, chatId, setChatId }) => {
         onChange={(e) => setMessageField(e.target.value)}
       ></textarea>
       <br />
-      {chatId === 0 ? (
+      {chatData.length <= 0 ? (
         <button className="send-btn" onClick={handleAddChatConvo}>
           first message
         </button>
