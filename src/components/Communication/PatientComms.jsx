@@ -6,11 +6,12 @@ import {
   GetSpecificChatHistory,
   AddChatHistory,
   AddChatMessage,
+  UpdateLastChatHistory,
 } from "../../assets/js/serverApi";
 
 import "../../styles/communicationstyles.css";
 
-const ChatConvo = ({ chosenConvo, chatId, setChatId }) => {
+const ChatConvo = ({ chosenConvo, chatId, setChatId, refreshList }) => {
   const currentUserId = parseInt(sessionStorage.getItem("id"));
   const [chatData, setChatData] = useState([]);
   const [sentMessage, setSentMessage] = useState(false);
@@ -46,6 +47,12 @@ const ChatConvo = ({ chosenConvo, chatId, setChatId }) => {
     //adds chatconvo for new chats
     const id = parseInt(sessionStorage.getItem("id"));
     const dateNow = new Date();
+
+    const localISOTime = new Date(
+      dateNow.getTime() - dateNow.getTimezoneOffset() * 60000
+    )
+      .toISOString()
+      .slice(0, -1); // Remove the 'Z' in example: 2024-08-08T12:34:56.789Z which indicates UTC.
     fetch(AddChatHistory, {
       method: "POST",
       headers: {
@@ -56,7 +63,8 @@ const ChatConvo = ({ chosenConvo, chatId, setChatId }) => {
         UserInitiatorId: id,
         UserRecipientId: chosenConvo.id,
         Name: chosenConvo.fullName,
-        Created: dateNow.toISOString(),
+        Created: localISOTime,
+        LastUpdated: localISOTime,
       }),
     })
       .then((res) => res.json())
@@ -95,8 +103,34 @@ const ChatConvo = ({ chosenConvo, chatId, setChatId }) => {
       .then((res) => res.json())
       .then((data) => {
         console.log(data); //delete log
+        if (chatData.length != 0) {
+          handleLastUpdate();
+        }
         setSentMessage(true);
         setMessageField("");
+      });
+  };
+  const handleLastUpdate = () => {
+    const dateNow = new Date();
+
+    const localISOTime = new Date(
+      dateNow.getTime() - dateNow.getTimezoneOffset() * 60000
+    )
+      .toISOString()
+      .slice(0, -1); // Remove the 'Z' in example: 2024-08-08T12:34:56.789Z which indicates UTC.
+
+    fetch(UpdateLastChatHistory, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify({ LastUpdated: localISOTime, Id: chatId }),
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        console.log(res);
+        refreshList();
       });
   };
 
@@ -207,13 +241,17 @@ const PatientComms = () => {
   const [existingChats, setExistingChats] = useState([]);
 
   useEffect(() => {
+    refreshList(); // calling refreshList() to update chatHistory list
+  }, [chatId]);
+
+  const refreshList = () => {
     const id = parseInt(sessionStorage.getItem("id"));
     fetch(`${GetSpecificChatHistory}/${id}`)
       .then((res) => res.json())
       .then((res) => {
         setExistingChats(res.returnStatus.data);
       });
-  }, [chatId]);
+  };
 
   useEffect(() => {
     if (searchField.length > 0) {
@@ -313,6 +351,7 @@ const PatientComms = () => {
               chosenConvo={chosenConvo}
               chatId={chatId}
               setChatId={setChatId}
+              refreshList={refreshList}
             />
           </div>
         )}
