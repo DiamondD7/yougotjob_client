@@ -142,8 +142,9 @@
   background-clip: padding-box;
 }
 
-.profile-label__wrapper {
+.profile-chathistory__wrapper {
   display: flex;
+  justify-content: space-between;
   align-items: center;
   margin-top: 15px;
   width: 100%;
@@ -154,9 +155,29 @@
   cursor: pointer;
 }
 
-.profile-label__wrapper:hover {
+.profile-chathistory__wrapper:hover {
   background-color: rgba(157, 205, 90, 0.3);
   border-radius: 10px;
+}
+
+.profile-chathistory-chosen {
+  background-color: rgba(157, 205, 90, 0.3);
+  border-radius: 10px;
+}
+
+.profile-chathistory-btn {
+  cursor: pointer;
+  background-color: transparent;
+  border: none;
+  text-align: start;
+  width: 100%;
+  padding: 10px;
+}
+
+.profile-chathistory-trash-btn {
+  cursor: pointer;
+  background-color: transparent;
+  border: none;
 }
 
 .profile-label__wrapper label {

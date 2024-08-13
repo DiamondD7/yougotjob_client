@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
-import { CircleNotch } from "@phosphor-icons/react";
+import { CircleNotch, TrashSimple } from "@phosphor-icons/react";
 import {
   GetHealthPractitionerData,
   GetSpecificChatMessage,
@@ -7,6 +7,7 @@ import {
   AddChatHistory,
   AddChatMessage,
   UpdateLastChatHistory,
+  DeleteChatHistory,
 } from "../../assets/js/serverApi";
 
 import "../../styles/communicationstyles.css";
@@ -237,6 +238,7 @@ const PatientComms = () => {
   const [searchLoad, setSearchLoad] = useState(true);
   const [searchField, setSearchField] = useState("");
   const [chosenConvo, setChosenConvo] = useState([]);
+  const [activeChatHistory, setActiveChatHistory] = useState(0);
   const [chatId, setChatId] = useState(0);
   const [existingChats, setExistingChats] = useState([]);
 
@@ -282,6 +284,23 @@ const PatientComms = () => {
   const handleOpenExistingConvo = (data) => {
     setChosenConvo(data);
     setChatId(data.id);
+    setActiveChatHistory(data.id);
+  };
+
+  const handleDeleteConvo = (e, id) => {
+    e.preventDefault();
+    fetch(`${DeleteChatHistory}/${id}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        setChosenConvo([]);
+        refreshList();
+      });
   };
 
   return (
@@ -333,13 +352,27 @@ const PatientComms = () => {
           )}
 
           {existingChats.map((items, index) => (
-            <button
-              className="profile-label__wrapper"
-              key={index}
-              onClick={() => handleOpenExistingConvo(items)}
+            <div
+              className={`profile-chathistory__wrapper ${
+                activeChatHistory === items.id
+                  ? "profile-chathistory-chosen"
+                  : ""
+              }`}
+              key={items.id}
             >
-              {items.name}
-            </button>
+              <button
+                className="profile-chathistory-btn"
+                onClick={() => handleOpenExistingConvo(items)}
+              >
+                {items.name}
+              </button>
+              <button
+                className="profile-chathistory-trash-btn"
+                onClick={(e) => handleDeleteConvo(e, items.id)}
+              >
+                <TrashSimple size={17} color="#ed2c2c" />
+              </button>
+            </div>
           ))}
         </div>
 
