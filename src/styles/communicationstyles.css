@@ -142,7 +142,7 @@
   background-clip: padding-box;
 }
 
-.profile-label__wrapper {
+.profile-chathistory__btn {
   display: flex;
   align-items: center;
   margin-top: 15px;
@@ -154,7 +154,12 @@
   cursor: pointer;
 }
 
-.profile-label__wrapper:hover {
+.profile-chathistory__btn:hover {
+  background-color: rgba(157, 205, 90, 0.3);
+  border-radius: 10px;
+}
+
+.profile-chathistory-chosen {
   background-color: rgba(157, 205, 90, 0.3);
   border-radius: 10px;
 }

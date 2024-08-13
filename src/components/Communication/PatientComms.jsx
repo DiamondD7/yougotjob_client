@@ -237,6 +237,7 @@ const PatientComms = () => {
   const [searchLoad, setSearchLoad] = useState(true);
   const [searchField, setSearchField] = useState("");
   const [chosenConvo, setChosenConvo] = useState([]);
+  const [activeChatHistory, setActiveChatHistory] = useState(0);
   const [chatId, setChatId] = useState(0);
   const [existingChats, setExistingChats] = useState([]);
 
@@ -282,6 +283,7 @@ const PatientComms = () => {
   const handleOpenExistingConvo = (data) => {
     setChosenConvo(data);
     setChatId(data.id);
+    setActiveChatHistory(data.id);
   };
 
   return (
@@ -334,7 +336,11 @@ const PatientComms = () => {
 
           {existingChats.map((items, index) => (
             <button
-              className="profile-label__wrapper"
+              className={`profile-chathistory__btn ${
+                activeChatHistory === items.id
+                  ? "profile-chathistory-chosen"
+                  : ""
+              }`}
               key={index}
               onClick={() => handleOpenExistingConvo(items)}
             >
