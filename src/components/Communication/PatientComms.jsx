@@ -7,6 +7,7 @@ import {
   AddChatHistory,
   AddChatMessage,
   UpdateLastChatHistory,
+  DeleteChatHistory,
 } from "../../assets/js/serverApi";
 
 import "../../styles/communicationstyles.css";
@@ -286,6 +287,22 @@ const PatientComms = () => {
     setActiveChatHistory(data.id);
   };
 
+  const handleDeleteConvo = (e, id) => {
+    e.preventDefault();
+    fetch(`${DeleteChatHistory}/${id}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        setChosenConvo([]);
+        refreshList();
+      });
+  };
+
   return (
     <div>
       <div className="communication-container__wrapper">
@@ -349,7 +366,10 @@ const PatientComms = () => {
               >
                 {items.name}
               </button>
-              <button className="profile-chathistory-trash-btn">
+              <button
+                className="profile-chathistory-trash-btn"
+                onClick={(e) => handleDeleteConvo(e, items.id)}
+              >
                 <TrashSimple size={17} color="#ed2c2c" />
               </button>
             </div>
