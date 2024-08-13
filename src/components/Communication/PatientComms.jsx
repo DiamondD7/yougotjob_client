@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
-import { CircleNotch } from "@phosphor-icons/react";
+import { CircleNotch, TrashSimple } from "@phosphor-icons/react";
 import {
   GetHealthPractitionerData,
   GetSpecificChatMessage,
@@ -335,17 +335,24 @@ const PatientComms = () => {
           )}
 
           {existingChats.map((items, index) => (
-            <button
-              className={`profile-chathistory__btn ${
+            <div
+              className={`profile-chathistory__wrapper ${
                 activeChatHistory === items.id
                   ? "profile-chathistory-chosen"
                   : ""
               }`}
-              key={index}
-              onClick={() => handleOpenExistingConvo(items)}
+              key={items.id}
             >
-              {items.name}
-            </button>
+              <button
+                className="profile-chathistory-btn"
+                onClick={() => handleOpenExistingConvo(items)}
+              >
+                {items.name}
+              </button>
+              <button className="profile-chathistory-trash-btn">
+                <TrashSimple size={17} color="#ed2c2c" />
+              </button>
+            </div>
           ))}
         </div>
 
