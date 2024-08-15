@@ -1,5 +1,11 @@
 import React, { useEffect, useState, useRef } from "react";
-import { CircleNotch, TrashSimple } from "@phosphor-icons/react";
+import {
+  CircleNotch,
+  TrashSimple,
+  DotsThree,
+  X,
+  PencilSimple,
+} from "@phosphor-icons/react";
 import {
   GetHealthPractitionerData,
   GetSpecificChatMessage,
@@ -17,6 +23,7 @@ const ChatConvo = ({ chosenConvo, chatId, setChatId, refreshList }) => {
   const [chatData, setChatData] = useState([]);
   const [sentMessage, setSentMessage] = useState(false);
   const [messageField, setMessageField] = useState("");
+  const [menuDotsModal, setMenuDotsModal] = useState(false);
   const today = new Date();
   const divScroll = useRef(null);
 
@@ -174,11 +181,35 @@ const ChatConvo = ({ chosenConvo, chatId, setChatId, refreshList }) => {
 
         {items.userId === currentUserId ? (
           <div className="user-message-container__wrapper">
-            <label className="message-timestamp">
-              {handleReadableTimeFormat(items.createdAt)}
-            </label>
-            <div className="user-message__wrapper">
-              <p>{items.message}</p>
+            <div>
+              <div className="user-message-dots-menu">
+                <button
+                  className="user-message-dots-button"
+                  onClick={() => setMenuDotsModal(!menuDotsModal)}
+                >
+                  {menuDotsModal === false ? (
+                    <DotsThree size={19} />
+                  ) : (
+                    <X size={15} />
+                  )}
+                </button>
+                {menuDotsModal && (
+                  <div className="menu-three-modal__wrapper">
+                    <button className="menu-trash-button">
+                      <TrashSimple size={15} color="#ed2c2c" />
+                    </button>
+                    <button className="menu-edit-button">
+                      <PencilSimple size={15} />
+                    </button>
+                  </div>
+                )}
+              </div>
+              <label className="message-timestamp">
+                {handleReadableTimeFormat(items.createdAt)}
+              </label>
+              <div className="user-message__wrapper">
+                <p>{items.message}</p>
+              </div>
             </div>
           </div>
         ) : (
