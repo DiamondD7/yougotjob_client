@@ -23,7 +23,7 @@ const ChatConvo = ({ chosenConvo, chatId, setChatId, refreshList }) => {
   const [chatData, setChatData] = useState([]);
   const [sentMessage, setSentMessage] = useState(false);
   const [messageField, setMessageField] = useState("");
-  const [menuDotsModal, setMenuDotsModal] = useState(false);
+  const [menuDotsId, setMenuDotsId] = useState(0);
   const today = new Date();
   const divScroll = useRef(null);
 
@@ -118,6 +118,7 @@ const ChatConvo = ({ chosenConvo, chatId, setChatId, refreshList }) => {
         setMessageField("");
       });
   };
+
   const handleLastUpdate = () => {
     const dateNow = new Date();
 
@@ -140,6 +141,14 @@ const ChatConvo = ({ chosenConvo, chatId, setChatId, refreshList }) => {
         console.log(res);
         refreshList();
       });
+  };
+
+  const handleMenuModalSetting = (id) => {
+    if (id === menuDotsId) {
+      setMenuDotsId(0); //setting the id to 0 to close the modal
+    } else {
+      setMenuDotsId(id); //setting the ID so that the 3 dots menu will only open at the right message(container)
+    }
   };
 
   const handleReadableTimeFormat = (date) => {
@@ -185,15 +194,15 @@ const ChatConvo = ({ chosenConvo, chatId, setChatId, refreshList }) => {
               <div className="user-message-dots-menu">
                 <button
                   className="user-message-dots-button"
-                  onClick={() => setMenuDotsModal(!menuDotsModal)}
+                  onClick={() => handleMenuModalSetting(items.id)}
                 >
-                  {menuDotsModal === false ? (
-                    <DotsThree size={19} />
-                  ) : (
+                  {items.id === menuDotsId ? (
                     <X size={15} />
+                  ) : (
+                    <DotsThree size={19} />
                   )}
                 </button>
-                {menuDotsModal && (
+                {items.id === menuDotsId ? (
                   <div className="menu-three-modal__wrapper">
                     <button className="menu-trash-button">
                       <TrashSimple size={15} color="#ed2c2c" />
@@ -202,6 +211,8 @@ const ChatConvo = ({ chosenConvo, chatId, setChatId, refreshList }) => {
                       <PencilSimple size={15} />
                     </button>
                   </div>
+                ) : (
+                  ""
                 )}
               </div>
               <label className="message-timestamp">
