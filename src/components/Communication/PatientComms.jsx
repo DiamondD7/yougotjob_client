@@ -14,16 +14,19 @@ import {
   AddChatMessage,
   UpdateLastChatHistory,
   DeleteChatHistory,
+  DeleteChatMessage,
 } from "../../assets/js/serverApi";
 
 import "../../styles/communicationstyles.css";
 
 const ChatConvo = ({ chosenConvo, chatId, setChatId, refreshList }) => {
   const currentUserId = parseInt(sessionStorage.getItem("id"));
+  const [refreshData, setRefreshData] = useState(false);
   const [chatData, setChatData] = useState([]);
   const [sentMessage, setSentMessage] = useState(false);
   const [messageField, setMessageField] = useState("");
-  const [menuDotsModal, setMenuDotsModal] = useState(false);
+  const [menuDotsId, setMenuDotsId] = useState(0);
+
   const today = new Date();
   const divScroll = useRef(null);
 
@@ -47,8 +50,26 @@ const ChatConvo = ({ chosenConvo, chatId, setChatId, refreshList }) => {
         console.log(res);
         setChatData(res.returnStatus.data);
         setSentMessage(false);
+        setRefreshData(false);
       });
-  }, [sentMessage, chatId]);
+  }, [sentMessage, chatId, refreshData]);
+
+  // const refreshMessageList = () => {
+  //   fetch(GetSpecificChatMessage, {
+  //     method: "POST",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //       Accept: "application/json",
+  //     },
+  //     body: JSON.stringify(chatId),
+  //   })
+  //     .then((res) => res.json())
+  //     .then((res) => {
+  //       console.log(res);
+  //       setChatData(res.returnStatus.data);
+  //       setSentMessage(false);
+  //     });
+  // }
 
   const handleAddChatConvo = (e) => {
     e.preventDefault();
@@ -118,6 +139,7 @@ const ChatConvo = ({ chosenConvo, chatId, setChatId, refreshList }) => {
         setMessageField("");
       });
   };
+
   const handleLastUpdate = () => {
     const dateNow = new Date();
 
@@ -140,6 +162,30 @@ const ChatConvo = ({ chosenConvo, chatId, setChatId, refreshList }) => {
         console.log(res);
         refreshList();
       });
+  };
+
+  const handleDeleteMessage = (e, id) => {
+    e.preventDefault();
+    fetch(`${DeleteChatMessage}/${id}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "accept/json",
+        Accept: "application/json",
+      },
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        console.log(res); //delete log
+        setRefreshData(true);
+      });
+  };
+
+  const handleMenuModalSetting = (id) => {
+    if (id === menuDotsId) {
+      setMenuDotsId(0); //setting the id to 0 to close the modal
+    } else {
+      setMenuDotsId(id); //setting the ID so that the 3 dots menu will only open at the right message(container)
+    }
   };
 
   const handleReadableTimeFormat = (date) => {
@@ -185,23 +231,28 @@ const ChatConvo = ({ chosenConvo, chatId, setChatId, refreshList }) => {
               <div className="user-message-dots-menu">
                 <button
                   className="user-message-dots-button"
-                  onClick={() => setMenuDotsModal(!menuDotsModal)}
+                  onClick={() => handleMenuModalSetting(items.id)}
                 >
-                  {menuDotsModal === false ? (
-                    <DotsThree size={19} />
-                  ) : (
+                  {items.id === menuDotsId ? (
                     <X size={15} />
+                  ) : (
+                    <DotsThree size={19} />
                   )}
                 </button>
-                {menuDotsModal && (
+                {items.id === menuDotsId ? (
                   <div className="menu-three-modal__wrapper">
-                    <button className="menu-trash-button">
+                    <button
+                      className="menu-trash-button"
+                      onClick={(e) => handleDeleteMessage(e, items.id)}
+                    >
                       <TrashSimple size={15} color="#ed2c2c" />
                     </button>
                     <button className="menu-edit-button">
                       <PencilSimple size={15} />
                     </button>
                   </div>
+                ) : (
+                  ""
                 )}
               </div>
               <label className="message-timestamp">
