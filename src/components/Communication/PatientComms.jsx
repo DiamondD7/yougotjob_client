@@ -47,7 +47,7 @@ const ChatConvo = ({ chosenConvo, chatId, setChatId, refreshList }) => {
     })
       .then((res) => res.json())
       .then((res) => {
-        console.log(res);
+        // console.log(res);
         setChatData(res.returnStatus.data);
         setSentMessage(false);
         setRefreshData(false);
