@@ -396,12 +396,26 @@ const PatientComms = () => {
 
   const handleDeleteConvo = (e, id) => {
     e.preventDefault();
-    fetch(`${DeleteChatHistory}/${id}`, {
-      method: "DELETE",
+    const userId = parseInt(sessionStorage.getItem("id"));
+
+    const dateNow = new Date();
+    const localISOTime = new Date(
+      dateNow.getTime() - dateNow.getTimezoneOffset() * 60000
+    )
+      .toISOString()
+      .slice(0, -1); // Remove the 'Z' in example: 2024-08-08T12:34:56.789Z which indicates UTC.
+    fetch(DeleteChatHistory, {
+      method: "PUT",
       headers: {
         "Content-Type": "application/json",
         Accept: "application/json",
       },
+      body: JSON.stringify({
+        Id: id,
+        IsDeleted: true,
+        DeletedById: userId,
+        DeletedAt: localISOTime,
+      }),
     })
       .then((res) => res.json())
       .then((res) => {
