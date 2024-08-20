@@ -108,6 +108,7 @@
   border: none;
   display: flex;
   align-items: center;
+  z-index: 5;
 }
 
 .menu-three-modal__wrapper {
@@ -118,7 +119,7 @@
 }
 
 .menu-trash-button {
-  padding: 0px 5px;
+  padding: 0 0 0 5px;
   cursor: pointer;
   background-color: transparent;
   border: none;
@@ -128,6 +129,59 @@
   cursor: pointer;
   background-color: transparent;
   border: none;
+}
+
+.hide {
+  display: none;
+}
+.menu-trash-options-container__wrapper {
+  position: absolute;
+}
+.menu-trash-options__wrapper {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  position: relative;
+  left: 86px;
+
+  border-top-right-radius: 50px;
+  border-bottom-right-radius: 50px;
+  width: 100%;
+  height: 19px;
+  background-color: #ed2c2c;
+  padding: 0 5px;
+
+  animation: deleteOptionsAnimation 0.5s;
+}
+
+.menu-trash-options__wrapper button {
+  cursor: pointer;
+  font-size: 12px;
+  padding: 1.5px 5px;
+  color: #f3f3f3;
+  background-color: transparent;
+  border: none;
+  animation: deleteOptionsBtn 0.51s;
+}
+
+@keyframes deleteOptionsAnimation {
+  0% {
+    width: 0;
+  }
+  100% {
+    width: 100%;
+  }
+}
+@keyframes deleteOptionsBtn {
+  0% {
+    opacity: 0;
+  }
+  98% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
 }
 
 .user-message-container__wrapper {

@@ -22,10 +22,12 @@ import "../../styles/communicationstyles.css";
 const ChatConvo = ({ chosenConvo, chatId, setChatId, refreshList }) => {
   const currentUserId = parseInt(sessionStorage.getItem("id"));
   const [refreshData, setRefreshData] = useState(false);
-  const [chatData, setChatData] = useState([]);
+  const [chatUserSender, setChatUserSender] = useState([]);
+  const [chatRecipient, setChatRecipient] = useState([]);
   const [sentMessage, setSentMessage] = useState(false);
   const [messageField, setMessageField] = useState("");
   const [menuDotsId, setMenuDotsId] = useState(0);
+  const [deleteOptions, setDeleteOptions] = useState(false);
 
   const today = new Date();
   const divScroll = useRef(null);
@@ -34,7 +36,7 @@ const ChatConvo = ({ chosenConvo, chatId, setChatId, refreshList }) => {
     if (divScroll.current) {
       divScroll.current.scrollTop = divScroll.current.scrollHeight;
     }
-  }, [chatData, sentMessage]);
+  }, [chatUserSender, sentMessage]);
 
   useEffect(() => {
     fetch(GetSpecificChatMessage, {
@@ -43,33 +45,20 @@ const ChatConvo = ({ chosenConvo, chatId, setChatId, refreshList }) => {
         "Content-Type": "application/json",
         Accept: "application/json",
       },
-      body: JSON.stringify(chatId),
+      body: JSON.stringify({
+        chatHistoryId: chatId,
+        userId: currentUserId,
+      }),
     })
       .then((res) => res.json())
       .then((res) => {
-        console.log(res);
-        setChatData(res.returnStatus.data);
+        //console.log(res);
+        setChatUserSender(res.returnStatus.data.chatHistoryMessagesUser);
+        //setChatRecipient()
         setSentMessage(false);
         setRefreshData(false);
       });
   }, [sentMessage, chatId, refreshData]);
-
-  // const refreshMessageList = () => {
-  //   fetch(GetSpecificChatMessage, {
-  //     method: "POST",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //       Accept: "application/json",
-  //     },
-  //     body: JSON.stringify(chatId),
-  //   })
-  //     .then((res) => res.json())
-  //     .then((res) => {
-  //       console.log(res);
-  //       setChatData(res.returnStatus.data);
-  //       setSentMessage(false);
-  //     });
-  // }
 
   const handleAddChatConvo = (e) => {
     e.preventDefault();
@@ -132,7 +121,7 @@ const ChatConvo = ({ chosenConvo, chatId, setChatId, refreshList }) => {
       .then((res) => res.json())
       .then((data) => {
         console.log(data); //delete log
-        if (chatData.length != 0) {
+        if (chatUserSender.length != 0) {
           handleLastUpdate();
         }
         setSentMessage(true);
@@ -166,12 +155,26 @@ const ChatConvo = ({ chosenConvo, chatId, setChatId, refreshList }) => {
 
   const handleDeleteMessage = (e, id) => {
     e.preventDefault();
-    fetch(`${DeleteChatMessage}/${id}`, {
-      method: "DELETE",
+
+    const dateNow = new Date();
+    const localISOTime = new Date(
+      dateNow.getTime() - dateNow.getTimezoneOffset() * 60000
+    )
+      .toISOString()
+      .slice(0, -1); // Remove the 'Z' in example: 2024-08-08T12:34:56.789Z which indicates UTC.
+
+    fetch(DeleteChatMessage, {
+      method: "PUT",
       headers: {
-        "Content-Type": "accept/json",
+        "Content-Type": "application/json",
         Accept: "application/json",
       },
+      body: JSON.stringify({
+        Id: id,
+        IsDeleted: true,
+        DeletedById: currentUserId,
+        DeletedAt: localISOTime,
+      }),
     })
       .then((res) => res.json())
       .then((res) => {
@@ -186,6 +189,7 @@ const ChatConvo = ({ chosenConvo, chatId, setChatId, refreshList }) => {
     } else {
       setMenuDotsId(id); //setting the ID so that the 3 dots menu will only open at the right message(container)
     }
+    setDeleteOptions(false); //setting to false to close the delete option container
   };
 
   const handleReadableTimeFormat = (date) => {
@@ -199,9 +203,9 @@ const ChatConvo = ({ chosenConvo, chatId, setChatId, refreshList }) => {
     return readableDate;
   };
 
-  const mappingData = chatData.map((items, index) => {
-    const nextItem = chatData[index + 1];
-    const prevs = chatData[index - 1];
+  const mappingData = chatUserSender.map((items, index) => {
+    const nextItem = chatUserSender[index + 1];
+    const prevs = chatUserSender[index - 1];
     return (
       <div key={items.id}>
         {handleReadableDateFormat(items.createdAt) !== //if the current item.createdAt is not equal today then dont use "today"
@@ -227,41 +231,62 @@ const ChatConvo = ({ chosenConvo, chatId, setChatId, refreshList }) => {
 
         {items.userId === currentUserId ? (
           <div className="user-message-container__wrapper">
-            <div>
-              <div className="user-message-dots-menu">
-                <button
-                  className="user-message-dots-button"
-                  onClick={() => handleMenuModalSetting(items.id)}
-                >
+            {items.isDeleted === false &&
+            items.deletedById !== currentUserId ? (
+              <div>
+                <div className="user-message-dots-menu">
+                  <button
+                    className="user-message-dots-button"
+                    onClick={() => handleMenuModalSetting(items.id)}
+                  >
+                    {items.id === menuDotsId ? (
+                      <X size={15} />
+                    ) : (
+                      <DotsThree size={19} />
+                    )}
+                  </button>
                   {items.id === menuDotsId ? (
-                    <X size={15} />
+                    <div className="menu-three-modal__wrapper">
+                      <button
+                        className="menu-trash-button"
+                        onClick={() => setDeleteOptions(true)}
+                      >
+                        <TrashSimple size={15} color="#ed2c2c" />
+                      </button>
+                      <div
+                        className={`menu-trash-options-container__wrapper ${
+                          deleteOptions === true ? "" : "hide"
+                        }`}
+                      >
+                        <div className="menu-trash-options__wrapper">
+                          <TrashSimple size={15} color="#f3f3f3" />
+
+                          <button
+                            onClick={(e) => handleDeleteMessage(e, items.id)}
+                          >
+                            Delete for yourself
+                          </button>
+                          <button>Unsend</button>
+                        </div>
+                      </div>
+                      <button className="menu-edit-button">
+                        <PencilSimple size={15} />
+                      </button>
+                    </div>
                   ) : (
-                    <DotsThree size={19} />
+                    ""
                   )}
-                </button>
-                {items.id === menuDotsId ? (
-                  <div className="menu-three-modal__wrapper">
-                    <button
-                      className="menu-trash-button"
-                      onClick={(e) => handleDeleteMessage(e, items.id)}
-                    >
-                      <TrashSimple size={15} color="#ed2c2c" />
-                    </button>
-                    <button className="menu-edit-button">
-                      <PencilSimple size={15} />
-                    </button>
-                  </div>
-                ) : (
-                  ""
-                )}
+                </div>
+                <label className="message-timestamp">
+                  {handleReadableTimeFormat(items.createdAt)}
+                </label>
+                <div className="user-message__wrapper">
+                  <p>{items.message}</p>
+                </div>
               </div>
-              <label className="message-timestamp">
-                {handleReadableTimeFormat(items.createdAt)}
-              </label>
-              <div className="user-message__wrapper">
-                <p>{items.message}</p>
-              </div>
-            </div>
+            ) : (
+              ""
+            )}
           </div>
         ) : (
           <div className="recieved-message-container__wrapper" key={items.id}>
@@ -282,7 +307,7 @@ const ChatConvo = ({ chosenConvo, chatId, setChatId, refreshList }) => {
         <h3>Dr {chosenConvo.fullName || chosenConvo.name}</h3>
       </div>
       <div className="convo-container__wrapper" ref={divScroll}>
-        {chatData.length <= 0 ? (
+        {chatUserSender.length <= 0 ? (
           <div>
             <h1>No Conversation yet</h1>
           </div>
@@ -298,7 +323,7 @@ const ChatConvo = ({ chosenConvo, chatId, setChatId, refreshList }) => {
         onChange={(e) => setMessageField(e.target.value)}
       ></textarea>
       <br />
-      {chatData.length <= 0 ? (
+      {chatUserSender.length <= 0 ? (
         <button className="send-btn" onClick={(e) => handleAddChatConvo(e)}>
           first message
         </button>
@@ -371,12 +396,26 @@ const PatientComms = () => {
 
   const handleDeleteConvo = (e, id) => {
     e.preventDefault();
-    fetch(`${DeleteChatHistory}/${id}`, {
-      method: "DELETE",
+    const userId = parseInt(sessionStorage.getItem("id"));
+
+    const dateNow = new Date();
+    const localISOTime = new Date(
+      dateNow.getTime() - dateNow.getTimezoneOffset() * 60000
+    )
+      .toISOString()
+      .slice(0, -1); // Remove the 'Z' in example: 2024-08-08T12:34:56.789Z which indicates UTC.
+    fetch(DeleteChatHistory, {
+      method: "PUT",
       headers: {
         "Content-Type": "application/json",
         Accept: "application/json",
       },
+      body: JSON.stringify({
+        Id: id,
+        IsDeleted: true,
+        DeletedById: userId,
+        DeletedAt: localISOTime,
+      }),
     })
       .then((res) => res.json())
       .then((res) => {
