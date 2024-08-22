@@ -15,11 +15,20 @@ import {
   UpdateLastChatHistory,
   DeleteChatHistory,
   DeleteChatMessage,
+  GetPatient,
 } from "../../assets/js/serverApi";
+import * as signalR from "@microsoft/signalr";
 
 import "../../styles/communicationstyles.css";
 
-const ChatConvo = ({ chosenConvo, chatId, setChatId, refreshList }) => {
+const ChatConvo = ({
+  patient,
+  chosenConvo,
+  chatId,
+  setChatId,
+  refreshList,
+}) => {
+  const currentRole = sessionStorage.getItem("role");
   const currentUserId = parseInt(sessionStorage.getItem("id"));
   const [refreshData, setRefreshData] = useState(false);
   const [chatUserSender, setChatUserSender] = useState([]);
@@ -52,13 +61,37 @@ const ChatConvo = ({ chosenConvo, chatId, setChatId, refreshList }) => {
     })
       .then((res) => res.json())
       .then((res) => {
-        //console.log(res);
-        setChatUserSender(res.returnStatus.data.chatHistoryMessagesUser);
-        //setChatRecipient()
+        console.log(res);
+        // setChatUserSender(res.returnStatus.data.chatHistoryMessagesUser);
+        // setChatRecipient(res.returnStatus.data.chatHistoryMessagesRecipient);
+
+        setChatUserSender(res.returnStatus.data);
         setSentMessage(false);
-        setRefreshData(false);
+        setRefreshData(false); //delete
       });
-  }, [sentMessage, chatId, refreshData]);
+  }, []);
+
+  useEffect(() => {
+    // Create and start the SignalR connection
+    const connect = new signalR.HubConnectionBuilder()
+      .withUrl("https://localhost:7110/chatHub")
+      .withAutomaticReconnect()
+      .build();
+
+    connect
+      .start()
+      .then(() => console.log("Connected to SignalR"))
+      .catch((err) => console.log("Error connecting to SignalR:", err));
+
+    // Listen for messages from the hub
+    connect.on("ReceiveMessage", (chatMessage) => {
+      setChatUserSender((prevMessages) => [...prevMessages, chatMessage]);
+    });
+
+    return () => {
+      connect.stop();
+    };
+  }, []);
 
   const handleAddChatConvo = (e) => {
     e.preventDefault();
@@ -80,7 +113,8 @@ const ChatConvo = ({ chosenConvo, chatId, setChatId, refreshList }) => {
       body: JSON.stringify({
         UserInitiatorId: id,
         UserRecipientId: chosenConvo.id,
-        Name: chosenConvo.fullName,
+        InitiatorName: patient.fullName,
+        RecipientName: chosenConvo.fullName,
         Created: localISOTime,
         LastUpdated: localISOTime,
       }),
@@ -120,7 +154,6 @@ const ChatConvo = ({ chosenConvo, chatId, setChatId, refreshList }) => {
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log(data); //delete log
         if (chatUserSender.length != 0) {
           handleLastUpdate();
         }
@@ -228,7 +261,6 @@ const ChatConvo = ({ chosenConvo, chatId, setChatId, refreshList }) => {
           //else if the item is equal the todays date, then return "today"
           <p className="message-datestamp">today</p>
         )}
-
         {items.userId === currentUserId ? (
           <div className="user-message-container__wrapper">
             {items.isDeleted === false &&
@@ -289,25 +321,81 @@ const ChatConvo = ({ chosenConvo, chatId, setChatId, refreshList }) => {
             )}
           </div>
         ) : (
-          <div className="recieved-message-container__wrapper" key={items.id}>
-            <div className="recieved-message__wrapper">
-              <p>{items.message}</p>
-            </div>
-            <label className="message-timestamp">
-              {handleReadableTimeFormat(items.createdAt)}
-            </label>
+          <div className="recieved-message-container__wrapper">
+            {items.isDeleted === false &&
+            items.deletedById !== currentUserId ? (
+              <div>
+                <div className="user-message-dots-menu">
+                  <button
+                    className="user-message-dots-button"
+                    onClick={() => handleMenuModalSetting(items.id)}
+                  >
+                    {items.id === menuDotsId ? (
+                      <X size={15} />
+                    ) : (
+                      <DotsThree size={19} />
+                    )}
+                  </button>
+                  {items.id === menuDotsId ? (
+                    <div className="menu-three-modal__wrapper">
+                      <button
+                        className="menu-trash-button"
+                        onClick={() => setDeleteOptions(true)}
+                      >
+                        <TrashSimple size={15} color="#ed2c2c" />
+                      </button>
+                      <div
+                        className={`menu-trash-options-container__wrapper ${
+                          deleteOptions === true ? "" : "hide"
+                        }`}
+                      >
+                        <div className="menu-trash-options__wrapper">
+                          <TrashSimple size={15} color="#f3f3f3" />
+
+                          <button
+                            onClick={(e) => handleDeleteMessage(e, items.id)}
+                          >
+                            Delete for yourself
+                          </button>
+                          <button>Unsend</button>
+                        </div>
+                      </div>
+                      <button className="menu-edit-button">
+                        <PencilSimple size={15} />
+                      </button>
+                    </div>
+                  ) : (
+                    ""
+                  )}
+                </div>
+
+                <label className="message-timestamp">
+                  {handleReadableTimeFormat(items.createdAt)}
+                </label>
+                <div className="recieved-message__wrapper">
+                  <p>{items.message}</p>
+                </div>
+              </div>
+            ) : (
+              ""
+            )}
           </div>
         )}
       </div>
     );
   });
+
   return (
     <div>
       <div className="convo-details__wrapper">
-        <h3>Dr {chosenConvo.fullName || chosenConvo.name}</h3>
+        {currentRole === "Patient" ? (
+          <h3>Dr. {chosenConvo.recipientName || chosenConvo.fullName}</h3>
+        ) : (
+          <h3>{chosenConvo.initiatorName}</h3>
+        )}
       </div>
       <div className="convo-container__wrapper" ref={divScroll}>
-        {chatUserSender.length <= 0 ? (
+        {chatUserSender.length <= 0 && chatRecipient.length <= 0 ? (
           <div>
             <h1>No Conversation yet</h1>
           </div>
@@ -323,7 +411,7 @@ const ChatConvo = ({ chosenConvo, chatId, setChatId, refreshList }) => {
         onChange={(e) => setMessageField(e.target.value)}
       ></textarea>
       <br />
-      {chatUserSender.length <= 0 ? (
+      {chatUserSender.length <= 0 && chatRecipient.length <= 0 ? (
         <button className="send-btn" onClick={(e) => handleAddChatConvo(e)}>
           first message
         </button>
@@ -348,20 +436,23 @@ const PatientComms = () => {
   const [activeChatHistory, setActiveChatHistory] = useState(0);
   const [chatId, setChatId] = useState(0);
   const [existingChats, setExistingChats] = useState([]);
+  const [patient, setPatient] = useState([]);
+  const currentUserId = parseInt(sessionStorage.getItem("id"));
+  const currentUserRole = sessionStorage.getItem("role");
 
   useEffect(() => {
     refreshList(); // calling refreshList() to update chatHistory list
   }, [chatId]);
 
   const refreshList = () => {
-    const id = parseInt(sessionStorage.getItem("id"));
-    fetch(`${GetSpecificChatHistory}/${id}`)
+    fetch(`${GetSpecificChatHistory}/${currentUserId}`)
       .then((res) => res.json())
       .then((res) => {
         setExistingChats(res.returnStatus.data);
       });
   };
 
+  console.log(existingChats);
   useEffect(() => {
     if (searchField.length > 0) {
       fetch(GetHealthPractitionerData)
@@ -377,6 +468,18 @@ const PatientComms = () => {
       return;
     }
   }, [searchField]);
+
+  useEffect(() => {
+    const role = sessionStorage.getItem("role");
+    if (role === "Patient") {
+      fetch(`${GetPatient}/${currentUserId}`)
+        .then((res) => res.json())
+        .then((res) => {
+          setPatient(res); //getting the patients' data when the currentUser is a Patient
+          //it is to use their names in the InitiatorName in the <ChatConvo/> container
+        });
+    }
+  }, []);
 
   const filteredData = searchData.filter((data) =>
     data.fullName.toLowerCase().includes(searchField.toLowerCase())
@@ -428,13 +531,17 @@ const PatientComms = () => {
     <div>
       <div className="communication-container__wrapper">
         <div className="communication-profiles__wrapper">
-          <input
-            className="search-profile__input"
-            type="text"
-            placeholder="search"
-            value={searchField}
-            onChange={(e) => setSearchField(e.target.value)}
-          />
+          {currentUserRole === "Patient" ? (
+            <input
+              className="search-profile__input"
+              type="text"
+              placeholder="search"
+              value={searchField}
+              onChange={(e) => setSearchField(e.target.value)}
+            />
+          ) : (
+            ""
+          )}
 
           {searchField && (
             <div className="search-container__wrapper">
@@ -485,7 +592,9 @@ const PatientComms = () => {
                 className="profile-chathistory-btn"
                 onClick={() => handleOpenExistingConvo(items)}
               >
-                {items.name}
+                {currentUserRole === "Patient" //if the currentUser is a Patient then, show the one they message which is the recipient, vice versa.
+                  ? items.recipientName
+                  : items.initiatorName}
               </button>
               <button
                 className="profile-chathistory-trash-btn"
@@ -502,6 +611,7 @@ const PatientComms = () => {
         ) : (
           <div>
             <ChatConvo
+              patient={patient}
               chosenConvo={chosenConvo}
               chatId={chatId}
               setChatId={setChatId}
