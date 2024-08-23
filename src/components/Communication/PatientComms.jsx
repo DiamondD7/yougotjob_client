@@ -35,7 +35,7 @@ const ChatConvo = ({
   const [chatRecipient, setChatRecipient] = useState([]);
   const [sentMessage, setSentMessage] = useState(false);
   const [messageField, setMessageField] = useState("");
-  const [menuDotsId, setMenuDotsId] = useState(0);
+  const [menuDotsId, setMenuDotsId] = useState(null);
   const [deleteOptions, setDeleteOptions] = useState(false);
 
   const today = new Date();
@@ -45,7 +45,7 @@ const ChatConvo = ({
     if (divScroll.current) {
       divScroll.current.scrollTop = divScroll.current.scrollHeight;
     }
-  }, [chatUserSender, sentMessage]);
+  }, [refreshData, sentMessage]);
 
   useEffect(() => {
     fetch(GetSpecificChatMessage, {
@@ -61,15 +61,15 @@ const ChatConvo = ({
     })
       .then((res) => res.json())
       .then((res) => {
-        console.log(res);
+        //console.log(res);
         // setChatUserSender(res.returnStatus.data.chatHistoryMessagesUser);
         // setChatRecipient(res.returnStatus.data.chatHistoryMessagesRecipient);
 
         setChatUserSender(res.returnStatus.data);
         setSentMessage(false);
-        setRefreshData(false); //delete
+        setRefreshData(true);
       });
-  }, []);
+  }, [chatUserSender]);
 
   useEffect(() => {
     // Create and start the SignalR connection
@@ -80,7 +80,9 @@ const ChatConvo = ({
 
     connect
       .start()
-      .then(() => console.log("Connected to SignalR"))
+      .then(() => {
+        console.log("Connected to SignalR");
+      })
       .catch((err) => console.log("Error connecting to SignalR:", err));
 
     // Listen for messages from the hub
@@ -181,7 +183,7 @@ const ChatConvo = ({
     })
       .then((res) => res.json())
       .then((res) => {
-        console.log(res);
+        //console.log(res);
         refreshList();
       });
   };
@@ -211,8 +213,60 @@ const ChatConvo = ({
     })
       .then((res) => res.json())
       .then((res) => {
-        console.log(res); //delete log
-        setRefreshData(true);
+        //console.log(res);
+        //setRefreshData(true);
+      });
+  };
+
+  const handleDeleteSenderMessage = (e, id) => {
+    e.preventDefault();
+
+    fetch(DeleteChatMessage, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify({
+        Id: id,
+        DeleteSenderMessage: true,
+      }),
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        //console.log(res);
+        //setRefreshData(true);
+      });
+  };
+
+  const handleUnsentMessage = (e, id) => {
+    e.preventDefault();
+
+    const dateNow = new Date();
+    const localISOTime = new Date(
+      dateNow.getTime() - dateNow.getTimezoneOffset() * 60000
+    )
+      .toISOString()
+      .slice(0, -1); // Remove the 'Z' in example: 2024-08-08T12:34:56.789Z which indicates UTC.
+
+    fetch(DeleteChatMessage, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify({
+        Id: id,
+        IsUnsent: true,
+        IsDeleted: true,
+        DeletedById: currentUserId,
+        DeletedAt: localISOTime,
+      }),
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        //console.log(res);
+        //setRefreshData(true);
       });
   };
 
@@ -298,12 +352,20 @@ const ChatConvo = ({
                           >
                             Delete for yourself
                           </button>
-                          <button>Unsend</button>
+                          <button
+                            onClick={(e) => handleUnsentMessage(e, items.id)}
+                          >
+                            Unsend
+                          </button>
                         </div>
                       </div>
-                      <button className="menu-edit-button">
-                        <PencilSimple size={15} />
-                      </button>
+                      {deleteOptions === false ? (
+                        <button className="menu-edit-button">
+                          <PencilSimple size={15} />
+                        </button>
+                      ) : (
+                        ""
+                      )}
                     </div>
                   ) : (
                     ""
@@ -316,14 +378,19 @@ const ChatConvo = ({
                   <p>{items.message}</p>
                 </div>
               </div>
+            ) : items.isUnsent === true ? (
+              <div className="user-message__wrapper">
+                <p>
+                  <strong>You unsent a message</strong>
+                </p>
+              </div>
             ) : (
               ""
             )}
           </div>
         ) : (
           <div className="recieved-message-container__wrapper">
-            {items.isDeleted === false &&
-            items.deletedById !== currentUserId ? (
+            {items.deleteSenderMessage === false && items.isUnsent === false ? (
               <div>
                 <div className="user-message-dots-menu">
                   <button
@@ -353,16 +420,21 @@ const ChatConvo = ({
                           <TrashSimple size={15} color="#f3f3f3" />
 
                           <button
-                            onClick={(e) => handleDeleteMessage(e, items.id)}
+                            onClick={(e) =>
+                              handleDeleteSenderMessage(e, items.id)
+                            }
                           >
                             Delete for yourself
                           </button>
-                          <button>Unsend</button>
                         </div>
                       </div>
-                      <button className="menu-edit-button">
-                        <PencilSimple size={15} />
-                      </button>
+                      {deleteOptions === false ? (
+                        <button className="menu-edit-button">
+                          <PencilSimple size={15} />
+                        </button>
+                      ) : (
+                        ""
+                      )}
                     </div>
                   ) : (
                     ""
@@ -375,6 +447,23 @@ const ChatConvo = ({
                 <div className="recieved-message__wrapper">
                   <p>{items.message}</p>
                 </div>
+              </div>
+            ) : items.isUnsent === true ? (
+              <div className="recieved-message__wrapper">
+                {/* this is always the recipientName because the user is a patient. */}
+                {currentRole === "Patient" ? (
+                  <p>
+                    <strong>
+                      {chosenConvo.recipientName} unsent a message
+                    </strong>
+                  </p>
+                ) : (
+                  <p>
+                    <strong>
+                      {chosenConvo.initiatorName} unsent a message
+                    </strong>
+                  </p>
+                )}
               </div>
             ) : (
               ""
@@ -452,7 +541,6 @@ const PatientComms = () => {
       });
   };
 
-  console.log(existingChats);
   useEffect(() => {
     if (searchField.length > 0) {
       fetch(GetHealthPractitionerData)
