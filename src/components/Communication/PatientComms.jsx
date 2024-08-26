@@ -16,6 +16,9 @@ import {
   DeleteChatHistory,
   DeleteChatMessage,
   GetPatient,
+  GetCurrentConvo,
+  RemoveChatMessages,
+  UpdateDeleteChatHistory,
 } from "../../assets/js/serverApi";
 import * as signalR from "@microsoft/signalr";
 
@@ -40,7 +43,6 @@ const ChatConvo = ({
 
   const today = new Date();
   const divScroll = useRef(null);
-
   useEffect(() => {
     if (divScroll.current) {
       divScroll.current.scrollTop = divScroll.current.scrollHeight;
@@ -125,8 +127,28 @@ const ChatConvo = ({
       .then((data) => {
         if (data.returnStatus.status === true) {
           handleAddChatMessage(e, data.returnStatus.chatId);
+          handleUpdateDeletedConvo(data.returnStatus.chatId);
           setChatId(data.returnStatus.chatId);
         }
+      });
+  };
+
+  const handleUpdateDeletedConvo = (id) => {
+    fetch(UpdateDeleteChatHistory, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify({
+        Id: id,
+        IsDeleted: false,
+        DeletedById: 0,
+      }),
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        console.log(res);
       });
   };
 
@@ -150,6 +172,7 @@ const ChatConvo = ({
       body: JSON.stringify({
         ChatHistoryId: chatHistoryId,
         UserId: id,
+        RecipientId: chosenConvo.id,
         message: messageField,
         CreatedAt: localISOTime,
       }),
@@ -318,7 +341,8 @@ const ChatConvo = ({
         {items.userId === currentUserId ? (
           <div className="user-message-container__wrapper">
             {items.isDeleted === false &&
-            items.deletedById !== currentUserId ? (
+            items.deletedById !== currentUserId &&
+            items.isRemovedById !== currentUserId ? (
               <div>
                 <div className="user-message-dots-menu">
                   <button
@@ -390,7 +414,9 @@ const ChatConvo = ({
           </div>
         ) : (
           <div className="recieved-message-container__wrapper">
-            {items.deleteSenderMessage === false && items.isUnsent === false ? (
+            {items.deleteSenderMessage === false &&
+            items.isUnsent === false &&
+            items.isRemovedById !== currentUserId ? (
               <div>
                 <div className="user-message-dots-menu">
                   <button
@@ -595,6 +621,7 @@ const PatientComms = () => {
     )
       .toISOString()
       .slice(0, -1); // Remove the 'Z' in example: 2024-08-08T12:34:56.789Z which indicates UTC.
+
     fetch(DeleteChatHistory, {
       method: "PUT",
       headers: {
@@ -611,6 +638,26 @@ const PatientComms = () => {
       .then((res) => res.json())
       .then((res) => {
         setChosenConvo([]);
+        handleRemoveChatMessages(id);
+      });
+  };
+
+  const handleRemoveChatMessages = (id) => {
+    fetch(RemoveChatMessages, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify({
+        chatHistoryId: id,
+        isRemovedById: currentUserId,
+        isRemoved: true,
+      }),
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        console.log(res);
         refreshList();
       });
   };
