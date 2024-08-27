@@ -17,6 +17,7 @@ import {
   DeleteChatMessage,
   GetPatient,
   GetCurrentConvo,
+  GetChatHistoryIdFromUserId,
   RemoveChatMessages,
   UpdateDeleteChatHistory,
 } from "../../assets/js/serverApi";
@@ -30,6 +31,7 @@ const ChatConvo = ({
   chatId,
   setChatId,
   refreshList,
+  setActiveChatHistory,
 }) => {
   const currentRole = sessionStorage.getItem("role");
   const currentUserId = parseInt(sessionStorage.getItem("id"));
@@ -41,6 +43,8 @@ const ChatConvo = ({
   const [menuDotsId, setMenuDotsId] = useState(null);
   const [deleteOptions, setDeleteOptions] = useState(false);
 
+  //const [currentChatId, setCurrentChatId] = useState(chatId);
+
   const today = new Date();
   const divScroll = useRef(null);
   useEffect(() => {
@@ -50,6 +54,10 @@ const ChatConvo = ({
   }, [refreshData, sentMessage]);
 
   useEffect(() => {
+    getMessageRefresh();
+  }, [chatUserSender]);
+
+  const getMessageRefresh = () => {
     fetch(GetSpecificChatMessage, {
       method: "POST",
       headers: {
@@ -58,20 +66,22 @@ const ChatConvo = ({
       },
       body: JSON.stringify({
         chatHistoryId: chatId,
+        recipientId: chosenConvo.id, //this is the id for the chosen convo in the search to get the chatHistoryId to check whether chat already exists
         userId: currentUserId,
       }),
     })
       .then((res) => res.json())
       .then((res) => {
-        //console.log(res);
         // setChatUserSender(res.returnStatus.data.chatHistoryMessagesUser);
         // setChatRecipient(res.returnStatus.data.chatHistoryMessagesRecipient);
-
         setChatUserSender(res.returnStatus.data);
         setSentMessage(false);
         setRefreshData(true);
+        //setActiveChatHistory(res.returnStatus.data[0].chatHistoryId);
+        //setChatId(res.returnStatus.data[0].chatHistoryId);
+        //setCurrentChatId(res.returnStatus.data[0].chatHistoryId);
       });
-  }, [chatUserSender]);
+  };
 
   useEffect(() => {
     // Create and start the SignalR connection
@@ -91,7 +101,6 @@ const ChatConvo = ({
     connect.on("ReceiveMessage", (chatMessage) => {
       setChatUserSender((prevMessages) => [...prevMessages, chatMessage]);
     });
-
     return () => {
       connect.stop();
     };
@@ -149,6 +158,8 @@ const ChatConvo = ({
       .then((res) => res.json())
       .then((res) => {
         console.log(res);
+        setActiveChatHistory(id); //makes sure that chat history is updated when active.
+        getMessageRefresh();
       });
   };
 
@@ -157,6 +168,7 @@ const ChatConvo = ({
     const id = parseInt(sessionStorage.getItem("id"));
     const dateNow = new Date();
 
+    console.log(chatHistoryId);
     const localISOTime = new Date(
       dateNow.getTime() - dateNow.getTimezoneOffset() * 60000
     )
@@ -184,6 +196,9 @@ const ChatConvo = ({
         }
         setSentMessage(true);
         setMessageField("");
+
+        refreshList();
+        getMessageRefresh();
       });
   };
 
@@ -208,6 +223,7 @@ const ChatConvo = ({
       .then((res) => {
         //console.log(res);
         refreshList();
+        getMessageRefresh();
       });
   };
 
@@ -238,6 +254,7 @@ const ChatConvo = ({
       .then((res) => {
         //console.log(res);
         //setRefreshData(true);
+        getMessageRefresh();
       });
   };
 
@@ -259,6 +276,7 @@ const ChatConvo = ({
       .then((res) => {
         //console.log(res);
         //setRefreshData(true);
+        getMessageRefresh();
       });
   };
 
@@ -290,6 +308,7 @@ const ChatConvo = ({
       .then((res) => {
         //console.log(res);
         //setRefreshData(true);
+        getMessageRefresh();
       });
   };
 
@@ -383,13 +402,6 @@ const ChatConvo = ({
                           </button>
                         </div>
                       </div>
-                      {deleteOptions === false ? (
-                        <button className="menu-edit-button">
-                          <PencilSimple size={15} />
-                        </button>
-                      ) : (
-                        ""
-                      )}
                     </div>
                   ) : (
                     ""
@@ -480,7 +492,8 @@ const ChatConvo = ({
                 {currentRole === "Patient" ? (
                   <p>
                     <strong>
-                      {chosenConvo.recipientName} unsent a message
+                      {chosenConvo.recipientName || chosenConvo.fullName} unsent
+                      a message
                     </strong>
                   </p>
                 ) : (
@@ -600,12 +613,39 @@ const PatientComms = () => {
   );
 
   const handleOpenConvo = (data) => {
-    setSearchField("");
-    setChosenConvo(data);
-    setChatId(data.id);
+    //opens a convo from the search
+    setSearchField(""); //when choosing a convo, delete the texts in the searchField.
+    setChosenConvo(data); //chosenConvo when opening a new convo uses the recipient's data.
+
+    //calling function
+    getChatIdFromUserId(currentUserId, data.id); //data.id is the userRecipientId and currentUserId is the userInitiatorId (Patient)
+  };
+
+  const getChatIdFromUserId = (userInitiator, userRecipientId) => {
+    //this function gets the id of the Patient and the searched Practitioner, then in the backend: gets the chatHistoryId if it is existing
+    //if not existing chat, then use the Patient Id to be the chatId so that when starting a new convo, it uses the Patient Id to create a new
+    //chatHistoryId. To be added to the Chat History Conversations.
+    fetch(GetChatHistoryIdFromUserId, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify({
+        userInitiatorId: userInitiator, //to look for the chatHistoryId using the users' id when they are searched in the search bar
+        userRecipientId: userRecipientId,
+      }),
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        //console.log(res);
+        setChatId(res.returnStatus.chatId); //setting this to the chatHistoryId to find the existing chat, if not found then use Patient Id (temporarily)
+        setActiveChatHistory(res.returnStatus.chatId); //setting the active chat to the chatId, if chatId is not found; then it wont highligh any chat
+      });
   };
 
   const handleOpenExistingConvo = (data) => {
+    //opens an existing convo
     setChosenConvo(data);
     setChatId(data.id);
     setActiveChatHistory(data.id);
@@ -637,12 +677,14 @@ const PatientComms = () => {
     })
       .then((res) => res.json())
       .then((res) => {
-        setChosenConvo([]);
-        handleRemoveChatMessages(id);
+        setChosenConvo([]); //empty the chosenConvo when deleting so that it refreshes the page with a blank page.
+        handleRemoveChatMessages(id); //calling function to also update the remove properties in the chatMessage.
       });
   };
 
   const handleRemoveChatMessages = (id) => {
+    //updates isRemovedById to the currentUserId and isRemoved to true so that it deletes/removes previous data
+    //from the user incase they start a message again with the same person/chat.
     fetch(RemoveChatMessages, {
       method: "PUT",
       headers: {
@@ -657,7 +699,6 @@ const PatientComms = () => {
     })
       .then((res) => res.json())
       .then((res) => {
-        console.log(res);
         refreshList();
       });
   };
@@ -749,6 +790,7 @@ const PatientComms = () => {
               patient={patient}
               chosenConvo={chosenConvo}
               chatId={chatId}
+              setActiveChatHistory={setActiveChatHistory}
               setChatId={setChatId}
               refreshList={refreshList}
             />
