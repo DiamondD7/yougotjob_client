@@ -260,6 +260,10 @@
   padding: 10px;
 }
 
+.unopenedConvo {
+  font-weight: bold;
+}
+
 .profile-chathistory-trash-btn {
   cursor: pointer;
   background-color: transparent;

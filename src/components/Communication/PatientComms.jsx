@@ -16,7 +16,6 @@ import {
   DeleteChatHistory,
   DeleteChatMessage,
   GetPatient,
-  GetCurrentConvo,
   GetChatHistoryIdFromUserId,
   RemoveChatMessages,
   UpdateDeleteChatHistory,
@@ -77,6 +76,7 @@ const ChatConvo = ({
         setChatUserSender(res.returnStatus.data);
         setSentMessage(false);
         setRefreshData(true);
+
         //setActiveChatHistory(res.returnStatus.data[0].chatHistoryId);
         //setChatId(res.returnStatus.data[0].chatHistoryId);
         //setCurrentChatId(res.returnStatus.data[0].chatHistoryId);
@@ -194,11 +194,10 @@ const ChatConvo = ({
         if (chatUserSender.length != 0) {
           handleLastUpdate();
         }
-        setSentMessage(true);
-        setMessageField("");
-
-        refreshList();
-        getMessageRefresh();
+        setSentMessage(true); //setting to true if a user has sent a message
+        setMessageField(""); //setting to empty string after a user sends a message
+        refreshList(); //refreshes the conversations list
+        getMessageRefresh(); //refreshes the current convo messages
       });
   };
 
@@ -565,12 +564,13 @@ const PatientComms = () => {
   const [chatId, setChatId] = useState(0);
   const [existingChats, setExistingChats] = useState([]);
   const [patient, setPatient] = useState([]);
+
   const currentUserId = parseInt(sessionStorage.getItem("id"));
   const currentUserRole = sessionStorage.getItem("role");
 
   useEffect(() => {
     refreshList(); // calling refreshList() to update chatHistory list
-  }, [chatId]);
+  }, [chatId, existingChats]); //run when chatId or existingChats changes
 
   const refreshList = () => {
     fetch(`${GetSpecificChatHistory}/${currentUserId}`)
@@ -765,7 +765,12 @@ const PatientComms = () => {
               key={items.id}
             >
               <button
-                className="profile-chathistory-btn"
+                className={`profile-chathistory-btn ${
+                  items.unopenedConversation === true &&
+                  items.senderLastId !== currentUserId
+                    ? "unopenedConvo"
+                    : ""
+                }`}
                 onClick={() => handleOpenExistingConvo(items)}
               >
                 {currentUserRole === "Patient" //if the currentUser is a Patient then, show the one they message which is the recipient, vice versa.
