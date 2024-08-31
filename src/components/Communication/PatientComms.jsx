@@ -16,7 +16,6 @@ import {
   DeleteChatHistory,
   DeleteChatMessage,
   GetPatient,
-  GetCurrentConvo,
   GetChatHistoryIdFromUserId,
   RemoveChatMessages,
   UpdateDeleteChatHistory,
@@ -67,7 +66,7 @@ const ChatConvo = ({
       body: JSON.stringify({
         chatHistoryId: chatId,
         recipientId: chosenConvo.id, //this is the id for the chosen convo in the search to get the chatHistoryId to check whether chat already exists
-        userId: currentUserId,
+        SenderId: currentUserId,
       }),
     })
       .then((res) => res.json())
@@ -77,6 +76,7 @@ const ChatConvo = ({
         setChatUserSender(res.returnStatus.data);
         setSentMessage(false);
         setRefreshData(true);
+
         //setActiveChatHistory(res.returnStatus.data[0].chatHistoryId);
         //setChatId(res.returnStatus.data[0].chatHistoryId);
         //setCurrentChatId(res.returnStatus.data[0].chatHistoryId);
@@ -124,8 +124,8 @@ const ChatConvo = ({
         Accept: "application/json",
       },
       body: JSON.stringify({
-        UserInitiatorId: id,
-        UserRecipientId: chosenConvo.id,
+        UserInitiatorId: id, //Patient is always the initiator
+        UserRecipientId: chosenConvo.id, //Health Practitioners are always the Recipient
         InitiatorName: patient.fullName,
         RecipientName: chosenConvo.fullName,
         Created: localISOTime,
@@ -168,12 +168,23 @@ const ChatConvo = ({
     const id = parseInt(sessionStorage.getItem("id"));
     const dateNow = new Date();
 
-    console.log(chatHistoryId);
     const localISOTime = new Date(
       dateNow.getTime() - dateNow.getTimezoneOffset() * 60000
     )
       .toISOString()
       .slice(0, -1); // Remove the 'Z' in example: 2024-08-08T12:34:56.789Z which indicates UTC.
+
+    //Initialisation and conditioning ----
+    let userInitiator = chosenConvo.userInitiatorId;
+    let userRecipient = chosenConvo.userRecipientId;
+
+    if (userInitiator === undefined && userRecipient === undefined) {
+      //if the convo is empty then just use the id from session and chosenConvo.id for the practitioner id
+      userInitiator = id;
+      userRecipient = chosenConvo.id;
+    }
+
+    //-----
 
     fetch(AddChatMessage, {
       method: "POST",
@@ -183,8 +194,9 @@ const ChatConvo = ({
       },
       body: JSON.stringify({
         ChatHistoryId: chatHistoryId,
-        UserId: id,
-        RecipientId: chosenConvo.id,
+        SenderId: id, //senderId is the sender of the message
+        InitiatorId: userInitiator, //initiatorid is the one that initiates the convo which is Patient
+        RecipientId: userRecipient, //recipientId is the one that reciever of the convo which is the health pracitioners/professionals
         message: messageField,
         CreatedAt: localISOTime,
       }),
@@ -194,11 +206,10 @@ const ChatConvo = ({
         if (chatUserSender.length != 0) {
           handleLastUpdate();
         }
-        setSentMessage(true);
-        setMessageField("");
-
-        refreshList();
-        getMessageRefresh();
+        setSentMessage(true); //setting to true if a user has sent a message
+        setMessageField(""); //setting to empty string after a user sends a message
+        refreshList(); //refreshes the conversations list
+        getMessageRefresh(); //refreshes the current convo messages
       });
   };
 
@@ -357,7 +368,7 @@ const ChatConvo = ({
           //else if the item is equal the todays date, then return "today"
           <p className="message-datestamp">today</p>
         )}
-        {items.userId === currentUserId ? (
+        {items.senderId === currentUserId ? (
           <div className="user-message-container__wrapper">
             {items.isDeleted === false &&
             items.deletedById !== currentUserId &&
@@ -565,12 +576,13 @@ const PatientComms = () => {
   const [chatId, setChatId] = useState(0);
   const [existingChats, setExistingChats] = useState([]);
   const [patient, setPatient] = useState([]);
+
   const currentUserId = parseInt(sessionStorage.getItem("id"));
   const currentUserRole = sessionStorage.getItem("role");
 
   useEffect(() => {
     refreshList(); // calling refreshList() to update chatHistory list
-  }, [chatId]);
+  }, [chatId, existingChats]); //run when chatId or existingChats changes
 
   const refreshList = () => {
     fetch(`${GetSpecificChatHistory}/${currentUserId}`)
@@ -765,7 +777,12 @@ const PatientComms = () => {
               key={items.id}
             >
               <button
-                className="profile-chathistory-btn"
+                className={`profile-chathistory-btn ${
+                  items.unopenedConversation === true &&
+                  items.senderLastId !== currentUserId
+                    ? "unopenedConvo"
+                    : ""
+                }`}
                 onClick={() => handleOpenExistingConvo(items)}
               >
                 {currentUserRole === "Patient" //if the currentUser is a Patient then, show the one they message which is the recipient, vice versa.
