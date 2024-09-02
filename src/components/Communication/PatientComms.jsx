@@ -19,6 +19,8 @@ import {
   GetChatHistoryIdFromUserId,
   RemoveChatMessages,
   UpdateDeleteChatHistory,
+  MarkChatHistoryAsSeen,
+  MarkMessageAsSeen,
 } from "../../assets/js/serverApi";
 import * as signalR from "@microsoft/signalr";
 
@@ -36,13 +38,11 @@ const ChatConvo = ({
   const currentUserId = parseInt(sessionStorage.getItem("id"));
   const [refreshData, setRefreshData] = useState(false);
   const [chatUserSender, setChatUserSender] = useState([]);
-  const [chatRecipient, setChatRecipient] = useState([]);
+  const [chatRecipient, setChatRecipient] = useState([]); //probs delete
   const [sentMessage, setSentMessage] = useState(false);
   const [messageField, setMessageField] = useState("");
   const [menuDotsId, setMenuDotsId] = useState(null);
   const [deleteOptions, setDeleteOptions] = useState(false);
-
-  //const [currentChatId, setCurrentChatId] = useState(chatId);
 
   const today = new Date();
   const divScroll = useRef(null);
@@ -54,7 +54,8 @@ const ChatConvo = ({
 
   useEffect(() => {
     getMessageRefresh();
-  }, [chatUserSender]);
+    markMessageSeen();
+  }, [chatUserSender]); //chatUserSender? **********
 
   const getMessageRefresh = () => {
     fetch(GetSpecificChatMessage, {
@@ -71,15 +72,36 @@ const ChatConvo = ({
     })
       .then((res) => res.json())
       .then((res) => {
-        // setChatUserSender(res.returnStatus.data.chatHistoryMessagesUser);
-        // setChatRecipient(res.returnStatus.data.chatHistoryMessagesRecipient);
         setChatUserSender(res.returnStatus.data);
         setSentMessage(false);
         setRefreshData(true);
+      });
+  };
 
-        //setActiveChatHistory(res.returnStatus.data[0].chatHistoryId);
-        //setChatId(res.returnStatus.data[0].chatHistoryId);
-        //setCurrentChatId(res.returnStatus.data[0].chatHistoryId);
+  const markMessageSeen = () => {
+    const dateNow = new Date();
+
+    const localISOTime = new Date(
+      dateNow.getTime() - dateNow.getTimezoneOffset() * 60000
+    )
+      .toISOString()
+      .slice(0, -1); // Remove the 'Z' in example: 2024-08-08T12:34:56.789Z which indicates UTC.
+
+    fetch(MarkMessageAsSeen, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify({
+        ChatHistoryId: chosenConvo.id,
+        LastSeen: localISOTime,
+        SenderId: currentUserId,
+      }),
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        console.log(res);
       });
   };
 
@@ -159,7 +181,6 @@ const ChatConvo = ({
       .then((res) => {
         console.log(res);
         setActiveChatHistory(id); //makes sure that chat history is updated when active.
-        getMessageRefresh();
       });
   };
 
@@ -209,7 +230,7 @@ const ChatConvo = ({
         setSentMessage(true); //setting to true if a user has sent a message
         setMessageField(""); //setting to empty string after a user sends a message
         refreshList(); //refreshes the conversations list
-        getMessageRefresh(); //refreshes the current convo messages
+        //getMessageRefresh(); //refreshes the current convo messages
       });
   };
 
@@ -234,7 +255,7 @@ const ChatConvo = ({
       .then((res) => {
         //console.log(res);
         refreshList();
-        getMessageRefresh();
+        //getMessageRefresh();
       });
   };
 
@@ -265,7 +286,7 @@ const ChatConvo = ({
       .then((res) => {
         //console.log(res);
         //setRefreshData(true);
-        getMessageRefresh();
+        //getMessageRefresh();
       });
   };
 
@@ -287,7 +308,7 @@ const ChatConvo = ({
       .then((res) => {
         //console.log(res);
         //setRefreshData(true);
-        getMessageRefresh();
+        //getMessageRefresh();
       });
   };
 
@@ -319,7 +340,7 @@ const ChatConvo = ({
       .then((res) => {
         //console.log(res);
         //setRefreshData(true);
-        getMessageRefresh();
+        //getMessageRefresh();
       });
   };
 
@@ -346,6 +367,7 @@ const ChatConvo = ({
   const mappingData = chatUserSender.map((items, index) => {
     const nextItem = chatUserSender[index + 1];
     const prevs = chatUserSender[index - 1];
+    const lastItemIndex = chatUserSender.length - 1;
     return (
       <div key={items.id}>
         {handleReadableDateFormat(items.createdAt) !== //if the current item.createdAt is not equal today then dont use "today"
@@ -424,6 +446,13 @@ const ChatConvo = ({
                 <div className="user-message__wrapper">
                   <p>{items.message}</p>
                 </div>
+                {items.isSeen === true && index === lastItemIndex ? (
+                  <p className="seen-delivered__text">seen</p>
+                ) : items.isSeen === false ? (
+                  <p className="seen-delivered__text">delivered</p>
+                ) : (
+                  ""
+                )}
               </div>
             ) : items.isUnsent === true ? (
               <div className="user-message__wrapper">
@@ -534,7 +563,7 @@ const ChatConvo = ({
         )}
       </div>
       <div className="convo-container__wrapper" ref={divScroll}>
-        {chatUserSender.length <= 0 && chatRecipient.length <= 0 ? (
+        {chatUserSender.length <= 0 ? (
           <div>
             <h1>No Conversation yet</h1>
           </div>
