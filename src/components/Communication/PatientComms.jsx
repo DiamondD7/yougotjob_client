@@ -542,13 +542,6 @@ const ChatConvo = ({
                           </button>
                         </div>
                       </div>
-                      {deleteOptions === false ? (
-                        <button className="menu-edit-button">
-                          <PencilSimple size={15} />
-                        </button>
-                      ) : (
-                        ""
-                      )}
                     </div>
                   ) : (
                     ""
