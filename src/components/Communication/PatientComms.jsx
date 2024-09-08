@@ -44,7 +44,7 @@ const ChatConvo = ({
   const [menuDotsId, setMenuDotsId] = useState(null);
   const [deleteOptions, setDeleteOptions] = useState(false);
 
-  const [connection, setConnection] = useState(null);
+  const [connection, setConnection] = useState();
 
   const today = new Date();
   const divScroll = useRef(null);
@@ -87,11 +87,12 @@ const ChatConvo = ({
         if (senderId !== currentUserId) {
           setChatUserSender((prevMessages) =>
             prevMessages.map((msg) =>
-              msg.chatHistoryId === chatHistoryId
+              msg.chatHistoryId === chatHistoryId && senderId !== currentUserId
                 ? { ...msg, isSeen: true }
                 : msg
             )
           );
+          //getMessageRefresh();
         }
       });
     }
