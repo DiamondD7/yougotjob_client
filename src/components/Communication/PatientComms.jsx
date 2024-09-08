@@ -44,6 +44,8 @@ const ChatConvo = ({
   const [menuDotsId, setMenuDotsId] = useState(null);
   const [deleteOptions, setDeleteOptions] = useState(false);
 
+  const [connection, setConnection] = useState();
+
   const today = new Date();
   const divScroll = useRef(null);
   useEffect(() => {
@@ -53,9 +55,54 @@ const ChatConvo = ({
   }, [refreshData, sentMessage]);
 
   useEffect(() => {
-    getMessageRefresh();
-    markMessageSeen();
-  }, [chatUserSender]); //chatUserSender? **********
+    const connect = new signalR.HubConnectionBuilder()
+      .withUrl("https://localhost:7110/chatHub")
+      .withAutomaticReconnect()
+      .build();
+    setConnection(connect);
+  }, []);
+
+  useEffect(() => {
+    // Create and start the SignalR connection
+
+    if (connection) {
+      connection
+        .start()
+        .then(() => {
+          console.log("Connected to SignalR");
+        })
+        .catch((err) => console.log("Error connecting to SignalR:", err));
+
+      // Listen for messages from the hub
+      connection.on("ReceiveMessage", (chatMessage) => {
+        setChatUserSender((prevMessages) => [...prevMessages, chatMessage]);
+        getMessageRefresh();
+      });
+
+      connection.on("DeleteMessage", (messageId) => {
+        getMessageRefresh();
+      });
+
+      connection.on("MarkMessageSeen", (chatHistoryId, senderId) => {
+        if (senderId !== currentUserId) {
+          setChatUserSender((prevMessages) =>
+            prevMessages.map((msg) =>
+              msg.chatHistoryId === chatHistoryId && senderId !== currentUserId
+                ? { ...msg, isSeen: true }
+                : msg
+            )
+          );
+          //getMessageRefresh();
+        }
+      });
+    }
+
+    return () => {
+      if (connection) {
+        connection.stop();
+      }
+    };
+  }, [connection]);
 
   const getMessageRefresh = () => {
     fetch(GetSpecificChatMessage, {
@@ -100,33 +147,20 @@ const ChatConvo = ({
       }),
     })
       .then((res) => res.json())
-      .then((res) => {
+      .then(async (res) => {
         console.log(res);
+        await connection.invoke(
+          "MarkMessageSeen",
+          chosenConvo.id,
+          currentUserId
+        );
       });
   };
 
   useEffect(() => {
-    // Create and start the SignalR connection
-    const connect = new signalR.HubConnectionBuilder()
-      .withUrl("https://localhost:7110/chatHub")
-      .withAutomaticReconnect()
-      .build();
-
-    connect
-      .start()
-      .then(() => {
-        console.log("Connected to SignalR");
-      })
-      .catch((err) => console.log("Error connecting to SignalR:", err));
-
-    // Listen for messages from the hub
-    connect.on("ReceiveMessage", (chatMessage) => {
-      setChatUserSender((prevMessages) => [...prevMessages, chatMessage]);
-    });
-    return () => {
-      connect.stop();
-    };
-  }, []);
+    getMessageRefresh();
+    markMessageSeen();
+  }, [connection]); //chatUserSender? **********
 
   const handleAddChatConvo = (e) => {
     e.preventDefault();
@@ -286,7 +320,8 @@ const ChatConvo = ({
       .then((res) => {
         //console.log(res);
         //setRefreshData(true);
-        //getMessageRefresh();
+
+        getMessageRefresh();
       });
   };
 
@@ -308,7 +343,7 @@ const ChatConvo = ({
       .then((res) => {
         //console.log(res);
         //setRefreshData(true);
-        //getMessageRefresh();
+        getMessageRefresh();
       });
   };
 
@@ -337,9 +372,10 @@ const ChatConvo = ({
       }),
     })
       .then((res) => res.json())
-      .then((res) => {
+      .then(async (res) => {
         //console.log(res);
         //setRefreshData(true);
+        await connection.invoke("DeleteMessage", id);
         //getMessageRefresh();
       });
   };
