@@ -542,13 +542,6 @@ const ChatConvo = ({
                           </button>
                         </div>
                       </div>
-                      {deleteOptions === false ? (
-                        <button className="menu-edit-button">
-                          <PencilSimple size={15} />
-                        </button>
-                      ) : (
-                        ""
-                      )}
                     </div>
                   ) : (
                     ""
@@ -854,12 +847,16 @@ const PatientComms = () => {
                   ? items.recipientName
                   : items.initiatorName}
               </button>
-              <button
-                className="profile-chathistory-trash-btn"
-                onClick={(e) => handleDeleteConvo(e, items.id)}
-              >
-                <TrashSimple size={17} color="#ed2c2c" />
-              </button>
+              {currentUserRole === "Patient" ? (
+                <button
+                  className="profile-chathistory-trash-btn"
+                  onClick={(e) => handleDeleteConvo(e, items.id)}
+                >
+                  <TrashSimple size={17} color="#ed2c2c" />
+                </button>
+              ) : (
+                ""
+              )}
             </div>
           ))}
         </div>
