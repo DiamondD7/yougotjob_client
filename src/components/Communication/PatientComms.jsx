@@ -29,6 +29,7 @@ import "../../styles/communicationstyles.css";
 const ChatConvo = ({
   patient,
   chosenConvo,
+  setChosenConvo,
   chatId,
   setChatId,
   refreshList,
@@ -43,6 +44,7 @@ const ChatConvo = ({
   const [messageField, setMessageField] = useState("");
   const [menuDotsId, setMenuDotsId] = useState(null);
   const [deleteOptions, setDeleteOptions] = useState(false);
+  const [currentConvo, setCurrentConvo] = useState(chosenConvo);
 
   const [connection, setConnection] = useState();
 
@@ -75,12 +77,25 @@ const ChatConvo = ({
 
       // Listen for messages from the hub
       connection.on("ReceiveMessage", (chatMessage) => {
-        setChatUserSender((prevMessages) => [...prevMessages, chatMessage]);
-        getMessageRefresh();
+        if (
+          chatMessage.chatHistoryId === currentUserId &&
+          chatMessage.chatHistoryId === currentUserId
+        ) {
+          setChatUserSender((prevMessages) => [...prevMessages, chatMessage]);
+        }
+        setSentMessage(true);
+
+        //getMessageRefresh();
       });
 
       connection.on("DeleteMessage", (messageId) => {
-        getMessageRefresh();
+        //getMessageRefresh();
+        setChatUserSender((prevMessages) =>
+          prevMessages.map((msg) =>
+            msg.id === messageId ? { ...msg, isUnsent: true } : msg
+          )
+        );
+        setSentMessage(true);
       });
 
       connection.on("MarkMessageSeen", (chatHistoryId, senderId) => {
@@ -120,7 +135,7 @@ const ChatConvo = ({
       .then((res) => res.json())
       .then((res) => {
         setChatUserSender(res.returnStatus.data);
-        setSentMessage(false);
+        //setSentMessage(false);
         setRefreshData(true);
       });
   };
@@ -148,7 +163,7 @@ const ChatConvo = ({
     })
       .then((res) => res.json())
       .then(async (res) => {
-        console.log(res);
+        //console.log(res);
         await connection.invoke(
           "MarkMessageSeen",
           chosenConvo.id,
@@ -160,7 +175,8 @@ const ChatConvo = ({
   useEffect(() => {
     getMessageRefresh();
     markMessageSeen();
-  }, [connection]); //chatUserSender? **********
+    setSentMessage(false);
+  }, [connection, chosenConvo, sentMessage]); //chatUserSender? **********
 
   const handleAddChatConvo = (e) => {
     e.preventDefault();
@@ -555,7 +571,8 @@ const ChatConvo = ({
                   <p>{items.message}</p>
                 </div>
               </div>
-            ) : items.isUnsent === true ? (
+            ) : items.isUnsent === true && //if the sender unsent their message
+              items.deleteSenderMessage === false ? ( //if recipient deletes the sender's message; if true then, just show nothing because it deleted the message already
               <div className="recieved-message__wrapper">
                 {/* this is always the recipientName because the user is a patient. */}
                 {currentRole === "Patient" ? (
@@ -868,6 +885,7 @@ const PatientComms = () => {
             <ChatConvo
               patient={patient}
               chosenConvo={chosenConvo}
+              setChosenConvo={setChosenConvo}
               chatId={chatId}
               setActiveChatHistory={setActiveChatHistory}
               setChatId={setChatId}
