@@ -1,11 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
-import {
-  CircleNotch,
-  TrashSimple,
-  DotsThree,
-  X,
-  PencilSimple,
-} from "@phosphor-icons/react";
+import { CircleNotch, TrashSimple } from "@phosphor-icons/react";
 import {
   GetHealthPractitionerData,
   GetSpecificChatMessage,
@@ -14,23 +8,20 @@ import {
   AddChatMessage,
   UpdateLastChatHistory,
   DeleteChatHistory,
-  DeleteChatMessage,
   GetPatient,
   GetChatHistoryIdFromUserId,
   RemoveChatMessages,
   UpdateDeleteChatHistory,
-  MarkChatHistoryAsSeen,
   MarkMessageAsSeen,
 } from "../../assets/js/serverApi";
 import * as signalR from "@microsoft/signalr";
+import Messages from "./ComponentsCom/Messages";
 
 import "../../styles/communicationstyles.css";
-import Messages from "./ComponentsCom/Messages";
 
 const ChatConvo = ({
   patient,
   chosenConvo,
-  setChosenConvo,
   chatId,
   setChatId,
   refreshList,
@@ -40,7 +31,6 @@ const ChatConvo = ({
   const currentUserId = parseInt(sessionStorage.getItem("id"));
   const [refreshData, setRefreshData] = useState(false);
   const [chatUserSender, setChatUserSender] = useState([]);
-  const [chatRecipient, setChatRecipient] = useState([]); //probs delete
   const [sentMessage, setSentMessage] = useState(false);
   const [messageField, setMessageField] = useState("");
 
@@ -341,7 +331,7 @@ const ChatConvo = ({
         onChange={(e) => setMessageField(e.target.value)}
       ></textarea>
       <br />
-      {chatUserSender.length <= 0 && chatRecipient.length <= 0 ? (
+      {chatUserSender.length <= 0 ? (
         <button className="send-btn" onClick={(e) => handleAddChatConvo(e)}>
           first message
         </button>
@@ -601,7 +591,6 @@ const PatientComms = () => {
             <ChatConvo
               patient={patient}
               chosenConvo={chosenConvo}
-              setChosenConvo={setChosenConvo}
               chatId={chatId}
               setActiveChatHistory={setActiveChatHistory}
               setChatId={setChatId}
