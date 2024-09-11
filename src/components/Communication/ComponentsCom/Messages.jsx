@@ -1,11 +1,5 @@
 import React, { useState } from "react";
-import {
-  CircleNotch,
-  TrashSimple,
-  DotsThree,
-  X,
-  PencilSimple,
-} from "@phosphor-icons/react";
+import { TrashSimple, DotsThree, X } from "@phosphor-icons/react";
 
 import { DeleteChatMessage } from "../../../assets/js/serverApi";
 const Messages = ({

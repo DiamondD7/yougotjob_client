@@ -44,8 +44,6 @@ const ChatConvo = ({
   const [sentMessage, setSentMessage] = useState(false);
   const [messageField, setMessageField] = useState("");
 
-  const [currentConvo, setCurrentConvo] = useState(chosenConvo);
-
   const [connection, setConnection] = useState();
 
   const divScroll = useRef(null);
@@ -175,7 +173,8 @@ const ChatConvo = ({
     getMessageRefresh();
     markMessageSeen();
     setSentMessage(false);
-  }, [connection, chosenConvo, sentMessage]); //chatUserSender? **********
+  }, [connection, chosenConvo, sentMessage, chatId]);
+  //connection is the SignalR connection
 
   const handleAddChatConvo = (e) => {
     e.preventDefault();
