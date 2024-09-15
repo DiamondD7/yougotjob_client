@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
-import { CircleNotch, TrashSimple } from "@phosphor-icons/react";
+import { CircleNotch, Trash } from "@phosphor-icons/react";
 import {
   GetHealthPractitionerData,
   GetSpecificChatMessage,
@@ -514,7 +514,7 @@ const PatientComms = () => {
 
           {searchField && (
             <div className="search-container__wrapper">
-              {filteredData.length <= 0 ? (
+              {searchLoad === false && filteredData.length === 0 ? (
                 <p className="nothing-to-show__text">nothing to show</p>
               ) : (
                 ""
@@ -575,7 +575,7 @@ const PatientComms = () => {
                   className="profile-chathistory-trash-btn"
                   onClick={(e) => handleDeleteConvo(e, items.id)}
                 >
-                  <TrashSimple size={17} color="#ed2c2c" />
+                  <Trash size={14} color="#f3f3f3" />
                 </button>
               ) : (
                 ""
