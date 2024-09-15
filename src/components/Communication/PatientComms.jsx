@@ -514,7 +514,7 @@ const PatientComms = () => {
 
           {searchField && (
             <div className="search-container__wrapper">
-              {filteredData.length <= 0 ? (
+              {searchLoad === false && filteredData.length === 0 ? (
                 <p className="nothing-to-show__text">nothing to show</p>
               ) : (
                 ""
