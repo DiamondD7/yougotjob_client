@@ -1,5 +1,10 @@
 import React, { useEffect, useState, useRef } from "react";
-import { CircleNotch, Trash } from "@phosphor-icons/react";
+import {
+  CircleNotch,
+  Trash,
+  MagnifyingGlass,
+  Paperclip,
+} from "@phosphor-icons/react";
 import {
   GetHealthPractitionerData,
   GetSpecificChatMessage,
@@ -331,18 +336,24 @@ const ChatConvo = ({
         onChange={(e) => setMessageField(e.target.value)}
       ></textarea>
       <br />
-      {chatUserSender.length <= 0 ? (
-        <button className="send-btn" onClick={(e) => handleAddChatConvo(e)}>
-          first message
+      <div className="send-buttons-options__wrapper">
+        {chatUserSender.length <= 0 ? (
+          <button className="send-btn" onClick={(e) => handleAddChatConvo(e)}>
+            first message
+          </button>
+        ) : (
+          <button
+            className="send-btn"
+            onClick={(e) => handleAddChatMessage(e, chatId)}
+          >
+            send
+          </button>
+        )}
+
+        <button className="paperclip__btn">
+          <Paperclip size={20} color="rgba(0,0,0,0.4)" />
         </button>
-      ) : (
-        <button
-          className="send-btn"
-          onClick={(e) => handleAddChatMessage(e, chatId)}
-        >
-          send
-        </button>
-      )}
+      </div>
     </div>
   );
 };
@@ -501,13 +512,16 @@ const PatientComms = () => {
       <div className="communication-container__wrapper">
         <div className="communication-profiles__wrapper">
           {currentUserRole === "Patient" ? (
-            <input
-              className="search-profile__input"
-              type="text"
-              placeholder="search"
-              value={searchField}
-              onChange={(e) => setSearchField(e.target.value)}
-            />
+            <div className="communication-search-profile__wrapper">
+              <MagnifyingGlass size={20} color="#515151" />
+              <input
+                className="search-profile__input"
+                type="text"
+                placeholder="search"
+                value={searchField}
+                onChange={(e) => setSearchField(e.target.value)}
+              />
+            </div>
           ) : (
             ""
           )}
@@ -548,34 +562,39 @@ const PatientComms = () => {
             </div>
           )}
 
+          <p style={{ marginTop: "20px" }}>Conversations</p>
           {existingChats.map((items, index) => (
             <div
-              className={`profile-chathistory__wrapper ${
-                activeChatHistory === items.id
-                  ? "profile-chathistory-chosen"
-                  : ""
-              }`}
+              className="profile-chatHistory-container__wrapper"
               key={items.id}
             >
-              <button
-                className={`profile-chathistory-btn ${
-                  items.unopenedConversation === true &&
-                  items.senderLastId !== currentUserId
-                    ? "unopenedConvo"
+              <div
+                className={`profile-chathistory__wrapper ${
+                  activeChatHistory === items.id
+                    ? "profile-chathistory-chosen"
                     : ""
                 }`}
-                onClick={() => handleOpenExistingConvo(items)}
               >
-                {currentUserRole === "Patient" //if the currentUser is a Patient then, show the one they message which is the recipient, vice versa.
-                  ? items.recipientName
-                  : items.initiatorName}
-              </button>
+                <button
+                  className={`profile-chathistory-btn ${
+                    items.unopenedConversation === true &&
+                    items.senderLastId !== currentUserId
+                      ? "unopenedConvo"
+                      : ""
+                  }`}
+                  onClick={() => handleOpenExistingConvo(items)}
+                >
+                  {currentUserRole === "Patient" //if the currentUser is a Patient then, show the one they message which is the recipient, vice versa.
+                    ? items.recipientName
+                    : items.initiatorName}
+                </button>
+              </div>
               {currentUserRole === "Patient" ? (
                 <button
                   className="profile-chathistory-trash-btn"
                   onClick={(e) => handleDeleteConvo(e, items.id)}
                 >
-                  <Trash size={14} color="#f3f3f3" />
+                  <Trash size={14} color="#ed2c2c" />
                 </button>
               ) : (
                 ""
