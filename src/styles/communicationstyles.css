@@ -286,13 +286,16 @@
   padding-left: 5px;
 }
 
+.communication-search-profile__wrapper {
+  display: flex;
+  align-items: center;
+}
+
 .search-profile__input {
-  width: 98%;
-  padding: 0 5px;
+  width: 91%;
+  padding: 5px 1px;
   border: none;
   outline: none;
-  box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px,
-    rgba(27, 31, 35, 0.268) 0px 0px 0px 1px;
 }
 
 .send-btn {

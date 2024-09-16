@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from "react";
 import {
   CircleNotch,
   Trash,
-  PaperclipHorizontal,
+  MagnifyingGlass,
   Paperclip,
 } from "@phosphor-icons/react";
 import {
@@ -512,13 +512,16 @@ const PatientComms = () => {
       <div className="communication-container__wrapper">
         <div className="communication-profiles__wrapper">
           {currentUserRole === "Patient" ? (
-            <input
-              className="search-profile__input"
-              type="text"
-              placeholder="search"
-              value={searchField}
-              onChange={(e) => setSearchField(e.target.value)}
-            />
+            <div className="communication-search-profile__wrapper">
+              <MagnifyingGlass size={20} color="#515151" />
+              <input
+                className="search-profile__input"
+                type="text"
+                placeholder="search"
+                value={searchField}
+                onChange={(e) => setSearchField(e.target.value)}
+              />
+            </div>
           ) : (
             ""
           )}
