@@ -1,5 +1,10 @@
 import React, { useEffect, useState, useRef } from "react";
-import { CircleNotch, Trash } from "@phosphor-icons/react";
+import {
+  CircleNotch,
+  Trash,
+  PaperclipHorizontal,
+  Paperclip,
+} from "@phosphor-icons/react";
 import {
   GetHealthPractitionerData,
   GetSpecificChatMessage,
@@ -331,18 +336,24 @@ const ChatConvo = ({
         onChange={(e) => setMessageField(e.target.value)}
       ></textarea>
       <br />
-      {chatUserSender.length <= 0 ? (
-        <button className="send-btn" onClick={(e) => handleAddChatConvo(e)}>
-          first message
+      <div className="send-buttons-options__wrapper">
+        {chatUserSender.length <= 0 ? (
+          <button className="send-btn" onClick={(e) => handleAddChatConvo(e)}>
+            first message
+          </button>
+        ) : (
+          <button
+            className="send-btn"
+            onClick={(e) => handleAddChatMessage(e, chatId)}
+          >
+            send
+          </button>
+        )}
+
+        <button className="paperclip__btn">
+          <Paperclip size={20} color="rgba(0,0,0,0.4)" />
         </button>
-      ) : (
-        <button
-          className="send-btn"
-          onClick={(e) => handleAddChatMessage(e, chatId)}
-        >
-          send
-        </button>
-      )}
+      </div>
     </div>
   );
 };
@@ -548,6 +559,7 @@ const PatientComms = () => {
             </div>
           )}
 
+          <p style={{ marginTop: "20px" }}>Conversations</p>
           {existingChats.map((items, index) => (
             <div
               className={`profile-chathistory__wrapper ${
