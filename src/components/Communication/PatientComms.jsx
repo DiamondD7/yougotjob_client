@@ -565,32 +565,36 @@ const PatientComms = () => {
           <p style={{ marginTop: "20px" }}>Conversations</p>
           {existingChats.map((items, index) => (
             <div
-              className={`profile-chathistory__wrapper ${
-                activeChatHistory === items.id
-                  ? "profile-chathistory-chosen"
-                  : ""
-              }`}
+              className="profile-chatHistory-container__wrapper"
               key={items.id}
             >
-              <button
-                className={`profile-chathistory-btn ${
-                  items.unopenedConversation === true &&
-                  items.senderLastId !== currentUserId
-                    ? "unopenedConvo"
+              <div
+                className={`profile-chathistory__wrapper ${
+                  activeChatHistory === items.id
+                    ? "profile-chathistory-chosen"
                     : ""
                 }`}
-                onClick={() => handleOpenExistingConvo(items)}
               >
-                {currentUserRole === "Patient" //if the currentUser is a Patient then, show the one they message which is the recipient, vice versa.
-                  ? items.recipientName
-                  : items.initiatorName}
-              </button>
+                <button
+                  className={`profile-chathistory-btn ${
+                    items.unopenedConversation === true &&
+                    items.senderLastId !== currentUserId
+                      ? "unopenedConvo"
+                      : ""
+                  }`}
+                  onClick={() => handleOpenExistingConvo(items)}
+                >
+                  {currentUserRole === "Patient" //if the currentUser is a Patient then, show the one they message which is the recipient, vice versa.
+                    ? items.recipientName
+                    : items.initiatorName}
+                </button>
+              </div>
               {currentUserRole === "Patient" ? (
                 <button
                   className="profile-chathistory-trash-btn"
                   onClick={(e) => handleDeleteConvo(e, items.id)}
                 >
-                  <Trash size={14} color="#f3f3f3" />
+                  <Trash size={14} color="#ed2c2c" />
                 </button>
               ) : (
                 ""
