@@ -1,7 +1,10 @@
 import React, { useState } from "react";
 import { TrashSimple, DotsThree, X } from "@phosphor-icons/react";
 
-import { DeleteChatMessage } from "../../../assets/js/serverApi";
+import {
+  DeleteChatMessage,
+  UpdateRecentMessage,
+} from "../../../assets/js/serverApi";
 const Messages = ({
   connection,
   getMessageRefresh,

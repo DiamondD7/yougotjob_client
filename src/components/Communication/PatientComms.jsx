@@ -18,6 +18,7 @@ import {
   RemoveChatMessages,
   UpdateDeleteChatHistory,
   MarkMessageAsSeen,
+  UpdateRecentMessage,
 } from "../../assets/js/serverApi";
 import * as signalR from "@microsoft/signalr";
 import Messages from "./ComponentsCom/Messages";
@@ -267,13 +268,33 @@ const ChatConvo = ({
     })
       .then((res) => res.json())
       .then((data) => {
-        if (chatUserSender.length != 0) {
-          handleLastUpdate();
-        }
+        // if (chatUserSender.length != 0) {
+        //   handleLastUpdate();
+        // }
+        handleUpdateRecentMessage(chatHistoryId, messageField, localISOTime);
         setSentMessage(true); //setting to true if a user has sent a message
         setMessageField(""); //setting to empty string after a user sends a message
-        refreshList(); //refreshes the conversations list
         //getMessageRefresh(); //refreshes the current convo messages
+      });
+  };
+
+  const handleUpdateRecentMessage = (chatHistoryId, message, date) => {
+    fetch(UpdateRecentMessage, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify({
+        Id: chatHistoryId,
+        MostRecentMessage: message,
+        RecentMessageDate: date,
+      }),
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        handleLastUpdate();
+        // refreshList();
       });
   };
 
@@ -374,7 +395,7 @@ const PatientComms = () => {
 
   useEffect(() => {
     refreshList(); // calling refreshList() to update chatHistory list
-  }, [chatId, existingChats]); //run when chatId or existingChats changes
+  }, [chatId]); //run when chatId changes
 
   const refreshList = () => {
     fetch(`${GetSpecificChatHistory}/${currentUserId}`)
@@ -507,6 +528,11 @@ const PatientComms = () => {
       });
   };
 
+  const handleReadableTimeFormat = (date) => {
+    const readableTime = new Date(date).toLocaleTimeString();
+    return readableTime;
+  };
+
   return (
     <div>
       <div className="communication-container__wrapper">
@@ -588,6 +614,16 @@ const PatientComms = () => {
                     ? items.recipientName
                     : items.initiatorName}
                 </button>
+                <div
+                  style={{ display: "flex", justifyContent: "space-between" }}
+                >
+                  <p className="profile-chatHistory-recentMessage__text">
+                    {items.mostRecentMessage}
+                  </p>
+                  <p className="profile-chatHistory-recentMessageDate">
+                    {handleReadableTimeFormat(items.recentMessageDate)}
+                  </p>
+                </div>
               </div>
               {currentUserRole === "Patient" ? (
                 <button

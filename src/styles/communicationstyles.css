@@ -236,10 +236,10 @@
 }
 
 .profile-chathistory__wrapper {
-  display: flex;
-  justify-content: space-between;
+  /* display: flex;
+  justify-content: space-between; */
 
-  margin-top: 15px;
+  /* margin-top: 15px; */
   width: 100%;
 
   border: none;
@@ -248,6 +248,13 @@
   border-bottom: 1px solid rgba(0, 0, 0, 0.15);
   background-color: transparent;
   cursor: pointer;
+}
+
+.profile-chatHistory-recentMessage__text,
+.profile-chatHistory-recentMessageDate {
+  font-size: 12px;
+  padding: 0 10px;
+  color: rgba(0, 0, 0, 0.6);
 }
 
 .profile-chathistory__wrapper:hover {
@@ -266,7 +273,8 @@
   border: none;
   text-align: start;
   width: 100%;
-  padding: 10px;
+  padding: 0 10px;
+  margin-top: 10px;
 }
 
 .unopenedConvo {
