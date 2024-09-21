@@ -250,7 +250,8 @@
   cursor: pointer;
 }
 
-.profile-chatHistory-recentMessage__text {
+.profile-chatHistory-recentMessage__text,
+.profile-chatHistory-recentMessageDate {
   font-size: 12px;
   padding: 0 10px;
   color: rgba(0, 0, 0, 0.6);

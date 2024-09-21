@@ -271,14 +271,14 @@ const ChatConvo = ({
         // if (chatUserSender.length != 0) {
         //   handleLastUpdate();
         // }
-        handleUpdateRecentMessage(chatHistoryId, messageField);
+        handleUpdateRecentMessage(chatHistoryId, messageField, localISOTime);
         setSentMessage(true); //setting to true if a user has sent a message
         setMessageField(""); //setting to empty string after a user sends a message
         //getMessageRefresh(); //refreshes the current convo messages
       });
   };
 
-  const handleUpdateRecentMessage = (chatHistoryId, message) => {
+  const handleUpdateRecentMessage = (chatHistoryId, message, date) => {
     fetch(UpdateRecentMessage, {
       method: "PUT",
       headers: {
@@ -288,6 +288,7 @@ const ChatConvo = ({
       body: JSON.stringify({
         Id: chatHistoryId,
         MostRecentMessage: message,
+        RecentMessageDate: date,
       }),
     })
       .then((res) => res.json())
@@ -613,9 +614,16 @@ const PatientComms = () => {
                     ? items.recipientName
                     : items.initiatorName}
                 </button>
-                <p className="profile-chatHistory-recentMessage__text">
-                  {items.mostRecentMessage}
-                </p>
+                <div
+                  style={{ display: "flex", justifyContent: "space-between" }}
+                >
+                  <p className="profile-chatHistory-recentMessage__text">
+                    {items.mostRecentMessage}
+                  </p>
+                  <p className="profile-chatHistory-recentMessageDate">
+                    {handleReadableTimeFormat(items.recentMessageDate)}
+                  </p>
+                </div>
               </div>
               {currentUserRole === "Patient" ? (
                 <button
