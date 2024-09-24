@@ -11,6 +11,72 @@
   overflow: scroll;
 }
 
+.convo-details-btns__wrapper {
+  display: flex;
+  align-items: center;
+  border-left: 1px solid rgba(0, 0, 0, 0.3);
+  padding: 0 10px;
+  margin-left: 20px;
+}
+
+.convo-details-delete__btn {
+  color: #7da04c;
+
+  display: flex;
+  align-items: center;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 5;
+}
+
+.convo-delete-modal__wrapper {
+  position: absolute;
+  top: 20%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  padding: 5px 0;
+
+  border-radius: 10px;
+  width: 300px;
+  background-color: #eff6ff;
+  z-index: 6;
+}
+
+.convo-delete-confirmation__wrapper {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.convo-delete-cancel__btn {
+  cursor: pointer;
+  padding: 0 5px;
+  background-color: transparent;
+  border: none;
+}
+
+.convo-delete-delete__btn {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  padding: 0 5px;
+  background-color: transparent;
+  border: none;
+  color: #7da04c;
+}
+
 .search-container__wrapper {
   position: absolute;
   height: 20%;
@@ -110,7 +176,7 @@
   border: none;
   display: flex;
   align-items: center;
-  z-index: 5;
+  z-index: 4;
 }
 
 .menu-three-modal__wrapper {

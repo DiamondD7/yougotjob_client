@@ -32,9 +32,11 @@ const ChatConvo = ({
   setChatId,
   refreshList,
   setActiveChatHistory,
+  setChosenConvo,
 }) => {
   const currentRole = sessionStorage.getItem("role");
   const currentUserId = parseInt(sessionStorage.getItem("id"));
+  const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const [refreshData, setRefreshData] = useState(false);
   const [chatUserSender, setChatUserSender] = useState([]);
   const [sentMessage, setSentMessage] = useState(false);
@@ -323,15 +325,106 @@ const ChatConvo = ({
       });
   };
 
+  const handleDeleteConvo = (e, id) => {
+    e.preventDefault();
+    const userId = parseInt(sessionStorage.getItem("id"));
+
+    const dateNow = new Date();
+    const localISOTime = new Date(
+      dateNow.getTime() - dateNow.getTimezoneOffset() * 60000
+    )
+      .toISOString()
+      .slice(0, -1); // Remove the 'Z' in example: 2024-08-08T12:34:56.789Z which indicates UTC.
+
+    fetch(DeleteChatHistory, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify({
+        Id: id,
+        IsDeleted: true,
+        DeletedById: userId,
+        DeletedAt: localISOTime,
+      }),
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        setChosenConvo([]); //empty the chosenConvo when deleting so that it refreshes the page with a blank page.
+        handleRemoveChatMessages(id); //calling function to also update the remove properties in the chatMessage.
+      });
+  };
+
+  const handleRemoveChatMessages = (id) => {
+    //updates isRemovedById to the currentUserId and isRemoved to true so that it deletes/removes previous data
+    //from the user incase they start a message again with the same person/chat.
+    fetch(RemoveChatMessages, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify({
+        chatHistoryId: id,
+        isRemovedById: currentUserId,
+        isRemoved: true,
+      }),
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        refreshList();
+        setOpenDeleteModal(false);
+      });
+  };
+
   //-----------------------------------------
   return (
     <div>
+      {openDeleteModal === true ? <div className="overlay"></div> : ""}
+
+      {openDeleteModal === true ? (
+        <div className="convo-delete-modal__wrapper">
+          <h3>Delete Conversation?</h3>
+          <div className="convo-delete-confirmation__wrapper">
+            <button
+              className="convo-delete-cancel__btn"
+              onClick={() => setOpenDeleteModal(false)}
+            >
+              Cancel
+            </button>
+            <button
+              className="convo-delete-delete__btn"
+              onClick={(e) => handleDeleteConvo(e, chatId)}
+            >
+              <Trash size={14} color="#7DA04C" weight="bold" /> Delete
+            </button>
+          </div>
+        </div>
+      ) : (
+        ""
+      )}
+
       <div className="convo-details__wrapper">
         {currentRole === "Patient" ? (
           <h3>Dr. {chosenConvo.recipientName || chosenConvo.fullName}</h3>
         ) : (
           <h3>{chosenConvo.initiatorName}</h3>
         )}
+
+        <div className="convo-details-btns__wrapper">
+          {currentRole === "Patient" ? (
+            <button
+              className="convo-details-delete__btn"
+              onClick={() => setOpenDeleteModal(true)}
+            >
+              <Trash size={14} color="#7DA04C" weight="bold" /> Delete
+              Conversation
+            </button>
+          ) : (
+            ""
+          )}
+        </div>
       </div>
       <div className="convo-container__wrapper" ref={divScroll}>
         {chatUserSender.length <= 0 ? (
@@ -476,58 +569,6 @@ const PatientComms = () => {
     setActiveChatHistory(data.id);
   };
 
-  const handleDeleteConvo = (e, id) => {
-    e.preventDefault();
-    const userId = parseInt(sessionStorage.getItem("id"));
-
-    const dateNow = new Date();
-    const localISOTime = new Date(
-      dateNow.getTime() - dateNow.getTimezoneOffset() * 60000
-    )
-      .toISOString()
-      .slice(0, -1); // Remove the 'Z' in example: 2024-08-08T12:34:56.789Z which indicates UTC.
-
-    fetch(DeleteChatHistory, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-      body: JSON.stringify({
-        Id: id,
-        IsDeleted: true,
-        DeletedById: userId,
-        DeletedAt: localISOTime,
-      }),
-    })
-      .then((res) => res.json())
-      .then((res) => {
-        setChosenConvo([]); //empty the chosenConvo when deleting so that it refreshes the page with a blank page.
-        handleRemoveChatMessages(id); //calling function to also update the remove properties in the chatMessage.
-      });
-  };
-
-  const handleRemoveChatMessages = (id) => {
-    //updates isRemovedById to the currentUserId and isRemoved to true so that it deletes/removes previous data
-    //from the user incase they start a message again with the same person/chat.
-    fetch(RemoveChatMessages, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-      body: JSON.stringify({
-        chatHistoryId: id,
-        isRemovedById: currentUserId,
-        isRemoved: true,
-      }),
-    })
-      .then((res) => res.json())
-      .then((res) => {
-        refreshList();
-      });
-  };
-
   const handleReadableTimeFormat = (date) => {
     const readableTime = new Date(date).toLocaleTimeString();
     return readableTime;
@@ -625,7 +666,7 @@ const PatientComms = () => {
                   </p>
                 </div>
               </div>
-              {currentUserRole === "Patient" ? (
+              {/* {currentUserRole === "Patient" ? (
                 <button
                   className="profile-chathistory-trash-btn"
                   onClick={(e) => handleDeleteConvo(e, items.id)}
@@ -634,7 +675,7 @@ const PatientComms = () => {
                 </button>
               ) : (
                 ""
-              )}
+              )} */}
             </div>
           ))}
         </div>
@@ -650,6 +691,7 @@ const PatientComms = () => {
               setActiveChatHistory={setActiveChatHistory}
               setChatId={setChatId}
               refreshList={refreshList}
+              setChosenConvo={setChosenConvo}
             />
           </div>
         )}
