@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { TrashSimple, DotsThree, X } from "@phosphor-icons/react";
+import { Trash, DotsThree, X } from "@phosphor-icons/react";
 
 import {
   DeleteChatMessage,
@@ -174,7 +174,7 @@ const Messages = ({
                         className="menu-trash-button"
                         onClick={() => setDeleteOptions(true)}
                       >
-                        <TrashSimple size={15} color="#ed2c2c" />
+                        <Trash size={15} color="#ed2c2c" />
                       </button>
                       <div
                         className={`menu-trash-options-container__wrapper ${
@@ -182,7 +182,7 @@ const Messages = ({
                         }`}
                       >
                         <div className="menu-trash-options__wrapper">
-                          <TrashSimple size={15} color="#f3f3f3" />
+                          <Trash size={15} color="#f3f3f3" />
 
                           <button
                             onClick={(e) => handleDeleteMessage(e, items.id)}
