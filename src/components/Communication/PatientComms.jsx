@@ -33,6 +33,7 @@ const ChatConvo = ({
   refreshList,
   setActiveChatHistory,
   setChosenConvo,
+  handleRecentMessage,
 }) => {
   const currentRole = sessionStorage.getItem("role");
   const currentUserId = parseInt(sessionStorage.getItem("id"));
@@ -49,7 +50,7 @@ const ChatConvo = ({
     if (divScroll.current) {
       divScroll.current.scrollTop = divScroll.current.scrollHeight;
     }
-  }, [refreshData, sentMessage]);
+  }, [refreshData, sentMessage, chatUserSender]);
 
   useEffect(() => {
     const connect = new signalR.HubConnectionBuilder()
@@ -296,6 +297,7 @@ const ChatConvo = ({
       .then((res) => res.json())
       .then((res) => {
         handleLastUpdate();
+        handleRecentMessage(chatHistoryId, message, date);
         // refreshList();
       });
   };
@@ -482,6 +484,7 @@ const PatientComms = () => {
   const [chatId, setChatId] = useState(0);
   const [existingChats, setExistingChats] = useState([]);
   const [patient, setPatient] = useState([]);
+  const [connection, setConnection] = useState();
 
   const currentUserId = parseInt(sessionStorage.getItem("id"));
   const currentUserRole = sessionStorage.getItem("role");
@@ -496,6 +499,53 @@ const PatientComms = () => {
       .then((res) => {
         setExistingChats(res.returnStatus.data);
       });
+  };
+
+  useEffect(() => {
+    const connect = new signalR.HubConnectionBuilder()
+      .withUrl("https://localhost:7110/chatHub")
+      .withAutomaticReconnect()
+      .build();
+    setConnection(connect);
+  }, []);
+
+  useEffect(() => {
+    // Create and start the SignalR connection
+
+    if (connection) {
+      connection
+        .start()
+        .then(() => {
+          console.log("Connected to SignalR");
+        })
+        .catch((err) => console.log("Error connecting to SignalR:", err));
+
+      // Listen for new messages in hub
+      connection.on("UpdateRecentMessage", (id, message, date) => {
+        setExistingChats((prev) =>
+          prev.map((convo) =>
+            convo.id === id
+              ? {
+                  ...convo,
+                  mostRecentMessage: message,
+                  recentMessageDate: date,
+                }
+              : convo
+          )
+        );
+      });
+    }
+
+    return () => {
+      if (connection) {
+        connection.stop();
+      }
+    };
+  }, [connection]);
+
+  //this function is called in the <ChatConvo/> when the user sends a message
+  const handleRecentMessage = async (id, message, date) => {
+    await connection.invoke("UpdateRecentMessage", id, message, date);
   };
 
   useEffect(() => {
@@ -692,6 +742,7 @@ const PatientComms = () => {
               setChatId={setChatId}
               refreshList={refreshList}
               setChosenConvo={setChosenConvo}
+              handleRecentMessage={handleRecentMessage}
             />
           </div>
         )}
