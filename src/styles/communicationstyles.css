@@ -318,6 +318,10 @@
   color: rgba(0, 0, 0, 0.6);
 }
 
+.message-not-seen {
+  font-weight: bold;
+}
+
 .profile-chathistory__wrapper:hover {
   background-color: rgba(157, 205, 90, 0.3);
   border-radius: 10px;

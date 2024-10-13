@@ -6,6 +6,7 @@ import {
   Paperclip,
 } from "@phosphor-icons/react";
 import {
+  GetCurrentConvo,
   GetHealthPractitionerData,
   GetSpecificChatMessage,
   GetSpecificChatHistory,
@@ -19,6 +20,7 @@ import {
   UpdateDeleteChatHistory,
   MarkMessageAsSeen,
   UpdateRecentMessage,
+  MarkChatHistoryAsSeen,
 } from "../../assets/js/serverApi";
 import * as signalR from "@microsoft/signalr";
 import Messages from "./ComponentsCom/Messages";
@@ -33,7 +35,10 @@ const ChatConvo = ({
   refreshList,
   setActiveChatHistory,
   setChosenConvo,
-  handleRecentMessage,
+  setExistingChats,
+  markChatHistorySeen,
+  recipientId,
+  setRecipientId,
 }) => {
   const currentRole = sessionStorage.getItem("role");
   const currentUserId = parseInt(sessionStorage.getItem("id"));
@@ -73,15 +78,38 @@ const ChatConvo = ({
 
       // Listen for messages from the hub
       connection.on("ReceiveMessage", (chatMessage) => {
-        if (
-          chatMessage.chatHistoryId === currentUserId &&
-          chatMessage.chatHistoryId === currentUserId
-        ) {
-          setChatUserSender((prevMessages) => [...prevMessages, chatMessage]);
+        setRecipientId(chatMessage.recipientId);
+        const dateNow = new Date();
+
+        const localISOTime = new Date(
+          dateNow.getTime() - dateNow.getTimezoneOffset() * 60000
+        )
+          .toISOString()
+          .slice(0, -1); // Remove the 'Z' in example: 2024-08-08T12:34:56.789Z which indicates UTC.
+
+        setChatUserSender((prevMessages) => [...prevMessages, chatMessage]);
+
+        //setIsConvoSeen(chatMessage.senderId !== currentUserId ? false : true);
+
+        if (currentUserId === chatMessage.senderId) {
+          setExistingChats((prev) =>
+            prev.map((convo) =>
+              convo.id === chatMessage.chatHistoryId
+                ? {
+                    ...convo,
+                    senderRecentMessage: chatMessage.senderId,
+                    mostRecentMessage: chatMessage.message,
+                    recentMessageDate: localISOTime,
+                    hasSeenMessages: false,
+                  }
+                : convo
+            )
+          );
+          markChatHistorySeen(chatMessage.chatHistoryId, false); //true because it has been seen by the recipient.
         }
         setSentMessage(true);
 
-        //getMessageRefresh();
+        //console.log(chatMessage);
       });
 
       connection.on("DeleteMessage", (messageId) => {
@@ -95,7 +123,7 @@ const ChatConvo = ({
       });
 
       connection.on("MarkMessageSeen", (chatHistoryId, senderId) => {
-        if (senderId !== currentUserId) {
+        if (currentUserId !== senderId) {
           setChatUserSender((prevMessages) =>
             prevMessages.map((msg) =>
               msg.chatHistoryId === chatHistoryId && senderId !== currentUserId
@@ -103,7 +131,21 @@ const ChatConvo = ({
                 : msg
             )
           );
-          //getMessageRefresh();
+
+          if (
+            //checks if the user is the recipient and if the user opens their convo hence chatHistoryId === chosenConvo.id
+            chatHistoryId === chosenConvo.id &&
+            currentUserId === recipientId
+          ) {
+            setExistingChats((prev) =>
+              prev.map((convo) =>
+                convo.id === chatHistoryId
+                  ? { ...convo, hasSeenMessages: true }
+                  : convo
+              )
+            );
+            markChatHistorySeen(chatHistoryId, true); //true because it has been seen by the recipient.
+          }
         }
       });
     }
@@ -160,20 +202,16 @@ const ChatConvo = ({
       .then((res) => res.json())
       .then(async (res) => {
         //console.log(res);
-        await connection.invoke(
-          "MarkMessageSeen",
-          chosenConvo.id,
-          currentUserId
-        );
+
+        if (connection) {
+          await connection.invoke(
+            "MarkMessageSeen",
+            chosenConvo.id,
+            currentUserId
+          );
+        }
       });
   };
-
-  useEffect(() => {
-    getMessageRefresh();
-    markMessageSeen();
-    setSentMessage(false);
-  }, [connection, chosenConvo, sentMessage, chatId]);
-  //connection is the SignalR connection
 
   const handleAddChatConvo = (e) => {
     e.preventDefault();
@@ -274,9 +312,12 @@ const ChatConvo = ({
         // if (chatUserSender.length != 0) {
         //   handleLastUpdate();
         // }
+        //currentConvoDetails(chatHistoryId);
+
         handleUpdateRecentMessage(chatHistoryId, messageField, localISOTime);
         setSentMessage(true); //setting to true if a user has sent a message
         setMessageField(""); //setting to empty string after a user sends a message
+
         //getMessageRefresh(); //refreshes the current convo messages
       });
   };
@@ -292,13 +333,13 @@ const ChatConvo = ({
         Id: chatHistoryId,
         MostRecentMessage: message,
         RecentMessageDate: date,
+        SenderRecentMessage: currentUserId,
       }),
     })
       .then((res) => res.json())
-      .then((res) => {
+      .then(async (res) => {
         handleLastUpdate();
-        handleRecentMessage(chatHistoryId, message, date);
-        // refreshList();
+        console.log("wtf");
       });
   };
 
@@ -321,9 +362,7 @@ const ChatConvo = ({
     })
       .then((res) => res.json())
       .then((res) => {
-        //console.log(res);
         refreshList();
-        //getMessageRefresh();
       });
   };
 
@@ -379,6 +418,19 @@ const ChatConvo = ({
         setOpenDeleteModal(false);
       });
   };
+
+  useEffect(() => {
+    getMessageRefresh();
+    setSentMessage(false);
+    markMessageSeen(); //when user opens the convo, it means they have seen the recent messages.
+    //console.log(chosenConvo);
+    // console.log("senderRecentMessage", chosenConvo.senderRecentMessage);
+    // console.log("currentUserId", currentUserId);
+    // if (chosenConvo.senderRecentMessage !== currentUserId) {
+    //   markMessageSeen(); //when user opens the convo, it means they have seen the recent messages.
+    // }
+  }, [connection, chosenConvo, sentMessage, chatId]);
+  //connection is the SignalR connection
 
   //-----------------------------------------
   return (
@@ -484,6 +536,8 @@ const PatientComms = () => {
   const [chatId, setChatId] = useState(0);
   const [existingChats, setExistingChats] = useState([]);
   const [patient, setPatient] = useState([]);
+  const [recipientId, setRecipientId] = useState(0);
+
   const [connection, setConnection] = useState();
 
   const currentUserId = parseInt(sessionStorage.getItem("id"));
@@ -521,18 +575,61 @@ const PatientComms = () => {
         .catch((err) => console.log("Error connecting to SignalR:", err));
 
       // Listen for new messages in hub
-      connection.on("UpdateRecentMessage", (id, message, date) => {
+      connection.on("ReceiveMessage", (chatMessage) => {
+        const dateNow = new Date();
+
+        const localISOTime = new Date(
+          dateNow.getTime() - dateNow.getTimezoneOffset() * 60000
+        )
+          .toISOString()
+          .slice(0, -1); // Remove the 'Z' in example: 2024-08-08T12:34:56.789Z which indicates UTC.
+
+        setExistingChats(
+          (prev) =>
+            prev
+              .map((convo) =>
+                convo.id === chatMessage.chatHistoryId
+                  ? {
+                      ...convo,
+                      lastUpdated: localISOTime,
+                      senderRecentMessage: chatMessage.senderId,
+                      mostRecentMessage: chatMessage.message,
+                      recentMessageDate: localISOTime,
+                      hasSeenMessages: false,
+                    }
+                  : convo
+              )
+              .sort((a, b) => new Date(b.lastUpdated) - new Date(a.lastUpdated)) // Sort by lastUpdated in descending order
+        );
+        markChatHistorySeen(chatMessage.chatHistoryId, false); //true because it has been seen by the recipient.
+      });
+
+      // connection.on("UpdateRecentMessage", (id, message, date) => {
+      //   setExistingChats((prev) =>
+      //     prev.map((convo) =>
+      //       convo.id === id
+      //         ? {
+      //             ...convo,
+      //             mostRecentMessage: message,
+      //             recentMessageDate: date,
+      //           }
+      //         : convo
+      //     )
+      //   );
+      // });
+
+      connection.on("MarkChatHistorySeen", (chatHistoryId, senderId) => {
+        //setIsConvoSeen(senderId !== currentUserId ? true : false);
+        markChatHistorySeen(chatHistoryId, true); //true because it has been seen by the recipient.
+
         setExistingChats((prev) =>
           prev.map((convo) =>
-            convo.id === id
-              ? {
-                  ...convo,
-                  mostRecentMessage: message,
-                  recentMessageDate: date,
-                }
+            convo.id === chatHistoryId
+              ? { ...convo, hasSeenMessages: true }
               : convo
           )
         );
+        //refreshList();
       });
     }
 
@@ -542,11 +639,6 @@ const PatientComms = () => {
       }
     };
   }, [connection]);
-
-  //this function is called in the <ChatConvo/> when the user sends a message
-  const handleRecentMessage = async (id, message, date) => {
-    await connection.invoke("UpdateRecentMessage", id, message, date);
-  };
 
   useEffect(() => {
     if (searchField.length > 0) {
@@ -612,11 +704,34 @@ const PatientComms = () => {
       });
   };
 
-  const handleOpenExistingConvo = (data) => {
+  const markChatHistorySeen = (chatHistoryId, isSeen) => {
+    fetch(MarkChatHistoryAsSeen, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify({
+        Id: chatHistoryId,
+        HasSeenMessages: isSeen,
+      }),
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        console.log(res);
+        //refreshList();
+      });
+  };
+
+  const handleOpenExistingConvo = async (data) => {
     //opens an existing convo
     setChosenConvo(data);
     setChatId(data.id);
     setActiveChatHistory(data.id);
+    setRecipientId(data.userInitiatorId);
+    if (connection && data.senderRecentMessage !== currentUserId) {
+      await connection.invoke("MarkChatHistorySeen", data.id, currentUserId);
+    }
   };
 
   const handleReadableTimeFormat = (date) => {
@@ -704,28 +819,26 @@ const PatientComms = () => {
                   {currentUserRole === "Patient" //if the currentUser is a Patient then, show the one they message which is the recipient, vice versa.
                     ? items.recipientName
                     : items.initiatorName}
+
+                  <div
+                    style={{ display: "flex", justifyContent: "space-between" }}
+                  >
+                    <p
+                      className={`profile-chatHistory-recentMessage__text ${
+                        items.hasSeenMessages === false &&
+                        items.senderRecentMessage !== currentUserId
+                          ? "message-not-seen"
+                          : ""
+                      }`}
+                    >
+                      {items.mostRecentMessage}
+                    </p>
+                    <p className="profile-chatHistory-recentMessageDate">
+                      {handleReadableTimeFormat(items.recentMessageDate)}
+                    </p>
+                  </div>
                 </button>
-                <div
-                  style={{ display: "flex", justifyContent: "space-between" }}
-                >
-                  <p className="profile-chatHistory-recentMessage__text">
-                    {items.mostRecentMessage}
-                  </p>
-                  <p className="profile-chatHistory-recentMessageDate">
-                    {handleReadableTimeFormat(items.recentMessageDate)}
-                  </p>
-                </div>
               </div>
-              {/* {currentUserRole === "Patient" ? (
-                <button
-                  className="profile-chathistory-trash-btn"
-                  onClick={(e) => handleDeleteConvo(e, items.id)}
-                >
-                  <Trash size={14} color="#ed2c2c" />
-                </button>
-              ) : (
-                ""
-              )} */}
             </div>
           ))}
         </div>
@@ -742,7 +855,10 @@ const PatientComms = () => {
               setChatId={setChatId}
               refreshList={refreshList}
               setChosenConvo={setChosenConvo}
-              handleRecentMessage={handleRecentMessage}
+              setExistingChats={setExistingChats}
+              markChatHistorySeen={markChatHistorySeen}
+              recipientId={recipientId}
+              setRecipientId={setRecipientId}
             />
           </div>
         )}
