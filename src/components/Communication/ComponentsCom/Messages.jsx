@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Trash, DotsThree, X } from "@phosphor-icons/react";
 
 import {
   DeleteChatMessage,
   UpdateRecentMessage,
+  RecentMessageUnsent,
 } from "../../../assets/js/serverApi";
 const Messages = ({
   connection,
@@ -15,6 +16,7 @@ const Messages = ({
 }) => {
   const [menuDotsId, setMenuDotsId] = useState(null);
   const [deleteOptions, setDeleteOptions] = useState(false);
+
   const today = new Date();
 
   const handleDeleteMessage = (e, id) => {
@@ -100,7 +102,28 @@ const Messages = ({
         //console.log(res);
         //setRefreshData(true);
         await connection.invoke("DeleteMessage", id);
+        handleRecentMessageUnsent(chosenConvo.id, id); //when recent message is Unsent.
         //getMessageRefresh();
+      });
+  };
+
+  const handleRecentMessageUnsent = (chatHistoryId, messageId) => {
+    fetch(RecentMessageUnsent, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify({
+        Id: chatHistoryId,
+        RecentMessageIsUnsent: true,
+        RecentMessageId: messageId,
+        MostRecentMessage: "Message unsent",
+      }),
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        console.log(res);
       });
   };
 
@@ -248,7 +271,7 @@ const Messages = ({
                         className="menu-trash-button"
                         onClick={() => setDeleteOptions(true)}
                       >
-                        <TrashSimple size={15} color="#ed2c2c" />
+                        <Trash size={15} color="#ed2c2c" />
                       </button>
                       <div
                         className={`menu-trash-options-container__wrapper ${
@@ -256,7 +279,7 @@ const Messages = ({
                         }`}
                       >
                         <div className="menu-trash-options__wrapper">
-                          <TrashSimple size={15} color="#f3f3f3" />
+                          <Trash size={15} color="#f3f3f3" />
 
                           <button
                             onClick={(e) =>
