@@ -21,6 +21,7 @@ import {
   MarkMessageAsSeen,
   UpdateRecentMessage,
   MarkChatHistoryAsSeen,
+  RecentMessageUnsent,
 } from "../../assets/js/serverApi";
 import * as signalR from "@microsoft/signalr";
 import Messages from "./ComponentsCom/Messages";
@@ -91,25 +92,23 @@ const ChatConvo = ({
 
         //setIsConvoSeen(chatMessage.senderId !== currentUserId ? false : true);
 
-        if (currentUserId === chatMessage.senderId) {
-          setExistingChats((prev) =>
-            prev.map((convo) =>
-              convo.id === chatMessage.chatHistoryId
-                ? {
-                    ...convo,
-                    senderRecentMessage: chatMessage.senderId,
-                    mostRecentMessage: chatMessage.message,
-                    recentMessageDate: localISOTime,
-                    hasSeenMessages: false,
-                  }
-                : convo
-            )
-          );
-          markChatHistorySeen(chatMessage.chatHistoryId, false); //true because it has been seen by the recipient.
-        }
+        // if (currentUserId === chatMessage.senderId) {
+        //   setExistingChats((prev) =>
+        //     prev.map((convo) =>
+        //       convo.id === chatMessage.chatHistoryId
+        //         ? {
+        //             ...convo,
+        //             senderRecentMessage: chatMessage.senderId,
+        //             mostRecentMessage: chatMessage.message,
+        //             recentMessageDate: localISOTime,
+        //             hasSeenMessages: false,
+        //           }
+        //         : convo
+        //     )
+        //   );
+        //   markChatHistorySeen(chatMessage.chatHistoryId, false); //true because it has been seen by the recipient.
+        // }
         setSentMessage(true);
-
-        //console.log(chatMessage);
       });
 
       connection.on("DeleteMessage", (messageId) => {
@@ -314,15 +313,24 @@ const ChatConvo = ({
         // }
         //currentConvoDetails(chatHistoryId);
 
-        handleUpdateRecentMessage(chatHistoryId, messageField, localISOTime);
+        handleUpdateRecentMessage(
+          chatHistoryId,
+          messageField,
+          localISOTime,
+          data.returnStatus.messageId
+        );
         setSentMessage(true); //setting to true if a user has sent a message
         setMessageField(""); //setting to empty string after a user sends a message
-
         //getMessageRefresh(); //refreshes the current convo messages
       });
   };
 
-  const handleUpdateRecentMessage = (chatHistoryId, message, date) => {
+  const handleUpdateRecentMessage = (
+    chatHistoryId,
+    message,
+    date,
+    messageId
+  ) => {
     fetch(UpdateRecentMessage, {
       method: "PUT",
       headers: {
@@ -333,13 +341,14 @@ const ChatConvo = ({
         Id: chatHistoryId,
         MostRecentMessage: message,
         RecentMessageDate: date,
+        RecentMessageId: messageId,
+        RecentMessageIsUnsent: false,
         SenderRecentMessage: currentUserId,
       }),
     })
       .then((res) => res.json())
-      .then(async (res) => {
+      .then((res) => {
         handleLastUpdate();
-        console.log("wtf");
       });
   };
 
@@ -602,6 +611,35 @@ const PatientComms = () => {
               .sort((a, b) => new Date(b.lastUpdated) - new Date(a.lastUpdated)) // Sort by lastUpdated in descending order
         );
         markChatHistorySeen(chatMessage.chatHistoryId, false); //true because it has been seen by the recipient.
+      });
+
+      connection.on("RecentMessageUnsent", (chatHistory) => {
+        const dateNow = new Date();
+
+        const localISOTime = new Date(
+          dateNow.getTime() - dateNow.getTimezoneOffset() * 60000
+        )
+          .toISOString()
+          .slice(0, -1); // Remove the 'Z' in example: 2024-08-08T12:34:56.789Z which indicates UTC.
+
+        setExistingChats(
+          (prev) =>
+            prev
+              .map((convo) =>
+                convo.id === chatHistory.id
+                  ? {
+                      ...convo,
+                      lastUpdated: localISOTime,
+                      mostRecentMessage: chatHistory.mostRecentMessage,
+                      recentMessageId: chatHistory.recentMessageId,
+                      recentMessageIsUnsent: chatHistory.recentMessageIsUnsent,
+                      hasSeenMessages: false,
+                    }
+                  : convo
+              )
+              .sort((a, b) => new Date(b.lastUpdated) - new Date(a.lastUpdated)) // Sort by lastUpdated in descending order
+        );
+        markChatHistorySeen(chatHistory.id, false); //true because it has been seen by the recipient.
       });
 
       // connection.on("UpdateRecentMessage", (id, message, date) => {
