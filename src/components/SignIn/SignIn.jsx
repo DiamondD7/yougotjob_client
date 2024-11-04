@@ -261,7 +261,7 @@ const GeneralPracitionerSignIn = ({ localData, today }) => {
           RegistrationNumber: "",
           FullName: "",
           HomeAddress: "",
-          Role: "",
+          Role: "Practitioner",
           DOB: today,
           EmailRecovery: "",
           Mobile: "",
@@ -279,6 +279,7 @@ const GeneralPracitionerSignIn = ({ localData, today }) => {
             navigate("/home");
           }
           setIsLoadingSignIn(false);
+          console.log(data.returnStatus.token);
         })
         .catch((err) => {
           console.log(err); //error
