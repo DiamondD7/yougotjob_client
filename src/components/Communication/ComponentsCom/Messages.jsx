@@ -44,9 +44,6 @@ const Messages = ({
     })
       .then((res) => res.json())
       .then((res) => {
-        //console.log(res);
-        //setRefreshData(true);
-
         getMessageRefresh();
       });
   };
