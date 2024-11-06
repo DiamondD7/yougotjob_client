@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import {
   AddHealthPractitionerUser,
   GetaHealthPractitioner,
+  AddTokens,
   AddTimePreference,
   CheckRegistration,
   CheckPassword,
@@ -275,16 +276,31 @@ const GeneralPracitionerSignIn = ({ localData, today }) => {
             console.log(data.returnStatus.message); //error message
             setErrorMessage(data.returnStatus.message);
           } else {
+            generateJwtTokens(data.returnStatus.userDetails);
             localData(data); //setData and auth
             navigate("/home");
           }
           setIsLoadingSignIn(false);
-          console.log(data.returnStatus.token);
         })
         .catch((err) => {
           console.log(err); //error
         });
     }, 3000);
+  };
+
+  const generateJwtTokens = (healthPractitioners) => {
+    fetch(AddTokens, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify(healthPractitioners),
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        console.log(res);
+      });
   };
 
   return (
