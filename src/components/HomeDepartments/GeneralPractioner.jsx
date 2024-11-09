@@ -18,6 +18,9 @@ const GeneralPractioner = () => {
         setDateSettings(res.returnStatus.data); //setting data of the user's date preference to use in the Nav component
         setLoadData(true); //setting to true when date settings data is loaded so that it wont compromised the moment() in the Nav to show the date/time
         setEditChanges(false); //setting edit change to false once the useEffect finishes running
+      })
+      .catch((err) => {
+        console.log(err);
       });
   }, [editChanges]);
   return (
