@@ -271,12 +271,12 @@ const GeneralPracitionerSignIn = ({ localData, today }) => {
       })
         .then((res) => res.json())
         .then((data) => {
+          generateJwtTokens(data.returnStatus.userDetails);
           if (data.returnStatus.status === false) {
             //checking if the status from the error is false or true
             console.log(data.returnStatus.message); //error message
             setErrorMessage(data.returnStatus.message);
           } else {
-            generateJwtTokens(data.returnStatus.userDetails);
             localData(data); //setData and auth
             navigate("/home");
           }
@@ -294,7 +294,9 @@ const GeneralPracitionerSignIn = ({ localData, today }) => {
       headers: {
         "Content-Type": "application/json",
         Accept: "application/json",
+        Authorization: `Bearer ${healthPractitioners.accessToken}`,
       },
+      credentials: "include", // Ensure cookies are included in the request if necessary
       body: JSON.stringify(healthPractitioners),
     })
       .then((res) => res.json())
