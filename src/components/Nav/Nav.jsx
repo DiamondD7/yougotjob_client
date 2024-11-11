@@ -17,9 +17,10 @@ import {
   Invoice,
   House,
 } from "@phosphor-icons/react";
-import NavLogo from "../../assets/img/HauoraNav.png";
 import { Link } from "react-router-dom";
+import NavLogo from "../../assets/img/HauoraNav.png";
 import moment from "moment-timezone";
+import { Logout } from "../../assets/js/serverApi";
 
 import "../../styles/navstyles.css";
 
@@ -414,6 +415,21 @@ const Nav = ({ setDisplayed, dateSettings }) => {
     return <p className="nav-date__text">{currentTime}</p>;
   };
 
+  const logout = () => {
+    sessionStorage.setItem("auth", false);
+    fetch(Logout, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      credentials: "include", // Ensure cookies are included in the request if necessary
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        console.log(res);
+      });
+  };
   return (
     <>
       <div
@@ -475,11 +491,7 @@ const Nav = ({ setDisplayed, dateSettings }) => {
               </button>
             </li>
             <li className="logout-btn">
-              <button
-                onClick={() => {
-                  sessionStorage.setItem("auth", false);
-                }}
-              >
+              <button onClick={logout}>
                 <Link to="/">
                   <SignOut size={20} color="#454545" />
                 </Link>

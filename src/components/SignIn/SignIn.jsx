@@ -294,7 +294,6 @@ const GeneralPracitionerSignIn = ({ localData, today }) => {
       headers: {
         "Content-Type": "application/json",
         Accept: "application/json",
-        Authorization: `Bearer ${healthPractitioners.accessToken}`,
       },
       credentials: "include", // Ensure cookies are included in the request if necessary
       body: JSON.stringify(healthPractitioners),
