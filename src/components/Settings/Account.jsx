@@ -1378,14 +1378,39 @@ const Account = ({ setEditChanges }) => {
   useEffect(() => {
     const id = parseInt(sessionStorage.getItem("id"));
     const role = sessionStorage.getItem("role");
-    if (role === "Practitioner") {
-      fetch(`${GetaHealthPractitioner}/${id}`)
-        .then((res) => res.json())
-        .then((data) => {
-          setLoggedUserData(data); //sets data of the current user
-          setLoadData(false);
-          setLoadDetails(true); //loading all details to display in the update section of the profile information
+
+    const fetchData = async (retry = true) => {
+      try {
+        const response = await fetch(`${GetaHealthPractitioner}/${id}`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+          credentials: "include", // Ensure cookies are included in the request if necessary
         });
+
+        if (response.status === 401 && retry) {
+          // Retry the request once if a 401 status is detected
+          console.warn("401 detected, retrying request...");
+          return fetchData(false); // Call with `retry` set to false
+        }
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        setLoggedUserData(data);
+        setLoadData(false);
+        setLoadDetails(true);
+      } catch (error) {
+        console.log("Error fetching data:", error.message);
+      }
+    };
+
+    if (role === "Practitioner") {
+      fetchData();
     } else if (role === "Patient") {
       fetch(`${GetPatient}/${id}`)
         .then((res) => res.json())
@@ -1393,8 +1418,56 @@ const Account = ({ setEditChanges }) => {
           setLoggedUserData(data);
           setLoadData(false);
           setLoadDetails(true);
+        })
+        .catch((error) => {
+          console.log("Error fetching patient data:", error.message);
         });
     }
+    // if (role === "Practitioner") {
+    //   fetch(`${GetaHealthPractitioner}/${id}`, {
+    //     method: "GET",
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //       Accept: "application/json",
+    //     },
+    //     credentials: "include", // Ensure cookies are included in the request if necessary
+    //   })
+    //     .then((res) => {
+    //       if (res.status === 401) {
+    //         fetch(`${GetaHealthPractitioner}/${id}`, {
+    //           method: "GET",
+    //           headers: {
+    //             "Content-Type": "application/json",
+    //             Accept: "application/json",
+    //           },
+    //           credentials: "include", // Ensure cookies are included in the request if necessary
+    //         })
+    //           .then((res) => res.json())
+    //           .then((data) => {
+    //             setLoggedUserData(data); //sets data of the current user
+    //             setLoadData(false);
+    //             setLoadDetails(true); //loading all details to display in the update section of the profile information
+    //             return;
+    //           });
+    //       }
+    //     })
+    //     .then((data) => {
+    //       setLoggedUserData(data); //sets data of the current user
+    //       setLoadData(false);
+    //       setLoadDetails(true); //loading all details to display in the update section of the profile information
+    //     })
+    //     .catch((e) => {
+    //       console.log(e.message);
+    //     });
+    // } else if (role === "Patient") {
+    //   fetch(`${GetPatient}/${id}`)
+    //     .then((res) => res.json())
+    //     .then((data) => {
+    //       setLoggedUserData(data);
+    //       setLoadData(false);
+    //       setLoadDetails(true);
+    //     });
+    // }
   }, [loadData]);
 
   return (
