@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Pencil, Trash } from "@phosphor-icons/react";
 import {
   GetaHealthPractitioner,
@@ -1372,7 +1373,7 @@ const TimezoneEdit = ({
 
 const Account = ({ setEditChanges }) => {
   const [loggedUserData, setLoggedUserData] = useState([]);
-
+  const navigate = useNavigate();
   const [loadData, setLoadData] = useState(false);
   const [loadDetails, setLoadDetails] = useState(false);
   useEffect(() => {
@@ -1389,6 +1390,14 @@ const Account = ({ setEditChanges }) => {
           },
           credentials: "include", // Ensure cookies are included in the request if necessary
         });
+
+        if (response.status === 302) {
+          //302 is redericting to sign in screen because refresh token and jwt are expired.
+          console.warn("302 detected, redirecting...");
+          // Redirect to the new path
+          navigate("/");
+          return; // Exit the function to prevent further execution
+        }
 
         if (response.status === 401 && retry) {
           // Retry the request once if a 401 status is detected
