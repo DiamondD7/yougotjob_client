@@ -12,6 +12,9 @@ import {
 } from "../../assets/js/serverApi";
 import { Link, useNavigate } from "react-router-dom";
 import { CircleNotch } from "@phosphor-icons/react";
+import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google";
+import { jwtDecode } from "jwt-decode";
+import GoogleSignUpRegistration from "./GoogleSignUpRegistration";
 
 import "../../styles/signinstyles.css";
 
@@ -135,6 +138,7 @@ const PatientSignUp = ({ setPatientOption }) => {
       setValidPw(true);
     }
   }, [password, confirmPassword]);
+
   return (
     <div>
       <div className="signupform-options-container__wrapper">
@@ -242,12 +246,12 @@ const PatientSignUp = ({ setPatientOption }) => {
 const GeneralPracitionerSignIn = ({ localData, today }) => {
   const [signinEmailAddress, setSigninEmailAddress] = useState("");
   const [signinPassword, setSigninPassword] = useState("");
+  const [signInGoogleId, setSignInGoogleId] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [isLoadingSignIn, setIsLoadingSignIn] = useState(false);
 
   const navigate = useNavigate();
-  const handleCheckPass = (e) => {
-    e.preventDefault();
+  const handleCheckPass = () => {
     setIsLoadingSignIn(true);
     setTimeout(() => {
       fetch(CheckPassword, {
@@ -259,6 +263,7 @@ const GeneralPracitionerSignIn = ({ localData, today }) => {
         body: JSON.stringify({
           EmailAddress: signinEmailAddress,
           UserPassword: signinPassword,
+          GoogleId: signInGoogleId,
           RegistrationNumber: "",
           FullName: "",
           HomeAddress: "",
@@ -304,6 +309,18 @@ const GeneralPracitionerSignIn = ({ localData, today }) => {
       });
   };
 
+  const googleLogin = (res) => {
+    const decoded = jwtDecode(res.credential);
+    console.log(decoded);
+    setSigninEmailAddress(decoded.email);
+    setSignInGoogleId(decoded.sub);
+    setSigninPassword("");
+
+    setTimeout(() => {
+      handleCheckPass();
+    }, 1000);
+  };
+
   return (
     <div>
       <div className="signin__wrapper">
@@ -341,21 +358,43 @@ const GeneralPracitionerSignIn = ({ localData, today }) => {
                   onChange={(e) => setSigninPassword(e.target.value)}
                 />
                 <br />
-                <Link
-                  className="signin-submit__btn"
-                  onClick={handleCheckPass}
-                  to="/home"
-                >
-                  Submit
-                </Link>
-                <button
-                  className="signup-back__btn"
-                  onClick={() => {
-                    window.location.reload();
+                <div>
+                  <Link
+                    className="signin-submit__btn"
+                    onClick={handleCheckPass}
+                    to="/home"
+                  >
+                    Submit
+                  </Link>
+                  <button
+                    className="signup-back__btn"
+                    onClick={() => {
+                      window.location.reload();
+                    }}
+                  >
+                    back
+                  </button>
+                </div>
+                <p>Or</p>
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    marginTop: "20px",
                   }}
                 >
-                  back
-                </button>
+                  <GoogleOAuthProvider
+                    clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}
+                  >
+                    <GoogleLogin
+                      onSuccess={googleLogin}
+                      onError={(err) => console.log(err)}
+                      text="signin_with"
+                      width="330px"
+                      shape="pill"
+                    />
+                  </GoogleOAuthProvider>
+                </div>
               </form>
 
               <p>Contact</p>
@@ -493,12 +532,17 @@ const SignIn = ({ localData }) => {
   const [signUpClicked, setSignUpClicked] = useState(false);
   const [signupOptionsClicked, setSignupOptionsClicked] = useState(false);
   const [registrationNumber, setRegistrationNumber] = useState("");
+  const [googleId, setGoogleId] = useState("");
+  const [authProvider, setAuthProvider] = useState("");
   const [fullName, setFullName] = useState("");
+  const [givenName, setGivenName] = useState("");
+  const [familyName, setFamilyName] = useState("");
   const [emailAddress, setEmailAddress] = useState("");
   const [password, setPassword] = useState("");
   const [matchPwd, setMatchPwd] = useState("");
   const [validPwdMatch, setValidPwdMatch] = useState(true);
   const [validPwd, setValidPwd] = useState("");
+  const [googleSignUp, setGoogleSignUp] = useState(false);
 
   const [errorSignupMessage, setErrorSignupMessage] = useState("");
   const [isError, setIsError] = useState(false);
@@ -562,7 +606,11 @@ const SignIn = ({ localData }) => {
         },
         body: JSON.stringify({
           RegistrationNumber: registrationNumber,
+          GoogleId: googleId || "",
+          AuthProvider: authProvider || "local",
           FullName: fullName,
+          GivenName: givenName || "",
+          FamilyName: familyName || "",
           EmailAddress: emailAddress,
           Role: "Practitioner",
           UserPassword: password,
@@ -602,11 +650,15 @@ const SignIn = ({ localData }) => {
       },
       body: JSON.stringify({
         RegistrationNumber: registrationNumber,
+        GoogleId: googleId || "",
+        AuthProvider: authProvider || "local",
         FullName: fullName,
+        GivenName: givenName || "",
+        FamilyName: familyName || "",
         EmailAddress: emailAddress,
         Role: "Practitioner",
-        UserPassword: password,
-        DOB: today,
+        UserPassword: password || "",
+        DOB: today, //change the logic here to get the age
         EmailRecovery: "",
         Mobile: "",
         MobileRecovery: "",
@@ -633,6 +685,7 @@ const SignIn = ({ localData }) => {
     //handlingBackButton when going back
     //and called this in the handlingSignUp to restart all values
     setHealthPractitionerOption(false);
+    setGoogleSignUp(false);
     setIsError(false);
     setIsErrorRegistration(false);
     setIsErrorPwd(false);
@@ -641,6 +694,17 @@ const SignIn = ({ localData }) => {
     setEmailAddress("");
     setPassword("");
     setMatchPwd("");
+  };
+
+  const signupWithGoogle = (res) => {
+    const decoded = jwtDecode(res.credential);
+    setGoogleSignUp(true);
+    setFullName(decoded.name);
+    setEmailAddress(decoded.email);
+    setGoogleId(decoded.sub);
+    setAuthProvider("google");
+    setGivenName(decoded.givenName);
+    setFamilyName(decoded.familyName);
   };
 
   // ------------------------------------------------------------------------------
@@ -760,90 +824,140 @@ const SignIn = ({ localData }) => {
                       </div>
                     ) : (
                       <form onSubmit={handlingCheckRegistration}>
-                        <div>
-                          <input
-                            type="text"
-                            placeholder="Registration Number"
-                            value={registrationNumber}
-                            className="signin-signup-form__input"
-                            onChange={(e) =>
-                              setRegistrationNumber(e.target.value)
-                            }
-                          />
-                          <input
-                            type="text"
-                            placeholder="Full Name"
-                            value={fullName}
-                            className="signin-signup-form__input"
-                            onChange={(e) => setFullName(e.target.value)}
-                          />
-                        </div>
-                        <input
-                          required
-                          type="text"
-                          placeholder="Email"
-                          value={emailAddress}
-                          className="signin-signup-form__input"
-                          onChange={(e) => setEmailAddress(e.target.value)}
-                        />
-                        <br />
-                        <div>
-                          {isErrrorPwd === true ? (
-                            <div className="passworderrornotvalid__wrapper">
-                              <p>password is not valid</p>
+                        {googleSignUp === false ? (
+                          <div>
+                            <div>
+                              <input
+                                type="text"
+                                placeholder="Registration Number"
+                                value={registrationNumber}
+                                className="signin-signup-form__input"
+                                onChange={(e) =>
+                                  setRegistrationNumber(e.target.value)
+                                }
+                              />
+                              <input
+                                type="text"
+                                placeholder="Full Name"
+                                value={fullName}
+                                className="signin-signup-form__input"
+                                onChange={(e) => setFullName(e.target.value)}
+                              />
                             </div>
-                          ) : (
-                            ""
-                          )}
-                          <input
-                            required
-                            type="password"
-                            placeholder="Password"
-                            onChange={(e) => setPassword(e.target.value)}
-                            className={`signin-signup-form__input ${
-                              validPwd === false && password.length !== 0
-                                ? "notvalidpwd"
-                                : ""
-                            }`}
-                          />
-                        </div>
-                        <input
-                          required
-                          type="password"
-                          placeholder="Confirm password"
-                          className="signin-signup-form__input"
-                          onChange={(e) => setMatchPwd(e.target.value)}
-                        />
-                        {validPwdMatch === false && matchPwd.length !== 0 ? (
-                          <div className="password-notmatch__wrapper">
-                            <p>Password do not match !</p>
+                            <input
+                              required
+                              type="text"
+                              placeholder="Email"
+                              value={emailAddress}
+                              className="signin-signup-form__input"
+                              onChange={(e) => setEmailAddress(e.target.value)}
+                            />
+                            <br />
+                            <div>
+                              {isErrrorPwd === true ? (
+                                <div className="passworderrornotvalid__wrapper">
+                                  <p>password is not valid</p>
+                                </div>
+                              ) : (
+                                ""
+                              )}
+                              <input
+                                required
+                                type="password"
+                                placeholder="Password"
+                                onChange={(e) => setPassword(e.target.value)}
+                                className={`signin-signup-form__input ${
+                                  validPwd === false && password.length !== 0
+                                    ? "notvalidpwd"
+                                    : ""
+                                }`}
+                              />
+                            </div>
+                            <input
+                              required
+                              type="password"
+                              placeholder="Confirm password"
+                              className="signin-signup-form__input"
+                              onChange={(e) => setMatchPwd(e.target.value)}
+                            />
+                            {validPwdMatch === false &&
+                            matchPwd.length !== 0 ? (
+                              <div className="password-notmatch__wrapper">
+                                <p>Password do not match !</p>
+                              </div>
+                            ) : (
+                              ""
+                            )}
+                            <div
+                              style={{
+                                display: "flex",
+                                justifyContent: "center",
+                              }}
+                            >
+                              <p className="termsofuse__text">
+                                By signing up to create an account: I accept
+                                Terms of Use and Privacy Policy
+                              </p>
+                            </div>
+                            <button
+                              className="signup-signin-submit__btn"
+                              type="submit"
+                            >
+                              Submit
+                            </button>
+                            <button
+                              className="signup-back__btn"
+                              onClick={handleBackButton}
+                            >
+                              Back
+                            </button>
+
+                            <p>Or</p>
+                            <div
+                              style={{
+                                marginTop: "20px",
+                                display: "flex",
+                                justifyContent: "center",
+                              }}
+                            >
+                              <GoogleOAuthProvider
+                                clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}
+                              >
+                                <GoogleLogin
+                                  onSuccess={signupWithGoogle}
+                                  onError={(err) => console.log(err)}
+                                  text="signup_with"
+                                  width="330px"
+                                  shape="pill"
+                                />
+                              </GoogleOAuthProvider>
+                            </div>
                           </div>
                         ) : (
-                          ""
+                          <>
+                            <GoogleSignUpRegistration
+                              emailAddress={emailAddress}
+                              setRegistrationNumber={setRegistrationNumber}
+                              registrationNumber={registrationNumber}
+                              handleBackButton={handleBackButton}
+                              handlingCheckRegistration={
+                                handlingCheckRegistration
+                              }
+                            />
+                            <button
+                              className="signup-signin-submit__btn"
+                              type="submit"
+                            >
+                              Submit
+                            </button>
+                            <button
+                              className="signup-back__btn"
+                              onClick={handleBackButton}
+                            >
+                              Back
+                            </button>
+                          </>
                         )}
-                        <div
-                          style={{ display: "flex", justifyContent: "center" }}
-                        >
-                          <p className="termsofuse__text">
-                            By signing up to create an account: I accept Terms
-                            of Use and Privacy Policy
-                          </p>
-                        </div>
-                        <br />
-                        <br />
-                        <button
-                          className="signup-signin-submit__btn"
-                          type="submit"
-                        >
-                          Submit
-                        </button>
-                        <br />
-                        <button
-                          className="signup-back__btn"
-                          onClick={handleBackButton}
-                        >
-                          Back
-                        </button>
                       </form>
                     )}
                   </div>
