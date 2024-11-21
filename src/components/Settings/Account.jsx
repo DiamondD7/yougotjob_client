@@ -725,24 +725,65 @@ const Contacts = () => {
   const [updateContactData, setUpdateContactData] = useState([]);
   const [emergencyContacts, setEmergencyContacts] = useState([]);
   const [loadData, setLoadData] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const id = parseInt(sessionStorage.getItem("id"));
     const role = sessionStorage.getItem("role");
+
+    const fetchPatientData = async (retry = true) => {
+      try {
+        const response = await fetch(`${GetPatientEmergencyContact}/${id}`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+          credentials: "include", // Ensure cookies are included in the request if necessary
+        });
+
+        if (response.status === 302) {
+          //302 is redericting to sign in screen because refresh token and jwt are expired.
+          console.warn("302 detected, redirecting...");
+          // Redirect to the new path
+          navigate("/");
+          return; // Exit the function to prevent further execution
+        }
+
+        if (response.status === 401 && retry) {
+          // Retry the request once if a 401 status is detected
+          console.warn("401 detected, retrying request...");
+          return fetchPatientData(false); // Call with `retry` set to false
+        }
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        setEmergencyContacts(data.returnStatus.data);
+        setLoadData(false);
+      } catch (error) {
+        console.log("Error fetching data:", error.message);
+      }
+    };
+
     if (role === "Practitioner") {
-      fetch(`${GetEmergencyContact}/${id}`)
+      fetch(`${GetEmergencyContact}/${id}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        credentials: "include",
+      })
         .then((res) => res.json())
         .then((res) => {
           setEmergencyContacts(res.returnStatus.data);
           setLoadData(false);
         });
     } else if (role === "Patient") {
-      fetch(`${GetPatientEmergencyContact}/${id}`)
-        .then((res) => res.json())
-        .then((res) => {
-          setEmergencyContacts(res.returnStatus.data);
-          setLoadData(false);
-        });
+      fetchPatientData();
     }
   }, [loadData]);
 
@@ -1137,7 +1178,14 @@ const TimezonesSettings = ({ setEditChanges }) => {
           setEditData(res.returnStatus.data);
         });
     } else if (role === "Patient") {
-      fetch(`${GetAPatientDateTime}/${id}`)
+      fetch(`${GetAPatientDateTime}/${id}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        credentials: "include",
+      })
         .then((res) => res.json())
         .then((data) => {
           console.log(data);
@@ -1418,19 +1466,48 @@ const Account = ({ setEditChanges }) => {
       }
     };
 
+    const fetchPatientData = async (retry = true) => {
+      try {
+        const response = await fetch(`${GetPatient}/${id}`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+          credentials: "include", // Ensure cookies are included in the request if necessary
+        });
+
+        if (response.status === 302) {
+          //302 is redericting to sign in screen because refresh token and jwt are expired.
+          console.warn("302 detected, redirecting...");
+          // Redirect to the new path
+          navigate("/");
+          return; // Exit the function to prevent further execution
+        }
+
+        if (response.status === 401 && retry) {
+          // Retry the request once if a 401 status is detected
+          console.warn("401 detected, retrying request...");
+          return fetchPatientData(false); // Call with `retry` set to false
+        }
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        setLoggedUserData(data);
+        setLoadData(false);
+        setLoadDetails(true);
+      } catch (error) {
+        console.log("Error fetching data:", error.message);
+      }
+    };
+
     if (role === "Practitioner") {
       fetchData();
     } else if (role === "Patient") {
-      fetch(`${GetPatient}/${id}`)
-        .then((res) => res.json())
-        .then((data) => {
-          setLoggedUserData(data);
-          setLoadData(false);
-          setLoadDetails(true);
-        })
-        .catch((error) => {
-          console.log("Error fetching patient data:", error.message);
-        });
+      fetchPatientData();
     }
   }, [loadData]);
 
