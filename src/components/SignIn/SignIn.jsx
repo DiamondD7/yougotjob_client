@@ -9,6 +9,7 @@ import {
   AddPatient,
   CheckPatientPassword,
   AddPatientDateTime,
+  PatientToken,
 } from "../../assets/js/serverApi";
 import { Link, useNavigate } from "react-router-dom";
 import { CircleNotch } from "@phosphor-icons/react";
@@ -517,6 +518,7 @@ const PatientSignIn = ({ localData, today }) => {
       })
         .then((res) => res.json())
         .then((data) => {
+          generateJwtTokens(data.returnStatus.userDetails);
           if (data.returnStatus.status === false) {
             //checking if the status from the error is false or true
             console.log(data.returnStatus.message); //error message
@@ -531,6 +533,23 @@ const PatientSignIn = ({ localData, today }) => {
           console.log(err); //error
         });
     }, 3000);
+  };
+
+  //generate tokens after checking the password/email of the user.
+  const generateJwtTokens = (patients) => {
+    fetch(PatientToken, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      credentials: "include", // Ensure cookies are included in the request if necessary
+      body: JSON.stringify(patients),
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        console.log(res);
+      });
   };
 
   //setting values for these to be used to validate in the useEffect below.
