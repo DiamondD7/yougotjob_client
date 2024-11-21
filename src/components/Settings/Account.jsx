@@ -1432,51 +1432,6 @@ const Account = ({ setEditChanges }) => {
           console.log("Error fetching patient data:", error.message);
         });
     }
-    // if (role === "Practitioner") {
-    //   fetch(`${GetaHealthPractitioner}/${id}`, {
-    //     method: "GET",
-    //     headers: {
-    //       "Content-Type": "application/json",
-    //       Accept: "application/json",
-    //     },
-    //     credentials: "include", // Ensure cookies are included in the request if necessary
-    //   })
-    //     .then((res) => {
-    //       if (res.status === 401) {
-    //         fetch(`${GetaHealthPractitioner}/${id}`, {
-    //           method: "GET",
-    //           headers: {
-    //             "Content-Type": "application/json",
-    //             Accept: "application/json",
-    //           },
-    //           credentials: "include", // Ensure cookies are included in the request if necessary
-    //         })
-    //           .then((res) => res.json())
-    //           .then((data) => {
-    //             setLoggedUserData(data); //sets data of the current user
-    //             setLoadData(false);
-    //             setLoadDetails(true); //loading all details to display in the update section of the profile information
-    //             return;
-    //           });
-    //       }
-    //     })
-    //     .then((data) => {
-    //       setLoggedUserData(data); //sets data of the current user
-    //       setLoadData(false);
-    //       setLoadDetails(true); //loading all details to display in the update section of the profile information
-    //     })
-    //     .catch((e) => {
-    //       console.log(e.message);
-    //     });
-    // } else if (role === "Patient") {
-    //   fetch(`${GetPatient}/${id}`)
-    //     .then((res) => res.json())
-    //     .then((data) => {
-    //       setLoggedUserData(data);
-    //       setLoadData(false);
-    //       setLoadDetails(true);
-    //     });
-    // }
   }, [loadData]);
 
   return (

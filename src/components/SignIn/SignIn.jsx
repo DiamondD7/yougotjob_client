@@ -17,6 +17,7 @@ import { jwtDecode } from "jwt-decode";
 import GoogleSignUpRegistration from "./GoogleSignUpRegistration";
 
 import "../../styles/signinstyles.css";
+import GoogleSignUpPatient from "./GoogleSignUpPatient";
 
 const SignUpOptions = ({
   setSignupOptionsClicked,
@@ -65,14 +66,20 @@ const SignUpOptions = ({
 const PatientSignUp = ({ setPatientOption }) => {
   const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
   const [nhi, setNhi] = useState("");
+  const [googleId, setGoogleId] = useState("");
+  const [authProvider, setAuthProvider] = useState("local");
   const [fullName, setFullName] = useState("");
+  const [givenName, setGivenName] = useState("");
+  const [familyName, setFamilyName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [matchedPw, setMatchedPw] = useState(false);
   const [validPw, setValidPw] = useState(false);
   const [emailNhiError, setEmailNhiError] = useState(false);
+  const [signupWithGoogle, setSignUpWithGoogle] = useState(false);
 
+  const [error, setError] = useState("");
   const handlePatientDateTime = (id) => {
     fetch(AddPatientDateTime, {
       method: "POST",
@@ -105,8 +112,12 @@ const PatientSignUp = ({ setPatientOption }) => {
       },
       body: JSON.stringify({
         NHI: nhi,
-        Role: role,
+        GoogleId: googleId,
+        AuthProvider: authProvider,
+        Role: "Patient",
         FullName: fullName,
+        GivenName: givenName,
+        FamilyName: familyName,
         EmailAddress: email,
         Password: password,
       }),
@@ -118,6 +129,9 @@ const PatientSignUp = ({ setPatientOption }) => {
           handlePatientDateTime(res.returnStatus.id);
           setPatientOption(false);
           setEmailNhiError(false);
+        } else if (res.returnStatus.code === "400") {
+          console.log("error");
+          setError("Error: Email/NHI already taken");
         } else {
           setEmailNhiError(true);
         }
@@ -139,104 +153,156 @@ const PatientSignUp = ({ setPatientOption }) => {
     }
   }, [password, confirmPassword]);
 
+  const handleGoogleSignUp = (res) => {
+    const decoded = jwtDecode(res.credential);
+    setSignUpWithGoogle(true);
+    setFullName(decoded.name);
+    setEmail(decoded.email);
+    setGivenName(decoded.given_name);
+    setFamilyName(decoded.family_name);
+    setGoogleId(decoded.sub);
+    setAuthProvider("google");
+  };
+
   return (
     <div>
       <div className="signupform-options-container__wrapper">
         <h1 style={{ textAlign: "center" }}>Patient Sign up</h1>
-        <br />
         <form className="signup-form" onSubmit={handleAddPatient}>
-          <p
-            className={
-              emailNhiError === true ? "emailtaken-error" : "error-default"
-            }
-          >
-            Email/NHI already registered
-          </p>
-          <input
-            className="signin-signup-form__input"
-            type="text"
-            placeholder="NHI"
-            onChange={(e) => setNhi(e.target.value)}
-          />
-          <input
-            className="signin-signup-form__input"
-            type="text"
-            placeholder="Full name"
-            onChange={(e) => setFullName(e.target.value)}
-          />
-          <input
-            required
-            className="signin-signup-form__input"
-            type="text"
-            placeholder="Email"
-            onChange={(e) => setEmail(e.target.value)}
-          />
-          <input
-            required
-            className="signin-signup-form__input"
-            type="password"
-            placeholder="Password"
-            onChange={(e) => setPassword(e.target.value)}
-          />
-          <input
-            required
-            type="password"
-            placeholder="Confirm password"
-            className="signin-signup-form__input"
-            onChange={(e) => setConfirmPassword(e.target.value)}
-          />
-          <p
-            className={validPw === false ? "pwd-validate-error" : "pwd-default"}
-          >
-            8 to 24 characters. Must include uppercase and lowercase letters, a
-            number and a special character. <br />
-            Allowed special characters: ! @ # $ %
-          </p>
-          <p
-            className={
-              password !== confirmPassword ? "pwd-donotmatch" : "pwd-default"
-            }
-          >
-            Password do not match!
-          </p>
+          {signupWithGoogle === false ? (
+            <div>
+              <p
+                className={
+                  emailNhiError === true ? "emailtaken-error" : "error-default"
+                }
+              >
+                Email/NHI already registered
+              </p>
+              <input
+                className="signin-signup-form__input"
+                type="text"
+                placeholder="NHI"
+                onChange={(e) => setNhi(e.target.value)}
+              />
+              <input
+                className="signin-signup-form__input"
+                type="text"
+                placeholder="Full name"
+                onChange={(e) => setFullName(e.target.value)}
+              />
+              <input
+                required
+                className="signin-signup-form__input"
+                type="text"
+                placeholder="Email"
+                onChange={(e) => setEmail(e.target.value)}
+              />
+              <input
+                required
+                className="signin-signup-form__input"
+                type="password"
+                placeholder="Password"
+                onChange={(e) => setPassword(e.target.value)}
+              />
+              <input
+                required
+                type="password"
+                placeholder="Confirm password"
+                className="signin-signup-form__input"
+                onChange={(e) => setConfirmPassword(e.target.value)}
+              />
+              <p
+                className={
+                  validPw === false ? "pwd-validate-error" : "pwd-default"
+                }
+              >
+                8 to 24 characters. Must include uppercase and lowercase
+                letters, a number and a special character. <br />
+                Allowed special characters: ! @ # $ %
+              </p>
+              <p
+                className={
+                  password !== confirmPassword
+                    ? "pwd-donotmatch"
+                    : "pwd-default"
+                }
+              >
+                Password do not match!
+              </p>
 
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              textAlign: "center",
-            }}
-          >
-            <p className="termsofuse__text">
-              By signing up to create an account: I accept Terms of Use and
-              Privacy Policy
-            </p>
-          </div>
-          <br />
-          <div style={{ textAlign: "center" }}>
-            <button
-              className="signup-signin-submit__btn"
-              style={
-                matchedPw === false
-                  ? {
-                      cursor: "default",
-                      backgroundColor: "transparent",
-                      color: "rgba(0,0,0,0.5)",
-                    }
-                  : { cursor: "pointer" }
-              }
-              disabled={matchedPw === false ? true : false}
-              type="submit"
-            >
-              Submit
-            </button>
-            <button
-              className="signup-back__btn"
-              onClick={() => setPatientOption(false)}
-            >
-              Back
-            </button>
-          </div>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  textAlign: "center",
+                }}
+              >
+                <p className="termsofuse__text">
+                  By signing up to create an account: I accept Terms of Use and
+                  Privacy Policy
+                </p>
+              </div>
+              <div style={{ textAlign: "center" }}>
+                <button
+                  className="signup-signin-submit__btn"
+                  style={
+                    matchedPw === false
+                      ? {
+                          cursor: "default",
+                          backgroundColor: "transparent",
+                          color: "rgba(0,0,0,0.5)",
+                        }
+                      : { cursor: "pointer" }
+                  }
+                  disabled={matchedPw === false ? true : false}
+                  type="submit"
+                >
+                  Submit
+                </button>
+                <button
+                  className="signup-back__btn"
+                  onClick={() => setPatientOption(false)}
+                >
+                  Back
+                </button>
+              </div>
+              <br />
+              <p>Or</p>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  marginTop: "15px",
+                }}
+              >
+                <GoogleOAuthProvider
+                  clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}
+                >
+                  <GoogleLogin
+                    onSuccess={handleGoogleSignUp}
+                    onError={(err) => console.log(err)}
+                    text="signup_with"
+                    width="330px"
+                    shape="pill"
+                  />
+                </GoogleOAuthProvider>
+              </div>
+            </div>
+          ) : (
+            <div style={{ textAlign: "center" }}>
+              <p style={{ color: "red", marginBottom: "10px" }}>{error}</p>
+              <GoogleSignUpPatient email={email} nhi={nhi} setNhi={setNhi} />
+              <button className="signup-signin-submit__btn" type="submit">
+                Submit
+              </button>
+              <button
+                className="signup-back__btn"
+                onClick={() => setPatientOption(false)}
+              >
+                Back
+              </button>
+            </div>
+          )}
         </form>
       </div>
     </div>
@@ -251,6 +317,14 @@ const GeneralPracitionerSignIn = ({ localData, today }) => {
   const [isLoadingSignIn, setIsLoadingSignIn] = useState(false);
 
   const navigate = useNavigate();
+
+  //handle for the submit button in the <form>
+  const handleFormSubmit = (e) => {
+    e.preventDefault();
+    handleCheckPass();
+  };
+
+  //function for httprequest to check password. both google auth and local auth uses this function
   const handleCheckPass = () => {
     setIsLoadingSignIn(true);
     setTimeout(() => {
@@ -293,6 +367,7 @@ const GeneralPracitionerSignIn = ({ localData, today }) => {
     }, 3000);
   };
 
+  //generate tokens after checking the password/email of the user.
   const generateJwtTokens = (healthPractitioners) => {
     fetch(AddTokens, {
       method: "POST",
@@ -309,17 +384,20 @@ const GeneralPracitionerSignIn = ({ localData, today }) => {
       });
   };
 
-  const googleLogin = (res) => {
+  //function for setting the values when user logs in using google
+  const googleLogin = async (res) => {
     const decoded = jwtDecode(res.credential);
-    console.log(decoded);
     setSigninEmailAddress(decoded.email);
     setSignInGoogleId(decoded.sub);
     setSigninPassword("");
-
-    setTimeout(() => {
-      handleCheckPass();
-    }, 1000);
   };
+
+  //calling this after the googleLogin() set values are set due to asynchronous nature of react
+  useEffect(() => {
+    if (signInGoogleId) {
+      handleCheckPass();
+    }
+  }, [signInGoogleId]);
 
   return (
     <div>
@@ -350,18 +428,16 @@ const GeneralPracitionerSignIn = ({ localData, today }) => {
                   placeholder="Email"
                   onChange={(e) => setSigninEmailAddress(e.target.value)}
                 />
-                <br />
                 <input
                   className="signin-signup-form__input"
                   type="password"
                   placeholder="Password"
                   onChange={(e) => setSigninPassword(e.target.value)}
                 />
-                <br />
                 <div>
                   <Link
                     className="signin-submit__btn"
-                    onClick={handleCheckPass}
+                    onClick={handleFormSubmit}
                     to="/home"
                   >
                     Submit
@@ -410,12 +486,20 @@ const GeneralPracitionerSignIn = ({ localData, today }) => {
 const PatientSignIn = ({ localData, today }) => {
   const [signinEmailAddress, setSigninEmailAddress] = useState("");
   const [signinPassword, setSigninPassword] = useState("");
+  const [googleId, setGoogleId] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [isLoadingSignIn, setIsLoadingSignIn] = useState(false);
 
   const navigate = useNavigate();
-  const handleCheckPass = (e) => {
+
+  //handle the form submit
+  const handleFormData = (e) => {
     e.preventDefault();
+    handleCheckPass();
+  };
+
+  //this function is both used by local sign in and google auth
+  const handleCheckPass = () => {
     setIsLoadingSignIn(true);
     setTimeout(() => {
       fetch(CheckPatientPassword, {
@@ -428,15 +512,7 @@ const PatientSignIn = ({ localData, today }) => {
           EmailAddress: signinEmailAddress,
           Password: signinPassword,
           NHI: "",
-          FullName: "",
-          HomeAddress: "",
-          Role: "",
-          DOB: today,
-          EmailRecovery: "",
-          MobileNumber: "",
-          Nationality: "",
-          Height: null,
-          Weight: null,
+          GoogleId: googleId,
         }),
       })
         .then((res) => res.json())
@@ -456,6 +532,21 @@ const PatientSignIn = ({ localData, today }) => {
         });
     }, 3000);
   };
+
+  //setting values for these to be used to validate in the useEffect below.
+  const googleAuthSignIn = async (res) => {
+    const decoded = jwtDecode(res.credential);
+    setGoogleId(decoded.sub);
+    setSigninEmailAddress(decoded.email);
+    setSigninPassword("");
+  };
+
+  //gets called when googleId's value changes and calls handleCheckPass to validate the user
+  useEffect(() => {
+    if (googleId) {
+      handleCheckPass();
+    }
+  }, [googleId]);
 
   return (
     <div>
@@ -496,7 +587,7 @@ const PatientSignIn = ({ localData, today }) => {
                 <br />
                 <Link
                   className="signin-submit__btn"
-                  onClick={handleCheckPass}
+                  onClick={handleFormData}
                   to="/home"
                 >
                   Submit
@@ -509,6 +600,27 @@ const PatientSignIn = ({ localData, today }) => {
                 >
                   back
                 </button>
+
+                <p>Or</p>
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    marginTop: "15px",
+                  }}
+                >
+                  <GoogleOAuthProvider
+                    clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}
+                  >
+                    <GoogleLogin
+                      onSuccess={googleAuthSignIn}
+                      onError={(err) => console.log(err)}
+                      text="signin_with"
+                      width="330px"
+                      shape="pill"
+                    />
+                  </GoogleOAuthProvider>
+                </div>
               </form>
 
               <p>Contact</p>
@@ -939,10 +1051,6 @@ const SignIn = ({ localData }) => {
                               emailAddress={emailAddress}
                               setRegistrationNumber={setRegistrationNumber}
                               registrationNumber={registrationNumber}
-                              handleBackButton={handleBackButton}
-                              handlingCheckRegistration={
-                                handlingCheckRegistration
-                              }
                             />
                             <button
                               className="signup-signin-submit__btn"

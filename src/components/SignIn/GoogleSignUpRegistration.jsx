@@ -4,8 +4,6 @@ const GoogleSignUp = ({
   emailAddress,
   setRegistrationNumber,
   registrationNumber,
-  handleBackButton,
-  handlingCheckRegistration,
 }) => {
   return (
     <div>
