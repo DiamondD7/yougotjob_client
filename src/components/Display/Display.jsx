@@ -16,6 +16,7 @@ import LabResults from "../PatientNAVS/LabResults";
 import TestResults from "../PatientNAVS/TestResults";
 import Immunisation from "../PatientNAVS/Immunisation";
 import Prescriptions from "../PatientNAVS/Prescriptions";
+import Appointment from "../PatientNAVS/Appointment";
 const Display = ({ displayed, setEditChanges }) => {
   const role = sessionStorage.getItem("role");
   return (
@@ -51,6 +52,8 @@ const Display = ({ displayed, setEditChanges }) => {
           <Immunisation />
         ) : displayed === "prescriptions" ? (
           <Prescriptions />
+        ) : displayed === "appointment" ? (
+          <Appointment />
         ) : (
           ""
         )}
