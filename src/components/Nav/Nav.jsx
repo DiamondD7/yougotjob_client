@@ -16,6 +16,7 @@ import {
   Gear,
   Invoice,
   House,
+  CalendarPlus,
 } from "@phosphor-icons/react";
 import { Link } from "react-router-dom";
 import NavLogo from "../../assets/img/HauoraNav.png";
@@ -238,6 +239,29 @@ const NavPatient = ({ minimizedNav, activeDisplay, onClickDisplayed }) => {
           <House size={20} color="#454545" />
           &nbsp;
           {minimizedNav === true ? "" : "Dashboard"}
+        </button>
+      </li>
+
+      <li
+        className={minimizedNav === true ? "minimizednav-icons" : ""}
+        style={
+          activeDisplay === "appointment" ? { backgroundColor: "#D6E8FF" } : {}
+        }
+      >
+        <button
+          className={minimizedNav === true ? "btn-normal" : "icon-label"}
+          onClick={() => onClickDisplayed("appointment")}
+          style={
+            minimizedNav === false
+              ? activeDisplay === "appointment"
+                ? { backgroundColor: "#D6E8FF" }
+                : {}
+              : {}
+          }
+        >
+          <CalendarPlus size={20} color="#454545" />
+          &nbsp;
+          {minimizedNav === true ? "" : "Appointment"}
         </button>
       </li>
 
