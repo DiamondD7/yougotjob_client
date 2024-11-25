@@ -10,15 +10,17 @@ import {
   CheckPatientPassword,
   AddPatientDateTime,
   PatientToken,
+  CheckGoogleEmail,
 } from "../../assets/js/serverApi";
 import { Link, useNavigate } from "react-router-dom";
 import { CircleNotch } from "@phosphor-icons/react";
 import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google";
 import { jwtDecode } from "jwt-decode";
 import GoogleSignUpRegistration from "./GoogleSignUpRegistration";
+import GoogleSignUpPatient from "./GoogleSignUpPatient";
+import GoogleSignUp from "./GoogleSignUp";
 
 import "../../styles/signinstyles.css";
-import GoogleSignUpPatient from "./GoogleSignUpPatient";
 
 const SignUpOptions = ({
   setSignupOptionsClicked,
@@ -38,11 +40,16 @@ const SignUpOptions = ({
           </button>
           <button
             className="signup-options__btns"
-            onClick={() => setHealthPractitionerOption(true)}
+            onClick={() => setHealthPractitionerOption("General Practitioner")}
           >
             General Practitioner
           </button>
-          <button className="signup-options__btns">Nurse</button>
+          <button
+            className="signup-options__btns"
+            onClick={() => setHealthPractitionerOption("Nurse")}
+          >
+            Nurse
+          </button>
           <button className="signup-options__btns">Therapist</button>
           <button className="signup-options__btns">Audiologist</button>
           <button className="signup-options__btns">Acupuncturist</button>
@@ -652,16 +659,8 @@ const PatientSignIn = ({ localData, today }) => {
   );
 };
 
-const SignIn = ({ localData }) => {
-  // SIGNUP-OPTIONS
-  const [patientOption, setPatientOption] = useState(false);
-  const [healthPractitionerOption, setHealthPractitionerOption] =
-    useState(false);
-  // SIGNUP-OPTIONS
-
+const SignUpOpt = ({ healthPractitionerOption }) => {
   const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
-  const [signUpClicked, setSignUpClicked] = useState(false);
-  const [signupOptionsClicked, setSignupOptionsClicked] = useState(false);
   const [registrationNumber, setRegistrationNumber] = useState("");
   const [googleId, setGoogleId] = useState("");
   const [authProvider, setAuthProvider] = useState("");
@@ -682,6 +681,7 @@ const SignIn = ({ localData }) => {
     useState(false);
   const [isLoadingSignUp, setIsLoadingSignUp] = useState(false);
   const [isErrrorPwd, setIsErrorPwd] = useState(false);
+
   var today = new Date();
 
   useEffect(() => {
@@ -692,6 +692,93 @@ const SignIn = ({ localData }) => {
     const match = password === matchPwd;
     setValidPwdMatch(match);
   }, [password, matchPwd]);
+
+  const handlingCheckRegistration = (e) => {
+    e.preventDefault();
+
+    const data = {
+      RegistrationNumber: registrationNumber,
+      GoogleId: googleId || "",
+      AuthProvider: authProvider || "local",
+      FullName: fullName,
+      GivenName: givenName || "",
+      FamilyName: familyName || "",
+      EmailAddress: emailAddress,
+      Role: "Practitioner",
+      DepartmentRole: healthPractitionerOption,
+      UserPassword: password || "",
+      DOB: today, //change the logic here to get the age
+      EmailRecovery: "",
+      Mobile: "",
+      MobileRecovery: "",
+      Certifications: [],
+    };
+    setIsError(false);
+    fetch(CheckRegistration, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify(data),
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        setIsLoadingSignUp(false);
+        if (res.returnStatus.status === false) {
+          setIsErrorRegistration(true); //setting error to be true
+          setErrorRegistrationMessage(res.returnStatus.message); //error message for the client to see
+        } else {
+          setErrorRegistrationMessage("");
+          console.log(res); //DELETE
+          handlingSignUp(data);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const handlingSignUp = (data) => {
+    if (!googleSignUp) {
+      const isPwdValid = PWD_REGEX.test(password);
+      if (!validPwdMatch) {
+        console.log("Password do not match");
+        return;
+      }
+      if (!isPwdValid) {
+        setIsErrorPwd(true);
+        return;
+      }
+    }
+    setIsLoadingSignUp(true);
+    setIsErrorRegistration(false);
+
+    setTimeout(() => {
+      fetch(AddHealthPractitionerUser, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify(data),
+      })
+        .then((res) => res.json())
+        .then((res) => {
+          setIsLoadingSignUp(false);
+          if (res.returnStatus.status === false) {
+            setIsError(true); //setting error to be true
+            setErrorSignupMessage(res.returnStatus.message); //error message for the client to see
+          } else {
+            console.log(res); //DELETE
+            handleAddInitialTimePref(res.returnStatus.id);
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }, 3000);
+  };
 
   const handleAddInitialTimePref = (id) => {
     fetch(AddTimePreference, {
@@ -711,120 +798,36 @@ const SignIn = ({ localData }) => {
       .then((res) => res.json())
       .then((data) => {
         console.log(data);
+        window.location.reload(); //relod to the signin screen
       });
   };
 
-  const handlingSignUp = (e) => {
-    e.preventDefault();
-    const isPwdValid = PWD_REGEX.test(password);
-    if (!validPwdMatch) {
-      console.log("Password do not match");
-      return;
-    }
-    if (!isPwdValid) {
-      setIsErrorPwd(true);
-      return;
-    }
-    setIsLoadingSignUp(true);
-    setIsErrorRegistration(false);
-
-    setTimeout(() => {
-      fetch(AddHealthPractitionerUser, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-        body: JSON.stringify({
-          RegistrationNumber: registrationNumber,
-          GoogleId: googleId || "",
-          AuthProvider: authProvider || "local",
-          FullName: fullName,
-          GivenName: givenName || "",
-          FamilyName: familyName || "",
-          EmailAddress: emailAddress,
-          Role: "Practitioner",
-          UserPassword: password,
-          DOB: today,
-          EmailRecovery: "",
-          Mobile: "",
-          MobileRecovery: "",
-          Certifications: [],
-        }),
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          setIsLoadingSignUp(false);
-          if (data.returnStatus.status === false) {
-            setIsError(true); //setting error to be true
-            setErrorSignupMessage(data.returnStatus.message); //error message for the client to see
-          } else {
-            handleAddInitialTimePref(data.returnStatus.id);
-            console.log(data); //DELETE
-            handleBackButton(); //called to restart values
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    }, 3000);
-  };
-
-  const handlingCheckRegistration = (e) => {
-    e.preventDefault();
-    setIsError(false);
-    fetch(CheckRegistration, {
+  //checks email if email already taken
+  const handleCheckGoogleEmail = (email) => {
+    fetch(CheckGoogleEmail, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         Accept: "application/json",
       },
       body: JSON.stringify({
-        RegistrationNumber: registrationNumber,
-        GoogleId: googleId || "",
-        AuthProvider: authProvider || "local",
-        FullName: fullName,
-        GivenName: givenName || "",
-        FamilyName: familyName || "",
-        EmailAddress: emailAddress,
-        Role: "Practitioner",
-        UserPassword: password || "",
-        DOB: today, //change the logic here to get the age
-        EmailRecovery: "",
-        Mobile: "",
-        MobileRecovery: "",
-        Certifications: [],
+        EmailAddress: email,
       }),
     })
       .then((res) => res.json())
-      .then((data) => {
-        setIsLoadingSignUp(false);
-        if (data.returnStatus.status === false) {
-          setIsErrorRegistration(true); //setting error to be true
-          setErrorRegistrationMessage(data.returnStatus.message); //error message for the client to see
+      .then((res) => {
+        if (res.returnStatus.status === false) {
+          setGoogleSignUp(false);
+          setEmailAddress("");
+          setFullName("");
+          setIsError(true); //setting error to be true
+          setErrorSignupMessage(res.returnStatus.message); //error handling
         } else {
-          console.log(data); //DELETE
-          handlingSignUp(e);
+          setIsError(false); //setting error to be true
+          setErrorSignupMessage("");
         }
-      })
-      .catch((err) => {
-        console.log(err);
+        console.log(res);
       });
-  };
-
-  const handleBackButton = () => {
-    //handlingBackButton when going back
-    //and called this in the handlingSignUp to restart all values
-    setHealthPractitionerOption(false);
-    setGoogleSignUp(false);
-    setIsError(false);
-    setIsErrorRegistration(false);
-    setIsErrorPwd(false);
-    setFullName("");
-    setRegistrationNumber("");
-    setEmailAddress("");
-    setPassword("");
-    setMatchPwd("");
   };
 
   const signupWithGoogle = (res) => {
@@ -833,10 +836,175 @@ const SignIn = ({ localData }) => {
     setFullName(decoded.name);
     setEmailAddress(decoded.email);
     setGoogleId(decoded.sub);
-    setAuthProvider("google");
     setGivenName(decoded.givenName);
     setFamilyName(decoded.familyName);
+    setAuthProvider("google");
+
+    //checks if the email is already in use.
+    handleCheckGoogleEmail(decoded.email);
   };
+
+  return (
+    <div className="signinform-container__wrapper">
+      <h1>Sign up as {healthPractitionerOption}</h1>
+      {isError === true ? (
+        <p className="signinform-errormessage__text">{errorSignupMessage}</p>
+      ) : (
+        ""
+      )}
+      {isErrorRegistration === true ? (
+        <p className="signinform-errormessage__text">
+          {errorRegistrationMessage}
+        </p>
+      ) : (
+        ""
+      )}
+
+      {isLoadingSignUp === true ? (
+        <div>
+          <CircleNotch size={26} color="#202020" className={"loading-icon"} />
+        </div>
+      ) : (
+        <form onSubmit={handlingCheckRegistration}>
+          {googleSignUp === false ? (
+            <div>
+              <div>
+                <input
+                  type="text"
+                  placeholder="Registration Number"
+                  value={registrationNumber}
+                  className="signin-signup-form__input"
+                  onChange={(e) => setRegistrationNumber(e.target.value)}
+                />
+                <input
+                  type="text"
+                  placeholder="Full Name"
+                  value={fullName}
+                  className="signin-signup-form__input"
+                  onChange={(e) => setFullName(e.target.value)}
+                />
+              </div>
+              <input
+                required
+                type="text"
+                placeholder="Email"
+                value={emailAddress}
+                className="signin-signup-form__input"
+                onChange={(e) => setEmailAddress(e.target.value)}
+              />
+              <br />
+              <div>
+                {isErrrorPwd === true ? (
+                  <div className="passworderrornotvalid__wrapper">
+                    <p>password is not valid</p>
+                  </div>
+                ) : (
+                  ""
+                )}
+                <input
+                  required
+                  type="password"
+                  placeholder="Password"
+                  onChange={(e) => setPassword(e.target.value)}
+                  className={`signin-signup-form__input ${
+                    validPwd === false && password.length !== 0
+                      ? "notvalidpwd"
+                      : ""
+                  }`}
+                />
+              </div>
+              <input
+                required
+                type="password"
+                placeholder="Confirm password"
+                className="signin-signup-form__input"
+                onChange={(e) => setMatchPwd(e.target.value)}
+              />
+              {validPwdMatch === false && matchPwd.length !== 0 ? (
+                <div className="password-notmatch__wrapper">
+                  <p>Password do not match !</p>
+                </div>
+              ) : (
+                ""
+              )}
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                }}
+              >
+                <p className="termsofuse__text">
+                  By signing up to create an account: I accept Terms of Use and
+                  Privacy Policy
+                </p>
+              </div>
+              <button className="signup-signin-submit__btn" type="submit">
+                Submit
+              </button>
+              <button
+                className="signup-back__btn"
+                onClick={() => {
+                  window.location.reload();
+                }}
+              >
+                Back
+              </button>
+
+              <p>Or</p>
+              <div
+                style={{
+                  marginTop: "20px",
+                  display: "flex",
+                  justifyContent: "center",
+                }}
+              >
+                <GoogleOAuthProvider
+                  clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}
+                >
+                  <GoogleLogin
+                    onSuccess={signupWithGoogle}
+                    onError={(err) => console.log(err)}
+                    text="signup_with"
+                    width="330px"
+                    shape="pill"
+                  />
+                </GoogleOAuthProvider>
+              </div>
+            </div>
+          ) : (
+            <>
+              <GoogleSignUp
+                emailAddress={emailAddress}
+                setRegistrationNumber={setRegistrationNumber}
+                registrationNumber={registrationNumber}
+              />
+              <button className="signup-signin-submit__btn" type="submit">
+                Submit
+              </button>
+              <button
+                className="signup-back__btn"
+                onClick={() => {
+                  window.location.reload();
+                }}
+              >
+                Back
+              </button>
+            </>
+          )}
+        </form>
+      )}
+    </div>
+  );
+};
+
+const SignIn = ({ localData }) => {
+  // SIGNUP-OPTIONS
+  const [patientOption, setPatientOption] = useState(false);
+  const [healthPractitionerOption, setHealthPractitionerOption] = useState("");
+  // SIGNUP-OPTIONS
+  const [signupOptionsClicked, setSignupOptionsClicked] = useState(false);
+
+  var today = new Date();
 
   // ------------------------------------------------------------------------------
 
@@ -888,7 +1056,7 @@ const SignIn = ({ localData }) => {
                   <option value="General Practitioner">
                     General Practitioner
                   </option>
-                  <option value="Nurses">Nurses</option>
+                  <option value="Nurse">Nurses</option>
                   <option value="Therapist">Therapist</option>
                 </select>
                 <br />
@@ -927,169 +1095,10 @@ const SignIn = ({ localData }) => {
                 ) : (
                   ""
                 )}
-
-                {healthPractitionerOption === true ? (
-                  <div className="signinform-container__wrapper">
-                    <h1>Sign up</h1>
-                    {isError === true ? (
-                      <p className="signinform-errormessage__text">
-                        {errorSignupMessage}
-                      </p>
-                    ) : (
-                      ""
-                    )}
-                    {isErrorRegistration === true ? (
-                      <p className="signinform-errormessage__text">
-                        {errorRegistrationMessage}
-                      </p>
-                    ) : (
-                      ""
-                    )}
-                    {isLoadingSignUp === true ? (
-                      <div>
-                        <CircleNotch
-                          size={26}
-                          color="#202020"
-                          className={"loading-icon"}
-                        />
-                      </div>
-                    ) : (
-                      <form onSubmit={handlingCheckRegistration}>
-                        {googleSignUp === false ? (
-                          <div>
-                            <div>
-                              <input
-                                type="text"
-                                placeholder="Registration Number"
-                                value={registrationNumber}
-                                className="signin-signup-form__input"
-                                onChange={(e) =>
-                                  setRegistrationNumber(e.target.value)
-                                }
-                              />
-                              <input
-                                type="text"
-                                placeholder="Full Name"
-                                value={fullName}
-                                className="signin-signup-form__input"
-                                onChange={(e) => setFullName(e.target.value)}
-                              />
-                            </div>
-                            <input
-                              required
-                              type="text"
-                              placeholder="Email"
-                              value={emailAddress}
-                              className="signin-signup-form__input"
-                              onChange={(e) => setEmailAddress(e.target.value)}
-                            />
-                            <br />
-                            <div>
-                              {isErrrorPwd === true ? (
-                                <div className="passworderrornotvalid__wrapper">
-                                  <p>password is not valid</p>
-                                </div>
-                              ) : (
-                                ""
-                              )}
-                              <input
-                                required
-                                type="password"
-                                placeholder="Password"
-                                onChange={(e) => setPassword(e.target.value)}
-                                className={`signin-signup-form__input ${
-                                  validPwd === false && password.length !== 0
-                                    ? "notvalidpwd"
-                                    : ""
-                                }`}
-                              />
-                            </div>
-                            <input
-                              required
-                              type="password"
-                              placeholder="Confirm password"
-                              className="signin-signup-form__input"
-                              onChange={(e) => setMatchPwd(e.target.value)}
-                            />
-                            {validPwdMatch === false &&
-                            matchPwd.length !== 0 ? (
-                              <div className="password-notmatch__wrapper">
-                                <p>Password do not match !</p>
-                              </div>
-                            ) : (
-                              ""
-                            )}
-                            <div
-                              style={{
-                                display: "flex",
-                                justifyContent: "center",
-                              }}
-                            >
-                              <p className="termsofuse__text">
-                                By signing up to create an account: I accept
-                                Terms of Use and Privacy Policy
-                              </p>
-                            </div>
-                            <button
-                              className="signup-signin-submit__btn"
-                              type="submit"
-                            >
-                              Submit
-                            </button>
-                            <button
-                              className="signup-back__btn"
-                              onClick={handleBackButton}
-                            >
-                              Back
-                            </button>
-
-                            <p>Or</p>
-                            <div
-                              style={{
-                                marginTop: "20px",
-                                display: "flex",
-                                justifyContent: "center",
-                              }}
-                            >
-                              <GoogleOAuthProvider
-                                clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}
-                              >
-                                <GoogleLogin
-                                  onSuccess={signupWithGoogle}
-                                  onError={(err) => console.log(err)}
-                                  text="signup_with"
-                                  width="330px"
-                                  shape="pill"
-                                />
-                              </GoogleOAuthProvider>
-                            </div>
-                          </div>
-                        ) : (
-                          <>
-                            <GoogleSignUpRegistration
-                              emailAddress={emailAddress}
-                              setRegistrationNumber={setRegistrationNumber}
-                              registrationNumber={registrationNumber}
-                            />
-                            <button
-                              className="signup-signin-submit__btn"
-                              type="submit"
-                            >
-                              Submit
-                            </button>
-                            <button
-                              className="signup-back__btn"
-                              onClick={handleBackButton}
-                            >
-                              Back
-                            </button>
-                          </>
-                        )}
-                      </form>
-                    )}
-                  </div>
-                ) : (
-                  ""
+                {healthPractitionerOption && (
+                  <SignUpOpt
+                    healthPractitionerOption={healthPractitionerOption}
+                  />
                 )}
               </div>
             )}
