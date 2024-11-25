@@ -1,6 +1,6 @@
 import React from "react";
 
-const GoogleSignUpNurse = ({
+const GoogleSignUp = ({
   emailAddress,
   setRegistrationNumber,
   registrationNumber,
@@ -9,9 +9,10 @@ const GoogleSignUpNurse = ({
     <div>
       <div className="signup-google__wrapper ">
         <p>
-          Please provide your NHI number for verification. Your NHI number will
-          be verfied by our team, an email with the result of the validation
-          will be sent to your email address <strong>{emailAddress}</strong>
+          Please provide your registration number for verification. Your
+          registration number will be verfied by our team, an email with the
+          result of the validation will be sent to your email address{" "}
+          <strong>{emailAddress}</strong>
         </p>
         <br />
         <input
@@ -26,4 +27,4 @@ const GoogleSignUpNurse = ({
   );
 };
 
-export default GoogleSignUpNurse;
+export default GoogleSignUp;
