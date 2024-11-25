@@ -1,10 +1,19 @@
-.appointment-search__wrapper {
+.appointment-search-container__wrapper {
   padding: 0px 0px 0px 10px;
   display: inline-flex;
   align-items: center;
   box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px,
     rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
   border-radius: 5px;
+}
+
+.appointment-search__wrapper {
+  display: flex;
+  gap: 20px;
+}
+
+.appointment-search__wrapper input {
+  margin-right: 5px;
 }
 
 .appointment__input {

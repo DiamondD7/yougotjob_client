@@ -16,9 +16,10 @@ import { CircleNotch } from "@phosphor-icons/react";
 import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google";
 import { jwtDecode } from "jwt-decode";
 import GoogleSignUpRegistration from "./GoogleSignUpRegistration";
+import GoogleSignUpPatient from "./GoogleSignUpPatient";
+import GoogleSignUpNurse from "./GoogleSignUpNurse";
 
 import "../../styles/signinstyles.css";
-import GoogleSignUpPatient from "./GoogleSignUpPatient";
 
 const SignUpOptions = ({
   setSignupOptionsClicked,
@@ -38,11 +39,16 @@ const SignUpOptions = ({
           </button>
           <button
             className="signup-options__btns"
-            onClick={() => setHealthPractitionerOption(true)}
+            onClick={() => setHealthPractitionerOption("General Practitioner")}
           >
             General Practitioner
           </button>
-          <button className="signup-options__btns">Nurse</button>
+          <button
+            className="signup-options__btns"
+            onClick={() => setHealthPractitionerOption("Nurse")}
+          >
+            Nurse
+          </button>
           <button className="signup-options__btns">Therapist</button>
           <button className="signup-options__btns">Audiologist</button>
           <button className="signup-options__btns">Acupuncturist</button>
@@ -652,11 +658,169 @@ const PatientSignIn = ({ localData, today }) => {
   );
 };
 
+const NurseSignUp = ({ handleBackButton }) => {
+  const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
+  const [fullName, setFullName] = useState("");
+  const [registrationNumber, setRegistrationNumber] = useState("");
+  const [emailAddress, setEmailAddress] = useState("");
+  const [password, setPassword] = useState("");
+  const [matchPwd, setMatchPwd] = useState("");
+  const [validPwdMatch, setValidPwdMatch] = useState(true);
+  const [validPwd, setValidPwd] = useState("");
+  const [googleSignUp, setGoogleSignUp] = useState(false);
+  const [isErrrorPwd, setIsErrorPwd] = useState(false);
+
+  const [googleId, setGoogleId] = useState("");
+  const [givenName, setGivenName] = useState("");
+  const [familyName, setFamilyName] = useState("");
+  const [authProvider, setAuthProvider] = useState("");
+
+  useEffect(() => {
+    setValidPwd(PWD_REGEX.test(password));
+    if (PWD_REGEX.test(password) === true) {
+      setIsErrorPwd(false);
+    }
+    const match = password === matchPwd;
+    setValidPwdMatch(match);
+  }, [password, matchPwd]);
+
+  const signupWithGoogle = (res) => {
+    const decoded = jwtDecode(res.credential);
+    setGoogleSignUp(true);
+    setFullName(decoded.name);
+    setEmailAddress(decoded.email);
+    setGoogleId(decoded.sub);
+    setGivenName(decoded.givenName);
+    setFamilyName(decoded.familyName);
+    setAuthProvider("google");
+  };
+
+  return (
+    <div className="signinform-container__wrapper">
+      <h1>Sign up as Nurse</h1>
+      <form>
+        {googleSignUp === false ? (
+          <div>
+            <div>
+              <input
+                type="text"
+                placeholder="Registration Number"
+                value={registrationNumber}
+                className="signin-signup-form__input"
+                onChange={(e) => setRegistrationNumber(e.target.value)}
+              />
+              <input
+                type="text"
+                placeholder="Full Name"
+                value={fullName}
+                className="signin-signup-form__input"
+                onChange={(e) => setFullName(e.target.value)}
+              />
+            </div>
+            <input
+              required
+              type="text"
+              placeholder="Email"
+              value={emailAddress}
+              className="signin-signup-form__input"
+              onChange={(e) => setEmailAddress(e.target.value)}
+            />
+            <br />
+            <div>
+              {isErrrorPwd === true ? (
+                <div className="passworderrornotvalid__wrapper">
+                  <p>password is not valid</p>
+                </div>
+              ) : (
+                ""
+              )}
+              <input
+                required
+                type="password"
+                placeholder="Password"
+                onChange={(e) => setPassword(e.target.value)}
+                className={`signin-signup-form__input ${
+                  validPwd === false && password.length !== 0
+                    ? "notvalidpwd"
+                    : ""
+                }`}
+              />
+            </div>
+            <input
+              required
+              type="password"
+              placeholder="Confirm password"
+              className="signin-signup-form__input"
+              onChange={(e) => setMatchPwd(e.target.value)}
+            />
+            {validPwdMatch === false && matchPwd.length !== 0 ? (
+              <div className="password-notmatch__wrapper">
+                <p>Password do not match !</p>
+              </div>
+            ) : (
+              ""
+            )}
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+              }}
+            >
+              <p className="termsofuse__text">
+                By signing up to create an account: I accept Terms of Use and
+                Privacy Policy
+              </p>
+            </div>
+            <button className="signup-signin-submit__btn" type="submit">
+              Submit
+            </button>
+            <button className="signup-back__btn">Back</button>
+
+            <p>Or</p>
+            <div
+              style={{
+                marginTop: "20px",
+                display: "flex",
+                justifyContent: "center",
+              }}
+            >
+              <GoogleOAuthProvider
+                clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}
+              >
+                <GoogleLogin
+                  onSuccess={signupWithGoogle}
+                  onError={(err) => console.log(err)}
+                  text="signup_with"
+                  width="330px"
+                  shape="pill"
+                />
+              </GoogleOAuthProvider>
+            </div>
+          </div>
+        ) : (
+          <>
+            <GoogleSignUpNurse
+              emailAddress={emailAddress}
+              setRegistrationNumber={setRegistrationNumber}
+              registrationNumber={registrationNumber}
+            />
+            <button className="signup-signin-submit__btn" type="submit">
+              Submit
+            </button>
+            <button className="signup-back__btn" onClick={handleBackButton}>
+              Back
+            </button>
+          </>
+        )}
+      </form>
+    </div>
+  );
+};
+
 const SignIn = ({ localData }) => {
   // SIGNUP-OPTIONS
   const [patientOption, setPatientOption] = useState(false);
-  const [healthPractitionerOption, setHealthPractitionerOption] =
-    useState(false);
+  const [healthPractitionerOption, setHealthPractitionerOption] = useState("");
   // SIGNUP-OPTIONS
 
   const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
@@ -815,7 +979,7 @@ const SignIn = ({ localData }) => {
   const handleBackButton = () => {
     //handlingBackButton when going back
     //and called this in the handlingSignUp to restart all values
-    setHealthPractitionerOption(false);
+    setHealthPractitionerOption("");
     setGoogleSignUp(false);
     setIsError(false);
     setIsErrorRegistration(false);
@@ -888,7 +1052,7 @@ const SignIn = ({ localData }) => {
                   <option value="General Practitioner">
                     General Practitioner
                   </option>
-                  <option value="Nurses">Nurses</option>
+                  <option value="Nurse">Nurses</option>
                   <option value="Therapist">Therapist</option>
                 </select>
                 <br />
@@ -928,7 +1092,7 @@ const SignIn = ({ localData }) => {
                   ""
                 )}
 
-                {healthPractitionerOption === true ? (
+                {healthPractitionerOption === "General Practitioner" ? (
                   <div className="signinform-container__wrapper">
                     <h1>Sign up</h1>
                     {isError === true ? (
@@ -1088,6 +1252,8 @@ const SignIn = ({ localData }) => {
                       </form>
                     )}
                   </div>
+                ) : healthPractitionerOption === "Nurse" ? (
+                  <NurseSignUp handleBackButton={handleBackButton} />
                 ) : (
                   ""
                 )}
