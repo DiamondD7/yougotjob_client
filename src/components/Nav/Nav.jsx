@@ -440,7 +440,8 @@ const Nav = ({ setDisplayed, dateSettings }) => {
   };
 
   const logout = () => {
-    sessionStorage.setItem("auth", false);
+    sessionStorage.removeItem("auth", false);
+    sessionStorage.removeItem("firstTime");
     fetch(Logout, {
       method: "POST",
       headers: {
