@@ -69,7 +69,17 @@ const SearchResults = ({ filterSearch }) => {
     <div className="result-cards-container__wrapper">
       {practitioners
         .filter((data) =>
-          data.fullName.toLowerCase().includes(filterSearch.toLowerCase())
+          filterSearch
+            ? data.fullName
+                ?.toLowerCase()
+                .includes(filterSearch.toLowerCase()) ||
+              data.departmentRole
+                ?.toLowerCase()
+                .includes(filterSearch.toLowerCase()) ||
+              data.workPreference
+                ?.toLowerCase()
+                .includes(filterSearch.toLowerCase())
+            : true
         )
         .map((data, index) => (
           <div key={data.id}>
@@ -84,7 +94,8 @@ const SearchResults = ({ filterSearch }) => {
                   <p>{data.departmentRole}</p>
                   <br />
                   <div>
-                    <Check size={12} color="limegreen" /> <label>Online</label>
+                    <Check size={12} color="limegreen" />{" "}
+                    <label>{data.workPreference}</label>
                   </div>
                   <div>
                     <Check size={12} color="limegreen" />{" "}
@@ -99,37 +110,13 @@ const SearchResults = ({ filterSearch }) => {
             </button>
           </div>
         ))}
-      {/* <button className="result-cards__wrapper">
-        <img
-          src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRabaTpAn33k1UuF33dQZzivbhfq8IsDt20BQ7ztZ1d-L65QtKKt2bJtEmlsbTpGhrTA90&usqp=CAU"
-          className="result-card__img"
-        />
-        <div style={{ justifyItems: "start" }}>
-          <h4>Smile Dental</h4>
-          <div style={{ fontSize: "12px", justifyItems: "start" }}>
-            <p>Dental</p>
-            <br />
-            <div>
-              <Check size={12} color="limegreen" /> <label>On-site</label>
-            </div>
-            <div>
-              <Check size={12} color="limegreen" /> <label>Verified</label>
-            </div>
-            <div>
-              <Check size={12} color="limegreen" />{" "}
-              <label>Experienced practitioners</label>
-            </div>
-          </div>
-        </div>
-      </button> */}
     </div>
   );
 };
 
-const AppointmentSearch = () => {
-  const [onlineRadio, setOnlineRadio] = useState("");
+const AppointmentSearch = ({ filterSearch, setFilterSearch }) => {
   const handleRadio = (e) => {
-    setOnlineRadio(e.target.value);
+    setFilterSearch(e.target.value);
   };
 
   return (
@@ -139,7 +126,7 @@ const AppointmentSearch = () => {
           <input
             type="radio"
             value="online"
-            checked={onlineRadio === "online"}
+            checked={filterSearch === "online"}
             onChange={(e) => handleRadio(e)}
           />
           <label className="radio-label">Online</label>
@@ -149,7 +136,7 @@ const AppointmentSearch = () => {
           <input
             type="radio"
             value="on-site"
-            checked={onlineRadio === "on-site"}
+            checked={filterSearch === "on-site"}
             onChange={(e) => handleRadio(e)}
           />
           <label className="radio-label">On-site</label>
@@ -158,7 +145,7 @@ const AppointmentSearch = () => {
           <input
             type="radio"
             value="flexible"
-            checked={onlineRadio === "flexible"}
+            checked={filterSearch === "flexible"}
             onChange={(e) => handleRadio(e)}
           />
           <label className="radio-label">flexible</label>
@@ -170,6 +157,7 @@ const AppointmentSearch = () => {
 
 const Appointment = () => {
   const [filterSearch, setFilterSearch] = useState("");
+  //const [onlineRadio, setOnlineRadio] = useState("online");
   return (
     <div style={{ margin: "50px 0 0 100px" }}>
       <div style={{ display: "flex", alignItems: "center", gap: "20px" }}>
@@ -184,7 +172,10 @@ const Appointment = () => {
             />
           </div>
         </div>
-        <AppointmentSearch />
+        <AppointmentSearch
+          filterSearch={filterSearch}
+          setFilterSearch={setFilterSearch}
+        />
       </div>
       <SearchResults filterSearch={filterSearch} />
     </div>

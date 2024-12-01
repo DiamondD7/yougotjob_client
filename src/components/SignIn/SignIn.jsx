@@ -16,7 +16,6 @@ import { Link, useNavigate } from "react-router-dom";
 import { CircleNotch } from "@phosphor-icons/react";
 import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google";
 import { jwtDecode } from "jwt-decode";
-import GoogleSignUpRegistration from "./GoogleSignUpRegistration";
 import GoogleSignUpPatient from "./GoogleSignUpPatient";
 import GoogleSignUp from "./GoogleSignUp";
 

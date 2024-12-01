@@ -12,9 +12,19 @@ function App() {
   ); //setting the sessionStorage initially for when refreshing the page.
 
   const localData = (data) => {
+    const userData = data.returnStatus.userDetails;
+
+    //if statement that checks whether this is the first time that the user logged and setting a session firstTime to a bool value.
+    //this is to run a welcome to the app modal when the user logs in first time.
+    if (userData.accessToken === null && userData.refreshToken === null) {
+      sessionStorage.setItem("firstTime", "true");
+    } else {
+      sessionStorage.setItem("firstTime", "false");
+    }
+
     sessionStorage.setItem("auth", "true");
-    sessionStorage.setItem("id", data.returnStatus.userDetails.id);
-    sessionStorage.setItem("role", data.returnStatus.userDetails.role);
+    sessionStorage.setItem("id", userData.id);
+    sessionStorage.setItem("role", userData.role);
     handleRoute(); //calling this when a user logs in
   };
 
