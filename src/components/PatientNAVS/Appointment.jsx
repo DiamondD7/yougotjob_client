@@ -1,14 +1,66 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { MagnifyingGlass, Check } from "@phosphor-icons/react";
+import {
+  MagnifyingGlass,
+  Check,
+  PaperPlaneRight,
+  X,
+} from "@phosphor-icons/react";
 import {
   GetHealthPractitionerData,
   GetPatient,
 } from "../../assets/js/serverApi";
 
 import "../../styles/appointmentstyles.css";
+const ChosenPractitioner = ({ practitionerData, setPractitionerClicked }) => {
+  return (
+    <div>
+      <div className="chosen-practitioner__wrapper">
+        <button
+          style={{
+            backgroundColor: "transparent",
+            border: "none",
+            cursor: "pointer",
+          }}
+          onClick={() => setPractitionerClicked(false)}
+        >
+          <X size={13} color="#202020" />
+        </button>
+        <h3>{practitionerData.fullName}</h3>
+        <p style={{ fontSize: "12px" }}>{practitionerData.departmentRole}</p>
+        <br />
+        <p style={{ fontSize: "12px" }}>
+          Email: {practitionerData.emailAddress}
+        </p>
+        <p style={{ fontSize: "12px" }}>Mobile: {practitionerData.mobile}</p>
+        <p style={{ fontSize: "12px" }}>
+          Preference: {practitionerData.workPreference}
+        </p>
+
+        <br />
+        <p style={{ fontSize: "11px" }}>
+          Send a message to {practitionerData.fullName}
+        </p>
+        <div style={{ display: "flex", gap: "5px", marginTop: "5px" }}>
+          <input
+            className="chosen-pracitioner-inputmessage__input"
+            type="text"
+            placeholder="Send a message..."
+          />
+          <button className="chosen-practitioner__btn">
+            <PaperPlaneRight size={13} color="#f3f3f3" />
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 const SearchResults = ({ filterSearch }) => {
   const [practitioners, setPractioners] = useState([]);
+  const [practitionerClicked, setPractitionerClicked] = useState(false);
+  const [practitionerData, setPractitionerData] = useState([]);
+
   const navigate = useNavigate();
   useEffect(() => {
     const practitionerData = async () => {
@@ -65,8 +117,21 @@ const SearchResults = ({ filterSearch }) => {
     checkPatient();
   }, []);
 
+  const handleChosenPractitioner = (data) => {
+    setPractitionerData(data);
+    setPractitionerClicked(true);
+  };
   return (
     <div className="result-cards-container__wrapper">
+      <div className={practitionerClicked === true ? "overlay" : ""}></div>
+      {practitionerClicked === true ? (
+        <ChosenPractitioner
+          practitionerData={practitionerData}
+          setPractitionerClicked={setPractitionerClicked}
+        />
+      ) : (
+        ""
+      )}
       {practitioners
         .filter((data) =>
           filterSearch
@@ -83,7 +148,10 @@ const SearchResults = ({ filterSearch }) => {
         )
         .map((data, index) => (
           <div key={data.id}>
-            <button className="result-cards__wrapper">
+            <button
+              className="result-cards__wrapper"
+              onClick={() => handleChosenPractitioner(data)}
+            >
               <img
                 src="https://plus.unsplash.com/premium_photo-1661764878654-3d0fc2eefcca?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
                 className="result-card__img"
