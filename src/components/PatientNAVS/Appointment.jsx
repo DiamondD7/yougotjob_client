@@ -223,29 +223,72 @@ const AppointmentSearch = ({ filterSearch, setFilterSearch }) => {
   );
 };
 
+const AppointmentWait = () => {
+  return (
+    <div>
+      <div className="appointment-wait__wrapper">
+        <h2>Await available Health Practitioner</h2>
+        <br />
+        <p>
+          Send all the details about you and what you need help with in the form
+          below
+        </p>
+        <br />
+        <form className="appointment-wait-form__wrapper">
+          <input
+            className="appointment-wait-form-full__input"
+            type="text"
+            placeholder="Full name"
+          />
+          <br />
+          <br />
+          <input
+            className="appointment-wait-form-half__input"
+            type="text"
+            placeholder="Email"
+          />
+          <input
+            className="appointment-wait-form-half__input"
+            type="text"
+            placeholder="Contact number"
+          />
+        </form>
+      </div>
+    </div>
+  );
+};
+
 const Appointment = () => {
   const [filterSearch, setFilterSearch] = useState("");
   //const [onlineRadio, setOnlineRadio] = useState("online");
   return (
     <div style={{ margin: "50px 0 0 100px" }}>
-      <div style={{ display: "flex", alignItems: "center", gap: "20px" }}>
-        <div className="appointment-search-container__wrapper">
-          <div>
-            <MagnifyingGlass size={15} />
-            <input
-              className="appointment__input"
-              type="text"
-              placeholder="what are you looking for..."
-              onChange={(e) => setFilterSearch(e.target.value)}
+      <div style={{ display: "flex", gap: "50px" }}>
+        <div>
+          <div style={{ display: "flex", alignItems: "center", gap: "20px" }}>
+            <div className="appointment-search-container__wrapper">
+              <div>
+                <MagnifyingGlass size={15} />
+                <input
+                  className="appointment__input"
+                  type="text"
+                  placeholder="what are you looking for..."
+                  onChange={(e) => setFilterSearch(e.target.value)}
+                />
+              </div>
+            </div>
+            <AppointmentSearch
+              filterSearch={filterSearch}
+              setFilterSearch={setFilterSearch}
             />
           </div>
+          <SearchResults filterSearch={filterSearch} />
         </div>
-        <AppointmentSearch
-          filterSearch={filterSearch}
-          setFilterSearch={setFilterSearch}
-        />
+
+        <div>
+          <AppointmentWait />
+        </div>
       </div>
-      <SearchResults filterSearch={filterSearch} />
     </div>
   );
 };
