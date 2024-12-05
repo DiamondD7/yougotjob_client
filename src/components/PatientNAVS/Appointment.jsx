@@ -10,7 +10,9 @@ import {
   GetHealthPractitionerData,
   GetPatient,
 } from "../../assets/js/serverApi";
+import DatePicker from "react-datepicker";
 
+import "react-datepicker/dist/react-datepicker.css";
 import "../../styles/appointmentstyles.css";
 const ChosenPractitioner = ({ practitionerData, setPractitionerClicked }) => {
   return (
@@ -224,14 +226,16 @@ const AppointmentSearch = ({ filterSearch, setFilterSearch }) => {
 };
 
 const AppointmentWait = () => {
+  const [startDate, setStartDate] = useState(new Date());
   return (
     <div>
       <div className="appointment-wait__wrapper">
         <h2>Await available Health Practitioner</h2>
         <br />
-        <p>
-          Send all the details about you and what you need help with in the form
-          below
+        <p className="appointment-wait-paragraph">
+          To make the process easier, we offer the option to book an appointment
+          based on the type of service or care you need, rather than selecting a
+          specific practitioner.
         </p>
         <br />
         <form className="appointment-wait-form__wrapper">
@@ -242,16 +246,58 @@ const AppointmentWait = () => {
           />
           <br />
           <br />
+          <div style={{ display: "flex", gap: "10px" }}>
+            <input
+              className="appointment-wait-form-half__input"
+              type="text"
+              placeholder="Email"
+            />
+            <input
+              className="appointment-wait-form-half__input"
+              type="text"
+              placeholder="Contact number"
+            />
+          </div>
+
+          <br />
           <input
-            className="appointment-wait-form-half__input"
+            className="appointment-wait-form-full__input"
             type="text"
-            placeholder="Email"
+            placeholder="NHI (optional)"
           />
-          <input
-            className="appointment-wait-form-half__input"
-            type="text"
-            placeholder="Contact number"
-          />
+
+          <div>
+            <br />
+            <h5>Service Details :</h5>
+            <form>
+              <label style={{ fontSize: "12px" }}>
+                Type of Health Practitioner
+              </label>
+              <br />
+              <select className="service-details-typeofPractitioner__select">
+                <option></option>
+                <option>General Practitioner</option>
+                <option>Nurse</option>
+                <option>Therapist</option>
+              </select>
+
+              <br />
+              <label style={{ fontSize: "12px" }}>Preffered Date</label>
+              <br />
+              <DatePicker
+                className="datePicker"
+                selected={startDate}
+                onChange={(date) => console.log(date)}
+                minDate={startDate}
+              />
+              <br />
+              <br />
+              <textarea
+                className="service-details-reason__textarea"
+                placeholder="Reason..."
+              ></textarea>
+            </form>
+          </div>
         </form>
       </div>
     </div>
