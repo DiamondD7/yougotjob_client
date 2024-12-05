@@ -10,7 +10,9 @@ import {
   GetHealthPractitionerData,
   GetPatient,
 } from "../../assets/js/serverApi";
+import DatePicker from "react-datepicker";
 
+import "react-datepicker/dist/react-datepicker.css";
 import "../../styles/appointmentstyles.css";
 const ChosenPractitioner = ({ practitionerData, setPractitionerClicked }) => {
   return (
@@ -223,29 +225,116 @@ const AppointmentSearch = ({ filterSearch, setFilterSearch }) => {
   );
 };
 
+const AppointmentWait = () => {
+  const [startDate, setStartDate] = useState(new Date());
+  return (
+    <div>
+      <div className="appointment-wait__wrapper">
+        <h2>Await available Health Practitioner</h2>
+        <br />
+        <p className="appointment-wait-paragraph">
+          To make the process easier, we offer the option to book an appointment
+          based on the type of service or care you need, rather than selecting a
+          specific practitioner.
+        </p>
+        <br />
+        <form className="appointment-wait-form__wrapper">
+          <input
+            className="appointment-wait-form-full__input"
+            type="text"
+            placeholder="Full name"
+          />
+          <br />
+          <br />
+          <div style={{ display: "flex", gap: "10px" }}>
+            <input
+              className="appointment-wait-form-half__input"
+              type="text"
+              placeholder="Email"
+            />
+            <input
+              className="appointment-wait-form-half__input"
+              type="text"
+              placeholder="Contact number"
+            />
+          </div>
+
+          <br />
+          <input
+            className="appointment-wait-form-full__input"
+            type="text"
+            placeholder="NHI (optional)"
+          />
+
+          <div>
+            <br />
+            <h5>Service Details :</h5>
+            <form>
+              <label style={{ fontSize: "12px" }}>
+                Type of Health Practitioner
+              </label>
+              <br />
+              <select className="service-details-typeofPractitioner__select">
+                <option></option>
+                <option>General Practitioner</option>
+                <option>Nurse</option>
+                <option>Therapist</option>
+              </select>
+
+              <br />
+              <label style={{ fontSize: "12px" }}>Preffered Date</label>
+              <br />
+              <DatePicker
+                className="datePicker"
+                selected={startDate}
+                onChange={(date) => console.log(date)}
+                minDate={startDate}
+              />
+              <br />
+              <br />
+              <textarea
+                className="service-details-reason__textarea"
+                placeholder="Reason..."
+              ></textarea>
+            </form>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+};
+
 const Appointment = () => {
   const [filterSearch, setFilterSearch] = useState("");
   //const [onlineRadio, setOnlineRadio] = useState("online");
   return (
     <div style={{ margin: "50px 0 0 100px" }}>
-      <div style={{ display: "flex", alignItems: "center", gap: "20px" }}>
-        <div className="appointment-search-container__wrapper">
-          <div>
-            <MagnifyingGlass size={15} />
-            <input
-              className="appointment__input"
-              type="text"
-              placeholder="what are you looking for..."
-              onChange={(e) => setFilterSearch(e.target.value)}
+      <div style={{ display: "flex", gap: "50px" }}>
+        <div>
+          <div style={{ display: "flex", alignItems: "center", gap: "20px" }}>
+            <div className="appointment-search-container__wrapper">
+              <div>
+                <MagnifyingGlass size={15} />
+                <input
+                  className="appointment__input"
+                  type="text"
+                  placeholder="what are you looking for..."
+                  onChange={(e) => setFilterSearch(e.target.value)}
+                />
+              </div>
+            </div>
+            <AppointmentSearch
+              filterSearch={filterSearch}
+              setFilterSearch={setFilterSearch}
             />
           </div>
+          <SearchResults filterSearch={filterSearch} />
         </div>
-        <AppointmentSearch
-          filterSearch={filterSearch}
-          setFilterSearch={setFilterSearch}
-        />
+
+        <div>
+          <AppointmentWait />
+        </div>
       </div>
-      <SearchResults filterSearch={filterSearch} />
     </div>
   );
 };
