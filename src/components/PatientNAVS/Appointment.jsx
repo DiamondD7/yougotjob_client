@@ -227,22 +227,51 @@ const AppointmentSearch = ({ filterSearch, setFilterSearch }) => {
 
 const AppointmentWait = () => {
   const [startDate, setStartDate] = useState(new Date());
+  const [appointmentData, setAppointmentData] = useState({
+    Nhi: "",
+    PractitionerId: 0,
+    PatientsId: 0,
+    FullName: "",
+    Comments: "",
+    ContactNumber: "",
+    EmailAddress: "",
+    HealthPractitionerType: "",
+    PreferredAppointmentDate: null,
+    Consent: false,
+  });
+
+  const handleOnChangeInput = (e) => {
+    setAppointmentData({
+      ...appointmentData,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const handlePreferredDate = (date) => {
+    setAppointmentData({
+      ...appointmentData,
+      PreferredAppointmentDate: date,
+    });
+  };
+
+  console.log(appointmentData);
   return (
     <div>
-      <div className="appointment-wait__wrapper">
-        <h2>Await available Health Practitioner</h2>
+      <div className="appointment-wait__wrapper ">
+        <h2>Appointment Form Submission,</h2>
         <br />
         <p className="appointment-wait-paragraph">
-          To make the process easier, we offer the option to book an appointment
-          based on the type of service or care you need, rather than selecting a
-          specific practitioner.
+          Please carefully fill out the form below with accurate and complete
+          information to ensure we can assist you effectively.
         </p>
         <br />
         <form className="appointment-wait-form__wrapper">
           <input
             className="appointment-wait-form-full__input"
             type="text"
+            name="FullName"
             placeholder="Full name"
+            onChange={(e) => handleOnChangeInput(e)}
           />
           <br />
           <br />
@@ -250,12 +279,16 @@ const AppointmentWait = () => {
             <input
               className="appointment-wait-form-half__input"
               type="text"
+              name="EmailAddress"
               placeholder="Email"
+              onChange={(e) => handleOnChangeInput(e)}
             />
             <input
               className="appointment-wait-form-half__input"
               type="text"
+              name="ContactNumber"
               placeholder="Contact number"
+              onChange={(e) => handleOnChangeInput(e)}
             />
           </div>
 
@@ -263,22 +296,38 @@ const AppointmentWait = () => {
           <input
             className="appointment-wait-form-full__input"
             type="text"
+            name="Nhi"
             placeholder="NHI (optional)"
+            onChange={(e) => handleOnChangeInput(e)}
           />
 
           <div>
             <br />
+            <br />
+            <br />
             <h5>Service Details :</h5>
             <form>
               <label style={{ fontSize: "12px" }}>
-                Type of Health Practitioner
+                Health Practitioner Type
               </label>
               <br />
-              <select className="service-details-typeofPractitioner__select">
-                <option></option>
-                <option>General Practitioner</option>
-                <option>Nurse</option>
-                <option>Therapist</option>
+              <select
+                className="service-details-typeofPractitioner__select"
+                onChange={(e) => handleOnChangeInput(e)}
+              >
+                <option value=""></option>
+                <option
+                  value="General Practitioner"
+                  name="HealthPractitionerType"
+                >
+                  General Practitioner
+                </option>
+                <option value="Nurse" name="HealthPractitionerType">
+                  Nurse
+                </option>
+                <option value="Therapist" name="HealthPractitionerType">
+                  Therapist
+                </option>
               </select>
 
               <br />
@@ -287,15 +336,33 @@ const AppointmentWait = () => {
               <DatePicker
                 className="datePicker"
                 selected={startDate}
-                onChange={(date) => console.log(date)}
+                onChange={(date) => handlePreferredDate(date)}
                 minDate={startDate}
               />
               <br />
               <br />
               <textarea
                 className="service-details-reason__textarea"
-                placeholder="Reason..."
+                placeholder="Comments or Requests"
+                name="Comments"
+                onChange={(e) => handleOnChangeInput(e)}
               ></textarea>
+              <br />
+              <br />
+              <input
+                type="checkbox"
+                name="Consent"
+                onChange={(e) => handleOnChangeInput(e)}
+              />
+              <label style={{ fontSize: "12px" }}>
+                {"   "}I consent to the processing of my information for
+                scheduling purposes.
+              </label>
+
+              <br />
+              <button type="submit" className="appointment-wait-form__btn">
+                Submit
+              </button>
             </form>
           </div>
         </form>
@@ -307,6 +374,7 @@ const AppointmentWait = () => {
 const Appointment = () => {
   const [filterSearch, setFilterSearch] = useState("");
   //const [onlineRadio, setOnlineRadio] = useState("online");
+  const [getStartedClicked, setGetStartedClicked] = useState(false);
   return (
     <div style={{ margin: "50px 0 0 100px" }}>
       <div style={{ display: "flex", gap: "50px" }}>
@@ -332,7 +400,23 @@ const Appointment = () => {
         </div>
 
         <div>
-          <AppointmentWait />
+          {getStartedClicked === true ? (
+            <AppointmentWait />
+          ) : (
+            <div style={{ textAlign: "center", margin: "90px 0 0 130px" }}>
+              <h2 style={{ width: "650px", lineHeight: "1.5" }}>
+                Or to make the process easier, we offer the option to book an
+                appointment based on the type of service or care you need and
+                get seen by all, rather than selecting a specific practitioner.
+              </h2>
+              <button
+                className="get-started__btn"
+                onClick={() => setGetStartedClicked(true)}
+              >
+                Get Started
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </div>
