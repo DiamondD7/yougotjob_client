@@ -9,6 +9,7 @@ import {
 import {
   GetHealthPractitionerData,
   GetPatient,
+  AddAppointmentFromForm,
 } from "../../assets/js/serverApi";
 import DatePicker from "react-datepicker";
 
@@ -226,19 +227,20 @@ const AppointmentSearch = ({ filterSearch, setFilterSearch }) => {
 };
 
 const AppointmentWait = () => {
+  const id = parseInt(sessionStorage.getItem("id"));
   const [startDate, setStartDate] = useState(new Date());
   const [appointmentData, setAppointmentData] = useState({
     Nhi: "",
     PractitionerId: 0,
-    PatientsId: 0,
+    PatientsId: id,
     FullName: "",
     Comments: "",
     ContactNumber: "",
     EmailAddress: "",
     HealthPractitionerType: "",
     PreferredAppointmentDate: null,
-    Consent: false,
   });
+  const [consentCheckbox, setConsentCheckbox] = useState(false);
 
   const handleOnChangeInput = (e) => {
     setAppointmentData({
@@ -252,6 +254,34 @@ const AppointmentWait = () => {
       ...appointmentData,
       PreferredAppointmentDate: date,
     });
+    setStartDate(date);
+  };
+
+  const handlePractitionerType = (e) => {
+    setAppointmentData({
+      ...appointmentData,
+      HealthPractitionerType: e.target.value,
+    });
+  };
+
+  const handleFormSubmit = (e) => {
+    e.preventDefault();
+
+    fetch(AddAppointmentFromForm, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify(appointmentData),
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((ex) => {
+        console.log(`Error: ${ex.message}`);
+      });
   };
 
   console.log(appointmentData);
@@ -265,7 +295,10 @@ const AppointmentWait = () => {
           information to ensure we can assist you effectively.
         </p>
         <br />
-        <form className="appointment-wait-form__wrapper">
+        <form
+          className="appointment-wait-form__wrapper"
+          onSubmit={handleFormSubmit}
+        >
           <input
             className="appointment-wait-form-full__input"
             type="text"
@@ -306,64 +339,69 @@ const AppointmentWait = () => {
             <br />
             <br />
             <h5>Service Details :</h5>
-            <form>
-              <label style={{ fontSize: "12px" }}>
-                Health Practitioner Type
-              </label>
-              <br />
-              <select
-                className="service-details-typeofPractitioner__select"
-                onChange={(e) => handleOnChangeInput(e)}
+
+            <label style={{ fontSize: "12px" }}>Health Practitioner Type</label>
+            <br />
+            <select
+              className="service-details-typeofPractitioner__select"
+              onChange={(e) => handlePractitionerType(e)}
+            >
+              <option value=""></option>
+              <option
+                value="General Practitioner"
+                name="HealthPractitionerType"
               >
-                <option value=""></option>
-                <option
-                  value="General Practitioner"
-                  name="HealthPractitionerType"
-                >
-                  General Practitioner
-                </option>
-                <option value="Nurse" name="HealthPractitionerType">
-                  Nurse
-                </option>
-                <option value="Therapist" name="HealthPractitionerType">
-                  Therapist
-                </option>
-              </select>
+                General Practitioner
+              </option>
+              <option value="Nurse" name="HealthPractitionerType">
+                Nurse
+              </option>
+              <option value="Therapist" name="HealthPractitionerType">
+                Therapist
+              </option>
+            </select>
 
-              <br />
-              <label style={{ fontSize: "12px" }}>Preffered Date</label>
-              <br />
-              <DatePicker
-                className="datePicker"
-                selected={startDate}
-                onChange={(date) => handlePreferredDate(date)}
-                minDate={startDate}
-              />
-              <br />
-              <br />
-              <textarea
-                className="service-details-reason__textarea"
-                placeholder="Comments or Requests"
-                name="Comments"
-                onChange={(e) => handleOnChangeInput(e)}
-              ></textarea>
-              <br />
-              <br />
-              <input
-                type="checkbox"
-                name="Consent"
-                onChange={(e) => handleOnChangeInput(e)}
-              />
-              <label style={{ fontSize: "12px" }}>
-                {"   "}I consent to the processing of my information for
-                scheduling purposes.
-              </label>
+            <br />
+            <label style={{ fontSize: "12px" }}>Preffered Date</label>
+            <br />
+            <DatePicker
+              className="datePicker"
+              dateFormat="dd/MM/YYYY"
+              selected={startDate}
+              onChange={(date) => handlePreferredDate(date)}
+              minDate={new Date()}
+            />
+            <br />
+            <br />
+            <textarea
+              className="service-details-reason__textarea"
+              placeholder="Comments or Requests"
+              name="Comments"
+              onChange={(e) => handleOnChangeInput(e)}
+            ></textarea>
+            <br />
+            <br />
+            <input
+              type="checkbox"
+              name="Consent"
+              value={consentCheckbox}
+              onChange={() => setConsentCheckbox(!consentCheckbox)}
+            />
+            <label style={{ fontSize: "12px" }}>
+              {"   "}* I consent to the processing of my information for
+              scheduling purposes.
+            </label>
 
-              <br />
-              <button type="submit" className="appointment-wait-form__btn">
-                Submit
-              </button>
-            </form>
+            <br />
+            <button
+              type="submit"
+              className={`appointment-wait-form__btn ${
+                consentCheckbox === false ? "btnDisabled" : ""
+              }`}
+              disabled={consentCheckbox === true ? false : true}
+            >
+              Submit
+            </button>
           </div>
         </form>
       </div>
