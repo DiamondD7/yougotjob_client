@@ -17,6 +17,7 @@ import {
   Invoice,
   House,
   CalendarPlus,
+  ClipboardText,
 } from "@phosphor-icons/react";
 import { Link } from "react-router-dom";
 import NavLogo from "../../assets/img/HauoraNav.png";
@@ -48,6 +49,26 @@ const NavPractitioner = ({ activeDisplay, minimizedNav, onClickDisplayed }) => {
           <House size={20} color="#454545" />
           &nbsp;
           {minimizedNav === true ? "" : "Dashboard"}
+        </button>
+      </li>
+      <li
+        className={minimizedNav === true ? "minimizednav-icons" : ""}
+        style={activeDisplay === "jobs" ? { backgroundColor: "#D6E8FF" } : {}}
+      >
+        <button
+          className={minimizedNav === true ? "btn-normal" : "icon-label"}
+          onClick={() => onClickDisplayed("jobs")}
+          style={
+            minimizedNav === false
+              ? activeDisplay === "jobs"
+                ? { backgroundColor: "#D6E8FF" }
+                : {}
+              : {}
+          }
+        >
+          <ClipboardText size={20} color="#454545" />
+          &nbsp;
+          {minimizedNav === true ? "" : "Jobs"}
         </button>
       </li>
       <li
