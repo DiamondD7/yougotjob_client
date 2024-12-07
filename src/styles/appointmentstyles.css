@@ -172,4 +172,10 @@
   background-color: #9dcd5a;
   color: #f3f3f3;
   font-weight: 500;
+  cursor: pointer;
+}
+
+.btnDisabled {
+  background-color: #bababa;
+  cursor: default;
 }
