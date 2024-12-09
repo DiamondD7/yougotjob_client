@@ -228,7 +228,7 @@ const AppointmentSearch = ({ filterSearch, setFilterSearch }) => {
 
 const AppointmentWait = () => {
   const id = parseInt(sessionStorage.getItem("id"));
-  const [startDate, setStartDate] = useState(new Date());
+  const [startDate, setStartDate] = useState();
   const [appointmentData, setAppointmentData] = useState({
     Nhi: "",
     PractitionerId: 0,
@@ -250,9 +250,10 @@ const AppointmentWait = () => {
   };
 
   const handlePreferredDate = (date) => {
+    const dateFormat = new Date(date);
     setAppointmentData({
       ...appointmentData,
-      PreferredAppointmentDate: date,
+      PreferredAppointmentDate: dateFormat.toISOString(),
     });
     setStartDate(date);
   };
@@ -284,7 +285,17 @@ const AppointmentWait = () => {
       });
   };
 
-  console.log(appointmentData);
+  const getMinTime = () => {
+    const minTime = new Date();
+    minTime.setHours(8, 0, 0, 0);
+    return minTime;
+  };
+
+  const getMaxTime = () => {
+    const maxTime = new Date();
+    maxTime.setHours(23, 0, 0, 0);
+    return maxTime;
+  };
   return (
     <div>
       <div className="appointment-wait__wrapper ">
@@ -366,10 +377,15 @@ const AppointmentWait = () => {
             <br />
             <DatePicker
               className="datePicker"
-              dateFormat="dd/MM/YYYY"
+              dateFormat="dd/MM/YYYY - hh:mm a"
               selected={startDate}
               onChange={(date) => handlePreferredDate(date)}
               minDate={new Date()}
+              showTimeSelect
+              timeIntervals={30}
+              timeFormat="hh:mm a"
+              minTime={getMinTime()}
+              maxTime={getMaxTime()}
             />
             <br />
             <br />

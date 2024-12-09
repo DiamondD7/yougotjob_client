@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { MockUserData } from "../../assets/js/mockChartData";
+import { GetNextAppointment } from "../../assets/js/serverApi";
 import { exportedMonthsArray } from "../../assets/js/months";
 import {
   User,
@@ -24,8 +25,24 @@ const SummaryCards = () => {
   const [minutes, setMinutes] = useState(0);
   const [seconds, setSeconds] = useState(0);
 
-  const [inputDate, setInputDate] = useState("7 Jul 2024 20:00"); //can be changed to mm/dd/yyyy
-  const [currentDate, setCurrentDate] = useState(inputDate);
+  const [inputDate, setInputDate] = useState(""); //for timer
+
+  const [nextApt, setNextApt] = useState([]);
+
+  useEffect(() => {
+    const id = parseInt(sessionStorage.getItem("id"));
+    fetch(`${GetNextAppointment}/${id}`)
+      .then((res) => res.json())
+      .then((res) => {
+        setNextApt(res.returnStatus.data[0]);
+
+        //format date and setting for timer
+        const dateFormat = new Date(
+          res.returnStatus.data[0].preferredAppointmentDate
+        );
+        setInputDate(dateFormat.toLocaleString());
+      });
+  }, []);
 
   //handles countdown
   useEffect(() => {
@@ -78,13 +95,17 @@ const SummaryCards = () => {
               className="dashboard-card-profilepic"
             /> */}
             <div>
-              <h3>Aaron Sierra</h3>
-              <label className="patient-card-id__label">ID:30004997</label>
+              <h3>{nextApt.fullName}</h3>
+              <label className="patient-card-id__label">
+                NHI:{nextApt.nhi}
+              </label>
             </div>
           </div>
           <div className="dashboard-patient-card-details__wrapper">
             <h2 className="dashboard-patient-card-details-h2-schedule">
-              23/01/2024 12:40pm
+              {new Date(nextApt.preferredAppointmentDate).toLocaleString(
+                "en-nz"
+              )}
             </h2>
             <h2 className="dashboard-patient-card-details-h2-countdown">
               {days}

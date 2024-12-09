@@ -25,7 +25,7 @@
 .jobs-content-card__wrapper {
   background-color: white;
   height: 200px;
-  width: 80%;
+  width: 100%;
 
   margin-top: 40px;
   box-shadow: rgba(136, 165, 191, 0.48) 6px 2px 16px 0px,
@@ -45,7 +45,7 @@
 
 .jobs-content-comment {
   font-size: 11px;
-  width: 70%;
+  width: 900px;
   height: 50px;
   overflow: auto;
 }
