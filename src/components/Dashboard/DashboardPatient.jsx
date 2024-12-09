@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { GetNextAppointmentForPatient } from "../../assets/js/serverApi";
 import {
   User,
   Calendar,
@@ -14,6 +16,23 @@ const SummaryCards = () => {
   const [seconds, setSeconds] = useState(0);
 
   const [inputDate, setInputDate] = useState("7 Aug 2024 20:00"); //can be changed to mm/dd/yyyy
+
+  const [nextApt, setNextApt] = useState([]);
+
+  useEffect(() => {
+    const id = parseInt(sessionStorage.getItem("id"));
+    fetch(`${GetNextAppointmentForPatient}/${id}`)
+      .then((res) => res.json())
+      .then((res) => {
+        setNextApt(res.returnStatus.data[0]);
+        //format date and setting for timer
+        const dateFormat = new Date(
+          res.returnStatus.data[0].preferredAppointmentDate
+        );
+
+        setInputDate(dateFormat.toLocaleString());
+      });
+  }, []);
 
   //handles countdown
   useEffect(() => {
@@ -62,13 +81,17 @@ const SummaryCards = () => {
           </div>
           <div className="dashboard-patient-card__wrapper">
             <div>
-              <h3>Dr. Johnson</h3>
-              <label className="patient-card-id__label">ID:30004997</label>
+              <h3>{nextApt.practitionerName} </h3>
+              <label className="patient-card-id__label">
+                {nextApt.healthPractitionerType}
+              </label>
             </div>
           </div>
           <div className="dashboard-patient-card-details__wrapper">
             <h2 className="dashboard-patient-card-details-h2-schedule">
-              27/08/2024 12:40pm
+              {new Date(nextApt.preferredAppointmentDate).toLocaleString(
+                "en-nz"
+              )}
             </h2>
             <h2 className="dashboard-patient-card-details-h2-countdown">
               {days}
