@@ -5,6 +5,7 @@ import PatientsHome from "./components/HomeDepartments/PatientsHome";
 import { Route, Routes } from "react-router-dom";
 
 import "./App.css";
+import Meeting from "./components/Meeting/Meeting";
 
 function App() {
   const [currentRole, setCurrentRole] = useState(
@@ -37,6 +38,7 @@ function App() {
       <>
         <Routes>
           <Route path="/" element={<SignIn localData={localData} />} />
+          <Route path="/meeting" element={<Meeting />} />
         </Routes>
         {currentRole === "Practitioner" ? (
           <Routes>

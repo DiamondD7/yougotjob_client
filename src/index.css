@@ -56,3 +56,9 @@
   height: 100%;
   z-index: 1;
 }
+
+.btnDisabled {
+  background-color: #bababa;
+  border: 1px solid #bababa;
+  cursor: default;
+}

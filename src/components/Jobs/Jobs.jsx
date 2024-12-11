@@ -4,6 +4,7 @@ import {
   GetAvailableJobs,
   AcceptJob,
   GetaHealthPractitioner,
+  CreateMeeting,
 } from "../../assets/js/serverApi";
 
 import "../../styles/jobsstyles.css";
@@ -92,6 +93,7 @@ const JobsCards = ({ jobsData, fetchAvailableJobs, userFullName }) => {
         console.log(err.message);
       });
   };
+
   return (
     <div>
       <div className="jobs-contents__wrapper">

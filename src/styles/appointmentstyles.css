@@ -174,8 +174,3 @@
   font-weight: 500;
   cursor: pointer;
 }
-
-.btnDisabled {
-  background-color: #bababa;
-  cursor: default;
-}

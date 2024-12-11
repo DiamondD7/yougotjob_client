@@ -13,37 +13,28 @@ import {
   EnvelopeOpen,
   Plus,
   ChatCenteredText,
+  X,
 } from "@phosphor-icons/react";
 import { Line } from "react-chartjs-2";
 import { Chart as ChartJS } from "chart.js/auto";
 
 import "../../styles/dashboardstyles.css";
 
-const SummaryCards = () => {
+const SummaryCards = ({
+  setNextAptBtn,
+  inputDate,
+  nextApt,
+  setActivateGoTo,
+}) => {
   const [days, setDays] = useState(0);
   const [hours, setHours] = useState(0);
   const [minutes, setMinutes] = useState(0);
   const [seconds, setSeconds] = useState(0);
 
-  const [inputDate, setInputDate] = useState(""); //for timer
-
-  const [nextApt, setNextApt] = useState([]);
-
-  useEffect(() => {
-    const id = parseInt(sessionStorage.getItem("id"));
-    fetch(`${GetNextAppointment}/${id}`)
-      .then((res) => res.json())
-      .then((res) => {
-        setNextApt(res.returnStatus.data[0]);
-
-        //format date and setting for timer
-        const dateFormat = new Date(
-          res.returnStatus.data[0].preferredAppointmentDate
-        );
-        setInputDate(dateFormat.toLocaleString());
-      });
-  }, []);
-
+  const handleNextAptView = (e) => {
+    e.preventDefault();
+    setNextAptBtn(true);
+  };
   //handles countdown
   useEffect(() => {
     const changingDate = new Date(inputDate);
@@ -55,6 +46,7 @@ const SummaryCards = () => {
       setHours(0);
       setMinutes(0);
       setSeconds(0);
+      setActivateGoTo(true); //activates the btn go to, when countdown is finished
     } else if (totalSeconds > 0) {
       setDays(Math.floor(totalSeconds / 3600 / 24));
       setHours(Math.floor(totalSeconds / 3600) % 24);
@@ -78,6 +70,7 @@ const SummaryCards = () => {
   const hour = <label className="time-indication">hr</label>;
   const min = <label className="time-indication">min</label>;
   const sec = <label className="time-indication">sec</label>;
+
   return (
     <div>
       <div className="dashboard-summary-cards__wrapper">
@@ -114,6 +107,13 @@ const SummaryCards = () => {
               {min} : {seconds}
               {sec}
             </h2>
+
+            <button
+              className="dashboard-patient-card__btn"
+              onClick={(e) => handleNextAptView(e)}
+            >
+              View
+            </button>
           </div>
         </div>
 
@@ -160,6 +160,65 @@ const SummaryCards = () => {
             </p>
           </div>
         </div>
+      </div>
+    </div>
+  );
+};
+
+const NextAptView = ({ nextApt, activateGoTo, setNextAptBtn }) => {
+  const handleFinaliseAuth = () => {
+    const cliendId = import.meta.env.VITE_ZOOM_CLIENT_ID;
+    const redirectUri = import.meta.env.VITE_ZOOM_REDIRECT_URI;
+    window.open(
+      `https://zoom.us/oauth/authorize?response_type=code&client_id=${cliendId}&redirect_uri=${redirectUri}`,
+      "_blank",
+      "noreferrer"
+    );
+  };
+  return (
+    <div>
+      <div className="nextaptview__wrapper">
+        <button
+          style={{
+            backgroundColor: "transparent",
+            border: "none",
+            cursor: "pointer",
+          }}
+          onClick={() => setNextAptBtn(false)}
+        >
+          <X size={15} />
+        </button>
+        <h4>Patient's Details</h4>
+        <p style={{ fontSize: "12px" }}>{nextApt.nhi}</p>
+        <br />
+        <div>
+          <div>
+            <p style={{ fontSize: "12px" }}>Full name: {nextApt.fullName}</p>
+            <p style={{ fontSize: "12px" }}>{nextApt.emailAddress}</p>
+            <p style={{ fontSize: "12px" }}>{nextApt.contactNumber}</p>
+            <br />
+            <p style={{ fontSize: "12px" }}>
+              Date:{" "}
+              {new Date(nextApt.preferredAppointmentDate).toLocaleString(
+                "en-nz"
+              )}
+            </p>
+          </div>
+        </div>
+        <button
+          className={`dashboard-patient-info__btn ${
+            activateGoTo === false ? "btnDisabled" : ""
+          }`}
+          disabled={activateGoTo === true ? false : true}
+        >
+          Go to
+        </button>
+        <button
+          className="dashboard-patient-card__btn"
+          onClick={(e) => handleFinaliseAuth(e)}
+        >
+          Finalise & Authorize
+        </button>
       </div>
     </div>
   );
@@ -664,34 +723,75 @@ const NotesContainer = () => {
 };
 
 const Dashboard = () => {
+  const [nextAptBtn, setNextAptBtn] = useState(false);
+  const [inputDate, setInputDate] = useState(""); //for timer
+  const [activateGoTo, setActivateGoTo] = useState(false);
+  const [nextApt, setNextApt] = useState([]);
+
+  useEffect(() => {
+    const id = parseInt(sessionStorage.getItem("id"));
+    fetch(`${GetNextAppointment}/${id}`)
+      .then((res) => res.json())
+      .then((res) => {
+        setNextApt(res.returnStatus.data[0]);
+
+        //format date and setting for timer
+        const dateFormat = new Date(
+          res.returnStatus.data[0].preferredAppointmentDate
+        );
+        setInputDate(dateFormat.toLocaleString());
+      });
+  }, []);
+
   return (
     <div>
-      <div style={{ display: "flex" }}>
-        <SummaryCards />
-        <NotesContainer />
-      </div>
-      <div className="dashboard-graph-container__wrapper">
-        <div className="dashboard-graph__wrapper">
-          <PatientLineGraph />
-        </div>
+      {nextAptBtn === true ? (
         <div>
-          <TotalAppointmentContainer />
-          <AppointmentContainer />
+          {" "}
+          <div className="overlay"></div>{" "}
+          <NextAptView
+            nextApt={nextApt}
+            activateGoTo={activateGoTo}
+            setNextAptBtn={setNextAptBtn}
+          />{" "}
         </div>
-        <div>
-          <ContinueLearningContainer />
+      ) : (
+        ""
+      )}
+
+      <div>
+        <div style={{ display: "flex" }}>
+          <SummaryCards
+            setNextAptBtn={setNextAptBtn}
+            inputDate={inputDate}
+            nextApt={nextApt}
+            setActivateGoTo={setActivateGoTo}
+          />
+          <NotesContainer />
         </div>
-      </div>
-      <div style={{ display: "flex" }}>
-        <div
-          style={{
-            margin: "20px 0 0 20px",
-          }}
-        >
-          <InvoiceContainer />
+        <div className="dashboard-graph-container__wrapper">
+          <div className="dashboard-graph__wrapper">
+            <PatientLineGraph />
+          </div>
+          <div>
+            <TotalAppointmentContainer />
+            <AppointmentContainer />
+          </div>
+          <div>
+            <ContinueLearningContainer />
+          </div>
         </div>
-        <div className="weekly-schedule-container__wrapper">
-          <WeeklyScheduleContainer />
+        <div style={{ display: "flex" }}>
+          <div
+            style={{
+              margin: "20px 0 0 20px",
+            }}
+          >
+            <InvoiceContainer />
+          </div>
+          <div className="weekly-schedule-container__wrapper">
+            <WeeklyScheduleContainer />
+          </div>
         </div>
       </div>
     </div>
