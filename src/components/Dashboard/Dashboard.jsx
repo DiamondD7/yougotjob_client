@@ -170,11 +170,13 @@ const NextAptView = ({ nextApt, activateGoTo, setNextAptBtn }) => {
     const cliendId = import.meta.env.VITE_ZOOM_CLIENT_ID;
     const redirectUri = import.meta.env.VITE_ZOOM_REDIRECT_URI;
     window.open(
-      `https://zoom.us/oauth/authorize?response_type=code&client_id=${cliendId}&redirect_uri=${redirectUri}`,
+      `https://zoom.us/oauth/authorize?response_type=code&client_id=${cliendId}&redirect_uri=${redirectUri}?id=${nextApt.id}`,
       "_blank",
       "noreferrer"
     );
   };
+
+  console.log(nextApt);
   return (
     <div>
       <div className="nextaptview__wrapper">
@@ -211,7 +213,7 @@ const NextAptView = ({ nextApt, activateGoTo, setNextAptBtn }) => {
           }`}
           disabled={activateGoTo === true ? false : true}
         >
-          Go to
+          Go to the meeting
         </button>
         <button
           className="dashboard-patient-card__btn"
