@@ -104,7 +104,10 @@ const MeetingAppointmentDetails = ({ patientData }) => {
           <strong>Comments/Requests</strong>
         </label>
         <br />
-        <textarea className="meeting-details__textarea"></textarea>
+        <textarea
+          className="meeting-details__textarea"
+          value={patientData.comments}
+        ></textarea>
       </div>
     </div>
   );
@@ -339,6 +342,7 @@ const Meeting = () => {
       .then((res) => res.json())
       .then((res) => {
         console.log(res);
+        window.close();
       });
   };
 

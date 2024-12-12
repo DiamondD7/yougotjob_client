@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { MockUserData } from "../../assets/js/mockChartData";
-import { GetNextAppointment } from "../../assets/js/serverApi";
+import {
+  GetNextAppointment,
+  UpdateIsAppointmentCompleted,
+} from "../../assets/js/serverApi";
 import { exportedMonthsArray } from "../../assets/js/months";
 import {
   User,
@@ -176,7 +179,27 @@ const NextAptView = ({ nextApt, activateGoTo, setNextAptBtn }) => {
     );
   };
 
-  console.log(nextApt);
+  const handleGoToZoomMeeting = (e) => {
+    e.preventDefault();
+    window.open(nextApt.startZoomLink, "_blank", "noreferrer");
+
+    //TODO: set appointmentCompleted to true in the db
+    fetch(UpdateIsAppointmentCompleted, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify({
+        Id: nextApt.id,
+      }),
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        console.log(res);
+      });
+  };
+
   return (
     <div>
       <div className="nextaptview__wrapper">
@@ -211,16 +234,23 @@ const NextAptView = ({ nextApt, activateGoTo, setNextAptBtn }) => {
           className={`dashboard-patient-info__btn ${
             activateGoTo === false ? "btnDisabled" : ""
           }`}
+          onClick={(e) => handleGoToZoomMeeting(e)}
           disabled={activateGoTo === true ? false : true}
         >
           Go to the meeting
         </button>
-        <button
-          className="dashboard-patient-card__btn"
-          onClick={(e) => handleFinaliseAuth(e)}
-        >
-          Finalise & Authorize
-        </button>
+
+        {/* if the practitioner created a zoom meeting, then isZoomMeetingCreated is true which will lead to the button to disappear */}
+        {nextApt.isZoomMeetingCreated === false ? (
+          <button
+            className="dashboard-patient-card__btn"
+            onClick={(e) => handleFinaliseAuth(e)}
+          >
+            Finalise & Authorize
+          </button>
+        ) : (
+          ""
+        )}
       </div>
     </div>
   );
