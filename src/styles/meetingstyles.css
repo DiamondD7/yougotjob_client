@@ -27,3 +27,12 @@
   min-height: 200px;
   max-height: 200px;
 }
+
+.meeting-loading-icon__wrapper {
+  position: absolute;
+  top: 35%;
+  left: 50%;
+
+  transform: translate(-50%, -50%);
+  z-index: 5;
+}

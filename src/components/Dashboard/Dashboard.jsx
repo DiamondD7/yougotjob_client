@@ -3,6 +3,7 @@ import { MockUserData } from "../../assets/js/mockChartData";
 import {
   GetNextAppointment,
   UpdateIsAppointmentCompleted,
+  GetPreviousApt,
 } from "../../assets/js/serverApi";
 import { exportedMonthsArray } from "../../assets/js/months";
 import {
@@ -17,6 +18,7 @@ import {
   Plus,
   ChatCenteredText,
   X,
+  CalendarSlash,
 } from "@phosphor-icons/react";
 import { Line } from "react-chartjs-2";
 import { Chart as ChartJS } from "chart.js/auto";
@@ -25,8 +27,10 @@ import "../../styles/dashboardstyles.css";
 
 const SummaryCards = ({
   setNextAptBtn,
+  setPrevAptBtn,
   inputDate,
   nextApt,
+  prevApt,
   setActivateGoTo,
 }) => {
   const [days, setDays] = useState(0);
@@ -84,40 +88,51 @@ const SummaryCards = ({
             </div>
             <h5>Next appointment</h5>
           </div>
-          <div className="dashboard-patient-card__wrapper">
-            {/* <img
+          {nextApt.length <= 0 ? (
+            <div style={{ textAlign: "center", marginTop: "30px" }}>
+              <CalendarSlash size={25} color="rgba(0,0,0,0.4)" />
+              <p style={{ color: "rgba(0,0,0,0.3)", fontSize: "13px" }}>
+                No upcoming appointment
+              </p>
+            </div>
+          ) : (
+            <>
+              <div className="dashboard-patient-card__wrapper">
+                {/* <img
               src="https://images.unsplash.com/photo-1521119989659-a83eee488004?q=80&w=1923&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
               alt="test-picture"
               className="dashboard-card-profilepic"
             /> */}
-            <div>
-              <h3>{nextApt.fullName}</h3>
-              <label className="patient-card-id__label">
-                NHI:{nextApt.nhi}
-              </label>
-            </div>
-          </div>
-          <div className="dashboard-patient-card-details__wrapper">
-            <h2 className="dashboard-patient-card-details-h2-schedule">
-              {new Date(nextApt.preferredAppointmentDate).toLocaleString(
-                "en-nz"
-              )}
-            </h2>
-            <h2 className="dashboard-patient-card-details-h2-countdown">
-              {days}
-              {day} : {hours}
-              {hour} : {minutes}
-              {min} : {seconds}
-              {sec}
-            </h2>
+                <div>
+                  <h3>{nextApt.fullName}</h3>
+                  <label className="patient-card-id__label">
+                    NHI:{nextApt.nhi}
+                  </label>
+                </div>
+              </div>
+              <div className="dashboard-patient-card-details__wrapper">
+                <h2 className="dashboard-patient-card-details-h2-schedule">
+                  {new Date(nextApt.preferredAppointmentDate).toLocaleString(
+                    "en-nz"
+                  )}
+                </h2>
+                <h2 className="dashboard-patient-card-details-h2-countdown">
+                  {days}
+                  {day} : {hours}
+                  {hour} : {minutes}
+                  {min} : {seconds}
+                  {sec}
+                </h2>
 
-            <button
-              className="dashboard-patient-card__btn"
-              onClick={(e) => handleNextAptView(e)}
-            >
-              View
-            </button>
-          </div>
+                <button
+                  className="dashboard-patient-card__btn"
+                  onClick={(e) => handleNextAptView(e)}
+                >
+                  View
+                </button>
+              </div>
+            </>
+          )}
         </div>
 
         <div className="dashboard-cards__wrapper">
@@ -127,26 +142,50 @@ const SummaryCards = ({
             </div>
             <h5>Previous appointment</h5>
           </div>
-          <div className="dashboard-patient-card__wrapper">
-            {/* <img
+          {prevApt <= 0 ? (
+            <div style={{ textAlign: "center", marginTop: "30px" }}>
+              <CalendarSlash size={25} color="rgba(0,0,0,0.4)" />
+              <p style={{ color: "rgba(0,0,0,0.3)", fontSize: "13px" }}>
+                No previous appointment
+              </p>
+            </div>
+          ) : (
+            <>
+              <div className="dashboard-patient-card__wrapper">
+                {/* <img
               src="https://images.unsplash.com/photo-1521119989659-a83eee488004?q=80&w=1923&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
               alt="test-picture"
               className="dashboard-card-profilepic"
             /> */}
-            <div>
-              <h3>John Doe</h3>
-              <label className="patient-card-id__label">ID:54004987</label>
-            </div>
-          </div>
+                <div>
+                  <h3>{prevApt.fullName}</h3>
+                  <label className="patient-card-id__label">
+                    NHI:{prevApt.nhi}
+                  </label>
+                </div>
+              </div>
 
-          <div className="dashboard-patient-card-details__wrapper">
-            <h2 className="dashboard-patient-card-details-h2-schedule">
-              19/01/2024 8:40am
-            </h2>
-            <div className="previous-patient-view__wrapper">
-              <button className="previous-patient-view__btn">view</button>
-            </div>
-          </div>
+              <div className="dashboard-patient-card-details__wrapper">
+                <h2 className="dashboard-patient-card-details-h2-schedule">
+                  {new Date(prevApt.preferredAppointmentDate).toLocaleString(
+                    "en-nz"
+                  )}
+                </h2>
+                <h2 className="dashboard-patient-card-details-h2-schedule">
+                  Accepted at:{" "}
+                  {new Date(prevApt.acceptedJobDate).toLocaleString("en-nz")}
+                </h2>
+                <div className="previous-patient-view__wrapper">
+                  <button
+                    className="previous-patient-view__btn"
+                    onClick={() => setPrevAptBtn(true)}
+                  >
+                    view
+                  </button>
+                </div>
+              </div>
+            </>
+          )}
         </div>
 
         <div className="dashboard-cards__wrapper">
@@ -164,6 +203,14 @@ const SummaryCards = ({
           </div>
         </div>
       </div>
+    </div>
+  );
+};
+
+const PrevAptView = ({ prevApt, setPrevAptBtn }) => {
+  return (
+    <div>
+      <h1>Hello, World!</h1>
     </div>
   );
 };
@@ -756,25 +803,39 @@ const NotesContainer = () => {
 
 const Dashboard = () => {
   const [nextAptBtn, setNextAptBtn] = useState(false);
+  const [prevAptBtn, setPrevAptBtn] = useState(false);
   const [inputDate, setInputDate] = useState(""); //for timer
   const [activateGoTo, setActivateGoTo] = useState(false);
   const [nextApt, setNextApt] = useState([]);
+  const [prevApt, setPrevApt] = useState([]);
 
   useEffect(() => {
+    refreshList();
+  }, []);
+
+  const refreshList = () => {
     const id = parseInt(sessionStorage.getItem("id"));
     fetch(`${GetNextAppointment}/${id}`)
       .then((res) => res.json())
       .then((res) => {
-        setNextApt(res.returnStatus.data[0]);
-
-        //format date and setting for timer
-        const dateFormat = new Date(
-          res.returnStatus.data[0].preferredAppointmentDate
-        );
-        setInputDate(dateFormat.toLocaleString());
+        if (res.returnStatus.data !== undefined) {
+          setNextApt(res.returnStatus.data[0]);
+          //format date and setting for timer
+          const dateFormat = new Date(
+            res.returnStatus.data[0].preferredAppointmentDate
+          );
+          setInputDate(dateFormat.toLocaleString());
+        }
       });
-  }, []);
 
+    //fetching the previous apt
+    fetch(`${GetPreviousApt}/${id}`)
+      .then((res) => res.json())
+      .then((res) => {
+        setPrevApt(res.returnStatus.data[0]);
+        //format date and setting for timer
+      });
+  };
   return (
     <div>
       {nextAptBtn === true ? (
@@ -791,12 +852,24 @@ const Dashboard = () => {
         ""
       )}
 
+      {prevAptBtn === true ? (
+        <div>
+          {" "}
+          <div className="overlay"></div>{" "}
+          <PrevAptView prevApt={prevApt} setPrevAptBtn={setPrevAptBtn} />
+        </div>
+      ) : (
+        ""
+      )}
+
       <div>
         <div style={{ display: "flex" }}>
           <SummaryCards
             setNextAptBtn={setNextAptBtn}
+            setPrevAptBtn={setPrevAptBtn}
             inputDate={inputDate}
             nextApt={nextApt}
+            prevApt={prevApt}
             setActivateGoTo={setActivateGoTo}
           />
           <NotesContainer />

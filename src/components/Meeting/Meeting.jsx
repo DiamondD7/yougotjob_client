@@ -8,6 +8,7 @@ import {
   CreateMeeting,
   AppointmentZoomLinkUpdate,
 } from "../../assets/js/serverApi";
+import { CircleNotch } from "@phosphor-icons/react";
 import DatePicker from "react-datepicker";
 
 import "../../styles/meetingstyles.css";
@@ -216,6 +217,7 @@ const Meeting = () => {
   });
   const [selectedDateTime, setSelectedDateTime] = useState();
   const [patientData, setPatientData] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     // Get the 'code' from the query parameters
@@ -299,6 +301,7 @@ const Meeting = () => {
 
   const handleCreateZoomMeet = (e) => {
     e.preventDefault();
+    setLoading(true);
     fetch(CreateMeeting, {
       method: "POST",
       headers: {
@@ -342,6 +345,7 @@ const Meeting = () => {
       .then((res) => res.json())
       .then((res) => {
         console.log(res);
+        setLoading(false);
         window.close();
       });
   };
@@ -372,6 +376,14 @@ const Meeting = () => {
   };
   return (
     <>
+      {loading === true ? <div className="overlay"></div> : ""}
+      {loading === true ? (
+        <div className="meeting-loading-icon__wrapper">
+          <CircleNotch size={45} color="#f3f3f3" className={"loading-icon"} />
+        </div>
+      ) : (
+        ""
+      )}
       <div style={{ padding: "50px", display: "flex", gap: "200px" }}>
         <div>
           <h2>Create: Zoom Meeting</h2>
