@@ -18,6 +18,7 @@ import {
   Plus,
   ChatCenteredText,
   X,
+  CircleNotch,
   CalendarSlash,
 } from "@phosphor-icons/react";
 import { Line } from "react-chartjs-2";
@@ -209,8 +210,110 @@ const SummaryCards = ({
 
 const PrevAptView = ({ prevApt, setPrevAptBtn }) => {
   return (
-    <div>
-      <h1>Hello, World!</h1>
+    <div className="prevaptview__wrapper">
+      <button
+        style={{
+          backgroundColor: "transparent",
+          border: "none",
+          cursor: "pointer",
+        }}
+        onClick={() => setPrevAptBtn(false)}
+      >
+        <X size={15} />
+      </button>
+      <div style={{ display: "flex", gap: "20px" }}>
+        <div className="prevapt-details-patient__wrapper">
+          <h4>Details: Patient</h4>
+          <br />
+          <div style={{ display: "flex", justifyContent: "space-between" }}>
+            <label style={{ fontSize: "12px" }}>Name:</label>
+            <label style={{ fontSize: "12px" }}>{prevApt.fullName}</label>
+          </div>
+          <div style={{ display: "flex", justifyContent: "space-between" }}>
+            <label style={{ fontSize: "12px" }}>NHI:</label>
+            <label style={{ fontSize: "12px" }}>{prevApt.nhi}</label>
+          </div>
+          <div style={{ display: "flex", justifyContent: "space-between" }}>
+            <label style={{ fontSize: "12px" }}>Contact Number:</label>
+            <label style={{ fontSize: "12px" }}>{prevApt.contactNumber}</label>
+          </div>
+          <div style={{ display: "flex", justifyContent: "space-between" }}>
+            <label style={{ fontSize: "12px" }}>Email:</label>
+            <label style={{ fontSize: "12px" }}>{prevApt.emailAddress}</label>
+          </div>
+          <div style={{ display: "flex", justifyContent: "space-between" }}>
+            <label style={{ fontSize: "12px" }}>Preferred Date:</label>
+            <label style={{ fontSize: "12px" }}>
+              {new Date(prevApt.preferredAppointmentDate).toLocaleString(
+                "en-nz"
+              )}
+            </label>
+          </div>
+          <p style={{ fontSize: "12px", marginTop: "15px" }}>
+            Comments/Requests:
+          </p>
+          <textarea
+            className="prevapt-textarea"
+            value={prevApt.comments}
+          ></textarea>
+        </div>
+
+        <div className="prevapt-details-diagnosis__wrapper">
+          <h4>Details: Diagnosis</h4>
+          <br />
+          <div style={{ display: "flex", justifyContent: "space-between" }}>
+            <label style={{ fontSize: "12px" }}>Practitioner name:</label>
+            <label style={{ fontSize: "12px" }}>
+              {prevApt.practitionerName}
+            </label>
+          </div>
+
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+            }}
+          >
+            <label style={{ fontSize: "12px" }}>Accepted Job Date:</label>
+            <label style={{ fontSize: "12px" }}>
+              {new Date(prevApt.appointmentDateCompleted).toLocaleDateString(
+                "en-nz"
+              )}
+            </label>
+          </div>
+
+          <div style={{ display: "flex", justifyContent: "space-between" }}>
+            <div></div>
+            <label style={{ fontSize: "12px" }}>
+              {new Date(prevApt.appointmentDateCompleted).toLocaleTimeString(
+                "en-nz"
+              )}
+            </label>
+          </div>
+
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              marginTop: "10px",
+            }}
+          >
+            <label style={{ fontSize: "12px" }}>Accepted Job Date:</label>
+            <label style={{ fontSize: "12px" }}>
+              {new Date(prevApt.acceptedJobDate).toLocaleDateString("en-nz")}
+            </label>
+          </div>
+          <div style={{ display: "flex", justifyContent: "space-between" }}>
+            <div></div>
+            <label style={{ fontSize: "12px" }}>
+              {new Date(prevApt.acceptedJobDate).toLocaleTimeString("en-nz")}
+            </label>
+          </div>
+
+          <label style={{ fontSize: "12px" }}>Conclusion/findings:</label>
+          <textarea className="prevapt-textarea"></textarea>
+        </div>
+      </div>
     </div>
   );
 };
@@ -809,6 +912,8 @@ const Dashboard = () => {
   const [nextApt, setNextApt] = useState([]);
   const [prevApt, setPrevApt] = useState([]);
 
+  const [loading, setLoading] = useState(true);
+
   useEffect(() => {
     refreshList();
   }, []);
@@ -833,7 +938,7 @@ const Dashboard = () => {
       .then((res) => res.json())
       .then((res) => {
         setPrevApt(res.returnStatus.data[0]);
-        //format date and setting for timer
+        setLoading(false); //MIGHT CHANGE THE LOADING.
       });
   };
   return (
@@ -862,43 +967,49 @@ const Dashboard = () => {
         ""
       )}
 
-      <div>
-        <div style={{ display: "flex" }}>
-          <SummaryCards
-            setNextAptBtn={setNextAptBtn}
-            setPrevAptBtn={setPrevAptBtn}
-            inputDate={inputDate}
-            nextApt={nextApt}
-            prevApt={prevApt}
-            setActivateGoTo={setActivateGoTo}
-          />
-          <NotesContainer />
+      {loading === false ? (
+        <div>
+          <div style={{ display: "flex" }}>
+            <SummaryCards
+              setNextAptBtn={setNextAptBtn}
+              setPrevAptBtn={setPrevAptBtn}
+              inputDate={inputDate}
+              nextApt={nextApt}
+              prevApt={prevApt}
+              setActivateGoTo={setActivateGoTo}
+            />
+            <NotesContainer />
+          </div>
+          <div className="dashboard-graph-container__wrapper">
+            <div className="dashboard-graph__wrapper">
+              <PatientLineGraph />
+            </div>
+            <div>
+              <TotalAppointmentContainer />
+              <AppointmentContainer />
+            </div>
+            <div>
+              <ContinueLearningContainer />
+            </div>
+          </div>
+          <div style={{ display: "flex" }}>
+            <div
+              style={{
+                margin: "20px 0 0 20px",
+              }}
+            >
+              <InvoiceContainer />
+            </div>
+            <div className="weekly-schedule-container__wrapper">
+              <WeeklyScheduleContainer />
+            </div>
+          </div>
         </div>
-        <div className="dashboard-graph-container__wrapper">
-          <div className="dashboard-graph__wrapper">
-            <PatientLineGraph />
-          </div>
-          <div>
-            <TotalAppointmentContainer />
-            <AppointmentContainer />
-          </div>
-          <div>
-            <ContinueLearningContainer />
-          </div>
+      ) : (
+        <div className="display-loading-icon__wrapper">
+          <CircleNotch size={45} color="#202020" className={"loading-icon"} />
         </div>
-        <div style={{ display: "flex" }}>
-          <div
-            style={{
-              margin: "20px 0 0 20px",
-            }}
-          >
-            <InvoiceContainer />
-          </div>
-          <div className="weekly-schedule-container__wrapper">
-            <WeeklyScheduleContainer />
-          </div>
-        </div>
-      </div>
+      )}
     </div>
   );
 };
