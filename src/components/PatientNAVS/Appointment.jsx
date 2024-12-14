@@ -239,6 +239,11 @@ const AppointmentWait = () => {
     EmailAddress: "",
     HealthPractitionerType: "",
     PreferredAppointmentDate: null,
+    AppointmentType: "",
+    StreetAddress: "",
+    Suburb: "",
+    City: "",
+    PostCode: "",
   });
   const [consentCheckbox, setConsentCheckbox] = useState(false);
 
@@ -262,6 +267,12 @@ const AppointmentWait = () => {
     setAppointmentData({
       ...appointmentData,
       HealthPractitionerType: e.target.value,
+    });
+  };
+  const handleAppointmentType = (e) => {
+    setAppointmentData({
+      ...appointmentData,
+      AppointmentType: e.target.value,
     });
   };
 
@@ -344,35 +355,90 @@ const AppointmentWait = () => {
             placeholder="NHI (optional)"
             onChange={(e) => handleOnChangeInput(e)}
           />
+          <br />
+          <br />
+          <input
+            className="appointment-wait-form-full__input"
+            type="text"
+            name="StreetAddress"
+            placeholder="Street Address"
+            onChange={(e) => handleOnChangeInput(e)}
+          />
+          <br />
+          <br />
+          <div style={{ display: "flex", gap: "10px" }}>
+            <input
+              className="appointment-wait-form-half__input"
+              type="text"
+              name="Suburb"
+              placeholder="Suburb"
+              onChange={(e) => handleOnChangeInput(e)}
+            />
+            <input
+              className="appointment-wait-form-half__input"
+              type="text"
+              name="PostCode"
+              placeholder="Post Code"
+              onChange={(e) => handleOnChangeInput(e)}
+            />
+          </div>
+
+          <br />
+          <input
+            className="appointment-wait-form-full__input"
+            type="text"
+            name="City"
+            placeholder="City"
+            onChange={(e) => handleOnChangeInput(e)}
+          />
 
           <div>
             <br />
-            <br />
-            <br />
             <h5>Service Details :</h5>
 
-            <label style={{ fontSize: "12px" }}>Health Practitioner Type</label>
-            <br />
-            <select
-              className="service-details-typeofPractitioner__select"
-              onChange={(e) => handlePractitionerType(e)}
-            >
-              <option value=""></option>
-              <option
-                value="General Practitioner"
-                name="HealthPractitionerType"
-              >
-                General Practitioner
-              </option>
-              <option value="Nurse" name="HealthPractitionerType">
-                Nurse
-              </option>
-              <option value="Therapist" name="HealthPractitionerType">
-                Therapist
-              </option>
-            </select>
-
-            <br />
+            <div style={{ display: "flex", gap: "10px" }}>
+              <div>
+                <label style={{ fontSize: "12px" }}>Appointment Type</label>
+                <br />
+                <select
+                  className="service-details-typeofPractitioner__select"
+                  onChange={(e) => handleAppointmentType(e)}
+                >
+                  <option value=""></option>
+                  <option value="online" name="AppointmentType">
+                    Online
+                  </option>
+                  <option value="on-site" name="AppointmentType">
+                    On-site
+                  </option>
+                </select>
+                <br />
+              </div>
+              <div>
+                <label style={{ fontSize: "12px" }}>
+                  Health Practitioner Type
+                </label>
+                <br />
+                <select
+                  className="service-details-typeofPractitioner__select"
+                  onChange={(e) => handlePractitionerType(e)}
+                >
+                  <option value=""></option>
+                  <option
+                    value="General Practitioner"
+                    name="HealthPractitionerType"
+                  >
+                    General Practitioner
+                  </option>
+                  <option value="Nurse" name="HealthPractitionerType">
+                    Nurse
+                  </option>
+                  <option value="Therapist" name="HealthPractitionerType">
+                    Therapist
+                  </option>
+                </select>
+              </div>
+            </div>
             <label style={{ fontSize: "12px" }}>Preffered Date</label>
             <br />
             <DatePicker

@@ -55,6 +55,34 @@ const JobsFilter = () => {
             <label style={{ fontSize: "11px" }}>Therapist</label>
             <input type="checkbox" />
           </div>
+
+          <br />
+          <br />
+          <p style={{ fontSize: "11px", fontWeight: "bold" }}>
+            Appointment type
+          </p>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              gap: "10px",
+              marginTop: "10px",
+            }}
+          >
+            <label style={{ fontSize: "11px" }}>Online</label>
+            <input type="checkbox" value="online" />
+          </div>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              gap: "10px",
+              marginTop: "10px",
+            }}
+          >
+            <label style={{ fontSize: "11px" }}>On-site</label>
+            <input type="checkbox" value="on-site" />
+          </div>
         </div>
 
         <button className="jobs-filter-apply__btn">Apply filter</button>
@@ -121,6 +149,9 @@ const JobsCards = ({ jobsData, fetchAvailableJobs, userFullName }) => {
                 Accept Job
               </button>
             </div>
+            <p style={{ fontSize: "11px", color: "#9dcd5a" }}>
+              {item.appointmentType}
+            </p>
             <p style={{ fontSize: "11px" }}>{item.nhi}</p>
 
             <p style={{ fontSize: "11px" }}>{item.emailAddress}</p>
