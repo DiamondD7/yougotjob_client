@@ -355,43 +355,60 @@ const AppointmentWait = () => {
             placeholder="NHI (optional)"
             onChange={(e) => handleOnChangeInput(e)}
           />
-          <br />
-          <br />
-          <input
-            className="appointment-wait-form-full__input"
-            type="text"
-            name="StreetAddress"
-            placeholder="Street Address"
-            onChange={(e) => handleOnChangeInput(e)}
-          />
-          <br />
-          <br />
-          <div style={{ display: "flex", gap: "10px" }}>
-            <input
-              className="appointment-wait-form-half__input"
-              type="text"
-              name="Suburb"
-              placeholder="Suburb"
-              onChange={(e) => handleOnChangeInput(e)}
-            />
-            <input
-              className="appointment-wait-form-half__input"
-              type="text"
-              name="PostCode"
-              placeholder="Post Code"
-              onChange={(e) => handleOnChangeInput(e)}
-            />
-          </div>
 
-          <br />
-          <input
-            className="appointment-wait-form-full__input"
-            type="text"
-            name="City"
-            placeholder="City"
-            onChange={(e) => handleOnChangeInput(e)}
-          />
+          {appointmentData.AppointmentType === "on-site" ? (
+            <div>
+              <p
+                style={{
+                  fontSize: "11px",
+                  marginTop: "10px",
+                  color: "rgba(0,0,0,0.4)",
+                }}
+              >
+                *if your appointment type is on-site, please fill address
+              </p>
+              <input
+                className="appointment-wait-form-full__input"
+                type="text"
+                name="StreetAddress"
+                placeholder="Street Address"
+                onChange={(e) => handleOnChangeInput(e)}
+                required
+              />
+              <br />
+              <br />
+              <div style={{ display: "flex", gap: "10px" }}>
+                <input
+                  className="appointment-wait-form-half__input"
+                  type="text"
+                  name="Suburb"
+                  placeholder="Suburb"
+                  onChange={(e) => handleOnChangeInput(e)}
+                  required
+                />
+                <input
+                  className="appointment-wait-form-half__input"
+                  type="text"
+                  name="PostCode"
+                  placeholder="Post Code"
+                  onChange={(e) => handleOnChangeInput(e)}
+                  required
+                />
+              </div>
 
+              <br />
+              <input
+                className="appointment-wait-form-full__input"
+                type="text"
+                name="City"
+                placeholder="City"
+                onChange={(e) => handleOnChangeInput(e)}
+                required
+              />
+            </div>
+          ) : (
+            ""
+          )}
           <div>
             <br />
             <h5>Service Details :</h5>
