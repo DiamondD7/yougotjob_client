@@ -378,3 +378,48 @@
   color: rgba(0, 0, 0, 0.5);
   font-size: 11px;
 }
+
+.note-form-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+  height: 100px;
+  width: 100%;
+  border-radius: 10px;
+  box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px,
+    rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
+  padding: 0px 10px;
+}
+
+.note-form-textarea {
+  margin-top: 10px;
+  min-width: 350px;
+  max-width: 350px;
+  min-height: 60px;
+  max-height: 60px;
+  padding: 0 5px;
+}
+
+.note-form-input {
+  width: 100%;
+  padding: 0 5px;
+}
+
+.note-form-btn {
+  cursor: pointer;
+  background-color: #9dcd5a;
+  border: 1px solid #9dcd5a;
+  border-radius: 5px;
+  padding: 2px 10px;
+  color: #f3f3f3;
+}
+
+.note-form-btn-cancel {
+  margin-top: 5px;
+  background-color: rgba(67, 57, 57, 0.4);
+  border: none;
+  border-radius: 5px;
+  padding: 2px 10px;
+  cursor: pointer;
+  color: #f3f3f3;
+}
