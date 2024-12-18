@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from "react";
+import { json, useNavigate } from "react-router-dom";
 import { MockUserData } from "../../assets/js/mockChartData";
 import {
   GetNextAppointment,
   UpdateIsAppointmentCompleted,
   GetPreviousApt,
+  CreateNote,
+  GetSpecificNotes,
 } from "../../assets/js/serverApi";
 import { exportedMonthsArray } from "../../assets/js/months";
 import {
@@ -799,8 +802,84 @@ const InvoiceContainer = () => {
 };
 
 const NotesContainer = () => {
+  const navigate = useNavigate();
+  const id = parseInt(sessionStorage.getItem("id"));
+  const [openFormAdd, setOpenFormAdd] = useState(false);
+  const [noteData, setNoteData] = useState({
+    PractitionerId: id,
+    NoteTitle: "",
+    NoteContent: "",
+    CreatedDate: null,
+  });
+  const [notes, setNotes] = useState([]);
+
   const noteTest =
     "Lorem ipsum dolor sit amet consectetur adipisicing elit. Tempora incidunt ab natus unde quae fugiat nihil esse error doloremque atque. Voluptas repellat neque earum quos! Ipsam, qui! Unde, impedit vero!";
+
+  const handleAddNote = (e) => {
+    e.preventDefault();
+    AddNote();
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData = () => {
+    fetch(`${GetSpecificNotes}/${id}`)
+      .then((res) => res.json())
+      .then((res) => {
+        console.log(res);
+        setNotes(res.returnStatus.data);
+      });
+  };
+
+  const AddNote = async (retry = true) => {
+    try {
+      const response = await fetch(CreateNote, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify({
+          PractitionerId: noteData.PractitionerId,
+          NoteTitle: noteData.NoteTitle,
+          NoteContent: noteData.NoteContent,
+        }),
+      });
+
+      if (response.status === 302) {
+        //302 is redericting to sign in screen because refresh token and jwt are expired.
+        console.warn("302 detected, redirecting...");
+        // Redirect to the new path
+        navigate("/");
+        return; // Exit the function to prevent further execution
+      }
+
+      if (response.status === 401 && retry) {
+        // Retry the request once if a 401 status is detected
+        console.warn("401 detected, retrying request...");
+        return AddNote(false); // Call with `retry` set to false
+      }
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const res = await response.json();
+      console.log(res);
+      fetchData(); //refresh the data to load new note
+      setOpenFormAdd(false); // Close form only if the note was added successfully
+    } catch (error) {
+      console.log("Error fetching data:", error.message);
+    }
+  };
+
+  const handleNoteChange = (e) => {
+    setNoteData({ ...noteData, [e.target.name]: e.target.value });
+  };
   return (
     <div>
       <div className="notes__wrapper">
@@ -815,90 +894,76 @@ const NotesContainer = () => {
               border: "none",
               cursor: "pointer",
             }}
+            onClick={() => setOpenFormAdd(true)}
           >
             <Plus size={15} color="#515151" />
           </button>
         </div>
-        <div style={{ marginTop: "10px" }}>
-          <button
-            className="note-container"
-            style={{
-              backgroundColor: "transparent",
-              border: "none",
-              cursor: "pointer",
-            }}
-          >
-            <div style={{ textAlign: "start" }}>
-              <h5 style={{ fontSize: "13px" }}>Must do</h5>
-              <p>
-                {noteTest.length > 70
-                  ? `${noteTest.substring(0, 80)}....`
-                  : noteTest}
-              </p>
-            </div>
+        {openFormAdd === true ? (
+          <div style={{ marginTop: "10px" }}>
+            <form className="note-form-container" onSubmit={handleAddNote}>
+              <div>
+                <input
+                  className="note-form-input"
+                  type="text"
+                  placeholder="Title"
+                  name="NoteTitle"
+                  onChange={(e) => handleNoteChange(e)}
+                />
+                <br />
+                <textarea
+                  className="note-form-textarea"
+                  placeholder="write something here..."
+                  name="NoteContent"
+                  onChange={(e) => handleNoteChange(e)}
+                ></textarea>
+              </div>
+              <div style={{ padding: "5px 10px" }}>
+                <button className="note-form-btn" type="submit">
+                  Submit
+                </button>
+                <button
+                  className="note-form-btn-cancel"
+                  onClick={() => setOpenFormAdd(false)}
+                >
+                  Cancel
+                </button>
+              </div>
+            </form>
+          </div>
+        ) : (
+          ""
+        )}
+        {notes.map((items, index) => (
+          <div style={{ marginTop: "10px" }} key={items.id}>
             <button
+              className="note-container"
               style={{
                 backgroundColor: "transparent",
                 border: "none",
                 cursor: "pointer",
               }}
             >
-              <Trash size={17} color="#DA4A1A" />
+              <div style={{ textAlign: "start" }}>
+                <h5 style={{ fontSize: "13px" }}>{items.noteTitle}</h5>
+                <p>
+                  {items.noteContent.length > 70
+                    ? `${items.noteContent.substring(0, 80)}....`
+                    : items.noteContent}
+                </p>
+              </div>
+              <button
+                style={{
+                  backgroundColor: "transparent",
+                  border: "none",
+                  cursor: "pointer",
+                }}
+              >
+                <Trash size={17} color="#DA4A1A" />
+              </button>
             </button>
-          </button>
-        </div>
-        <div style={{ marginTop: "10px" }}>
-          <button
-            className="note-container"
-            style={{
-              backgroundColor: "transparent",
-              border: "none",
-              cursor: "pointer",
-            }}
-          >
-            <div style={{ textAlign: "start" }}>
-              <h5 style={{ fontSize: "13px" }}>Sign up Henry</h5>
-              <p>Need to make sure to sign up Henry</p>
-            </div>
-            <button
-              style={{
-                backgroundColor: "transparent",
-                border: "none",
-                cursor: "pointer",
-              }}
-            >
-              <Trash size={17} color="#DA4A1A" />
-            </button>
-          </button>
-        </div>
-        <div style={{ marginTop: "10px" }}>
-          <button
-            className="note-container"
-            style={{
-              backgroundColor: "transparent",
-              border: "none",
-              cursor: "pointer",
-            }}
-          >
-            <div style={{ textAlign: "start" }}>
-              <h5 style={{ fontSize: "13px" }}>Must do</h5>
-              <p>
-                {noteTest.length > 70
-                  ? `${noteTest.substring(0, 80)}....`
-                  : noteTest}
-              </p>
-            </div>
-            <button
-              style={{
-                backgroundColor: "transparent",
-                border: "none",
-                cursor: "pointer",
-              }}
-            >
-              <Trash size={17} color="#DA4A1A" />
-            </button>
-          </button>
-        </div>
+          </div>
+        ))}
       </div>
     </div>
   );
