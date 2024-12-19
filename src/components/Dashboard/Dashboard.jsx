@@ -524,9 +524,11 @@ const PatientLineGraph = () => {
   );
 };
 
-const AppointmentContainer = () => {
+const AppointmentContainer = ({ aptDue }) => {
   const [openAppointmentContainer, setOpenAppointmentContainer] =
     useState(false);
+
+  const appointmentTotalDue = aptDue.length;
   return (
     <div>
       <button
@@ -548,7 +550,7 @@ const AppointmentContainer = () => {
               gap: "10px",
             }}
           >
-            <h1 style={{ color: "#9dcd5a" }}>5</h1>
+            <h1 style={{ color: "#9dcd5a" }}>{appointmentTotalDue}</h1>
             <h4 style={{ width: "100px", fontSize: "13px" }}>
               appointments due today
             </h4>
@@ -586,31 +588,17 @@ const AppointmentContainer = () => {
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td>1</td>
-              <td>Sierra, Aaron</td>
-              <td>15 Mar 2024 12:40pm</td>
-            </tr>
-            <tr>
-              <td>2</td>
-              <td>Sierra, Aaron</td>
-              <td>15 Mar 2024 12:40pm</td>
-            </tr>
-            <tr>
-              <td>3</td>
-              <td>Sierra, Aaron</td>
-              <td>15 Mar 2024 12:40pm</td>
-            </tr>
-            <tr>
-              <td>4</td>
-              <td>Sierra, Aaron</td>
-              <td>15 Mar 2024 12:40pm</td>
-            </tr>
-            <tr>
-              <td>5</td>
-              <td>Sierra, Aaron</td>
-              <td>15 Mar 2024 12:40pm</td>
-            </tr>
+            {aptDue.map((items) => (
+              <tr key={items.id}>
+                <td>1</td>
+                <td>{items.fullName}</td>
+                <td>
+                  {new Date(items.preferredAppointmentDate).toLocaleString(
+                    "en-nz"
+                  )}
+                </td>
+              </tr>
+            ))}
           </tbody>
         </table>
       </div>
@@ -1077,6 +1065,7 @@ const Dashboard = () => {
   const [prevAptBtn, setPrevAptBtn] = useState(false);
   const [inputDate, setInputDate] = useState(""); //for timer
   const [activateGoTo, setActivateGoTo] = useState(false);
+  const [aptDue, setAptDue] = useState([]);
   const [nextApt, setNextApt] = useState([]);
   const [prevApt, setPrevApt] = useState([]);
 
@@ -1093,6 +1082,7 @@ const Dashboard = () => {
       .then((res) => {
         if (res.returnStatus.data !== undefined) {
           setNextApt(res.returnStatus.data[0]);
+          setAptDue(res.returnStatus.data);
           //format date and setting for timer
           const dateFormat = new Date(
             res.returnStatus.data[0].preferredAppointmentDate
@@ -1154,7 +1144,7 @@ const Dashboard = () => {
             </div>
             <div>
               <TotalAppointmentContainer />
-              <AppointmentContainer />
+              <AppointmentContainer aptDue={aptDue} />
             </div>
             <div>
               <ContinueLearningContainer />
