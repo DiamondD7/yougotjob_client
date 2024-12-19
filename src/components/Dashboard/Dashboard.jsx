@@ -6,6 +6,7 @@ import {
   UpdateIsAppointmentCompleted,
   GetPreviousApt,
   CreateNote,
+  DeleteNote,
   GetSpecificNotes,
 } from "../../assets/js/serverApi";
 import { exportedMonthsArray } from "../../assets/js/months";
@@ -23,6 +24,7 @@ import {
   X,
   CircleNotch,
   CalendarSlash,
+  NoteBlank,
 } from "@phosphor-icons/react";
 import { Line } from "react-chartjs-2";
 import { Chart as ChartJS } from "chart.js/auto";
@@ -829,7 +831,7 @@ const NotesContainer = () => {
     fetch(`${GetSpecificNotes}/${id}`)
       .then((res) => res.json())
       .then((res) => {
-        console.log(res);
+        //console.log(res);
         setNotes(res.returnStatus.data);
       });
   };
@@ -869,11 +871,52 @@ const NotesContainer = () => {
       }
 
       const res = await response.json();
-      console.log(res);
+      //console.log(res);
       fetchData(); //refresh the data to load new note
       setOpenFormAdd(false); // Close form only if the note was added successfully
     } catch (error) {
       console.log("Error fetching data:", error.message);
+    }
+  };
+
+  const handleDeleteNote = async (e, id, retry = true) => {
+    e.preventDefault();
+    try {
+      const response = await fetch(DeleteNote, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify({
+          Id: id,
+        }),
+      });
+
+      if (response.status === 302) {
+        //302 is redericting to sign in screen because refresh token and jwt are expired.
+        console.warn("302 detected, redirecting...");
+        // Redirect to the new path
+        navigate("/");
+        return; // Exit the function to prevent further execution
+      }
+
+      if (response.status === 401 && retry) {
+        // Retry the request once if a 401 status is detected
+        console.warn("401 detected, retrying request...");
+        return AddNote(id, false); // Call with `retry` set to false
+      }
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const res = await response.json();
+      //console.log(res);
+      fetchData(); //refresh the data to load
+    } catch (error) {
+      console.log("Error fetching data: ", error.message);
     }
   };
 
@@ -886,7 +929,7 @@ const NotesContainer = () => {
         <div style={{ display: "flex", justifyContent: "space-between" }}>
           <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
             <Notepad size={19} color="#9DCD5A" />
-            <h5>Notes</h5>
+            <h5 style={{ color: "#202020" }}>Notes</h5>
           </div>
           <button
             style={{
@@ -934,36 +977,49 @@ const NotesContainer = () => {
         ) : (
           ""
         )}
-        {notes.map((items, index) => (
-          <div style={{ marginTop: "10px" }} key={items.id}>
-            <button
-              className="note-container"
-              style={{
-                backgroundColor: "transparent",
-                border: "none",
-                cursor: "pointer",
-              }}
-            >
-              <div style={{ textAlign: "start" }}>
-                <h5 style={{ fontSize: "13px" }}>{items.noteTitle}</h5>
-                <p>
-                  {items.noteContent.length > 70
-                    ? `${items.noteContent.substring(0, 80)}....`
-                    : items.noteContent}
-                </p>
-              </div>
-              <button
-                style={{
-                  backgroundColor: "transparent",
-                  border: "none",
-                  cursor: "pointer",
-                }}
-              >
-                <Trash size={17} color="#DA4A1A" />
-              </button>
-            </button>
+
+        {notes.length <= 0 ? (
+          <div style={{ textAlign: "center", marginTop: "45px" }}>
+            <NoteBlank size={25} color="rgba(0,0,0,0.4)" />
+            <p style={{ color: "rgba(0,0,0,0.3)", fontSize: "13px" }}>
+              No notes
+            </p>
           </div>
-        ))}
+        ) : (
+          <div>
+            {notes.map((items, index) => (
+              <div style={{ marginTop: "10px" }} key={items.id}>
+                <button
+                  className="note-container"
+                  style={{
+                    backgroundColor: "transparent",
+                    border: "none",
+                    cursor: "pointer",
+                  }}
+                >
+                  <div style={{ textAlign: "start" }}>
+                    <h5 style={{ fontSize: "13px" }}>{items.noteTitle}</h5>
+                    <p>
+                      {items.noteContent.length > 70
+                        ? `${items.noteContent.substring(0, 80)}....`
+                        : items.noteContent}
+                    </p>
+                  </div>
+                  <button
+                    style={{
+                      backgroundColor: "transparent",
+                      border: "none",
+                      cursor: "pointer",
+                    }}
+                    onClick={(e) => handleDeleteNote(e, items.id)}
+                  >
+                    <Trash size={17} color="#DA4A1A" />
+                  </button>
+                </button>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );
