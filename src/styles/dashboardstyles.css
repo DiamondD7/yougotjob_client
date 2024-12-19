@@ -94,6 +94,30 @@
   z-index: 5;
 }
 
+.zoomconfirmation-btn {
+  cursor: pointer;
+  background-color: #9dcd5a;
+  border: 1px solid #9dcd5a;
+  border-radius: 5px;
+  color: #f3f3f3;
+  margin-top: 10px;
+  padding: 2px 10px;
+}
+
+.zoomconfirmation-textarea {
+  font-size: 12px;
+
+  margin-top: 5px;
+  min-width: 290px;
+  max-width: 290px;
+  min-height: 50px;
+  max-height: 50px;
+
+  outline: none;
+  padding: 5px;
+  border-radius: 5px;
+}
+
 .prevaptview__wrapper {
   position: absolute;
   top: 30%;

@@ -216,7 +216,6 @@ const JobsCards = ({
         console.log(err.message);
       });
   };
-
   return (
     <div>
       <div className="jobs-contents__wrapper">

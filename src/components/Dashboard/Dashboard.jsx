@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { json, useNavigate } from "react-router-dom";
 import { MockUserData } from "../../assets/js/mockChartData";
 import {
+  GetTotalAppointment,
   GetNextAppointment,
   UpdateIsAppointmentCompleted,
   GetPreviousApt,
@@ -324,6 +325,7 @@ const PrevAptView = ({ prevApt, setPrevAptBtn }) => {
 };
 
 const NextAptView = ({ nextApt, activateGoTo, setNextAptBtn }) => {
+  const [openMeeting, setOpenMeeting] = useState(false);
   const handleFinaliseAuth = () => {
     const cliendId = import.meta.env.VITE_ZOOM_CLIENT_ID;
     const redirectUri = import.meta.env.VITE_ZOOM_REDIRECT_URI;
@@ -336,23 +338,8 @@ const NextAptView = ({ nextApt, activateGoTo, setNextAptBtn }) => {
 
   const handleGoToZoomMeeting = (e) => {
     e.preventDefault();
+    setOpenMeeting(true);
     window.open(nextApt.startZoomLink, "_blank", "noreferrer");
-
-    //TODO: set appointmentCompleted to true in the db
-    fetch(UpdateIsAppointmentCompleted, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-      body: JSON.stringify({
-        Id: nextApt.id,
-      }),
-    })
-      .then((res) => res.json())
-      .then((res) => {
-        console.log(res);
-      });
   };
 
   return (
@@ -368,45 +355,94 @@ const NextAptView = ({ nextApt, activateGoTo, setNextAptBtn }) => {
         >
           <X size={15} />
         </button>
-        <h4>Patient's Details</h4>
-        <p style={{ fontSize: "12px" }}>{nextApt.nhi}</p>
-        <br />
-        <div>
+        {openMeeting === true ? (
           <div>
-            <p style={{ fontSize: "12px" }}>Full name: {nextApt.fullName}</p>
-            <p style={{ fontSize: "12px" }}>{nextApt.emailAddress}</p>
-            <p style={{ fontSize: "12px" }}>{nextApt.contactNumber}</p>
-            <br />
-            <p style={{ fontSize: "12px" }}>
-              Date:{" "}
-              {new Date(nextApt.preferredAppointmentDate).toLocaleString(
-                "en-nz"
-              )}
-            </p>
+            <ZoomMeetingFinishConfirmation setNextAptBtn={setNextAptBtn} />
           </div>
-        </div>
-        <button
-          className={`dashboard-patient-info__btn ${
-            activateGoTo === false ? "btnDisabled" : ""
-          }`}
-          onClick={(e) => handleGoToZoomMeeting(e)}
-          disabled={activateGoTo === true ? false : true}
-        >
-          Go to the meeting
-        </button>
-
-        {/* if the practitioner created a zoom meeting, then isZoomMeetingCreated is true which will lead to the button to disappear */}
-        {nextApt.isZoomMeetingCreated === false ? (
-          <button
-            className="dashboard-patient-card__btn"
-            onClick={(e) => handleFinaliseAuth(e)}
-          >
-            Finalise & Authorize
-          </button>
         ) : (
-          ""
+          <div>
+            <h4>Patient's Details</h4>
+            <p style={{ fontSize: "12px" }}>{nextApt.nhi}</p>
+            <br />
+            <div>
+              <div>
+                <p style={{ fontSize: "12px" }}>
+                  Full name: {nextApt.fullName}
+                </p>
+                <p style={{ fontSize: "12px" }}>{nextApt.emailAddress}</p>
+                <p style={{ fontSize: "12px" }}>{nextApt.contactNumber}</p>
+                <br />
+                <p style={{ fontSize: "12px" }}>
+                  Date:{" "}
+                  {new Date(nextApt.preferredAppointmentDate).toLocaleString(
+                    "en-nz"
+                  )}
+                </p>
+              </div>
+            </div>
+            <button
+              className={`dashboard-patient-info__btn ${
+                activateGoTo === false ? "btnDisabled" : ""
+              }`}
+              onClick={(e) => handleGoToZoomMeeting(e)}
+              disabled={activateGoTo === true ? false : true}
+            >
+              Go to the meeting
+            </button>
+
+            {/* if the practitioner created a zoom meeting, then isZoomMeetingCreated is true which will lead to the button to disappear */}
+            {nextApt.isZoomMeetingCreated === false ? (
+              <button
+                className="dashboard-patient-card__btn"
+                onClick={(e) => handleFinaliseAuth(e)}
+              >
+                Finalise & Authorize
+              </button>
+            ) : (
+              ""
+            )}
+          </div>
         )}
       </div>
+    </div>
+  );
+};
+
+const ZoomMeetingFinishConfirmation = ({ setNextAptBtn }) => {
+  const handleCompleteAppointment = (e) => {
+    e.preventDefault();
+    //TODO: set appointmentCompleted to true in the db
+    fetch(UpdateIsAppointmentCompleted, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify({
+        Id: nextApt.id,
+      }),
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        console.log(res);
+        setNextAptBtn(false);
+      });
+  };
+
+  return (
+    <div>
+      <h4>Conclusion</h4>
+      <textarea
+        className="zoomconfirmation-textarea"
+        placeholder="Conclusion/findings..."
+      ></textarea>
+      <p style={{ fontSize: "12px" }}>Conclude appointment?</p>
+      <button
+        className="zoomconfirmation-btn"
+        onClick={(e) => handleCompleteAppointment(e)}
+      >
+        Yes
+      </button>
     </div>
   );
 };
@@ -582,19 +618,30 @@ const AppointmentContainer = () => {
   );
 };
 const TotalAppointmentContainer = () => {
+  const id = parseInt(sessionStorage.getItem("id"));
+  const [totalApt, setTotalApt] = useState(0);
+
+  useEffect(() => {
+    fetch(`${GetTotalAppointment}/${id}`)
+      .then((res) => res.json())
+      .then((res) => {
+        console.log(res);
+        setTotalApt(res);
+      });
+  }, []);
   return (
     <div>
       <div className="total-appointment__wrapper">
-        <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
-          <h1 style={{ color: "#9dcd5a" }}>213</h1>
+        <div style={{ display: "flex", gap: "15px", alignItems: "center" }}>
+          <h1 style={{ color: "#9dcd5a" }}>{totalApt}</h1>
           <h4 style={{ width: "100px", fontSize: "13px" }}>
             total appointments
           </h4>
         </div>
-        <div>
+        {/* <div>
           <p style={{ fontSize: "13px" }}>since 2019</p>
           <p style={{ fontSize: "13px", color: "#9dcd5a" }}>+ 8%</p>
-        </div>
+        </div> */}
       </div>
     </div>
   );
@@ -929,7 +976,7 @@ const NotesContainer = () => {
         <div style={{ display: "flex", justifyContent: "space-between" }}>
           <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
             <Notepad size={19} color="#9DCD5A" />
-            <h5 style={{ color: "#202020" }}>Notes</h5>
+            <h5>Notes</h5>
           </div>
           <button
             style={{
@@ -978,7 +1025,7 @@ const NotesContainer = () => {
           ""
         )}
 
-        {notes.length <= 0 ? (
+        {notes.length <= 0 && openFormAdd === false ? (
           <div style={{ textAlign: "center", marginTop: "45px" }}>
             <NoteBlank size={25} color="rgba(0,0,0,0.4)" />
             <p style={{ color: "rgba(0,0,0,0.3)", fontSize: "13px" }}>
