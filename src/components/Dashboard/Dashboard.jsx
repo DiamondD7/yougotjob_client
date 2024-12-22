@@ -2,12 +2,15 @@ import React, { useState, useEffect } from "react";
 import { json, useNavigate } from "react-router-dom";
 import { MockUserData } from "../../assets/js/mockChartData";
 import {
+  GetTotalAppointment,
   GetNextAppointment,
   UpdateIsAppointmentCompleted,
   GetPreviousApt,
   CreateNote,
   DeleteNote,
   GetSpecificNotes,
+  AddAppointmentPayment,
+  GetChartData,
 } from "../../assets/js/serverApi";
 import { exportedMonthsArray } from "../../assets/js/months";
 import {
@@ -324,6 +327,7 @@ const PrevAptView = ({ prevApt, setPrevAptBtn }) => {
 };
 
 const NextAptView = ({ nextApt, activateGoTo, setNextAptBtn }) => {
+  const [openMeeting, setOpenMeeting] = useState(false);
   const handleFinaliseAuth = () => {
     const cliendId = import.meta.env.VITE_ZOOM_CLIENT_ID;
     const redirectUri = import.meta.env.VITE_ZOOM_REDIRECT_URI;
@@ -336,23 +340,8 @@ const NextAptView = ({ nextApt, activateGoTo, setNextAptBtn }) => {
 
   const handleGoToZoomMeeting = (e) => {
     e.preventDefault();
+    setOpenMeeting(true);
     window.open(nextApt.startZoomLink, "_blank", "noreferrer");
-
-    //TODO: set appointmentCompleted to true in the db
-    fetch(UpdateIsAppointmentCompleted, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-      body: JSON.stringify({
-        Id: nextApt.id,
-      }),
-    })
-      .then((res) => res.json())
-      .then((res) => {
-        console.log(res);
-      });
   };
 
   return (
@@ -368,62 +357,187 @@ const NextAptView = ({ nextApt, activateGoTo, setNextAptBtn }) => {
         >
           <X size={15} />
         </button>
-        <h4>Patient's Details</h4>
-        <p style={{ fontSize: "12px" }}>{nextApt.nhi}</p>
-        <br />
-        <div>
+        {openMeeting === true ? (
           <div>
-            <p style={{ fontSize: "12px" }}>Full name: {nextApt.fullName}</p>
-            <p style={{ fontSize: "12px" }}>{nextApt.emailAddress}</p>
-            <p style={{ fontSize: "12px" }}>{nextApt.contactNumber}</p>
-            <br />
-            <p style={{ fontSize: "12px" }}>
-              Date:{" "}
-              {new Date(nextApt.preferredAppointmentDate).toLocaleString(
-                "en-nz"
-              )}
-            </p>
+            <ZoomMeetingFinishConfirmation
+              nextApt={nextApt}
+              setNextAptBtn={setNextAptBtn}
+            />
           </div>
-        </div>
-        <button
-          className={`dashboard-patient-info__btn ${
-            activateGoTo === false ? "btnDisabled" : ""
-          }`}
-          onClick={(e) => handleGoToZoomMeeting(e)}
-          disabled={activateGoTo === true ? false : true}
-        >
-          Go to the meeting
-        </button>
-
-        {/* if the practitioner created a zoom meeting, then isZoomMeetingCreated is true which will lead to the button to disappear */}
-        {nextApt.isZoomMeetingCreated === false ? (
-          <button
-            className="dashboard-patient-card__btn"
-            onClick={(e) => handleFinaliseAuth(e)}
-          >
-            Finalise & Authorize
-          </button>
         ) : (
-          ""
+          <div>
+            <h4>Patient's Details</h4>
+            <p style={{ fontSize: "12px" }}>{nextApt.nhi}</p>
+            <br />
+            <div>
+              <div>
+                <p style={{ fontSize: "12px" }}>
+                  Full name: {nextApt.fullName}
+                </p>
+                <p style={{ fontSize: "12px" }}>{nextApt.emailAddress}</p>
+                <p style={{ fontSize: "12px" }}>{nextApt.contactNumber}</p>
+                <br />
+                <p style={{ fontSize: "12px" }}>
+                  Date:{" "}
+                  {new Date(nextApt.preferredAppointmentDate).toLocaleString(
+                    "en-nz"
+                  )}
+                </p>
+              </div>
+            </div>
+            <button
+              className={`dashboard-patient-info__btn ${
+                activateGoTo === false ? "btnDisabled" : ""
+              }`}
+              onClick={(e) => handleGoToZoomMeeting(e)}
+              disabled={activateGoTo === true ? false : true}
+            >
+              Go to the meeting
+            </button>
+
+            {/* if the practitioner created a zoom meeting, then isZoomMeetingCreated is true which will lead to the button to disappear */}
+            {nextApt.isZoomMeetingCreated === false ? (
+              <button
+                className="dashboard-patient-card__btn"
+                onClick={(e) => handleFinaliseAuth(e)}
+              >
+                Finalise & Authorize
+              </button>
+            ) : (
+              ""
+            )}
+          </div>
         )}
       </div>
     </div>
   );
 };
 
+const ZoomMeetingFinishConfirmation = ({ nextApt, setNextAptBtn }) => {
+  const handleCompleteAppointment = (e) => {
+    e.preventDefault();
+    //TODO: set appointmentCompleted to true in the db
+    fetch(UpdateIsAppointmentCompleted, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify({
+        Id: nextApt.id,
+      }),
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        console.log(res);
+        setNextAptBtn(false);
+        handleAddAppointmentPayment(nextApt.id);
+      });
+  };
+
+  const handleAddAppointmentPayment = (id) => {
+    fetch(AddAppointmentPayment, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify({
+        Id: id,
+      }),
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        //console.log(res);
+        window.location.reload();
+      });
+  };
+
+  return (
+    <div>
+      <h4>Conclusion</h4>
+      <textarea
+        className="zoomconfirmation-textarea"
+        placeholder="Conclusion/findings..."
+      ></textarea>
+      <p style={{ fontSize: "12px" }}>Conclude appointment?</p>
+      <button
+        className="zoomconfirmation-btn"
+        onClick={(e) => handleCompleteAppointment(e)}
+      >
+        Yes
+      </button>
+    </div>
+  );
+};
+
 const PatientLineGraph = () => {
   const [changeChartSubject, setChangeChartSubject] = useState(1);
+
+  //initialised empty array at first
   const [userData, setUserData] = useState({
-    labels: MockUserData.map((data) => data.monthName),
+    labels: [].map((data) => data.monthName),
     datasets: [
       {
         label: "Amount of Appointments per month",
-        data: MockUserData.map((data) => data.appointments),
+        data: [].map((data) => data.appointments),
         backgroundColor: "#9dcd5a",
         borderColor: "#9dcd5a",
       },
     ],
   });
+
+  useEffect(() => {
+    fetchData();
+  }, [changeChartSubject]);
+
+  const fetchData = () => {
+    const id = parseInt(sessionStorage.getItem("id"));
+    fetch(`${GetChartData}/${id}`)
+      .then((res) => res.json())
+      .then((res) => {
+        //console.log(res);
+        const data = res.returnStatus.data;
+
+        if (changeChartSubject === 1) {
+          setUserData({
+            labels: data.map((data) => data.monthName),
+            datasets: [
+              {
+                label: "Amount of Appointments per month",
+                data: data.map((data) => data.appointments),
+                backgroundColor: "#9dcd5a",
+                borderColor: "#9dcd5a",
+              },
+            ],
+          });
+        } else if (changeChartSubject === 2) {
+          setUserData({
+            labels: data.map((data) => data.monthName),
+            datasets: [
+              {
+                label: "Amount of Appointments per month",
+                data: data.map((data) => data.appointments),
+                backgroundColor: "#9dcd5a",
+                borderColor: "#9dcd5a",
+              },
+            ],
+          });
+        } else {
+          setUserData({
+            labels: data.map((data) => data.monthName),
+            datasets: [
+              {
+                label: "Amount of Appointments per month",
+                data: data.map((data) => data.appointments),
+                backgroundColor: "#9dcd5a",
+                borderColor: "#9dcd5a",
+              },
+            ],
+          });
+        }
+      });
+  };
 
   const handleChangeChartSubject = () => {
     if (changeChartSubject < 3) {
@@ -432,46 +546,6 @@ const PatientLineGraph = () => {
       setChangeChartSubject(1);
     }
   };
-
-  useEffect(() => {
-    if (changeChartSubject === 1) {
-      setUserData({
-        labels: MockUserData.map((data) => data.monthName),
-        datasets: [
-          {
-            label: "Amount of Appointments per month",
-            data: MockUserData.map((data) => data.appointments),
-            backgroundColor: "#9dcd5a",
-            borderColor: "#9dcd5a",
-          },
-        ],
-      });
-    } else if (changeChartSubject === 2) {
-      setUserData({
-        labels: MockUserData.map((data) => data.monthName),
-        datasets: [
-          {
-            label: "Amount of Flu Vaccination per month",
-            data: MockUserData.map((data) => data.fluVacinnation),
-            backgroundColor: "purple",
-            borderColor: "purple",
-          },
-        ],
-      });
-    } else {
-      setUserData({
-        labels: MockUserData.map((data) => data.monthName),
-        datasets: [
-          {
-            label: "Amount of Covid Vaccination per month",
-            data: MockUserData.map((data) => data.covidVaccination),
-            backgroundColor: "red",
-            borderColor: "red",
-          },
-        ],
-      });
-    }
-  }, [changeChartSubject]);
 
   return (
     <div>
@@ -488,9 +562,11 @@ const PatientLineGraph = () => {
   );
 };
 
-const AppointmentContainer = () => {
+const AppointmentContainer = ({ aptDue }) => {
   const [openAppointmentContainer, setOpenAppointmentContainer] =
     useState(false);
+
+  const appointmentTotalDue = aptDue.length;
   return (
     <div>
       <button
@@ -512,7 +588,7 @@ const AppointmentContainer = () => {
               gap: "10px",
             }}
           >
-            <h1 style={{ color: "#9dcd5a" }}>5</h1>
+            <h1 style={{ color: "#9dcd5a" }}>{appointmentTotalDue}</h1>
             <h4 style={{ width: "100px", fontSize: "13px" }}>
               appointments due today
             </h4>
@@ -550,31 +626,17 @@ const AppointmentContainer = () => {
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td>1</td>
-              <td>Sierra, Aaron</td>
-              <td>15 Mar 2024 12:40pm</td>
-            </tr>
-            <tr>
-              <td>2</td>
-              <td>Sierra, Aaron</td>
-              <td>15 Mar 2024 12:40pm</td>
-            </tr>
-            <tr>
-              <td>3</td>
-              <td>Sierra, Aaron</td>
-              <td>15 Mar 2024 12:40pm</td>
-            </tr>
-            <tr>
-              <td>4</td>
-              <td>Sierra, Aaron</td>
-              <td>15 Mar 2024 12:40pm</td>
-            </tr>
-            <tr>
-              <td>5</td>
-              <td>Sierra, Aaron</td>
-              <td>15 Mar 2024 12:40pm</td>
-            </tr>
+            {aptDue.map((items, index) => (
+              <tr key={items.id}>
+                <td>{index + 1}</td>
+                <td>{items.fullName}</td>
+                <td>
+                  {new Date(items.preferredAppointmentDate).toLocaleString(
+                    "en-nz"
+                  )}
+                </td>
+              </tr>
+            ))}
           </tbody>
         </table>
       </div>
@@ -582,19 +644,30 @@ const AppointmentContainer = () => {
   );
 };
 const TotalAppointmentContainer = () => {
+  const id = parseInt(sessionStorage.getItem("id"));
+  const [totalApt, setTotalApt] = useState(0);
+
+  useEffect(() => {
+    fetch(`${GetTotalAppointment}/${id}`)
+      .then((res) => res.json())
+      .then((res) => {
+        //console.log(res);
+        setTotalApt(res);
+      });
+  }, []);
   return (
     <div>
       <div className="total-appointment__wrapper">
-        <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
-          <h1 style={{ color: "#9dcd5a" }}>213</h1>
+        <div style={{ display: "flex", gap: "15px", alignItems: "center" }}>
+          <h1 style={{ color: "#9dcd5a" }}>{totalApt}</h1>
           <h4 style={{ width: "100px", fontSize: "13px" }}>
             total appointments
           </h4>
         </div>
-        <div>
+        {/* <div>
           <p style={{ fontSize: "13px" }}>since 2019</p>
           <p style={{ fontSize: "13px", color: "#9dcd5a" }}>+ 8%</p>
-        </div>
+        </div> */}
       </div>
     </div>
   );
@@ -730,43 +803,16 @@ const WeeklyScheduleContainer = () => {
 };
 
 const InvoiceContainer = () => {
-  const testinvoice = [
-    {
-      Date: "23/02/2024",
-      Code: 3445,
-      Description: "Short Consultation",
-      Tax: 0.0,
-      Total: 76.0,
-    },
-    {
-      Date: "23/02/2024",
-      Code: 3445,
-      Description: "Short Consultation",
-      Tax: 0.0,
-      Total: 76.0,
-    },
-    {
-      Date: "23/02/2024",
-      Code: 3445,
-      Description: "Short Consultation",
-      Tax: 0.0,
-      Total: 76.0,
-    },
-    {
-      Date: "23/02/2024",
-      Code: 3445,
-      Description: "Short Consultation",
-      Tax: 0.0,
-      Total: 76.0,
-    },
-    {
-      Date: "23/02/2024",
-      Code: 3445,
-      Description: "Short Consultation",
-      Tax: 0.0,
-      Total: 76.0,
-    },
-  ];
+  const [apts, setApts] = useState([]);
+
+  useEffect(() => {
+    const id = parseInt(sessionStorage.getItem("id"));
+    fetch(`${GetPreviousApt}/${id}`)
+      .then((res) => res.json())
+      .then((res) => {
+        setApts(res.returnStatus.data);
+      });
+  }, []);
 
   return (
     <div>
@@ -775,24 +821,42 @@ const InvoiceContainer = () => {
           <thead>
             <tr>
               <th>#</th>
-              <th>Date</th>
+              <th>Date/Time</th>
               <th>Invoice Code</th>
               <th>Description</th>
               <th>Tax</th>
               <th>Total</th>
+              <th>Payment</th>
             </tr>
           </thead>
           <tbody>
-            {testinvoice.map((data, index) => (
+            {apts.map((data, index) => (
               <tr key={index}>
                 <td>{index + 1}</td>
-                <td>{data.Date}</td>
-                <td>{data.Code}</td>
-                <td>{data.Description}</td>
-                <td>${data.Tax}</td>
-                <td>${data.Total}</td>
                 <td>
-                  <button className="btnclear">view</button>
+                  {new Date(data.appointmentDateCompleted).toLocaleString(
+                    "en-nz"
+                  )}
+                </td>
+                <td>0</td>
+                <td>{data.comments}</td>
+                <td>{data.appointmentPayments.taxRate}</td>
+                <td>${data.appointmentPayments.total}</td>
+                <td>
+                  <button
+                    className={
+                      data.appointmentPayments.isPaid === true
+                        ? "btn-paid"
+                        : "btn-notpaid"
+                    }
+                    disabled={
+                      data.appointmentPayments.isPaid === true ? true : false
+                    }
+                  >
+                    {data.appointmentPayments.isPaid === true
+                      ? "Paid"
+                      : "Pending"}
+                  </button>
                 </td>
               </tr>
             ))}
@@ -929,7 +993,7 @@ const NotesContainer = () => {
         <div style={{ display: "flex", justifyContent: "space-between" }}>
           <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
             <Notepad size={19} color="#9DCD5A" />
-            <h5 style={{ color: "#202020" }}>Notes</h5>
+            <h5>Notes</h5>
           </div>
           <button
             style={{
@@ -978,7 +1042,7 @@ const NotesContainer = () => {
           ""
         )}
 
-        {notes.length <= 0 ? (
+        {notes.length <= 0 && openFormAdd === false ? (
           <div style={{ textAlign: "center", marginTop: "45px" }}>
             <NoteBlank size={25} color="rgba(0,0,0,0.4)" />
             <p style={{ color: "rgba(0,0,0,0.3)", fontSize: "13px" }}>
@@ -1030,6 +1094,7 @@ const Dashboard = () => {
   const [prevAptBtn, setPrevAptBtn] = useState(false);
   const [inputDate, setInputDate] = useState(""); //for timer
   const [activateGoTo, setActivateGoTo] = useState(false);
+  const [aptDue, setAptDue] = useState([]);
   const [nextApt, setNextApt] = useState([]);
   const [prevApt, setPrevApt] = useState([]);
 
@@ -1046,6 +1111,7 @@ const Dashboard = () => {
       .then((res) => {
         if (res.returnStatus.data !== undefined) {
           setNextApt(res.returnStatus.data[0]);
+          setAptDue(res.returnStatus.data);
           //format date and setting for timer
           const dateFormat = new Date(
             res.returnStatus.data[0].preferredAppointmentDate
@@ -1107,7 +1173,7 @@ const Dashboard = () => {
             </div>
             <div>
               <TotalAppointmentContainer />
-              <AppointmentContainer />
+              <AppointmentContainer aptDue={aptDue} />
             </div>
             <div>
               <ContinueLearningContainer />
