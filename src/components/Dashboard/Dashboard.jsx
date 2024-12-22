@@ -9,6 +9,8 @@ import {
   CreateNote,
   DeleteNote,
   GetSpecificNotes,
+  AddAppointmentPayment,
+  GetChartData,
 } from "../../assets/js/serverApi";
 import { exportedMonthsArray } from "../../assets/js/months";
 import {
@@ -357,7 +359,10 @@ const NextAptView = ({ nextApt, activateGoTo, setNextAptBtn }) => {
         </button>
         {openMeeting === true ? (
           <div>
-            <ZoomMeetingFinishConfirmation setNextAptBtn={setNextAptBtn} />
+            <ZoomMeetingFinishConfirmation
+              nextApt={nextApt}
+              setNextAptBtn={setNextAptBtn}
+            />
           </div>
         ) : (
           <div>
@@ -408,7 +413,7 @@ const NextAptView = ({ nextApt, activateGoTo, setNextAptBtn }) => {
   );
 };
 
-const ZoomMeetingFinishConfirmation = ({ setNextAptBtn }) => {
+const ZoomMeetingFinishConfirmation = ({ nextApt, setNextAptBtn }) => {
   const handleCompleteAppointment = (e) => {
     e.preventDefault();
     //TODO: set appointmentCompleted to true in the db
@@ -426,6 +431,25 @@ const ZoomMeetingFinishConfirmation = ({ setNextAptBtn }) => {
       .then((res) => {
         console.log(res);
         setNextAptBtn(false);
+        handleAddAppointmentPayment(nextApt.id);
+      });
+  };
+
+  const handleAddAppointmentPayment = (id) => {
+    fetch(AddAppointmentPayment, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify({
+        Id: id,
+      }),
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        //console.log(res);
+        window.location.reload();
       });
   };
 
@@ -449,17 +473,71 @@ const ZoomMeetingFinishConfirmation = ({ setNextAptBtn }) => {
 
 const PatientLineGraph = () => {
   const [changeChartSubject, setChangeChartSubject] = useState(1);
+
+  //initialised empty array at first
   const [userData, setUserData] = useState({
-    labels: MockUserData.map((data) => data.monthName),
+    labels: [].map((data) => data.monthName),
     datasets: [
       {
         label: "Amount of Appointments per month",
-        data: MockUserData.map((data) => data.appointments),
+        data: [].map((data) => data.appointments),
         backgroundColor: "#9dcd5a",
         borderColor: "#9dcd5a",
       },
     ],
   });
+
+  useEffect(() => {
+    fetchData();
+  }, [changeChartSubject]);
+
+  const fetchData = () => {
+    const id = parseInt(sessionStorage.getItem("id"));
+    fetch(`${GetChartData}/${id}`)
+      .then((res) => res.json())
+      .then((res) => {
+        //console.log(res);
+        const data = res.returnStatus.data;
+
+        if (changeChartSubject === 1) {
+          setUserData({
+            labels: data.map((data) => data.monthName),
+            datasets: [
+              {
+                label: "Amount of Appointments per month",
+                data: data.map((data) => data.appointments),
+                backgroundColor: "#9dcd5a",
+                borderColor: "#9dcd5a",
+              },
+            ],
+          });
+        } else if (changeChartSubject === 2) {
+          setUserData({
+            labels: data.map((data) => data.monthName),
+            datasets: [
+              {
+                label: "Amount of Appointments per month",
+                data: data.map((data) => data.appointments),
+                backgroundColor: "#9dcd5a",
+                borderColor: "#9dcd5a",
+              },
+            ],
+          });
+        } else {
+          setUserData({
+            labels: data.map((data) => data.monthName),
+            datasets: [
+              {
+                label: "Amount of Appointments per month",
+                data: data.map((data) => data.appointments),
+                backgroundColor: "#9dcd5a",
+                borderColor: "#9dcd5a",
+              },
+            ],
+          });
+        }
+      });
+  };
 
   const handleChangeChartSubject = () => {
     if (changeChartSubject < 3) {
@@ -468,46 +546,6 @@ const PatientLineGraph = () => {
       setChangeChartSubject(1);
     }
   };
-
-  useEffect(() => {
-    if (changeChartSubject === 1) {
-      setUserData({
-        labels: MockUserData.map((data) => data.monthName),
-        datasets: [
-          {
-            label: "Amount of Appointments per month",
-            data: MockUserData.map((data) => data.appointments),
-            backgroundColor: "#9dcd5a",
-            borderColor: "#9dcd5a",
-          },
-        ],
-      });
-    } else if (changeChartSubject === 2) {
-      setUserData({
-        labels: MockUserData.map((data) => data.monthName),
-        datasets: [
-          {
-            label: "Amount of Flu Vaccination per month",
-            data: MockUserData.map((data) => data.fluVacinnation),
-            backgroundColor: "purple",
-            borderColor: "purple",
-          },
-        ],
-      });
-    } else {
-      setUserData({
-        labels: MockUserData.map((data) => data.monthName),
-        datasets: [
-          {
-            label: "Amount of Covid Vaccination per month",
-            data: MockUserData.map((data) => data.covidVaccination),
-            backgroundColor: "red",
-            borderColor: "red",
-          },
-        ],
-      });
-    }
-  }, [changeChartSubject]);
 
   return (
     <div>
@@ -588,9 +626,9 @@ const AppointmentContainer = ({ aptDue }) => {
             </tr>
           </thead>
           <tbody>
-            {aptDue.map((items) => (
+            {aptDue.map((items, index) => (
               <tr key={items.id}>
-                <td>1</td>
+                <td>{index + 1}</td>
                 <td>{items.fullName}</td>
                 <td>
                   {new Date(items.preferredAppointmentDate).toLocaleString(
@@ -613,7 +651,7 @@ const TotalAppointmentContainer = () => {
     fetch(`${GetTotalAppointment}/${id}`)
       .then((res) => res.json())
       .then((res) => {
-        console.log(res);
+        //console.log(res);
         setTotalApt(res);
       });
   }, []);
@@ -765,43 +803,16 @@ const WeeklyScheduleContainer = () => {
 };
 
 const InvoiceContainer = () => {
-  const testinvoice = [
-    {
-      Date: "23/02/2024",
-      Code: 3445,
-      Description: "Short Consultation",
-      Tax: 0.0,
-      Total: 76.0,
-    },
-    {
-      Date: "23/02/2024",
-      Code: 3445,
-      Description: "Short Consultation",
-      Tax: 0.0,
-      Total: 76.0,
-    },
-    {
-      Date: "23/02/2024",
-      Code: 3445,
-      Description: "Short Consultation",
-      Tax: 0.0,
-      Total: 76.0,
-    },
-    {
-      Date: "23/02/2024",
-      Code: 3445,
-      Description: "Short Consultation",
-      Tax: 0.0,
-      Total: 76.0,
-    },
-    {
-      Date: "23/02/2024",
-      Code: 3445,
-      Description: "Short Consultation",
-      Tax: 0.0,
-      Total: 76.0,
-    },
-  ];
+  const [apts, setApts] = useState([]);
+
+  useEffect(() => {
+    const id = parseInt(sessionStorage.getItem("id"));
+    fetch(`${GetPreviousApt}/${id}`)
+      .then((res) => res.json())
+      .then((res) => {
+        setApts(res.returnStatus.data);
+      });
+  }, []);
 
   return (
     <div>
@@ -810,24 +821,42 @@ const InvoiceContainer = () => {
           <thead>
             <tr>
               <th>#</th>
-              <th>Date</th>
+              <th>Date/Time</th>
               <th>Invoice Code</th>
               <th>Description</th>
               <th>Tax</th>
               <th>Total</th>
+              <th>Payment</th>
             </tr>
           </thead>
           <tbody>
-            {testinvoice.map((data, index) => (
+            {apts.map((data, index) => (
               <tr key={index}>
                 <td>{index + 1}</td>
-                <td>{data.Date}</td>
-                <td>{data.Code}</td>
-                <td>{data.Description}</td>
-                <td>${data.Tax}</td>
-                <td>${data.Total}</td>
                 <td>
-                  <button className="btnclear">view</button>
+                  {new Date(data.appointmentDateCompleted).toLocaleString(
+                    "en-nz"
+                  )}
+                </td>
+                <td>0</td>
+                <td>{data.comments}</td>
+                <td>{data.appointmentPayments.taxRate}</td>
+                <td>${data.appointmentPayments.total}</td>
+                <td>
+                  <button
+                    className={
+                      data.appointmentPayments.isPaid === true
+                        ? "btn-paid"
+                        : "btn-notpaid"
+                    }
+                    disabled={
+                      data.appointmentPayments.isPaid === true ? true : false
+                    }
+                  >
+                    {data.appointmentPayments.isPaid === true
+                      ? "Paid"
+                      : "Pending"}
+                  </button>
                 </td>
               </tr>
             ))}
