@@ -6,6 +6,7 @@ import { Route, Routes } from "react-router-dom";
 
 import "./App.css";
 import Meeting from "./components/Meeting/Meeting";
+import SuccessPayment from "./components/Stripe/Redirect/SuccessPayment";
 
 function App() {
   const [currentRole, setCurrentRole] = useState(
@@ -39,6 +40,7 @@ function App() {
         <Routes>
           <Route path="/" element={<SignIn localData={localData} />} />
           <Route path="/meeting" element={<Meeting />} />
+          <Route path="/success-payment" element={<SuccessPayment />} />
         </Routes>
         {currentRole === "Practitioner" ? (
           <Routes>

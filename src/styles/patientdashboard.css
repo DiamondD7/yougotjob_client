@@ -242,3 +242,22 @@
 .tables-chosen-table__wrapper tbody tr:nth-child(even) {
   background-color: #d6e8ff;
 }
+
+.btn-paid {
+  background-color: #9dcd5a;
+  border: 1px solid #9dcd5a;
+  border-radius: 5px;
+  color: #f3f3f3;
+
+  padding: 2px 10px;
+}
+
+.btn-notpaid {
+  cursor: pointer;
+  background-color: #d7c60f;
+  border: 1px solid #d7c60f;
+  border-radius: 5px;
+  color: #f3f3f3;
+
+  padding: 2px 10px;
+}
