@@ -802,7 +802,7 @@ const WeeklyScheduleContainer = () => {
   );
 };
 
-const InvoiceContainer = () => {
+const PaymentContainer = () => {
   const [apts, setApts] = useState([]);
 
   useEffect(() => {
@@ -821,6 +821,7 @@ const InvoiceContainer = () => {
           <thead>
             <tr>
               <th>#</th>
+              <th>Patient</th>
               <th>Date/Time</th>
               <th>Invoice Code</th>
               <th>Description</th>
@@ -833,6 +834,7 @@ const InvoiceContainer = () => {
             {apts.map((data, index) => (
               <tr key={index}>
                 <td>{index + 1}</td>
+                <td>{data.fullName}</td>
                 <td>
                   {new Date(data.appointmentDateCompleted).toLocaleString(
                     "en-nz"
@@ -1185,7 +1187,7 @@ const Dashboard = () => {
                 margin: "20px 0 0 20px",
               }}
             >
-              <InvoiceContainer />
+              <PaymentContainer />
             </div>
             <div className="weekly-schedule-container__wrapper">
               <WeeklyScheduleContainer />

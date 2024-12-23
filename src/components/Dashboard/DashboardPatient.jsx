@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { GetNextAppointmentForPatient } from "../../assets/js/serverApi";
+import {
+  GetNextAppointmentForPatient,
+  GetPatientPreviousApt,
+} from "../../assets/js/serverApi";
 import {
   User,
   Calendar,
@@ -9,6 +12,7 @@ import {
 } from "@phosphor-icons/react";
 
 import "../../styles/patientdashboard.css";
+import Payment from "../Stripe/Payment";
 const SummaryCards = () => {
   const [days, setDays] = useState(0);
   const [hours, setHours] = useState(0);
@@ -260,71 +264,86 @@ const PreferredPractitioner = () => {
   );
 };
 
-const InvoiceContainer = () => {
-  const testinvoice = [
-    {
-      Date: "23/02/2024",
-      Code: 3445,
-      Description: "Short Consultation",
-      Tax: 0.0,
-      Total: 76.0,
-    },
-    {
-      Date: "23/02/2024",
-      Code: 3445,
-      Description: "Short Consultation",
-      Tax: 0.0,
-      Total: 76.0,
-    },
-    {
-      Date: "23/02/2024",
-      Code: 3445,
-      Description: "Short Consultation",
-      Tax: 0.0,
-      Total: 76.0,
-    },
-    {
-      Date: "23/02/2024",
-      Code: 3445,
-      Description: "Short Consultation",
-      Tax: 0.0,
-      Total: 76.0,
-    },
-    {
-      Date: "23/02/2024",
-      Code: 3445,
-      Description: "Short Consultation",
-      Tax: 0.0,
-      Total: 76.0,
-    },
-  ];
+const PaymentContainer = () => {
+  const [paymentClick, setPaymentClick] = useState(false);
+  const [chosenPayment, setChosenPayment] = useState([]);
+
+  const [apts, setApts] = useState([]);
+
+  useEffect(() => {
+    const id = parseInt(sessionStorage.getItem("id"));
+    fetch(`${GetPatientPreviousApt}/${id}`)
+      .then((res) => res.json())
+      .then((res) => {
+        setApts(res.returnStatus.data);
+      });
+  }, []);
+
+  const handlePaymentModal = (e, data) => {
+    e.preventDefault();
+    setPaymentClick(true);
+    setChosenPayment(data);
+  };
 
   return (
     <div>
+      {paymentClick === true ? <div className="overlay"></div> : ""}
+      {paymentClick === true ? (
+        <div>
+          <Payment
+            chosenPayment={chosenPayment}
+            setPaymentClick={setPaymentClick}
+          />
+        </div>
+      ) : (
+        ""
+      )}
       <div className="patientdashboard-invoice-container__wrapper">
-        <h5 className="patientdashboard-invoice-h5__text">Invoice</h5>
         <table className="patientdashboard-invoice-table">
           <thead>
             <tr>
               <th>#</th>
-              <th>Date</th>
+              <th>Practitioner</th>
+              <th>Date/Time</th>
               <th>Invoice Code</th>
               <th>Description</th>
               <th>Tax</th>
               <th>Total</th>
+              <th>Payment</th>
             </tr>
           </thead>
           <tbody>
-            {testinvoice.map((data, index) => (
+            {apts.map((data, index) => (
               <tr key={index}>
                 <td>{index + 1}</td>
-                <td>{data.Date}</td>
-                <td>{data.Code}</td>
-                <td>{data.Description}</td>
-                <td>${data.Tax}</td>
-                <td>${data.Total}</td>
+                <td>{data.practitionerName}</td>
                 <td>
-                  <button className="btnclear">view</button>
+                  {new Date(data.appointmentDateCompleted).toLocaleString(
+                    "en-nz"
+                  )}
+                </td>
+                <td>0</td>
+                <td>{data.comments}</td>
+                <td>{data.appointmentPayments.taxRate}</td>
+                <td>${data.appointmentPayments.total}</td>
+                <td>
+                  <button
+                    className={
+                      data.appointmentPayments.isPaid === true
+                        ? "btn-paid"
+                        : "btn-notpaid"
+                    }
+                    disabled={
+                      data.appointmentPayments.isPaid === true ? true : false
+                    }
+                    onClick={(e) =>
+                      handlePaymentModal(e, data.appointmentPayments)
+                    }
+                  >
+                    {data.appointmentPayments.isPaid === true
+                      ? "Paid"
+                      : "Pending"}
+                  </button>
                 </td>
               </tr>
             ))}
@@ -550,8 +569,17 @@ const TablesContainer = () => {
 };
 
 const DashboardPatient = () => {
+  const [paymentClick, setPaymentClick] = useState(false);
   return (
     <div>
+      {/* {paymentClick === true ? <div className="overlay"></div> : ""}
+      {paymentClick === true ? (
+        <div>
+          <Payment setPaymentClick={setPaymentClick} />
+        </div>
+      ) : (
+        ""
+      )} */}
       <div style={{ display: "flex" }}>
         <SummaryCards />
       </div>
@@ -561,7 +589,7 @@ const DashboardPatient = () => {
         <PrescriptionContainer />
       </div>
       <div style={{ padding: "10px", display: "flex", gap: "10px" }}>
-        <InvoiceContainer />
+        <PaymentContainer setPaymentClick={setPaymentClick} />
         <TablesContainer />
       </div>
     </div>
