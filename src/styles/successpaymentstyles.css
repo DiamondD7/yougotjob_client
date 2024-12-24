@@ -1,0 +1,17 @@
+.success-payment__wrapper {
+  text-align: center;
+  margin-top: 200px;
+}
+
+.success-payment-btn {
+  cursor: pointer;
+
+  font-size: 12px;
+  width: 100px;
+  border: 1px solid #9dcd5a;
+  background-color: #9dcd5a;
+  border-radius: 5px;
+  padding: 3px 100px;
+  color: #f3f3f3;
+  text-decoration: none;
+}
