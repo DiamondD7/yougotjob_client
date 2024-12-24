@@ -267,6 +267,7 @@ const PreferredPractitioner = () => {
 const PaymentContainer = () => {
   const [paymentClick, setPaymentClick] = useState(false);
   const [chosenPayment, setChosenPayment] = useState([]);
+  const [chosenAptId, setChosenAptId] = useState(0);
 
   const [apts, setApts] = useState([]);
 
@@ -279,10 +280,11 @@ const PaymentContainer = () => {
       });
   }, []);
 
-  const handlePaymentModal = (e, data) => {
+  const handlePaymentModal = (e, data, id) => {
     e.preventDefault();
-    setPaymentClick(true);
-    setChosenPayment(data);
+    setPaymentClick(true); //this is for opening the modal stripe pay
+    setChosenPayment(data); //this is the appointmentPayments
+    setChosenAptId(id);
   };
 
   return (
@@ -293,6 +295,7 @@ const PaymentContainer = () => {
           <Payment
             chosenPayment={chosenPayment}
             setPaymentClick={setPaymentClick}
+            chosenAptId={chosenAptId}
           />
         </div>
       ) : (
@@ -337,7 +340,7 @@ const PaymentContainer = () => {
                       data.appointmentPayments.isPaid === true ? true : false
                     }
                     onClick={(e) =>
-                      handlePaymentModal(e, data.appointmentPayments)
+                      handlePaymentModal(e, data.appointmentPayments, data.id)
                     }
                   >
                     {data.appointmentPayments.isPaid === true
