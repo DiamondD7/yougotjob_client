@@ -331,7 +331,7 @@
 
 .days-daily__wrapper p {
   font-size: 11px;
-  padding: 5px;
+  /* padding: 5px; */
   color: rgba(0, 0, 0, 0.4);
   transition: color 0.3s ease-in;
   cursor: default;
