@@ -329,9 +329,10 @@
   text-align: center;
 }
 
-.days-daily__wrapper p {
+.weekly-contents-day__p {
+  display: inline-block;
   font-size: 11px;
-  /* padding: 5px; */
+  padding-top: 5px;
   color: rgba(0, 0, 0, 0.4);
   transition: color 0.3s ease-in;
   cursor: default;
