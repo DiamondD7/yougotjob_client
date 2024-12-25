@@ -4,6 +4,7 @@ import { MockUserData } from "../../assets/js/mockChartData";
 import {
   GetTotalAppointment,
   GetNextAppointment,
+  GetWeeklyAppointment,
   UpdateIsAppointmentCompleted,
   GetPreviousApt,
   CreateNote,
@@ -414,6 +415,7 @@ const NextAptView = ({ nextApt, activateGoTo, setNextAptBtn }) => {
 };
 
 const ZoomMeetingFinishConfirmation = ({ nextApt, setNextAptBtn }) => {
+  const [conclusion, setConclusion] = useState("");
   const handleCompleteAppointment = (e) => {
     e.preventDefault();
     //TODO: set appointmentCompleted to true in the db
@@ -425,6 +427,7 @@ const ZoomMeetingFinishConfirmation = ({ nextApt, setNextAptBtn }) => {
       },
       body: JSON.stringify({
         Id: nextApt.id,
+        Conclusion: conclusion,
       }),
     })
       .then((res) => res.json())
@@ -459,6 +462,7 @@ const ZoomMeetingFinishConfirmation = ({ nextApt, setNextAptBtn }) => {
       <textarea
         className="zoomconfirmation-textarea"
         placeholder="Conclusion/findings..."
+        onChange={(e) => setConclusion(e.target.value)}
       ></textarea>
       <p style={{ fontSize: "12px" }}>Conclude appointment?</p>
       <button
@@ -755,6 +759,18 @@ const WeeklyScheduleContainer = () => {
     }
   }
 
+  // ----------------------------------------------------------
+
+  const [weeklyApt, setWeeklyApt] = useState([]);
+  useEffect(() => {
+    const id = parseInt(sessionStorage.getItem("id"));
+    fetch(`${GetWeeklyAppointment}/${id}`)
+      .then((res) => res.json())
+      .then((res) => {
+        //console.log(res);
+        setWeeklyApt(res.returnStatus.data);
+      });
+  }, []);
   return (
     <div>
       <div className="weekly-container__wrapper">
@@ -790,9 +806,19 @@ const WeeklyScheduleContainer = () => {
                 >
                   {day}
                 </h4>
-                <p>appointment @ 12 55pm</p>
-                <p>appointment @ 12 55pm</p>
-                <p>appointment @ 12 55pm</p>
+                {weeklyApt.map((data) => (
+                  //this code compares if the data.preferredDate is
+                  //the same with the day of the week.
+                  <p className="weekly-contents-day__p" key={data.id}>
+                    {new Date(data.preferredAppointmentDate).getDate() === day
+                      ? //this shows the name and the time of this
+                        //particular appointment
+                        `${data.fullName} @ ${new Date(
+                          data.preferredAppointmentDate
+                        ).toLocaleTimeString()}`
+                      : ""}
+                  </p>
+                ))}
               </div>
             ))}
           </div>
