@@ -71,7 +71,8 @@
 .result-table__table tbody tr td button {
   border: none;
   background-color: #9dcd5a;
-  padding: 5px 15px;
+  color: #f3f3f3;
+  padding: 2px 15px;
   border-radius: 5px;
   cursor: pointer;
 }

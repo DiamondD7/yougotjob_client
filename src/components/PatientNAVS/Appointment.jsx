@@ -233,6 +233,7 @@ const AppointmentWait = () => {
     Nhi: "",
     PractitionerId: 0,
     PatientsId: id,
+    Duration: 0,
     FullName: "",
     Comments: "",
     ContactNumber: "",

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import FullResult from "./FullResult";
+import { GetPreviousApt } from "../../assets/js/serverApi";
 import { PatientResultData } from "../../assets/js/usermock";
 import {
   CaretRight,
@@ -9,14 +10,7 @@ import {
 } from "@phosphor-icons/react";
 
 import "../../styles/resultsstyles.css";
-const FilterResults = ({
-  searchField,
-  setSearchField,
-  setVisitType,
-  setStatus,
-  setPayment,
-  setTriageLevel,
-}) => {
+const FilterResults = ({ setSearchField, setVisitType }) => {
   return (
     <div>
       <div className="filter-result__wrapper">
@@ -49,45 +43,9 @@ const FilterResults = ({
             onChange={(e) => setVisitType(e.target.value)}
           >
             <option value="">All</option>
-            <option>General Appointment</option>
-            <option>Vaccination</option>
-            <option>Checkup</option>
-          </select>
-        </div>
-        <div style={{ width: "12%" }}>
-          <h4 style={{ fontSize: "12px" }}>Status</h4>
-          <select
-            className="filter-result__dropdown"
-            onChange={(e) => setStatus(e.target.value)}
-          >
-            <option value="">All</option>
-            <option>Pending</option>
-            <option>Complete</option>
-            <option>KK</option>
-          </select>
-        </div>
-        <div style={{ width: "10%" }}>
-          <h4 style={{ fontSize: "12px" }}>Payment</h4>
-          <select
-            className="filter-result__dropdown"
-            onChange={(e) => setPayment(e.target.value)}
-          >
-            <option value="">All</option>
-            <option>Paid</option>
-            <option>Pending</option>
-            <option>Overdue</option>
-          </select>
-        </div>
-        <div style={{ width: "10%" }}>
-          <h4 style={{ fontSize: "12px" }}>Triage Level</h4>
-          <select
-            className="filter-result__dropdown"
-            onChange={(e) => setTriageLevel(e.target.value)}
-          >
-            <option value="">All</option>
-            <option>L1</option>
-            <option>L2</option>
-            <option>L3</option>
+            <option value="General Appoinment">General Appointment</option>
+            <option value="Vaccination">Vaccination</option>
+            <option value="Checkup">Checkup</option>
           </select>
         </div>
       </div>
@@ -96,16 +54,13 @@ const FilterResults = ({
 };
 
 const Results = () => {
-  const [updatedData, setUpdatedData] = useState(PatientResultData);
-  const [openResult, setOpenResult] = useState(false);
+  const [prevApts, setPrevApts] = useState([]);
+  const [filteredData, setFilteredData] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
+  const [openResult, setOpenResult] = useState(false);
   const [loadingTable, setLoadingTable] = useState(false);
   const [searchField, setSearchField] = useState("");
   const [visitType, setVisitType] = useState("");
-  const [status, setStatus] = useState("");
-  const [payment, setPayment] = useState("");
-  const [triageLevel, setTriageLevel] = useState("");
-  const [filteredData, setFilteredData] = useState([]);
 
   let recordsPerPage = 12;
 
@@ -113,69 +68,14 @@ const Results = () => {
   let indexOfirstRecord = indexOFLastRecord - recordsPerPage;
   let paginationButtons = []; //setting initial value
   let paginationLength = Math.ceil(
-    (searchField === "" &&
-    visitType === "" &&
-    status === "" &&
-    payment === "" &&
-    triageLevel === ""
-      ? PatientResultData.length
+    (searchField === "" && visitType === ""
+      ? prevApts.length
       : filteredData.length) / recordsPerPage
   );
 
   for (let i = 0; i < paginationLength; i++) {
     paginationButtons[i] = i; //populating the array based on the pages needed to fit all the data. make this better
   }
-
-  useEffect(() => {
-    updateRecord(); //calling updateRecord when currentPage is updated
-    setLoadingTable(false);
-  }, [currentPage, searchField, visitType, status, payment, triageLevel]);
-
-  const updateRecord = () => {
-    if (
-      searchField === "" &&
-      visitType === "" &&
-      status === "" &&
-      payment === "" &&
-      triageLevel === ""
-    ) {
-      setUpdatedData(
-        PatientResultData.slice(indexOfirstRecord, indexOFLastRecord) //setting PatientResultData to updatedData when pages are changed.
-      );
-    } else {
-      const filtered = searchField.toLowerCase();
-      const filteredVisitType = visitType.toLowerCase();
-      const filteredStatus = status.toLowerCase();
-      const filteredPayment = payment.toLowerCase();
-      const filteredTriageLevel = triageLevel.toLowerCase();
-      const filters = PatientResultData.filter(
-        //filters data
-        (data) => {
-          return (
-            (data.FullName.toLowerCase().includes(filtered) ||
-              data.NHI.toLowerCase().includes(filtered) ||
-              data.Subject.toLowerCase().includes(filtered)) &&
-            data.VisitType.toLowerCase().includes(filteredVisitType) &&
-            data.Status.toLowerCase().includes(filteredStatus) &&
-            data.Payment.toLowerCase().includes(filteredPayment) &&
-            data.TriageLevel.toLowerCase().includes(filteredTriageLevel)
-          );
-        }
-      );
-      setFilteredData(filters);
-      setUpdatedData(filters.slice(indexOfirstRecord, indexOFLastRecord));
-
-      if (currentPage > paginationLength) {
-        //if currentPage is more than the paginationLength then make currentPage 1 so that user can see data.but this is temporary. will imprv this
-        setCurrentPage(1);
-      }
-    }
-
-    setTimeout(() => {
-      setLoadingTable(true);
-    }, 2000);
-  };
-
   const handleCaretPageChange = (leftOrRight) => {
     if (leftOrRight === "right") {
       if (currentPage !== paginationLength) {
@@ -188,6 +88,49 @@ const Results = () => {
     }
   };
 
+  const getPreviousApt = () => {
+    const id = parseInt(sessionStorage.getItem("id"));
+    fetch(`${GetPreviousApt}/${id}`)
+      .then((res) => res.json())
+      .then((res) => {
+        //console.log(res);
+        setPrevApts(res.returnStatus.data);
+      });
+  };
+
+  useEffect(() => {
+    updateRecord(); //calling updateRecord when currentPage is updated
+    setLoadingTable(false);
+  }, [currentPage, searchField, visitType]);
+
+  const updateRecord = () => {
+    if (searchField === "" && visitType === "") {
+      //calls the fetch logic to get all the data when the searchfield and visitype is empty
+      getPreviousApt();
+    } else {
+      const filtered = searchField.toLowerCase();
+      const filteredVisitType = visitType.toLowerCase();
+
+      //filters the apt
+      const filters = prevApts.filter((data) => {
+        // Ensure all properties exist before accessing them
+        const hasFullNameMatch = data.fullName.toLowerCase().includes(filtered);
+        const hasNhiMatch = data.nhi.toLowerCase().includes(filtered);
+        const appointmentType = data.appointmentType
+          .toLowerCase()
+          .includes(filteredVisitType);
+
+        return (hasFullNameMatch || hasNhiMatch) && appointmentType;
+      });
+
+      setFilteredData(filters); //this is to check the length of data
+      setPrevApts(filters.slice(indexOfirstRecord, indexOFLastRecord));
+    }
+    setTimeout(() => {
+      setLoadingTable(true);
+    }, 2000);
+  };
+
   return (
     <div>
       {openResult === false ? (
@@ -195,11 +138,7 @@ const Results = () => {
           {/* <h2 className="result-table__h2">Results</h2> */}
           <FilterResults
             setSearchField={setSearchField}
-            searchField={searchField}
             setVisitType={setVisitType}
-            setStatus={setStatus}
-            setPayment={setPayment}
-            setTriageLevel={setTriageLevel}
           />
           {loadingTable === true ? (
             <div>
@@ -209,40 +148,36 @@ const Results = () => {
                     <th>NHI</th>
                     <th>Date</th>
                     <th>Name</th>
-                    <th>Visit type</th>
-                    <th>Subject</th>
+                    <th>Appointment type</th>
+                    <th>Agenda</th>
                     <th>Duration</th>
-                    <th>Triage</th>
                     <th>Comments</th>
                     <th>Payment</th>
-                    <th>Status</th>
                     <th></th>
                   </tr>
                 </thead>
 
                 <tbody>
-                  {updatedData.map((data, index) => (
+                  {prevApts.map((data, index) => (
                     <tr key={index}>
-                      <td>{data.NHI}</td>
-                      <td>{data.Date}</td>
-                      <td>{data.FullName}</td>
-                      <td>{data.VisitType}</td>
-                      <td>{data.Subject}</td>
+                      <td>{data.nhi}</td>
+                      <td>{data.preferredAppointmentDate}</td>
+                      <td>{data.fullName}</td>
+                      <td>{data.apointmentType}</td>
+                      <td>{data.appointmentAgenda}</td>
                       <td>{data.Duration}</td>
-                      <td>{data.TriageLevel}</td>
-                      <td>{data.Comments}</td>
+                      <td>{data.conclusion}</td>
                       <td
                         style={
-                          data.Payment === "Paid"
+                          data.appointmentPayments.isPaid === true
                             ? { color: "#9dcd5a" }
-                            : data.Payment === "Overdue"
-                            ? { color: "red" }
                             : { color: "#d7c60f" }
                         }
                       >
-                        {data.Payment}
+                        {data.appointmentPayments.isPaid === true
+                          ? "Paid"
+                          : "Pending"}
                       </td>
-                      <td>{data.Status}</td>
                       <td>
                         <button onClick={() => setOpenResult(true)}>
                           view
