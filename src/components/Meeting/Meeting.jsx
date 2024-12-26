@@ -320,7 +320,7 @@ const Meeting = () => {
       .then((res) => res.json())
       .then((res) => {
         const dataFormatted = JSON.parse(res.returnStatus.data);
-        //console.log(formatJSON);
+        console.log(dataFormatted);
         handleUpdateAppointmentLinks(patientData, dataFormatted);
       });
   };
@@ -334,6 +334,8 @@ const Meeting = () => {
       },
       body: JSON.stringify({
         Id: patientData.id,
+        Duration: zoomData.duration,
+        AppointmentAgenda: zoomData.agenda,
         PractitionerName: patientData.practitionerName,
         EmailAddress: patientData.emailAddress,
         PractitionerEmail: zoomData.host_email,

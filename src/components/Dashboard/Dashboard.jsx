@@ -391,7 +391,7 @@ const NextAptView = ({ nextApt, activateGoTo, setNextAptBtn }) => {
                 activateGoTo === false ? "btnDisabled" : ""
               }`}
               onClick={(e) => handleGoToZoomMeeting(e)}
-              disabled={activateGoTo === true ? false : true}
+              // disabled={activateGoTo === true ? false : true}
             >
               Go to the meeting
             </button>

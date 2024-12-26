@@ -102,32 +102,22 @@
   margin: 10px 0 0 10px;
 }
 
-.fullres-profile__wrapper {
-  margin: 30px 0 0 10px;
-  display: flex;
-  gap: 10px;
-}
-
-.fullres-viewprofile__btn {
-  background-color: #9dcd5a;
-  color: #f3f3f3;
+.fullres-documents__wrapper {
+  margin: 20px 0 0 10px;
+  padding: 10px;
+  border: 1px solid rgba(0, 0, 0, 0.2);
   border-radius: 5px;
-  padding: 2px 5px;
-  border: none;
-  cursor: pointer;
-
-  margin-left: 10px;
+  width: 500px;
+  height: 222px;
+  overflow: auto;
 }
 
-.nhi-header {
-  font-size: 12px;
-  margin-bottom: 10px;
-  color: rgba(0, 0, 0, 0.3);
+.fullres-documents__wrapper p {
+  margin-top: 10px;
 }
 
 .fullres-profile-container__wrapper {
   display: flex;
-  justify-content: space-between;
 }
 
 .fullres-details__wrapper {
@@ -137,6 +127,7 @@
   border-radius: 5px;
   width: 500px;
 }
+
 .fullres-details__wrapper p {
   margin-top: 10px;
 }
@@ -148,27 +139,14 @@
   justify-content: space-between;
 }
 
-.pdf-container__wrapper {
-  width: 69%;
-  height: 97vh;
-}
-
-.fullres-testdescription__wrapper {
-  margin: 10px 0 0 10px;
-}
-
-.conclusion-textarea {
-  font-size: 12px;
-  margin-top: 10px;
-  min-width: 505px;
-  max-width: 505px;
-  min-height: 100px;
-  max-height: 100px;
-  padding: 5px;
+/* .pdf-container__wrapper {
+  width: 650px;
+  height: 66vh;
+  margin: 20px 0 0 10px;
+  padding: 10px;
+  border: 1px solid rgba(0, 0, 0, 0.2);
   border-radius: 5px;
-  overflow: auto;
-  outline: none;
-}
+} */
 
 .result-profile-pic__img {
   width: 170px;
@@ -176,10 +154,6 @@
   object-fit: cover;
   object-position: center center;
   border-radius: 5px;
-}
-
-.full-result-profile-subinfo__wrapper p {
-  margin-top: 5px;
 }
 
 .symptoms-update__btn {
@@ -198,4 +172,50 @@
   padding: 3px 0px;
   font-size: 12px;
   color: rgba(0, 0, 0, 0.5);
+}
+
+/* ------------------ */
+
+.fullres-textarea-comments {
+  font-size: 12px;
+  padding: 2px 5px;
+  border-radius: 5px;
+  outline: none;
+
+  min-width: 100%;
+  max-width: 100%;
+  min-height: 100px;
+  max-height: 100px;
+}
+
+.fullres-conclusion__p {
+  font-size: 12px;
+  height: 80px;
+  overflow: auto;
+}
+
+.fullres-documents__table {
+  padding: 10px;
+  border-collapse: collapse;
+  font-size: 12px;
+}
+
+.fullres-documents__table thead th {
+  text-align: start;
+  padding: 10px;
+}
+
+.fullres-documents__table tbody td {
+  text-align: start;
+  padding: 10px;
+}
+
+.fullres-documents__btn {
+  background-color: #9dcd5a;
+  border: 1px solid #9dcd5a;
+  color: #f3f3f3;
+
+  cursor: pointer;
+  border-radius: 5px;
+  padding: 0 10px;
 }

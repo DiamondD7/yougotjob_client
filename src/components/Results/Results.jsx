@@ -163,7 +163,6 @@ const Results = () => {
                     <th>Appointment type</th>
                     <th>Agenda</th>
                     <th>Duration</th>
-                    <th>Comments</th>
                     <th>Payment</th>
                     <th></th>
                   </tr>
@@ -173,12 +172,15 @@ const Results = () => {
                   {prevApts.map((data, index) => (
                     <tr key={index}>
                       <td>{data.nhi}</td>
-                      <td>{data.preferredAppointmentDate}</td>
+                      <td>
+                        {new Date(
+                          data.preferredAppointmentDate
+                        ).toLocaleDateString("en-nz")}
+                      </td>
                       <td>{data.fullName}</td>
-                      <td>{data.apointmentType}</td>
+                      <td>{data.appointmentType}</td>
                       <td>{data.appointmentAgenda}</td>
-                      <td>{data.Duration}</td>
-                      <td>{data.conclusion}</td>
+                      <td>{data.duration}</td>
                       <td
                         style={
                           data.appointmentPayments.isPaid === true
