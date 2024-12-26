@@ -6,17 +6,162 @@ import { Viewer, Worker } from "@react-pdf-viewer/core";
 import { defaultLayoutPlugin } from "@react-pdf-viewer/default-layout";
 import "@react-pdf-viewer/core/lib/styles/index.css";
 import "@react-pdf-viewer/default-layout/lib/styles/index.css";
+const PatientDetails = ({ chosenView }) => {
+  return (
+    <div className="fullres-details__wrapper">
+      <h5>Patient Details</h5>
 
-const FullResult = ({ setOpenResult }) => {
-  const newPlugin = defaultLayoutPlugin();
-  const initialTestText =
-    "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Ipsa non ea saepe ipsam explicabo dolores eius dolorem expedita! Dolore aut impedit nostrum expedita officiis perspiciatis esse laborum quaerat neque blanditiis.";
-  const [testText, setTestText] = useState(
-    "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Ipsa non ea saepe ipsam explicabo dolores eius dolorem expedita! Dolore aut impedit nostrum expedita officiis perspiciatis esse laborum quaerat neque blanditiis."
+      <div className="fullres-details-infos__wrapper">
+        <div>
+          <p>Patient: {chosenView.fullName}</p>
+          <p>Email: {chosenView.emailAddress}</p>
+        </div>
+        <div>
+          <p>NHI: {chosenView.nhi}</p>
+          <p>Contact: {chosenView.contactNumber}</p>
+        </div>
+      </div>
+    </div>
   );
+};
 
-  const [prescribedMed, setPrescribedMed] = useState("Phenolynx Celyn 18/mcg");
-  const [editMed, setEditMed] = useState(false);
+const PractitionerDetails = ({ chosenView }) => {
+  return (
+    <div className="fullres-details__wrapper">
+      <h5>Practitioner Details</h5>
+      <div className="fullres-details-infos__wrapper">
+        <div>
+          <p>Practitioner: {chosenView.practitionerName}</p>
+          <p>Email: {chosenView.practitionerEmail}</p>
+        </div>
+        <div>
+          <p>Practitioner Type: {chosenView.healthPractitionerType}</p>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const AppointmentDetails = ({ chosenView }) => {
+  return (
+    <div className="fullres-details__wrapper">
+      <h5>Appointment Details</h5>
+      <div className="fullres-details-infos__wrapper">
+        <div>
+          <p>Appointment Agenda: {chosenView.appointmentAgenda}</p>
+          <p>Appointment Type: {chosenView.appointmentType}</p>
+          {chosenView.appointmentType === "on-site" ? (
+            <div>
+              <p>Address: {chosenView.streetAddress} </p>
+              <p>
+                {chosenView.suburb} {chosenView.city}, {chosenView.postCode}
+              </p>
+            </div>
+          ) : (
+            ""
+          )}
+        </div>
+        <div>
+          <p>
+            Preferred Date:{" "}
+            {new Date(chosenView.preferredAppointmentDate).toLocaleString(
+              "en-nz"
+            )}
+          </p>
+          <p>
+            Accepted Job At:{" "}
+            {new Date(chosenView.acceptedJobDate).toLocaleString("en-nz")}
+          </p>
+          <p>
+            Completed Job At:{" "}
+            {new Date(chosenView.appointmentDateCompleted).toLocaleString(
+              "en-nz"
+            )}
+          </p>
+        </div>
+      </div>
+
+      <div>
+        <p style={{ fontSize: "12px" }}>Patient's comments</p>
+        <textarea
+          className="fullres-textarea-comments"
+          value={chosenView.comments}
+        ></textarea>
+      </div>
+      <div>
+        <p style={{ fontSize: "12px" }}>Practitioner's findings</p>
+        <textarea
+          className="fullres-textarea-comments"
+          value={chosenView.conclusion}
+        ></textarea>
+      </div>
+    </div>
+  );
+};
+
+const ConclusionContainer = ({ chosenView }) => {
+  return (
+    <div className="fullres-details__wrapper">
+      <h5>Conclusion</h5>
+      <div className="fullres-details-infos__wrapper">
+        <div>
+          <p>Reschedule meeting: No</p>
+          <p>New meeting date: </p>
+          <p>Reasons for reschedule (if yes):</p>
+        </div>
+        <div>
+          <p>Practitioner Name: {chosenView.practitionerName}</p>
+        </div>
+      </div>
+      <p className="fullres-conclusion__p">
+        Lorem ipsum, dolor sit amet consectetur adipisicing elit. Illum quas
+        suscipit voluptatibus quam! Qui saepe doloribus, fugiat, aliquam
+        doloremque, est harum culpa tenetur porro sint optio minima. Ea, enim
+        molestiae! Lorem ipsum dolor sit, amet consectetur adipisicing elit. Cum
+        veniam ea quia repellendus, magnam, saepe aut vitae aliquam quam commodi
+        quis fugit ducimus laborum magni voluptates voluptate natus? Quisquam,
+        exercitationem?
+      </p>
+    </div>
+  );
+};
+
+const DocumentsContainer = ({ chosenView }) => {
+  return (
+    <div className="fullres-documents__wrapper">
+      <h5>Documents</h5>
+      <table className="fullres-documents__table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Date</th>
+            <th>Type</th>
+            <th>Name</th>
+            <th>Details</th>
+            <th>Size</th>
+            <th></th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr>
+            <td>1</td>
+            <td>12/09/2025</td>
+            <td>pdf</td>
+            <td>Xray</td>
+            <td>Lung Xray and Spine</td>
+            <td>130mb</td>
+            <td>
+              <button className="fullres-documents__btn">view</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  );
+};
+const FullResult = ({ setOpenResult, chosenView }) => {
+  const newPlugin = defaultLayoutPlugin();
   return (
     <div>
       <button
@@ -27,152 +172,21 @@ const FullResult = ({ setOpenResult }) => {
       </button>
       <div className="fullres-profile-container__wrapper">
         <div>
-          <div className="fullres-profile__wrapper">
-            <div>
-              <img
-                className="result-profile-pic__img"
-                src="https://images.unsplash.com/photo-1491349174775-aaafddd81942?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                alt="profile-pic"
-              />
-            </div>
-            <div className="full-result-profile-subinfo__wrapper">
-              <h3>Johnson Martin Leaso Henderson</h3>
-              <h4 className="nhi-header">NHI: 3550837</h4>
-              <p>DOB: 2 November 1998</p>
-              <p>Age: 35</p>
-              <p>Nationality: Mexican</p>
-              <p>Height: 166cm</p>
-              <p>Weight: 75kg</p>
-            </div>
-          </div>
-          <div>
-            <button className="fullres-viewprofile__btn">
-              view patient's profile
-            </button>
-          </div>
+          <PatientDetails chosenView={chosenView} />
 
-          <div className="fullres-details__wrapper">
-            <h5>Details</h5>
-            <div className="fullres-details-infos__wrapper">
-              <div>
-                <p>Physician: Dr. Mahit Sharma</p>
-                <p>Office: Epsom Medical Centre </p>
-                <p>Room 4</p>
-              </div>
-              <div>
-                <p>Condition: Hemoglobin</p>
-                <p>Triage level: 3</p>
-                <p>Duration: 40 mins</p>
-              </div>
-              <div>
-                <p>Condition: Hemoglobin</p>
-                <p>Triage level: 3</p>
-                <p>Duration: 40 mins</p>
-              </div>
-            </div>
-          </div>
+          <PractitionerDetails chosenView={chosenView} />
+          <AppointmentDetails chosenView={chosenView} />
 
-          <div
-            className="fullres-prescribed__wrapper"
-            style={{ display: "flex", justifyContent: "space-between" }}
-          >
-            <div>
-              <div style={{ display: "flex", gap: "5px" }}>
-                <h5>Prescribed medicines</h5>
-                <button
-                  className="fullres-btn-edit"
-                  onClick={() => setEditMed(!editMed)}
-                >
-                  {editMed === true ? "cancel" : "edit"}
-                </button>
-
-                {editMed && (
-                  <button
-                    className="fullres-btn-edit"
-                    onClick={() => setEditMed(!editMed)}
-                  >
-                    done
-                  </button>
-                )}
-              </div>
-              <div className="fullres-prescription-details__wrapper">
-                <Prescription size={19} />
-                <div>
-                  {editMed === true ? (
-                    <input
-                      value={prescribedMed}
-                      onChange={(e) => setPrescribedMed(e.target.value)}
-                    />
-                  ) : (
-                    <p>{prescribedMed}</p>
-                  )}
-                </div>
-              </div>
-              <div className="fullres-prescription-details__wrapper">
-                <Prescription size={19} />
-                <div>
-                  {editMed === true ? (
-                    <input
-                      value={prescribedMed}
-                      onChange={(e) => setPrescribedMed(e.target.value)}
-                    />
-                  ) : (
-                    <p>{prescribedMed}</p>
-                  )}
-                </div>
-              </div>
-              <div className="fullres-prescription-details__wrapper">
-                <Prescription size={19} />
-                <div>
-                  {editMed === true ? (
-                    <input
-                      value={prescribedMed}
-                      onChange={(e) => setPrescribedMed(e.target.value)}
-                    />
-                  ) : (
-                    <p>{prescribedMed}</p>
-                  )}
-                </div>
-              </div>
-            </div>
-            <div style={{ width: "200px" }}>
-              <h5>Allergies</h5>
-              <div className="fullres-allergies__wrapper">
-                <p>Milk</p>
-                <p>Peanuts</p>
-                <p>Pets/fur</p>
-              </div>
-            </div>
-          </div>
-
-          <div className="fullres-testdescription__wrapper">
-            <div style={{ marginTop: "10px" }}>
-              <h5>Test summary</h5>
-              <textarea
-                className="symptoms-textarea"
-                value={testText}
-                onChange={(e) => setTestText(e.target.value)}
-              ></textarea>
-              <div style={{ display: "flex", justifyContent: "space-between" }}>
-                {initialTestText !== testText ? (
-                  <button className="symptoms-update__btn">
-                    <PencilSimpleLine size={18} color={"#81bb30"} /> update
-                  </button>
-                ) : (
-                  <div></div>
-                )}
-                <label className="symptoms-label__text">
-                  last updated 3/12/2023
-                </label>
-              </div>
-            </div>
-          </div>
+          <ConclusionContainer chosenView={chosenView} />
         </div>
 
-        <div className="pdf-container__wrapper">
-          <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.4.120/build/pdf.worker.min.js">
-            <Viewer fileUrl={ViewPDF} plugins={[newPlugin]} />
-          </Worker>
+        <div>
+          <DocumentsContainer chosenView={chosenView} />
+          {/* <div className="pdf-container__wrapper">
+            <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.4.120/build/pdf.worker.min.js">
+              <Viewer fileUrl={ViewPDF} plugins={[newPlugin]} />
+            </Worker>
+          </div> */}
         </div>
       </div>
     </div>

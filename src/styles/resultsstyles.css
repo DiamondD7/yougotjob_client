@@ -71,7 +71,8 @@
 .result-table__table tbody tr td button {
   border: none;
   background-color: #9dcd5a;
-  padding: 5px 15px;
+  color: #f3f3f3;
+  padding: 2px 15px;
   border-radius: 5px;
   cursor: pointer;
 }
@@ -101,76 +102,51 @@
   margin: 10px 0 0 10px;
 }
 
-.fullres-profile__wrapper {
-  margin: 30px 0 0 10px;
-  display: flex;
-  gap: 10px;
-}
-
-.fullres-profile__wrapper p {
-  font-size: 14px;
-  color: rgba(0, 0, 0, 0.7);
-}
-
-.fullres-viewprofile__btn {
-  background-color: #81bb30;
+.fullres-documents__wrapper {
+  margin: 20px 0 0 10px;
+  padding: 10px;
+  border: 1px solid rgba(0, 0, 0, 0.2);
   border-radius: 5px;
-  padding: 5px;
-  border: none;
-  cursor: pointer;
-
-  margin-left: 10px;
+  width: 500px;
+  height: 222px;
+  overflow: auto;
 }
 
-.nhi-header {
-  font-size: 13px;
-  margin-bottom: 10px;
-  color: rgba(0, 0, 0, 0.6);
+.fullres-documents__wrapper p {
+  margin-top: 10px;
 }
 
 .fullres-profile-container__wrapper {
   display: flex;
-  justify-content: space-between;
 }
 
 .fullres-details__wrapper {
-  margin: 30px 0 0 10px;
-}
-
-.fullres-details-infos__wrapper {
-  display: flex;
-  gap: 20px;
+  margin: 20px 0 0 10px;
+  padding: 10px;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  border-radius: 5px;
   width: 500px;
-  height: 68px;
-  overflow: auto;
-
-  margin-top: 10px;
 }
 
 .fullres-details__wrapper p {
-  font-size: 13px;
-}
-
-.pdf-container__wrapper {
-  width: 69%;
-  height: 97vh;
-}
-
-.fullres-testdescription__wrapper {
-  margin: 30px 0 0 10px;
-}
-
-.symptoms-textarea {
   margin-top: 10px;
-  min-width: 505px;
-  max-width: 505px;
-  min-height: 200px;
-  max-height: 200px;
-  padding: 5px;
-  border-radius: 10px;
-  overflow: auto;
-  outline: none;
 }
+
+.fullres-details-infos__wrapper {
+  font-size: 12px;
+  margin-top: 10px;
+  display: flex;
+  justify-content: space-between;
+}
+
+/* .pdf-container__wrapper {
+  width: 650px;
+  height: 66vh;
+  margin: 20px 0 0 10px;
+  padding: 10px;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  border-radius: 5px;
+} */
 
 .result-profile-pic__img {
   width: 170px;
@@ -178,10 +154,6 @@
   object-fit: cover;
   object-position: center center;
   border-radius: 5px;
-}
-
-.full-result-profile-subinfo__wrapper p {
-  margin-top: 5px;
 }
 
 .symptoms-update__btn {
@@ -196,38 +168,54 @@
   font-size: 12px;
 }
 
-.symptoms-label__text {
+.conclusion-label__text {
   padding: 3px 0px;
   font-size: 12px;
   color: rgba(0, 0, 0, 0.5);
 }
 
-.fullres-prescribed__wrapper {
-  margin: 20px 0 0 10px;
-  /* background-color: red; */
-  height: 160px;
-  overflow-y: auto;
+/* ------------------ */
+
+.fullres-textarea-comments {
+  font-size: 12px;
+  padding: 2px 5px;
+  border-radius: 5px;
+  outline: none;
+
+  min-width: 100%;
+  max-width: 100%;
+  min-height: 100px;
+  max-height: 100px;
 }
 
-.fullres-prescription-details__wrapper {
-  margin-top: 10px;
-  display: flex;
-  align-items: center;
-  gap: 5px;
+.fullres-conclusion__p {
+  font-size: 12px;
+  height: 80px;
+  overflow: auto;
 }
 
-.fullres-prescription-details__wrapper p {
-  font-size: 13px;
+.fullres-documents__table {
+  padding: 10px;
+  border-collapse: collapse;
+  font-size: 12px;
 }
 
-.fullres-btn-edit {
-  background-color: transparent;
-  border: none;
-  color: #81bb30;
+.fullres-documents__table thead th {
+  text-align: start;
+  padding: 10px;
+}
+
+.fullres-documents__table tbody td {
+  text-align: start;
+  padding: 10px;
+}
+
+.fullres-documents__btn {
+  background-color: #9dcd5a;
+  border: 1px solid #9dcd5a;
+  color: #f3f3f3;
+
   cursor: pointer;
-}
-
-.fullres-allergies__wrapper p {
-  font-size: 13px;
-  margin-top: 5px;
+  border-radius: 5px;
+  padding: 0 10px;
 }
