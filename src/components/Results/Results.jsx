@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import FullResult from "./FullResult";
-import { GetPreviousApt } from "../../assets/js/serverApi";
+import { GetPreviousApt, GetAnAppointment } from "../../assets/js/serverApi";
 import { PatientResultData } from "../../assets/js/usermock";
 import {
   CaretRight,
@@ -54,6 +54,7 @@ const FilterResults = ({ setSearchField, setVisitType }) => {
 };
 
 const Results = () => {
+  const [chosenView, setChosenView] = useState([]);
   const [prevApts, setPrevApts] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -95,6 +96,17 @@ const Results = () => {
       .then((res) => {
         //console.log(res);
         setPrevApts(res.returnStatus.data);
+      });
+  };
+
+  const handleResultView = (e, id) => {
+    e.preventDefault();
+    fetch(`${GetAnAppointment}/${id}`)
+      .then((res) => res.json())
+      .then((res) => {
+        console.log(res);
+        setChosenView(res.returnStatus.data);
+        setOpenResult(true);
       });
   };
 
@@ -179,7 +191,7 @@ const Results = () => {
                           : "Pending"}
                       </td>
                       <td>
-                        <button onClick={() => setOpenResult(true)}>
+                        <button onClick={(e) => handleResultView(e, data.id)}>
                           view
                         </button>
                       </td>
@@ -238,7 +250,7 @@ const Results = () => {
           )}
         </div>
       ) : (
-        <FullResult setOpenResult={setOpenResult} />
+        <FullResult setOpenResult={setOpenResult} chosenView={chosenView} />
       )}
     </div>
   );
