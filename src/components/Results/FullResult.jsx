@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { GetFiles, GetFile } from "../../assets/js/serverApi";
 import ViewPDF from "../../assets/pdf/Aaron-CoverLetter.pdf";
 import { PencilSimpleLine, Prescription } from "@phosphor-icons/react";
 
@@ -127,6 +128,18 @@ const ConclusionContainer = ({ chosenView }) => {
 };
 
 const DocumentsContainer = ({ chosenView }) => {
+  const [files, setFiles] = useState([]);
+  useEffect(() => {
+    try {
+      fetch(`${GetFiles}/${chosenView.id}`)
+        .then((res) => res.json())
+        .then((res) => {
+          setFiles(res.returnStatus.files);
+        });
+    } catch (err) {
+      console.log(err);
+    }
+  }, []);
   return (
     <div className="fullres-documents__wrapper">
       <h5>Documents</h5>
@@ -134,27 +147,32 @@ const DocumentsContainer = ({ chosenView }) => {
         <thead>
           <tr>
             <th>#</th>
-            <th>Date</th>
             <th>Type</th>
             <th>Name</th>
-            <th>Details</th>
-            <th>Size</th>
             <th></th>
           </tr>
         </thead>
 
         <tbody>
-          <tr>
-            <td>1</td>
-            <td>12/09/2025</td>
-            <td>pdf</td>
-            <td>Xray</td>
-            <td>Lung Xray and Spine</td>
-            <td>130mb</td>
-            <td>
-              <button className="fullres-documents__btn">view</button>
-            </td>
-          </tr>
+          {files &&
+            files.map((items, index) => (
+              <tr key={items.id}>
+                <td>{index + 1}</td>
+                <td>12/09/2025</td>
+                <td>{items.contentType}</td>
+                <td>{items.name}</td>
+                <td>
+                  <a
+                    className="fullres-documents__btn"
+                    href={`${GetFile}/${items.id}`}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    view
+                  </a>
+                </td>
+              </tr>
+            ))}
         </tbody>
       </table>
     </div>
