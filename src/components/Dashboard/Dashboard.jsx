@@ -12,6 +12,8 @@ import {
   GetSpecificNotes,
   AddAppointmentPayment,
   GetChartData,
+  GetFiles,
+  GetFile,
 } from "../../assets/js/serverApi";
 import { exportedMonthsArray } from "../../assets/js/months";
 import {
@@ -329,6 +331,24 @@ const PrevAptView = ({ prevApt, setPrevAptBtn }) => {
 
 const NextAptView = ({ nextApt, activateGoTo, setNextAptBtn }) => {
   const [openMeeting, setOpenMeeting] = useState(false);
+  const [files, setFiles] = useState([]);
+
+  useEffect(() => {
+    try {
+      fetch(`${GetFiles}/${nextApt.id}`)
+        .then((res) => res.json())
+        .then((res) => {
+          console.log(res);
+          setFiles(res.returnStatus.files);
+        })
+        .catch((err) => {
+          console.log("Error in fetching files: ", err);
+        });
+    } catch (err) {
+      console.log(err);
+    }
+  }, []);
+
   const handleFinaliseAuth = () => {
     const cliendId = import.meta.env.VITE_ZOOM_CLIENT_ID;
     const redirectUri = import.meta.env.VITE_ZOOM_REDIRECT_URI;
@@ -370,20 +390,48 @@ const NextAptView = ({ nextApt, activateGoTo, setNextAptBtn }) => {
             <h4>Patient's Details</h4>
             <p style={{ fontSize: "12px" }}>{nextApt.nhi}</p>
             <br />
-            <div>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                gap: "50px",
+              }}
+            >
               <div>
-                <p style={{ fontSize: "12px" }}>
-                  Full name: {nextApt.fullName}
-                </p>
-                <p style={{ fontSize: "12px" }}>{nextApt.emailAddress}</p>
-                <p style={{ fontSize: "12px" }}>{nextApt.contactNumber}</p>
-                <br />
-                <p style={{ fontSize: "12px" }}>
-                  Date:{" "}
-                  {new Date(nextApt.preferredAppointmentDate).toLocaleString(
-                    "en-nz"
-                  )}
-                </p>
+                <div>
+                  <p style={{ fontSize: "12px" }}>
+                    Full name: {nextApt.fullName}
+                  </p>
+                  <p style={{ fontSize: "12px" }}>{nextApt.emailAddress}</p>
+                  <p style={{ fontSize: "12px" }}>{nextApt.contactNumber}</p>
+                  <br />
+                  <p style={{ fontSize: "12px" }}>
+                    Date:{" "}
+                    {new Date(nextApt.preferredAppointmentDate).toLocaleString(
+                      "en-nz"
+                    )}
+                  </p>
+                </div>
+              </div>
+              <div>
+                <p style={{ fontSize: "12px" }}>Files:</p>
+                {files.map((items) => (
+                  <a
+                    key={items.id}
+                    href={`${GetFile}/${items.id}`}
+                    target="_blank"
+                    rel="noreferrer"
+                    style={{
+                      fontSize: "12px",
+                      display: "block",
+                      marginTop: "5px",
+                    }}
+                  >
+                    {items.name.length > 20
+                      ? items.name.substring(0, 20)
+                      : items.name}
+                  </a>
+                ))}
               </div>
             </div>
             <button

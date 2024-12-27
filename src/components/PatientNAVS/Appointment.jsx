@@ -5,11 +5,13 @@ import {
   Check,
   PaperPlaneRight,
   X,
+  Files,
 } from "@phosphor-icons/react";
 import {
   GetHealthPractitionerData,
   GetPatient,
   AddAppointmentFromForm,
+  UploadFile,
 } from "../../assets/js/serverApi";
 import DatePicker from "react-datepicker";
 
@@ -247,6 +249,7 @@ const AppointmentWait = () => {
     PostCode: "",
   });
   const [consentCheckbox, setConsentCheckbox] = useState(false);
+  const [files, setFiles] = useState([]);
 
   const handleOnChangeInput = (e) => {
     setAppointmentData({
@@ -291,6 +294,9 @@ const AppointmentWait = () => {
       .then((res) => res.json())
       .then((res) => {
         console.log(res);
+        if (files) {
+          handleFilesUpload(res.returnStatus.aptId);
+        }
       })
       .catch((ex) => {
         console.log(`Error: ${ex.message}`);
@@ -307,6 +313,39 @@ const AppointmentWait = () => {
     const maxTime = new Date();
     maxTime.setHours(23, 0, 0, 0);
     return maxTime;
+  };
+
+  const handleFileChange = (event) => {
+    // Get the current files selected by the user
+    const newFiles = event.target.files;
+
+    // Convert the FileList to an array and append it to the existing files
+    setFiles((prevFiles) => {
+      return [...prevFiles, ...Array.from(newFiles)];
+    });
+  };
+
+  const handleFilesUpload = async (id) => {
+    const formData = new FormData();
+    for (let i = 0; i < files.length; i++) {
+      formData.append("files", files[i]);
+    }
+
+    try {
+      const response = await fetch(`${UploadFile}/${id}`, {
+        method: "POST",
+        body: formData,
+      });
+
+      if (!response.ok) {
+        throw new Error("Error uploading files");
+      }
+
+      const data = await response.json();
+      console.log(data);
+    } catch (ex) {
+      console.log(ex);
+    }
   };
   return (
     <div>
@@ -471,6 +510,15 @@ const AppointmentWait = () => {
               minTime={getMinTime()}
               maxTime={getMaxTime()}
             />
+            <br />
+            <label style={{ fontSize: "12px" }}>Upload documents</label>
+            <br />
+            <input type="file" multiple onChange={handleFileChange} />
+            {files.map((items, index) => (
+              <p key={index} style={{ fontSize: "12px" }}>
+                {items.name}
+              </p>
+            ))}
             <br />
             <br />
             <textarea
