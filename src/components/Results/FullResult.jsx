@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from "react";
+import { FileX } from "@phosphor-icons/react";
 import { GetFiles, GetFile } from "../../assets/js/serverApi";
-import ViewPDF from "../../assets/pdf/Aaron-CoverLetter.pdf";
-import { PencilSimpleLine, Prescription } from "@phosphor-icons/react";
-
-import { Viewer, Worker } from "@react-pdf-viewer/core";
 import { defaultLayoutPlugin } from "@react-pdf-viewer/default-layout";
 import "@react-pdf-viewer/core/lib/styles/index.css";
 import "@react-pdf-viewer/default-layout/lib/styles/index.css";
+import ViewPDF from "../../assets/pdf/Aaron-CoverLetter.pdf";
+import { Viewer, Worker } from "@react-pdf-viewer/core";
 const PatientDetails = ({ chosenView }) => {
   return (
     <div className="fullres-details__wrapper">
@@ -153,27 +152,43 @@ const DocumentsContainer = ({ chosenView }) => {
           </tr>
         </thead>
 
-        <tbody>
-          {files &&
-            files.map((items, index) => (
-              <tr key={items.id}>
-                <td>{index + 1}</td>
-                <td>12/09/2025</td>
-                <td>{items.contentType}</td>
-                <td>{items.name}</td>
-                <td>
-                  <a
-                    className="fullres-documents__btn"
-                    href={`${GetFile}/${items.id}`}
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    view
-                  </a>
-                </td>
-              </tr>
-            ))}
-        </tbody>
+        {files.length <= 0 ? (
+          <div
+            style={{
+              textAlign: "center",
+              position: "relative",
+              left: "235px",
+              top: "20px",
+            }}
+          >
+            <FileX size={25} color="rgba(0,0,0,0.4)" />
+            <p style={{ color: "rgba(0,0,0,0.3)", fontSize: "13px" }}>
+              No files included
+            </p>
+          </div>
+        ) : (
+          <tbody>
+            {files &&
+              files.map((items, index) => (
+                <tr key={items.id}>
+                  <td>{index + 1}</td>
+                  <td>12/09/2025</td>
+                  <td>{items.contentType}</td>
+                  <td>{items.name}</td>
+                  <td>
+                    <a
+                      className="fullres-documents__btn"
+                      href={`${GetFile}/${items.id}`}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      view
+                    </a>
+                  </td>
+                </tr>
+              ))}
+          </tbody>
+        )}
       </table>
     </div>
   );

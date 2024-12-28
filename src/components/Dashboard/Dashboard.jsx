@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { json, useNavigate } from "react-router-dom";
-import { MockUserData } from "../../assets/js/mockChartData";
 import {
   GetTotalAppointment,
   GetNextAppointment,

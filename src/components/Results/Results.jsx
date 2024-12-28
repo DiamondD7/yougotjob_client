@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import FullResult from "./FullResult";
 import { GetPreviousApt, GetAnAppointment } from "../../assets/js/serverApi";
-import { PatientResultData } from "../../assets/js/usermock";
 import {
   CaretRight,
   CaretLeft,
