@@ -17,6 +17,7 @@ const SearchProfile = ({
     handleGetPatients(); //it is authorized by patient TODO
   }, []);
 
+  //TODO:
   const handleGetPatients = async (retry = true) => {
     try {
       const response = await fetch(GetPatients, {
