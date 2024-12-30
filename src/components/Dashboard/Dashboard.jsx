@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { json, useNavigate } from "react-router-dom";
-import { MockUserData } from "../../assets/js/mockChartData";
 import {
   GetTotalAppointment,
   GetNextAppointment,
@@ -964,16 +963,39 @@ const NotesContainer = () => {
   };
 
   useEffect(() => {
-    fetchData();
+    fetchNotesData();
   }, []);
 
-  const fetchData = () => {
-    fetch(`${GetSpecificNotes}/${id}`)
-      .then((res) => res.json())
-      .then((res) => {
-        //console.log(res);
-        setNotes(res.returnStatus.data);
+  const fetchNotesData = async (retry = true) => {
+    try {
+      const response = await fetch(`${GetSpecificNotes}/${id}`, {
+        method: "GET",
+        credentials: "include",
       });
+
+      if (response.status === 302) {
+        //302 is redericting to sign in screen because refresh token and jwt are expired.
+        console.warn("302 detected, redirecting...");
+        // Redirect to the new path
+        navigate("/");
+        return; // Exit the function to prevent further execution
+      }
+
+      if (response.status === 401 && retry) {
+        // Retry the request once if a 401 status is detected
+        console.warn("401 detected, retrying request...");
+        return fetchNotesData(false); // Call with `retry` set to false
+      }
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const res = await response.json();
+      setNotes(res.returnStatus.data);
+    } catch (error) {
+      console.log("Error fetching data:", error.message);
+    }
   };
 
   const AddNote = async (retry = true) => {
@@ -1012,7 +1034,7 @@ const NotesContainer = () => {
 
       const res = await response.json();
       //console.log(res);
-      fetchData(); //refresh the data to load new note
+      fetchNotesData(); //refresh the data to load new note
       setOpenFormAdd(false); // Close form only if the note was added successfully
     } catch (error) {
       console.log("Error fetching data:", error.message);
@@ -1054,7 +1076,7 @@ const NotesContainer = () => {
 
       const res = await response.json();
       //console.log(res);
-      fetchData(); //refresh the data to load
+      fetchNotesData(); //refresh the data to load
     } catch (error) {
       console.log("Error fetching data: ", error.message);
     }
@@ -1182,7 +1204,10 @@ const Dashboard = () => {
 
   const refreshList = () => {
     const id = parseInt(sessionStorage.getItem("id"));
-    fetch(`${GetNextAppointment}/${id}`)
+    fetch(`${GetNextAppointment}/${id}`, {
+      method: "GET",
+      credentials: "include",
+    })
       .then((res) => res.json())
       .then((res) => {
         if (res.returnStatus.data !== undefined) {
@@ -1197,7 +1222,10 @@ const Dashboard = () => {
       });
 
     //fetching the previous apt
-    fetch(`${GetPreviousApt}/${id}`)
+    fetch(`${GetPreviousApt}/${id}`, {
+      method: "GET",
+      credentials: "include",
+    })
       .then((res) => res.json())
       .then((res) => {
         setPrevApt(res.returnStatus.data[0]);
