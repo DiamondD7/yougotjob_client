@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { GetPatients } from "../../assets/js/serverApi";
+import { GetPatients, ValidatePrac } from "../../assets/js/serverApi";
 import { CaretRight, MagnifyingGlass, SmileySad } from "@phosphor-icons/react";
 import { useNavigate } from "react-router-dom";
 import { PatientMockData } from "../../assets/js/usermock";
@@ -14,10 +14,46 @@ const SearchProfile = ({
   const [patients, setPatients] = useState([]);
 
   useEffect(() => {
-    handleGetPatients(); //it is authorized by patient TODO
+    handleValidateAuth();
   }, []);
 
-  //TODO:
+  //this is only for validating tokens, this is only used for calling another controller action method that is authorized. This will work as a counter measure to validate current tokens because the user is a different role as the controller action is calling. in this case the "GetPatients".
+  const handleValidateAuth = async (retry = true) => {
+    try {
+      const response = await fetch(ValidatePrac, {
+        method: "GET",
+        credentials: "include",
+      });
+
+      if (response.status === 302) {
+        //302 is redericting to sign in screen because refresh token and jwt are expired.
+        console.warn("302 detected, redirecting...");
+        // Redirect to the new path
+        navigate("/");
+        return; // Exit the function to prevent further execution
+      }
+
+      if (response.status === 401 && retry) {
+        // Retry the request once if a 401 status is detected
+        console.warn("401 detected, retrying request...");
+
+        return handleValidateAuth(false); // Call with `retry` set to false
+      }
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      handleGetPatients(); //if response is ok, call this.
+
+      const data = await response.json();
+      console.log(data.returnStatus.message);
+    } catch (error) {
+      console.log("Error fetching data:", error.message);
+    }
+  };
+
+  //this api route is from the Patient API.
   const handleGetPatients = async (retry = true) => {
     try {
       const response = await fetch(GetPatients, {
@@ -36,6 +72,7 @@ const SearchProfile = ({
       if (response.status === 401 && retry) {
         // Retry the request once if a 401 status is detected
         console.warn("401 detected, retrying request...");
+
         return handleGetPatients(false); // Call with `retry` set to false
       }
 
@@ -44,6 +81,7 @@ const SearchProfile = ({
       }
 
       const data = await response.json();
+      //console.log(data);
       setPatients(data);
     } catch (error) {
       console.log("Error fetching data:", error.message);

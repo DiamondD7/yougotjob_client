@@ -1,13 +1,15 @@
-import React, { useState } from "react";
-import { MagnifyingGlass } from "@phosphor-icons/react";
+import React, { useEffect, useState } from "react";
+import { ValidatePrac } from "../../assets/js/serverApi";
 
-import "../../styles/patientsstyles.css";
 import SearchProfile from "./SearchProfile";
 import FullProfile from "./FullProfile";
+
+import "../../styles/patientsstyles.css";
 const Patients = () => {
   const [searchField, setSearchField] = useState("");
   const [openFullProfile, setOpenFullProfile] = useState(false); //handles full profile click
   const [fullProfileData, setFullProfileData] = useState([]);
+
   return (
     <div>
       {openFullProfile === false ? (

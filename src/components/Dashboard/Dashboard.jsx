@@ -954,9 +954,6 @@ const NotesContainer = () => {
   });
   const [notes, setNotes] = useState([]);
 
-  const noteTest =
-    "Lorem ipsum dolor sit amet consectetur adipisicing elit. Tempora incidunt ab natus unde quae fugiat nihil esse error doloremque atque. Voluptas repellat neque earum quos! Ipsam, qui! Unde, impedit vero!";
-
   const handleAddNote = (e) => {
     e.preventDefault();
     AddNote();
