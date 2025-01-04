@@ -1,6 +1,37 @@
 import React, { useState } from "react";
 import { CaretRight, X, DownloadSimple } from "@phosphor-icons/react";
 
+const PatientEmergencyContacts = () => {
+  return (
+    <div>
+      <h4>Emergency Contacts</h4>
+      <div className="emergencycontacts__wrapper">
+        <div className="contact__wrapper">
+          <p style={{ fontWeight: "bold" }}>Michael Jackson</p>
+          <p>Father</p>
+          <br />
+          <p>021023034056</p>
+          <p>mj@gmail.com</p>
+        </div>
+        <div className="contact__wrapper">
+          <p style={{ fontWeight: "bold" }}>Freya Jackson</p>
+          <p>Mother</p>
+          <br />
+          <p>0210230222256</p>
+          <p>freys@gmail.com</p>
+        </div>
+        <div className="contact__wrapper">
+          <p style={{ fontWeight: "bold" }}>Sonja Jackson</p>
+          <p>Aunt</p>
+          <br />
+          <p>02102321356</p>
+          <p>sonn_2@gmail.com</p>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 const PatientDocuments = () => {
   return (
     <div>
@@ -104,6 +135,8 @@ const FullProfile = ({ fullProfileData, setOpenFullProfile }) => {
       <br />
       <br />
       <PatientDocuments />
+      <br />
+      <PatientEmergencyContacts />
     </div>
   );
 };

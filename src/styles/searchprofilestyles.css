@@ -107,3 +107,14 @@
   padding: 0 20px;
   font-size: 12px;
 }
+
+.emergencycontacts__wrapper {
+  display: flex;
+  justify-content: space-between;
+  padding: 20px 0;
+  width: 500px;
+}
+
+.contact__wrapper {
+  font-size: 12px;
+}
