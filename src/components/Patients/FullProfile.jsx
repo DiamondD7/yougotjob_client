@@ -3,32 +3,34 @@ import { CaretRight, X, DownloadSimple } from "@phosphor-icons/react";
 
 const PatientDocuments = () => {
   return (
-    <div className="patient-documents__wrapper">
+    <div>
       <h4>Documents</h4>
-      <table className="patient-documents__table">
-        <thead>
-          <tr>
-            <th>#</th>
-            <th>Date</th>
-            <th>Name</th>
-            <th>Type</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>1</td>
-            <td>12/12/2024</td>
-            <td>passport</td>
-            <td>.pdf</td>
-            <td>
-              <button className="btnclear">
-                <DownloadSimple size={18} color="#202020" />
-              </button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+      <div className="patient-documents__wrapper">
+        <table className="patient-documents__table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Date</th>
+              <th>Name</th>
+              <th>Type</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>1</td>
+              <td>12/12/2024</td>
+              <td>passport</td>
+              <td>.pdf</td>
+              <td>
+                <button className="btnclear">
+                  <DownloadSimple size={18} color="#202020" />
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 };
