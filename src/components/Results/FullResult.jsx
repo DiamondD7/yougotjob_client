@@ -146,9 +146,9 @@ const DocumentsContainer = ({ chosenView }) => {
         <thead>
           <tr>
             <th>#</th>
+            <th>Date</th>
             <th>Type</th>
             <th>Name</th>
-            <th></th>
           </tr>
         </thead>
 

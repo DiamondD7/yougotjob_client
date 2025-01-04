@@ -1,430 +1,142 @@
 import React, { useState } from "react";
-import {
-  X,
-  CalendarCheck,
-  Heartbeat,
-  CheckCircle,
-  Question,
-  PersonArmsSpread,
-  Barbell,
-  Heart,
-  UserCircle,
-  ArrowSquareIn,
-} from "@phosphor-icons/react";
+import { CaretRight, X, DownloadSimple } from "@phosphor-icons/react";
+
+const PatientEmergencyContacts = () => {
+  return (
+    <div>
+      <h4>Emergency Contacts</h4>
+      <div className="emergencycontacts__wrapper">
+        <div className="contact__wrapper">
+          <p style={{ fontWeight: "bold" }}>Michael Jackson</p>
+          <p>Father</p>
+          <br />
+          <p>021023034056</p>
+          <p>mj@gmail.com</p>
+        </div>
+        <div className="contact__wrapper">
+          <p style={{ fontWeight: "bold" }}>Freya Jackson</p>
+          <p>Mother</p>
+          <br />
+          <p>0210230222256</p>
+          <p>freys@gmail.com</p>
+        </div>
+        <div className="contact__wrapper">
+          <p style={{ fontWeight: "bold" }}>Sonja Jackson</p>
+          <p>Aunt</p>
+          <br />
+          <p>02102321356</p>
+          <p>sonn_2@gmail.com</p>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const PatientDocuments = () => {
+  return (
+    <div>
+      <h4>Documents</h4>
+      <div className="patient-documents__wrapper">
+        <table className="patient-documents__table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Date</th>
+              <th>Name</th>
+              <th>Type</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>1</td>
+              <td>12/12/2024</td>
+              <td>passport</td>
+              <td>.pdf</td>
+              <td>
+                <button className="btnclear">
+                  <DownloadSimple size={18} color="#202020" />
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+};
+
+const PatientDetails = ({ fullProfileData }) => {
+  const none = "N/A";
+  return (
+    <div style={{ marginTop: "20px" }}>
+      <label style={{ fontSize: "12px", color: "#9dcd5a" }}>NHI: </label>
+      <label style={{ fontSize: "12px", color: "#9dcd5a", fontWeight: "bold" }}>
+        {fullProfileData.nhi}
+      </label>
+      <div className="fullres-patient-details__wrapper">
+        <div style={{ display: "flex", gap: "20px" }}>
+          <div>
+            <label>Date of birth</label>
+            <p>{fullProfileData.dob}</p>
+          </div>
+          <div>
+            <label>Age</label>
+            <p>{fullProfileData.age}</p>
+          </div>
+        </div>
+        <div style={{ marginTop: "10px" }}>
+          <label>Address</label>
+          <p>{fullProfileData.homeAddress}</p>
+        </div>
+
+        <div style={{ marginTop: "10px" }}>
+          <div style={{ display: "flex", gap: "20px" }}>
+            <div>
+              <label>Contact number</label>
+              <p>{fullProfileData.mobileNumber || none}</p>
+            </div>
+            <div>
+              <label>Email</label>
+              <p>{fullProfileData.emailAddress}</p>
+            </div>
+            <div>
+              <label>Insurance</label>
+              <p>N/A</p>
+            </div>
+          </div>
+        </div>
+
+        <div style={{ marginTop: "10px" }}>
+          <label>Registered on</label>
+          <p>12/12/2024</p>
+        </div>
+      </div>
+    </div>
+  );
+};
 
 const FullProfile = ({ fullProfileData, setOpenFullProfile }) => {
   return (
-    <div>
-      <div className="full-profile-container__wrapper">
-        <div
-          className="search-profile-container__wrapper"
-          style={{ marginTop: "38px" }}
-        >
-          <button
-            className="full-profile__btn"
-            onClick={() => setOpenFullProfile(false)}
-          >
-            <X size={27} color="#454545" />
-          </button>
-          <div className="search-profile-header__wrapper">
-            <img
-              src={fullProfileData.picture}
-              alt="test-img"
-              className="search-profile__img"
-            />
-            <div>
-              <p className="search-profile-header__texts">
-                Nationality: {fullProfileData.nationality}
-              </p>
-              <p className="search-profile-header__texts">
-                DOB: {fullProfileData.dob}
-              </p>
-              <p className="search-profile-header__texts">
-                Age: {fullProfileData.age}
-              </p>
-              <p className="search-profile-header__texts">
-                Height: {fullProfileData.height} cm
-              </p>
-              <p className="search-profile-header__texts">
-                Weight: {fullProfileData.weight} kg
-              </p>
-            </div>
-          </div>
-          <p className="search-profile-name__text">
-            {fullProfileData.firstName} {fullProfileData.lastName}
-          </p>
-          <p className="search-profile-nhi__text">NHI: {fullProfileData.nhi}</p>
-
-          <button className="search-profile-moreinformation__btn">
-            See all information
-          </button>
-
-          <div className="medications-lists__wrapper">
-            <table className="medications-list-table__table">
-              <thead>
-                <tr>
-                  <th>Medication</th>
-                  <th>Dose</th>
-                  <th>Frequency</th>
-                  <th>Condition</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>Phlemytropic</td>
-                  <td>150mg</td>
-                  <td>1 / day</td>
-                  <td>Gout</td>
-                </tr>
-                <tr>
-                  <td>Phlemytropic</td>
-                  <td>150mg</td>
-                  <td>1 / day</td>
-                  <td>Gout</td>
-                </tr>
-                <tr>
-                  <td>Phlemytropic</td>
-                  <td>150mg</td>
-                  <td>1 / day</td>
-                  <td>Gout</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-
-          <div className="appointment-history-lists__wrapper">
-            <div>
-              <div className="appointment-history-header__wrapper">
-                <h3>Appointment history</h3>
-                <button>view all</button>
-              </div>
-              <div className="appointment-history__wrapper">
-                <div>
-                  <CalendarCheck size={17} />
-                </div>
-                <div>
-                  <p>General appointment</p>
-                  <p>Dr. Malephosa Juno</p>
-                  <p>25/12/2023</p>
-                </div>
-              </div>
-              <div className="appointment-history__wrapper">
-                <div>
-                  <Heartbeat size={17} />
-                </div>
-                <div>
-                  <p>Cholesterol Test</p>
-                  <p>Dr. Henry Chun</p>
-                  <p>10/01/2024</p>
-                </div>
-              </div>
-              <div className="appointment-history__wrapper">
-                <div>
-                  <Heartbeat size={17} />
-                </div>
-                <div>
-                  <p>Cholesterol Test</p>
-                  <p>Dr. Henry Chun</p>
-                  <p>10/01/2024</p>
-                </div>
-              </div>
-            </div>
-
-            <div>
-              <div className="medical-bills-header__wrapper">
-                <h3>Medical bills</h3>
-                <button>view all</button>
-              </div>
-              <div className="medical-bills-information__wrapper">
-                <div>
-                  <p>$50 NZD</p>
-                  <p>29/01/2024</p>
-                </div>
-                <div className="medical-bills-status__wrapper">
-                  <Question size={17} color="#d7c60f" /> <p>Pending</p>
-                </div>
-              </div>
-              <div className="medical-bills-information__wrapper">
-                <div>
-                  <p>$50 NZD</p>
-                  <p>10/01/2024</p>
-                </div>
-                <div className="medical-bills-status__wrapper">
-                  <CheckCircle size={17} color="#81bb30" /> <p>Paid</p>
-                </div>
-              </div>
-              <div className="medical-bills-information__wrapper">
-                <div>
-                  <p>$50 NZD</p>
-                  <p>10/01/2024</p>
-                </div>
-                <div className="medical-bills-status__wrapper">
-                  <CheckCircle size={17} color="#81bb30" /> <p>Paid</p>
-                </div>
-              </div>
-              <div className="medical-bills-information__wrapper">
-                <div>
-                  <p>$50 NZD</p>
-                  <p>10/01/2024</p>
-                </div>
-                <div className="medical-bills-status__wrapper">
-                  <CheckCircle size={17} color="#81bb30" /> <p>Paid</p>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="personal-medical-contact__wrapper">
-            <div className="personal-medical-history__wrapper">
-              <div>
-                <h3>Personal Medical History</h3>
-              </div>
-              <div className="ul-medical__wrapper">
-                <ul>
-                  <li>Acid Reflux</li>
-                  <li>Allergy Problems</li>
-                  <li>Anxiety</li>
-                  <li>Anxiety</li>
-                  <li>Anxiety</li>
-                  <li>Anxiety</li>
-                  <li>Anxiety</li>
-                  <li>Anxiety</li>
-                  <li>Anxiety</li>
-                  <li>Anxiety</li>
-                  <li>Anxiety</li>
-                  <li>Anxiety</li>
-                  <li>Anxiety</li>
-                </ul>
-              </div>
-            </div>
-            <div className="emergency-contact__wrapper">
-              <h3>Emergency contacts</h3>
-              <div className="emergency-contact-information__wrapper">
-                <UserCircle size={16} />
-                <div>
-                  <p>Henry Bell</p>
-                  <p>Relationship: Father</p>
-                  <p>021021021</p>
-                </div>
-              </div>
-              <div className="emergency-contact-information__wrapper">
-                <UserCircle size={16} />
-                <div>
-                  <p>Henry Bell</p>
-                  <p>Relationship: Father</p>
-                  <p>021021021</p>
-                </div>
-              </div>
-              <div className="emergency-contact-information__wrapper">
-                <UserCircle size={16} />
-                <div>
-                  <p>Henry Bell</p>
-                  <p>Relationship: Father</p>
-                  <p>021021021</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div>
-          <div className="icons__wrapper">
-            <div className="each-icons__wrapper">
-              <PersonArmsSpread size={100} weight="thin" color={"#A7CE71"} />
-              <p>Height: 160 cm</p>
-            </div>
-
-            <div className="each-icons__wrapper">
-              <Barbell size={100} weight="thin" color={"#A7CE71"} />
-              <p>Weight: 60 kg</p>
-            </div>
-            <div className="each-icons__wrapper">
-              <Heart size={100} weight="thin" color={"#A7CE71"} />
-              <p>BMI: 22.9</p>
-            </div>
-          </div>
-          <div className="analysis__wrapper">
-            <div>
-              <div className="analysis-header__wrapper">
-                <h3>Analysis</h3>
-                <button>more</button>
-              </div>
-              <div
-                style={{
-                  display: "flex",
-                  gap: "50px",
-                }}
-              >
-                <div>
-                  <div
-                    style={{
-                      display: "flex",
-                      alignContent: "center",
-                      marginTop: "20px",
-                      gap: "10px",
-                    }}
-                  >
-                    <Heartbeat size={17} />{" "}
-                    <label className="analysis-label__text">01 Feb 2024</label>
-                  </div>
-                  <div>
-                    <p className="analysis-p__text">Hemoglobin</p>
-                    <label className="analysis-label__text">
-                      Awaiting result
-                    </label>
-                  </div>
-                </div>
-                <div>
-                  <div
-                    style={{
-                      display: "flex",
-                      alignContent: "center",
-                      marginTop: "20px",
-                      gap: "10px",
-                    }}
-                  >
-                    <Heartbeat size={17} />{" "}
-                    <label className="analysis-label__text">28 Jan 2024</label>
-                  </div>
-                  <div>
-                    <p className="analysis-p__text">Covid</p>
-                    <a className="analysis-anchor" href="#">
-                      View result{" "}
-                      <ArrowSquareIn
-                        size={16}
-                        weight="thin"
-                        color={"#515151"}
-                      />
-                    </a>
-                  </div>
-                </div>
-                <div>
-                  <div
-                    style={{
-                      display: "flex",
-                      alignContent: "center",
-                      marginTop: "20px",
-                      gap: "10px",
-                    }}
-                  >
-                    <Heartbeat size={17} />{" "}
-                    <label className="analysis-label__text">25 Jan 2024</label>
-                  </div>
-                  <div>
-                    <p className="analysis-p__text">Cholesterol</p>
-                    <a className="analysis-anchor" href="#">
-                      View result{" "}
-                      <ArrowSquareIn
-                        size={16}
-                        weight="thin"
-                        color={"#515151"}
-                      />
-                    </a>
-                  </div>
-                </div>
-                <div>
-                  <div
-                    style={{
-                      display: "flex",
-                      alignContent: "center",
-                      marginTop: "20px",
-                      gap: "10px",
-                    }}
-                  >
-                    <Heartbeat size={17} />{" "}
-                    <label className="analysis-label__text">15 Jan 2024</label>
-                  </div>
-                  <div>
-                    <p className="analysis-p__text">Sugar</p>
-                    <a className="analysis-anchor" href="#">
-                      View result{" "}
-                      <ArrowSquareIn
-                        size={16}
-                        weight="thin"
-                        color={"#515151"}
-                      />
-                    </a>
-                  </div>
-                </div>
-                <div>
-                  <div
-                    style={{
-                      display: "flex",
-                      alignContent: "center",
-                      marginTop: "20px",
-                      gap: "10px",
-                    }}
-                  >
-                    <Heartbeat size={17} />{" "}
-                    <label className="analysis-label__text">25 Dev 2023</label>
-                  </div>
-                  <div>
-                    <p className="analysis-p__text">Iron Diffeciency</p>
-                    <a className="analysis-anchor" href="#">
-                      View result{" "}
-                      <ArrowSquareIn
-                        size={16}
-                        weight="thin"
-                        color={"#515151"}
-                      />
-                    </a>
-                  </div>
-                </div>
-                <div>
-                  <div
-                    style={{
-                      display: "flex",
-                      alignContent: "center",
-                      marginTop: "20px",
-                      gap: "10px",
-                    }}
-                  >
-                    <Heartbeat size={17} />{" "}
-                    <label className="analysis-label__text">2 Nov 2023</label>
-                  </div>
-                  <div>
-                    <p className="analysis-p__text">X-ray</p>
-                    <a className="analysis-anchor" href="#">
-                      View result{" "}
-                      <ArrowSquareIn
-                        size={16}
-                        weight="thin"
-                        color={"#515151"}
-                      />
-                    </a>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div className="reminder__wrapper">
-            <h3>Reminder</h3>
-            <div className="reminder-details__wrapper">
-              <div>
-                <img
-                  className="doctor-picture"
-                  src="https://plus.unsplash.com/premium_photo-1661764878654-3d0fc2eefcca?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                  alt="doctor-picture"
-                />
-              </div>
-              <div>
-                <p
-                  style={{
-                    marginTop: "15px",
-                    fontSize: "15px",
-                    fontWeight: "bold",
-                  }}
-                >
-                  Dr. Mahichit Sharma
-                </p>
-                <p style={{ marginTop: "5px", fontSize: "15px" }}>
-                  General appointment
-                </p>
-                <p style={{ fontSize: "12px" }}>10/02/2024 12:50pm</p>
-              </div>
-            </div>
-          </div>
-        </div>
+    <div style={{ margin: "10px 0 0 10px" }}>
+      <button
+        className="fullres-close__btn"
+        onClick={() => setOpenFullProfile(false)}
+      >
+        <X size={20} />
+      </button>
+      <div className="fullres-route-name__wrapper">
+        <h3>Patients</h3>
+        <CaretRight size={15} color="#202020" />
+        <h3 style={{ color: "rgba(0,0,0,0.5)" }}>{fullProfileData.fullName}</h3>
       </div>
+
+      <PatientDetails fullProfileData={fullProfileData} />
+      <br />
+      <br />
+      <PatientDocuments />
+      <br />
+      <PatientEmergencyContacts />
     </div>
   );
 };

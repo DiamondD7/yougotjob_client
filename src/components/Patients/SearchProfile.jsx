@@ -151,11 +151,11 @@ const SearchProfile = ({
         {filterData.map((items, index) => (
           <div style={{ marginTop: "20px" }} key={index}>
             <div className="search-profile-header__wrapper">
-              <img
+              {/* <img
                 src={items.picture}
                 alt="test-img"
                 className="search-profile__img"
-              />
+              /> */}
               <div>
                 <p className="search-profile-header__texts">
                   Nationality: {items.nationality}
@@ -179,9 +179,7 @@ const SearchProfile = ({
               </div>
             </div>
 
-            <p className="search-profile-name__text">
-              {items.firstName} {items.lastName}
-            </p>
+            <p className="search-profile-name__text">{items.fullName}</p>
             <p className="search-profile-nhi__text">NHI: {items.nhi}</p>
           </div>
         ))}
