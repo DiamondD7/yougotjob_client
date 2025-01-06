@@ -8,6 +8,7 @@ import {
   User,
   Calendar,
   ChatCenteredText,
+  Link,
   EnvelopeOpen,
 } from "@phosphor-icons/react";
 
@@ -268,6 +269,7 @@ const PaymentContainer = () => {
   const [paymentClick, setPaymentClick] = useState(false);
   const [chosenPayment, setChosenPayment] = useState([]);
   const [chosenAptId, setChosenAptId] = useState(0);
+  const [chosenAptEmail, setChosenAptEmail] = useState("");
 
   const [apts, setApts] = useState([]);
 
@@ -280,11 +282,12 @@ const PaymentContainer = () => {
       });
   }, []);
 
-  const handlePaymentModal = (e, data, id) => {
+  const handlePaymentModal = (e, data, id, email) => {
     e.preventDefault();
     setPaymentClick(true); //this is for opening the modal stripe pay
     setChosenPayment(data); //this is the appointmentPayments
     setChosenAptId(id);
+    setChosenAptEmail(email);
   };
 
   return (
@@ -296,6 +299,7 @@ const PaymentContainer = () => {
             chosenPayment={chosenPayment}
             setPaymentClick={setPaymentClick}
             chosenAptId={chosenAptId}
+            chosenAptEmail={chosenAptEmail}
           />
         </div>
       ) : (
@@ -307,16 +311,16 @@ const PaymentContainer = () => {
             <tr>
               <th>#</th>
               <th>Practitioner</th>
-              <th>Date/Time</th>
-              <th>Invoice Code</th>
-              <th>Description</th>
+              <th>Appointment</th>
+              <th>Receipt</th>
               <th>Tax</th>
+              <th>Subtotal</th>
               <th>Total</th>
               <th>Payment</th>
             </tr>
           </thead>
           <tbody>
-            {apts.map((data, index) => (
+            {apts?.map((data, index) => (
               <tr key={index}>
                 <td>{index + 1}</td>
                 <td>{data.practitionerName}</td>
@@ -325,10 +329,30 @@ const PaymentContainer = () => {
                     "en-nz"
                   )}
                 </td>
-                <td>0</td>
-                <td>{data.comments}</td>
-                <td>{data.appointmentPayments.taxRate}</td>
+                {/* if receiptLink is null, means users has not paid it yet */}
+                {data.appointmentPayments.receiptLink === null ? (
+                  <td></td>
+                ) : (
+                  <td>
+                    <a
+                      href={data.appointmentPayments.receiptLink}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      <Link size={15} />
+                    </a>
+                  </td>
+                )}
+                <td>{data.appointmentPayments.taxRate * 100}%</td>
                 <td>${data.appointmentPayments.total}</td>
+                <td>
+                  $
+                  {Math.floor(
+                    (data.appointmentPayments.total * 0.15 +
+                      data.appointmentPayments.total) *
+                      100
+                  ) / 100}
+                </td>
                 <td>
                   <button
                     className={
@@ -340,7 +364,12 @@ const PaymentContainer = () => {
                       data.appointmentPayments.isPaid === true ? true : false
                     }
                     onClick={(e) =>
-                      handlePaymentModal(e, data.appointmentPayments, data.id)
+                      handlePaymentModal(
+                        e,
+                        data.appointmentPayments,
+                        data.id,
+                        data.emailAddress
+                      )
                     }
                   >
                     {data.appointmentPayments.isPaid === true

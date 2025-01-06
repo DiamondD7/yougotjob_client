@@ -3,32 +3,55 @@ import { useNavigate } from "react-router-dom";
 import { useSearchParams } from "react-router-dom";
 import { CheckCircle } from "@phosphor-icons/react";
 import { Link } from "react-router-dom";
-import { UpdatePaymentSuccess } from "../../../assets/js/serverApi";
+import {
+  UpdatePaymentSuccess,
+  GetPaymentIntent,
+} from "../../../assets/js/serverApi";
 
 import "../../../styles/successpaymentstyles.css";
 const SuccessPayment = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const id = searchParams.get("id");
+  const paymentIntentId = searchParams.get("payment_intent");
+
   useEffect(() => {
     if (id) {
       //if there is an id value
-      fetch(UpdatePaymentSuccess, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-        body: JSON.stringify({
-          Id: id,
-        }),
-      })
+      handleGetPaymentIntent();
+    }
+  }, []);
+
+  const handleGetPaymentIntent = () => {
+    try {
+      fetch(`${GetPaymentIntent}?paymentIntentId=${paymentIntentId}`)
         .then((res) => res.json())
         .then((res) => {
           console.log(res);
+          handleUpdatePaymentSuccess(res.returnStatus.receipt_url);
         });
+    } catch (err) {
+      console.log(err);
     }
-  }, []);
+  };
+
+  const handleUpdatePaymentSuccess = (link) => {
+    fetch(UpdatePaymentSuccess, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify({
+        Id: id,
+        appointmentPayments: { ReceiptLink: link },
+      }),
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        console.log(res);
+      });
+  };
 
   useEffect(() => {
     // Redirect after 3 seconds
