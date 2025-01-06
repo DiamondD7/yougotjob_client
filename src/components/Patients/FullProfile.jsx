@@ -1,5 +1,151 @@
 import React, { useState } from "react";
 import { CaretRight, X, DownloadSimple } from "@phosphor-icons/react";
+import { color } from "chart.js/helpers";
+
+const PatientCommentsHistory = ({ fullProfileData }) => {
+  const test =
+    " Lorem ipsum dolor, sit amet consectetur adipisicing elit. DucimusLorem ipsum dolor, sit amet consectetur adipisicing elit. DucimusLorem ipsum dolor, sit amet consectetur adipisicing elit. DucimusLorem ipsum dolor, sit amet consectetur adipisicing elit. DucimusLorem ipsum dolor, sit amet consectetur adipisicing elit. DucimusLorem ipsum dolor, sit amet consectetur adipisicing elit. DucimusLorem ipsum dolor, sit amet consectetur adipisicing elit. DucimusLorem ipsum dolor, sit amet consectetur adipisicing elit. Ducimus ";
+  return (
+    <div className="patient-histories__wrapper">
+      <h4>Comments</h4>
+      <br />
+      <div className="patient-commentsHistory__wrapper">
+        <label>Dr. Manny Jones</label>
+        <p>15/12/2024</p>
+        <p>{test.substring(0, 150)}</p>
+      </div>
+    </div>
+  );
+};
+
+const PatientBillingHistory = () => {
+  return (
+    <div className="patient-histories__wrapper">
+      <h4>Billing History</h4>
+      <div className="patient-billinghistory__wrapper">
+        <div>
+          <label>$20NZD</label>
+          <p>20/12/2024</p>
+        </div>
+        <div>
+          <p style={{ color: "#d7c60f" }}>Pending</p>
+        </div>
+      </div>
+      <div className="patient-billinghistory__wrapper">
+        <div>
+          <label>$20NZD</label>
+          <p>20/12/2024</p>
+        </div>
+        <div>
+          <p>Paid</p>
+        </div>
+      </div>
+      <div className="patient-billinghistory__wrapper">
+        <div>
+          <label>$20NZD</label>
+          <p>20/12/2024</p>
+        </div>
+        <div>
+          <p>Paid</p>
+        </div>
+      </div>
+
+      <div style={{ textAlign: "center", marginTop: "40px" }}>
+        <button className="patient-histories__btn">See all</button>
+      </div>
+    </div>
+  );
+};
+
+const PatientAppointmentsHistory = () => {
+  return (
+    <div className="patient-histories__wrapper">
+      <h4>Appointment History</h4>
+      <div className="patient-appointmentHistory-contents__wrapper">
+        <br />
+        <label>Check-up Appointment</label>
+        <p>Dr. Manny Jones</p>
+        <p>14/12/2024</p>
+        <br />
+        <label>Check-up Appointment</label>
+        <p>Dr. Manny Jones</p>
+        <p>14/12/2024</p>
+        <br />
+        <label>Check-up Appointment</label>
+        <p>Dr. Manny Jones</p>
+        <p>14/12/2024</p>
+        <br />
+        <div style={{ textAlign: "center" }}>
+          <button className="patient-histories__btn">See all</button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const PatientMedicalRecords = () => {
+  return (
+    <div>
+      <div className="patient-medicalrecords__wrapper">
+        <h4>Medical Records</h4>
+        <div className="patient-table-container__wrapper">
+          <table className="patient__table">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Date</th>
+                <th>Condition</th>
+                <th>Doctor</th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>1</td>
+                <td>18/12/2024</td>
+                <td>Type 2 Diabetic</td>
+                <td>Dr. Manny Jones</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>
+                  <button className="btnclear">
+                    <DownloadSimple size={18} color="#202020" />
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const PatientVitals = () => {
+  return (
+    <div style={{ display: "flex", gap: "100px", marginTop: "40px" }}>
+      <div className="patientvitals-circle__wrapper">
+        <p>Height: 177cm</p>
+      </div>
+      <div className="patientvitals-circle__wrapper">
+        <p>Weight: 70kg</p>
+      </div>
+      <div className="patientvitals-circle__wrapper">
+        <p>BMI: 120</p>
+      </div>
+    </div>
+  );
+};
 
 const PatientEmergencyContacts = () => {
   return (
@@ -7,25 +153,25 @@ const PatientEmergencyContacts = () => {
       <h4>Emergency Contacts</h4>
       <div className="emergencycontacts__wrapper">
         <div className="contact__wrapper">
-          <p style={{ fontWeight: "bold" }}>Michael Jackson</p>
+          <p style={{ fontWeight: "bold" }}>Kratos</p>
           <p>Father</p>
           <br />
           <p>021023034056</p>
-          <p>mj@gmail.com</p>
+          <p>atreussss@gmail.com</p>
         </div>
         <div className="contact__wrapper">
-          <p style={{ fontWeight: "bold" }}>Freya Jackson</p>
+          <p style={{ fontWeight: "bold" }}>Freya</p>
           <p>Mother</p>
           <br />
           <p>0210230222256</p>
           <p>freys@gmail.com</p>
         </div>
         <div className="contact__wrapper">
-          <p style={{ fontWeight: "bold" }}>Sonja Jackson</p>
+          <p style={{ fontWeight: "bold" }}>Sigrun</p>
           <p>Aunt</p>
           <br />
           <p>02102321356</p>
-          <p>sonn_2@gmail.com</p>
+          <p>valkqueen_2@gmail.com</p>
         </div>
       </div>
     </div>
@@ -37,7 +183,7 @@ const PatientDocuments = () => {
     <div>
       <h4>Documents</h4>
       <div className="patient-documents__wrapper">
-        <table className="patient-documents__table">
+        <table className="patient__table">
           <thead>
             <tr>
               <th>#</th>
@@ -131,12 +277,42 @@ const FullProfile = ({ fullProfileData, setOpenFullProfile }) => {
         <h3 style={{ color: "rgba(0,0,0,0.5)" }}>{fullProfileData.fullName}</h3>
       </div>
 
-      <PatientDetails fullProfileData={fullProfileData} />
-      <br />
-      <br />
-      <PatientDocuments />
-      <br />
-      <PatientEmergencyContacts />
+      <div style={{ display: "flex", gap: "100px" }}>
+        <div>
+          <PatientDetails fullProfileData={fullProfileData} />
+          <br />
+          <br />
+          <PatientDocuments />
+          <br />
+          <br />
+          <br />
+          <PatientEmergencyContacts />
+        </div>
+        <div>
+          <PatientVitals />
+          <br />
+          <br />
+          <br />
+          <br />
+
+          <PatientMedicalRecords />
+          <br />
+          <br />
+
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-evenly",
+              gap: "20px",
+            }}
+          >
+            <PatientAppointmentsHistory />
+
+            <PatientBillingHistory />
+            <PatientCommentsHistory fullProfileData={fullProfileData} />
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

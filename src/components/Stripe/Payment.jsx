@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { CreatePayment, UpdatePaymentSuccess } from "../../assets/js/serverApi";
+import { CreatePayment } from "../../assets/js/serverApi";
 import {
   Elements,
   useStripe,
@@ -34,8 +34,6 @@ const Checkout = ({ chosenAptId }) => {
     if (error) {
       console.error(error.message);
     }
-
-    setLoading(false);
   };
 
   return (
@@ -60,11 +58,17 @@ const Checkout = ({ chosenAptId }) => {
   );
 };
 
-const Payment = ({ chosenPayment, setPaymentClick, chosenAptId }) => {
+const Payment = ({
+  chosenPayment,
+  setPaymentClick,
+  chosenAptId,
+  chosenAptEmail,
+}) => {
   // Replace with your Stripe Publishable Key
   const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PKEY);
   const [clientSecret, setClientSecret] = useState("");
   const convertToCents = chosenPayment.total * 100;
+  const [latestCharge, setLatestCharge] = useState([]);
 
   useEffect(() => {
     fetch(CreatePayment, {
@@ -75,14 +79,17 @@ const Payment = ({ chosenPayment, setPaymentClick, chosenAptId }) => {
       },
       body: JSON.stringify({
         Amount: convertToCents,
+        ReceiptEmail: chosenAptEmail,
       }),
     })
       .then((res) => res.json())
       .then((data) => {
         handleOpt(data.returnStatus.paymentIntent.clientSecret);
+        setLatestCharge(data.returnStatus.paymentIntent);
       });
   }, []);
 
+  console.log(latestCharge);
   const handleOpt = (clientSecret) => {
     setClientSecret({
       clientSecret,

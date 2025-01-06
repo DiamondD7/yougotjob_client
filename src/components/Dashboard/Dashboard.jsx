@@ -412,31 +412,37 @@ const NextAptView = ({ nextApt, activateGoTo, setNextAptBtn }) => {
                   </p>
                 </div>
               </div>
-              <div>
-                <p style={{ fontSize: "12px" }}>Files:</p>
-                {files.map((items) => (
-                  <a
-                    key={items.id}
-                    href={`${GetFile}/${items.id}`}
-                    target="_blank"
-                    rel="noreferrer"
-                    style={{
-                      fontSize: "12px",
-                      display: "block",
-                      marginTop: "5px",
-                    }}
-                  >
-                    {items.name.length > 20
-                      ? items.name.substring(0, 20)
-                      : items.name}
-                  </a>
-                ))}
-              </div>
+              {files.length <= 0 ? (
+                ""
+              ) : (
+                <div>
+                  <p style={{ fontSize: "12px" }}>Files:</p>
+                  {files.map((items) => (
+                    <a
+                      key={items.id}
+                      href={`${GetFile}/${items.id}`}
+                      target="_blank"
+                      rel="noreferrer"
+                      style={{
+                        fontSize: "12px",
+                        display: "block",
+                        marginTop: "5px",
+                      }}
+                    >
+                      {items.name.length > 20
+                        ? items.name.substring(0, 20)
+                        : items.name}
+                    </a>
+                  ))}
+                </div>
+              )}
             </div>
             <button
-              className={`dashboard-patient-info__btn ${
-                activateGoTo === false ? "btnDisabled" : ""
-              }`}
+              // className={`dashboard-patient-info__btn ${
+              //   activateGoTo === false || nextApt.isZoomMeetingCreated === false
+              //     ? "btnDisabled"
+              //     : ""
+              // }`}
               onClick={(e) => handleGoToZoomMeeting(e)}
               // disabled={activateGoTo === true ? false : true}
             >
@@ -896,9 +902,8 @@ const PaymentContainer = () => {
               <th>#</th>
               <th>Patient</th>
               <th>Date/Time</th>
-              <th>Invoice Code</th>
-              <th>Description</th>
               <th>Tax</th>
+              <th>Subtotal</th>
               <th>Total</th>
               <th>Payment</th>
             </tr>
@@ -913,10 +918,16 @@ const PaymentContainer = () => {
                     "en-nz"
                   )}
                 </td>
-                <td>0</td>
-                <td>{data.comments}</td>
-                <td>{data.appointmentPayments.taxRate}</td>
-                <td>${data.appointmentPayments.total}</td>
+                <td>{data.appointmentPayments.taxRate * 100}%</td>
+                <td>{data.appointmentPayments.total}</td>
+                <td>
+                  $
+                  {Math.floor(
+                    (data.appointmentPayments.total * 0.15 +
+                      data.appointmentPayments.total) *
+                      100
+                  ) / 100}
+                </td>
                 <td>
                   <button
                     className={

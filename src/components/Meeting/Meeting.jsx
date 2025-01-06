@@ -240,7 +240,7 @@ const Meeting = () => {
     })
       .then((res) => res.json())
       .then((res) => {
-        //console.log(res.returnStatus.data);
+        console.log(res);
         const accessToken = res.returnStatus.data.accessToken;
         const refreshToken = res.returnStatus.data.refreshToken;
 
