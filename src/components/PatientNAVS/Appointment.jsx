@@ -228,7 +228,7 @@ const AppointmentSearch = ({ filterSearch, setFilterSearch }) => {
   );
 };
 
-const AppointmentWait = () => {
+const AppointmentWait = ({ autofillData }) => {
   const id = parseInt(sessionStorage.getItem("id"));
   const [startDate, setStartDate] = useState();
   const [appointmentData, setAppointmentData] = useState({
@@ -236,10 +236,10 @@ const AppointmentWait = () => {
     PractitionerId: 0,
     PatientsId: id,
     Duration: 0,
-    FullName: "",
+    FullName: autofillData.fullName,
     Comments: "",
-    ContactNumber: "",
-    EmailAddress: "",
+    ContactNumber: autofillData.mobileNumber || "",
+    EmailAddress: autofillData.emailAddress,
     HealthPractitionerType: "",
     PreferredAppointmentDate: null,
     AppointmentType: "",
@@ -366,7 +366,8 @@ const AppointmentWait = () => {
             type="text"
             name="FullName"
             placeholder="Full name"
-            onChange={(e) => handleOnChangeInput(e)}
+            disabled
+            value={autofillData.fullName}
           />
           <br />
           <br />
@@ -376,13 +377,17 @@ const AppointmentWait = () => {
               type="text"
               name="EmailAddress"
               placeholder="Email"
-              onChange={(e) => handleOnChangeInput(e)}
+              disabled
+              value={autofillData.emailAddress}
             />
             <input
               className="appointment-wait-form-half__input"
               type="text"
               name="ContactNumber"
               placeholder="Contact number"
+              required
+              disabled={autofillData.mobileNumber === null ? false : true}
+              value={autofillData.mobileNumber}
               onChange={(e) => handleOnChangeInput(e)}
             />
           </div>
@@ -393,7 +398,8 @@ const AppointmentWait = () => {
             type="text"
             name="Nhi"
             placeholder="NHI (optional)"
-            onChange={(e) => handleOnChangeInput(e)}
+            disabled
+            value={autofillData.nhi}
           />
 
           {appointmentData.AppointmentType === "on-site" ? (
@@ -561,6 +567,52 @@ const Appointment = () => {
   const [filterSearch, setFilterSearch] = useState("");
   //const [onlineRadio, setOnlineRadio] = useState("online");
   const [getStartedClicked, setGetStartedClicked] = useState(false);
+  const [autofillData, setAutoFillData] = useState([]);
+  const navigate = useNavigate();
+
+  const handleAutoFill = (e) => {
+    e.preventDefault();
+
+    const fetchDataAsync = async (retry = true) => {
+      try {
+        const id = parseInt(sessionStorage.getItem("id"));
+        const response = await fetch(`${GetPatient}/${id}`, {
+          method: "GET",
+          headers: {
+            Accept: "application/json",
+          },
+          credentials: "include",
+        });
+
+        if (response.status === 302) {
+          //302 is redericting to sign in screen because refresh token and jwt are expired.
+          console.warn("302 detected, redirecting...");
+          // Redirect to the new path
+          navigate("/");
+          return; // Exit the function to prevent further execution
+        }
+
+        if (response.status === 401 && retry) {
+          // Retry the request once if a 401 status is detected
+          console.warn("401 detected, retrying request...");
+          return fetchDataAsync(false); // Call with `retry` set to false
+        }
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+
+        setAutoFillData(data);
+        setGetStartedClicked(true);
+      } catch (error) {
+        console.log("Error fetching data:", error.message);
+      }
+    };
+    fetchDataAsync();
+  };
+
   return (
     <div style={{ margin: "50px 0 0 100px" }}>
       <div style={{ display: "flex", gap: "50px" }}>
@@ -587,7 +639,7 @@ const Appointment = () => {
 
         <div>
           {getStartedClicked === true ? (
-            <AppointmentWait />
+            <AppointmentWait autofillData={autofillData} />
           ) : (
             <div style={{ textAlign: "center", margin: "90px 0 0 130px" }}>
               <h2 style={{ width: "650px", lineHeight: "1.5" }}>
@@ -597,7 +649,7 @@ const Appointment = () => {
               </h2>
               <button
                 className="get-started__btn"
-                onClick={() => setGetStartedClicked(true)}
+                onClick={(e) => handleAutoFill(e)}
               >
                 Get Started
               </button>
