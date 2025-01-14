@@ -616,7 +616,7 @@ const Appointment = () => {
   return (
     <div style={{ margin: "50px 0 0 100px" }}>
       <div style={{ display: "flex", gap: "50px" }}>
-        <div>
+        {/* <div>
           <div style={{ display: "flex", alignItems: "center", gap: "20px" }}>
             <div className="appointment-search-container__wrapper">
               <div>
@@ -635,7 +635,7 @@ const Appointment = () => {
             />
           </div>
           <SearchResults filterSearch={filterSearch} />
-        </div>
+        </div> */}
 
         <div>
           {getStartedClicked === true ? (
@@ -643,7 +643,7 @@ const Appointment = () => {
           ) : (
             <div style={{ textAlign: "center", margin: "90px 0 0 130px" }}>
               <h2 style={{ width: "650px", lineHeight: "1.5" }}>
-                Or to make the process easier, we offer the option to book an
+                To make the process easier, we offer the option to book an
                 appointment based on the type of service or care you need and
                 get seen by all, rather than selecting a specific practitioner.
               </h2>
