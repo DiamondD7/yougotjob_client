@@ -8,7 +8,7 @@ import "../../styles/patientsstyles.css";
 const Patients = () => {
   const [searchField, setSearchField] = useState("");
   const [openFullProfile, setOpenFullProfile] = useState(false); //handles full profile click
-  const [fullProfileData, setFullProfileData] = useState([]);
+  const [patientProfileId, setPatientProfileId] = useState(0);
 
   return (
     <div>
@@ -31,13 +31,13 @@ const Patients = () => {
 
           <SearchProfile
             searchField={searchField}
-            setFullProfileData={setFullProfileData}
+            setPatientProfileId={setPatientProfileId}
             setOpenFullProfile={setOpenFullProfile}
           />
         </div>
       ) : (
         <FullProfile
-          fullProfileData={fullProfileData}
+          patientProfileId={patientProfileId}
           setOpenFullProfile={setOpenFullProfile}
         />
       )}

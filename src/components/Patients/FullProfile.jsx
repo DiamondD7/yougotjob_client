@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { CaretRight, X, DownloadSimple } from "@phosphor-icons/react";
-import { color } from "chart.js/helpers";
+import { GetPatient } from "../../assets/js/serverApi";
+import { useNavigate } from "react-router-dom";
 
 const PatientCommentsHistory = ({ fullProfileData }) => {
   const test =
@@ -214,6 +215,9 @@ const PatientDocuments = () => {
 
 const PatientDetails = ({ fullProfileData }) => {
   const none = "N/A";
+  const registeredDate = new Date(
+    fullProfileData.registeredOn
+  ).toLocaleDateString("en-nz");
   return (
     <div style={{ marginTop: "20px" }}>
       <label style={{ fontSize: "12px", color: "#9dcd5a" }}>NHI: </label>
@@ -233,7 +237,7 @@ const PatientDetails = ({ fullProfileData }) => {
         </div>
         <div style={{ marginTop: "10px" }}>
           <label>Address</label>
-          <p>{fullProfileData.homeAddress}</p>
+          <p>{fullProfileData.homeAddress || none}</p>
         </div>
 
         <div style={{ marginTop: "10px" }}>
@@ -255,14 +259,48 @@ const PatientDetails = ({ fullProfileData }) => {
 
         <div style={{ marginTop: "10px" }}>
           <label>Registered on</label>
-          <p>12/12/2024</p>
+          <p>{registeredDate}</p>
         </div>
       </div>
     </div>
   );
 };
 
-const FullProfile = ({ fullProfileData, setOpenFullProfile }) => {
+const FullProfile = ({ patientProfileId, setOpenFullProfile }) => {
+  const navigate = useNavigate();
+  const [fullProfileData, setFullProfileData] = useState([]);
+
+  useEffect(() => {
+    handleFetchPatient();
+  }, []);
+
+  const handleFetchPatient = async (retry = true) => {
+    try {
+      const response = await fetch(`${GetPatient}/${patientProfileId}`, {
+        method: "GET",
+        credentials: "include",
+      });
+      if (response.status === 302) {
+        //302 is redericting to sign in screen because refresh token and jwt are expired.
+        console.warn("302 detected, redirecting...");
+        // Redirect to the new path
+        navigate("/");
+        return; // Exit the function to prevent further execution
+      }
+      if (response.status === 401 && retry) {
+        // Retry the request once if a 401 status is detected
+        console.warn("401 detected, retrying request...");
+        return handleFetchPatient(false); // Call with `retry` set to false
+      }
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const data = await response.json();
+      setFullProfileData(data);
+    } catch (error) {
+      console.log("Error fetching data:", error.message);
+    }
+  };
   return (
     <div style={{ margin: "10px 0 0 10px" }}>
       <button

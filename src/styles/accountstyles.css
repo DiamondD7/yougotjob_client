@@ -274,3 +274,13 @@
   font-size: 11px;
   width: 90%;
 }
+
+/* ------------------------------------------------------ */
+
+.insurance-details__wrapper {
+  width: 500px;
+  height: 200px;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  padding: 10px;
+  border-radius: 10px;
+}

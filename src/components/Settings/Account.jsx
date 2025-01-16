@@ -103,7 +103,6 @@ const Profile = ({ loggedUserData, setLoadData }) => {
 
   return (
     <div>
-      <h3 style={{ color: "#9dcd5a", fontWeight: "bold" }}>Profile</h3>
       <div style={{ display: "flex", gap: "20px" }}>
         <div className="account-profile__wrapper">
           <div style={{ display: "flex", justifyContent: "space-between" }}>
@@ -232,6 +231,110 @@ const Profile = ({ loggedUserData, setLoadData }) => {
 
         {sessionStorage.getItem("role") === "Practitioner" && (
           <Certifications />
+        )}
+      </div>
+    </div>
+  );
+};
+
+const InsuranceDetails = ({ loggedUserData, setLoadData }) => {
+  const [openEdit, setOpenEdit] = useState(false);
+  const [insuranceName, setInsuranceName] = useState("");
+
+  const updatePersonalInformation = (e) => {
+    e.preventDefault();
+    const id = parseInt(sessionStorage.getItem("id"));
+    const role = sessionStorage.getItem("role");
+    if (role === "Practitioner") {
+      fetch(`${UpdateHealthPractitionerData}/${id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({}),
+      })
+        .then((res) => res.json())
+        .then((res) => {
+          console.log(res); //delete c.log
+          setOpenEdit(false);
+        });
+    } else if (role === "Patient") {
+      fetch(`${UpdatePatient}/${id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({
+          Insurance: {
+            insuranceName: insuranceName,
+          },
+        }),
+      })
+        .then((res) => res.json())
+        .then((res) => {
+          setOpenEdit(false);
+          setLoadData(true);
+        });
+    }
+  };
+
+  return (
+    <div className="insurance-details__wrapper">
+      <div style={{ display: "flex", justifyContent: "space-between" }}>
+        <h5>Insurance</h5>
+        <div style={{ display: "flex", gap: "10px" }}>
+          <button
+            className="account-profile-edit__btn"
+            onClick={() => setOpenEdit(!openEdit)}
+          >
+            {openEdit === false ? (
+              <>
+                <Pencil size={15} />
+                Edit
+              </>
+            ) : (
+              "Cancel"
+            )}
+          </button>
+          {openEdit === true ? (
+            <button
+              className="profile-update__btn"
+              onClick={(e) => updatePersonalInformation(e)}
+            >
+              Update
+            </button>
+          ) : (
+            ""
+          )}
+        </div>
+      </div>
+      <div
+        style={{
+          marginTop: "20px",
+          display: "flex",
+
+          justifyContent: "space-between",
+          width: "300px",
+        }}
+      >
+        <div>
+          <p className="account-profile__text profilelabel">Insurance Name</p>
+        </div>
+        {openEdit === false ? (
+          <div>
+            <p className="account-profile__text profiledetails">
+              {loggedUserData?.insurance?.insuranceName || "N/A"}
+            </p>
+          </div>
+        ) : (
+          <input
+            className="update-details__input"
+            type="text"
+            value={insuranceName}
+            onChange={(e) => setInsuranceName(e.target.value)}
+          />
         )}
       </div>
     </div>
@@ -1514,9 +1617,19 @@ const Account = ({ setEditChanges }) => {
   return (
     <div>
       <div className="setting-contents-display-container__wrapper">
-        {loadDetails && (
-          <Profile loggedUserData={loggedUserData} setLoadData={setLoadData} />
-        )}
+        <h3 style={{ color: "#9dcd5a", fontWeight: "bold" }}>Profile</h3>
+        <div style={{ display: "flex", gap: "30px" }}>
+          {loadDetails && (
+            <Profile
+              loggedUserData={loggedUserData}
+              setLoadData={setLoadData}
+            />
+          )}
+          <InsuranceDetails
+            loggedUserData={loggedUserData}
+            setLoadData={setLoadData}
+          />
+        </div>
 
         <br />
         <br />

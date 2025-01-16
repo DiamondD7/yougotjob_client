@@ -69,7 +69,7 @@ const Results = () => {
   let paginationButtons = []; //setting initial value
   let paginationLength = Math.ceil(
     (searchField === "" && visitType === ""
-      ? prevApts.length
+      ? prevApts?.length
       : filteredData.length) / recordsPerPage
   );
 
@@ -168,7 +168,7 @@ const Results = () => {
                 </thead>
 
                 <tbody>
-                  {prevApts.map((data, index) => (
+                  {prevApts?.map((data, index) => (
                     <tr key={index}>
                       <td>{data.nhi}</td>
                       <td>
