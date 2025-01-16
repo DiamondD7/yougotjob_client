@@ -909,7 +909,7 @@ const PaymentContainer = () => {
             </tr>
           </thead>
           <tbody>
-            {apts.map((data, index) => (
+            {apts?.map((data, index) => (
               <tr key={index}>
                 <td>{index + 1}</td>
                 <td>{data.fullName}</td>
@@ -1236,7 +1236,9 @@ const Dashboard = () => {
     })
       .then((res) => res.json())
       .then((res) => {
-        setPrevApt(res.returnStatus.data[0]);
+        if (res.returnStatus.status === true) {
+          setPrevApt(res.returnStatus.data[0]);
+        }
         setLoading(false); //MIGHT CHANGE THE LOADING.
       });
   };
