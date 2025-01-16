@@ -252,7 +252,7 @@ const PatientDetails = ({ fullProfileData }) => {
             </div>
             <div>
               <label>Insurance</label>
-              <p>N/A</p>
+              <p>{fullProfileData?.insurance?.insuranceName || none}</p>
             </div>
           </div>
         </div>
