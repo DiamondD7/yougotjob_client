@@ -215,6 +215,9 @@ const PatientDocuments = () => {
 
 const PatientDetails = ({ fullProfileData }) => {
   const none = "N/A";
+  const registeredDate = new Date(
+    fullProfileData.registeredOn
+  ).toLocaleDateString("en-nz");
   return (
     <div style={{ marginTop: "20px" }}>
       <label style={{ fontSize: "12px", color: "#9dcd5a" }}>NHI: </label>
@@ -234,7 +237,7 @@ const PatientDetails = ({ fullProfileData }) => {
         </div>
         <div style={{ marginTop: "10px" }}>
           <label>Address</label>
-          <p>{fullProfileData.homeAddress}</p>
+          <p>{fullProfileData.homeAddress || none}</p>
         </div>
 
         <div style={{ marginTop: "10px" }}>
@@ -256,7 +259,7 @@ const PatientDetails = ({ fullProfileData }) => {
 
         <div style={{ marginTop: "10px" }}>
           <label>Registered on</label>
-          <p>12/12/2024</p>
+          <p>{registeredDate}</p>
         </div>
       </div>
     </div>
