@@ -218,6 +218,8 @@ const PatientDetails = ({ fullProfileData }) => {
   const registeredDate = new Date(
     fullProfileData.registeredOn
   ).toLocaleDateString("en-nz");
+
+  const DOB = new Date(fullProfileData.dob).toLocaleDateString("en-nz");
   return (
     <div style={{ marginTop: "20px" }}>
       <label style={{ fontSize: "12px", color: "#9dcd5a" }}>NHI: </label>
@@ -228,7 +230,7 @@ const PatientDetails = ({ fullProfileData }) => {
         <div style={{ display: "flex", gap: "20px" }}>
           <div>
             <label>Date of birth</label>
-            <p>{fullProfileData.dob}</p>
+            <p>{DOB}</p>
           </div>
           <div>
             <label>Age</label>
