@@ -43,6 +43,9 @@ const Profile = ({ loggedUserData, setLoadData }) => {
     loggedUserData.homeAddress || ""
   );
 
+  const [dob, setDob] = useState(loggedUserData.dob || "");
+  const formatDOB = new Date(dob).toLocaleDateString("en-NZ");
+
   const updatePersonalInformation = (e) => {
     e.preventDefault();
     const id = parseInt(sessionStorage.getItem("id"));
@@ -79,6 +82,7 @@ const Profile = ({ loggedUserData, setLoadData }) => {
           MobileNumber: mobilePhone,
           EmailAddress: emailAddress,
           HomeAddress: homeAddress,
+          Dob: dob,
         }),
       })
         .then((res) => res.json())
@@ -159,6 +163,34 @@ const Profile = ({ loggedUserData, setLoadData }) => {
                   type="text"
                   value={fullName}
                   onChange={(e) => setFullName(e.target.value)}
+                />
+              )}
+            </div>
+          </div>
+
+          <div
+            style={{
+              marginTop: "10px",
+              display: "flex",
+
+              justifyContent: "space-between",
+              width: "300px",
+            }}
+          >
+            <div>
+              <p className="account-profile__text profilelabel">DOB</p>
+            </div>
+            <div>
+              {openEdit === false ? (
+                <p className="account-profile__text profiledetails">
+                  {formatDOB}
+                </p>
+              ) : (
+                <input
+                  className="update-details__input"
+                  type="date"
+                  value={dob}
+                  onChange={(e) => setDob(e.target.value)}
                 />
               )}
             </div>
@@ -1527,10 +1559,9 @@ const Account = ({ setEditChanges }) => {
   const navigate = useNavigate();
   const [loadData, setLoadData] = useState(false);
   const [loadDetails, setLoadDetails] = useState(false);
+  const id = parseInt(sessionStorage.getItem("id"));
+  const role = sessionStorage.getItem("role");
   useEffect(() => {
-    const id = parseInt(sessionStorage.getItem("id"));
-    const role = sessionStorage.getItem("role");
-
     const fetchData = async (retry = true) => {
       try {
         const response = await fetch(`${GetaHealthPractitioner}/${id}`, {
@@ -1625,10 +1656,15 @@ const Account = ({ setEditChanges }) => {
               setLoadData={setLoadData}
             />
           )}
-          <InsuranceDetails
-            loggedUserData={loggedUserData}
-            setLoadData={setLoadData}
-          />
+
+          {role === "Patient" ? (
+            <InsuranceDetails
+              loggedUserData={loggedUserData}
+              setLoadData={setLoadData}
+            />
+          ) : (
+            ""
+          )}
         </div>
 
         <br />

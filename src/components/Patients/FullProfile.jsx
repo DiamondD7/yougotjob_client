@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { CaretRight, X, DownloadSimple } from "@phosphor-icons/react";
-import { GetPatient } from "../../assets/js/serverApi";
+import {
+  ID,
+  GetPatient,
+  GetPatientEmergencyContact,
+} from "../../assets/js/serverApi";
 import { useNavigate } from "react-router-dom";
 
 const PatientCommentsHistory = ({ fullProfileData }) => {
@@ -148,76 +152,118 @@ const PatientVitals = () => {
   );
 };
 
-const PatientEmergencyContacts = () => {
+const PatientEmergencyContacts = ({ fullProfileData }) => {
+  const navigate = useNavigate();
+  const [emergencyContacts, setEmergencyContacts] = useState([]);
+
+  useEffect(() => {
+    const handleFetchContacts = async (retry = true) => {
+      try {
+        const response = await fetch(
+          `${GetPatientEmergencyContact}/${fullProfileData.id}`,
+          {
+            method: "GET",
+            credentials: "include",
+          }
+        );
+        if (response.status === 302) {
+          //302 is redericting to sign in screen because refresh token and jwt are expired.
+          console.warn("302 detected, redirecting...");
+          // Redirect to the new path
+          navigate("/");
+          return; // Exit the function to prevent further execution
+        }
+        if (response.status === 401 && retry) {
+          // Retry the request once if a 401 status is detected
+          console.warn("401 detected, retrying request...");
+          return handleFetchContacts(false); // Call with `retry` set to false
+        }
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const res = await response.json();
+        //console.log(res);
+        setEmergencyContacts(res.returnStatus.data);
+      } catch (error) {
+        console.log("Error fetching data:", error.message);
+      }
+    };
+    handleFetchContacts();
+  }, [fullProfileData.id]);
+
   return (
     <div>
       <h4>Emergency Contacts</h4>
       <div className="emergencycontacts__wrapper">
-        <div className="contact__wrapper">
-          <p style={{ fontWeight: "bold" }}>Kratos</p>
-          <p>Father</p>
-          <br />
-          <p>021023034056</p>
-          <p>atreussss@gmail.com</p>
-        </div>
-        <div className="contact__wrapper">
-          <p style={{ fontWeight: "bold" }}>Freya</p>
-          <p>Mother</p>
-          <br />
-          <p>0210230222256</p>
-          <p>freys@gmail.com</p>
-        </div>
-        <div className="contact__wrapper">
-          <p style={{ fontWeight: "bold" }}>Sigrun</p>
-          <p>Aunt</p>
-          <br />
-          <p>02102321356</p>
-          <p>valkqueen_2@gmail.com</p>
-        </div>
+        {emergencyContacts.map((data, index) => (
+          <div className="contact__wrapper" key={data.id}>
+            <p style={{ fontWeight: "bold" }}>{data.contactName}</p>
+            <p>{data.contactRelationship}</p>
+            <br />
+            <p>{data.contactMobile}</p>
+            <p>{data.contactEmailAddress}</p>
+          </div>
+        ))}
+        {/* <div className="contact__wrapper">
+            <p style={{ fontWeight: "bold" }}>Freya</p>
+            <p>Mother</p>
+            <br />
+            <p>0210230222256</p>
+            <p>freys@gmail.com</p>
+          </div>
+          <div className="contact__wrapper">
+            <p style={{ fontWeight: "bold" }}>Sigrun</p>
+            <p>Aunt</p>
+            <br />
+            <p>02102321356</p>
+            <p>valkqueen_2@gmail.com</p>
+          </div> */}
       </div>
     </div>
   );
 };
 
-const PatientDocuments = () => {
-  return (
-    <div>
-      <h4>Documents</h4>
-      <div className="patient-documents__wrapper">
-        <table className="patient__table">
-          <thead>
-            <tr>
-              <th>#</th>
-              <th>Date</th>
-              <th>Name</th>
-              <th>Type</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>1</td>
-              <td>12/12/2024</td>
-              <td>passport</td>
-              <td>.pdf</td>
-              <td>
-                <button className="btnclear">
-                  <DownloadSimple size={18} color="#202020" />
-                </button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-  );
-};
+// const PatientDocuments = () => {
+//   return (
+//     <div>
+//       <h4>Documents</h4>
+//       <div className="patient-documents__wrapper">
+//         <table className="patient__table">
+//           <thead>
+//             <tr>
+//               <th>#</th>
+//               <th>Date</th>
+//               <th>Name</th>
+//               <th>Type</th>
+//               <th></th>
+//             </tr>
+//           </thead>
+//           <tbody>
+//             <tr>
+//               <td>1</td>
+//               <td>12/12/2024</td>
+//               <td>passport</td>
+//               <td>.pdf</td>
+//               <td>
+//                 <button className="btnclear">
+//                   <DownloadSimple size={18} color="#202020" />
+//                 </button>
+//               </td>
+//             </tr>
+//           </tbody>
+//         </table>
+//       </div>
+//     </div>
+//   );
+// };
 
 const PatientDetails = ({ fullProfileData }) => {
   const none = "N/A";
   const registeredDate = new Date(
     fullProfileData.registeredOn
   ).toLocaleDateString("en-nz");
+
+  const DOB = new Date(fullProfileData.dob).toLocaleDateString("en-nz");
   return (
     <div style={{ marginTop: "20px" }}>
       <label style={{ fontSize: "12px", color: "#9dcd5a" }}>NHI: </label>
@@ -228,7 +274,7 @@ const PatientDetails = ({ fullProfileData }) => {
         <div style={{ display: "flex", gap: "20px" }}>
           <div>
             <label>Date of birth</label>
-            <p>{fullProfileData.dob}</p>
+            <p>{DOB}</p>
           </div>
           <div>
             <label>Age</label>
@@ -318,13 +364,12 @@ const FullProfile = ({ patientProfileId, setOpenFullProfile }) => {
       <div style={{ display: "flex", gap: "100px" }}>
         <div>
           <PatientDetails fullProfileData={fullProfileData} />
+          {/* <br />
+          <br />
+          <PatientDocuments /> */}
           <br />
           <br />
-          <PatientDocuments />
-          <br />
-          <br />
-          <br />
-          <PatientEmergencyContacts />
+          <PatientEmergencyContacts fullProfileData={fullProfileData} />
         </div>
         <div>
           <PatientVitals />
