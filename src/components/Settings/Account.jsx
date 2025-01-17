@@ -1559,10 +1559,9 @@ const Account = ({ setEditChanges }) => {
   const navigate = useNavigate();
   const [loadData, setLoadData] = useState(false);
   const [loadDetails, setLoadDetails] = useState(false);
+  const id = parseInt(sessionStorage.getItem("id"));
+  const role = sessionStorage.getItem("role");
   useEffect(() => {
-    const id = parseInt(sessionStorage.getItem("id"));
-    const role = sessionStorage.getItem("role");
-
     const fetchData = async (retry = true) => {
       try {
         const response = await fetch(`${GetaHealthPractitioner}/${id}`, {
@@ -1657,10 +1656,15 @@ const Account = ({ setEditChanges }) => {
               setLoadData={setLoadData}
             />
           )}
-          <InsuranceDetails
-            loggedUserData={loggedUserData}
-            setLoadData={setLoadData}
-          />
+
+          {role === "Patient" ? (
+            <InsuranceDetails
+              loggedUserData={loggedUserData}
+              setLoadData={setLoadData}
+            />
+          ) : (
+            ""
+          )}
         </div>
 
         <br />
