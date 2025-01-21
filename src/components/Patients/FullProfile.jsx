@@ -4,6 +4,7 @@ import {
   ID,
   GetPatient,
   GetPatientEmergencyContact,
+  GetPatientPreviousApt,
 } from "../../assets/js/serverApi";
 import { useNavigate } from "react-router-dom";
 
@@ -23,20 +24,30 @@ const PatientCommentsHistory = ({ fullProfileData }) => {
   );
 };
 
-const PatientBillingHistory = () => {
+const PatientBillingHistory = ({ prevApts }) => {
   return (
     <div className="patient-histories__wrapper">
       <h4>Billing History</h4>
-      <div className="patient-billinghistory__wrapper">
-        <div>
-          <label>$20NZD</label>
-          <p>20/12/2024</p>
+      {prevApts?.slice(0, 3).map((bill, index) => (
+        <div className="patient-billinghistory__wrapper" key={bill.id}>
+          <div>
+            <label>${bill.appointmentPayments.total}</label>
+            <p>20/12/2024</p>
+          </div>
+          <div>
+            <p
+              style={
+                bill.appointmentPayments.isPaid === false
+                  ? { color: "#d7c60f" }
+                  : {}
+              }
+            >
+              {bill.appointmentPayments.isPaid === false ? "Pending" : "Paid"}
+            </p>
+          </div>
         </div>
-        <div>
-          <p style={{ color: "#d7c60f" }}>Pending</p>
-        </div>
-      </div>
-      <div className="patient-billinghistory__wrapper">
+      ))}
+      {/* <div className="patient-billinghistory__wrapper">
         <div>
           <label>$20NZD</label>
           <p>20/12/2024</p>
@@ -53,7 +64,7 @@ const PatientBillingHistory = () => {
         <div>
           <p>Paid</p>
         </div>
-      </div>
+      </div> */}
 
       <div style={{ textAlign: "center", marginTop: "40px" }}>
         <button className="patient-histories__btn">See all</button>
@@ -62,12 +73,27 @@ const PatientBillingHistory = () => {
   );
 };
 
-const PatientAppointmentsHistory = () => {
+const PatientAppointmentsHistory = ({ prevApts }) => {
   return (
     <div className="patient-histories__wrapper">
       <h4>Appointment History</h4>
-      <div className="patient-appointmentHistory-contents__wrapper">
+      <div>
         <br />
+        {prevApts?.slice(0, 3).map((apt, index) => (
+          <div
+            className="patient-appointmentHistory-contents__wrapper"
+            key={apt.id}
+          >
+            <label>{apt.appointmentAgenda}</label>
+            <p>{apt.practitionerName}</p>
+            <p>
+              {new Date(apt.appointmentDateCompleted).toLocaleDateString(
+                "en-nz"
+              )}
+            </p>
+          </div>
+        ))}
+        {/* <br />
         <label>Check-up Appointment</label>
         <p>Dr. Manny Jones</p>
         <p>14/12/2024</p>
@@ -75,11 +101,7 @@ const PatientAppointmentsHistory = () => {
         <label>Check-up Appointment</label>
         <p>Dr. Manny Jones</p>
         <p>14/12/2024</p>
-        <br />
-        <label>Check-up Appointment</label>
-        <p>Dr. Manny Jones</p>
-        <p>14/12/2024</p>
-        <br />
+        <br /> */}
         <div style={{ textAlign: "center" }}>
           <button className="patient-histories__btn">See all</button>
         </div>
@@ -315,6 +337,7 @@ const PatientDetails = ({ fullProfileData }) => {
 const FullProfile = ({ patientProfileId, setOpenFullProfile }) => {
   const navigate = useNavigate();
   const [fullProfileData, setFullProfileData] = useState([]);
+  const [prevApts, setPrevApts] = useState([]);
 
   useEffect(() => {
     handleFetchPatient();
@@ -347,6 +370,17 @@ const FullProfile = ({ patientProfileId, setOpenFullProfile }) => {
       console.log("Error fetching data:", error.message);
     }
   };
+
+  // fetch appointment history data
+
+  useEffect(() => {
+    fetch(`${GetPatientPreviousApt}/${patientProfileId}`)
+      .then((res) => res.json())
+      .then((res) => {
+        console.log(res);
+        setPrevApts(res.returnStatus.data);
+      });
+  }, []);
   return (
     <div style={{ margin: "10px 0 0 10px" }}>
       <button
@@ -389,9 +423,9 @@ const FullProfile = ({ patientProfileId, setOpenFullProfile }) => {
               gap: "20px",
             }}
           >
-            <PatientAppointmentsHistory />
+            <PatientAppointmentsHistory prevApts={prevApts} />
 
-            <PatientBillingHistory />
+            <PatientBillingHistory prevApts={prevApts} />
             <PatientCommentsHistory fullProfileData={fullProfileData} />
           </div>
         </div>

@@ -151,6 +151,10 @@
   border: 1px solid rgba(0, 0, 0, 0.3);
 }
 
+.patient-appointmentHistory-contents__wrapper {
+  height: 225px;
+}
+
 .patient-appointmentHistory-contents__wrapper label {
   font-size: 12px;
   font-weight: bold;
@@ -169,6 +173,7 @@
   display: flex;
   justify-content: space-between;
   margin-top: 30px;
+  height: 174px;
 }
 
 .patient-billinghistory__wrapper label {
