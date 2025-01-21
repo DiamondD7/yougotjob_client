@@ -1,20 +1,20 @@
-.patientsId-search__wrapper{
-    /* position: absolute;
+.patientsId-search__wrapper {
+  /* position: absolute;
     top:10%;
     left:50%;
     transform: translate(-50%, -50%); */
-    margin:10px 0 0 380px;
+  margin: 10px 0 0 380px;
 }
 
-.patientID__input{
-    padding: 5px 5px;
-    width: 1000px;
-    border: 1px solid rgba(0,0,0,0.4);
-    border-radius: 10px;
+.patientID__input {
+  padding: 5px 5px;
+  width: 1000px;
+  border: 1px solid rgba(0, 0, 0, 0.4);
+  border-radius: 10px;
 
-    font-size: 21px;
-    outline: none;
-    /* box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px; */
+  font-size: 21px;
+  outline: none;
+  /* box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px; */
 }
 
 /* .patientFirstLastName__input{
@@ -28,16 +28,15 @@
     text-align: center;
 } */
 
-.patientsearch__btn{
-    cursor: pointer;
-    background-color:#9DCD5A;
-    width: 100px;
-    padding: 5px 5px;
-    font-size: 21px;
-    border: 1px solid #9DCD5A;
-    border-radius: 10px;
-    
-    
-    border-top-left-radius: 0;
-    border-bottom-left-radius: 0;
+.patientsearch__btn {
+  cursor: pointer;
+  background-color: #9dcd5a;
+  width: 100px;
+  padding: 5px 5px;
+  font-size: 21px;
+  border: 1px solid #9dcd5a;
+  border-radius: 10px;
+
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
 }
