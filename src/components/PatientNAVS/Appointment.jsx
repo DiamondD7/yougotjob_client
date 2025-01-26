@@ -232,7 +232,7 @@ const AppointmentWait = ({ autofillData }) => {
   const id = parseInt(sessionStorage.getItem("id"));
   const [startDate, setStartDate] = useState();
   const [appointmentData, setAppointmentData] = useState({
-    Nhi: "",
+    nhi: autofillData.nhi,
     PractitionerId: 0,
     PatientsId: id,
     Duration: 0,
@@ -396,8 +396,8 @@ const AppointmentWait = ({ autofillData }) => {
           <input
             className="appointment-wait-form-full__input"
             type="text"
-            name="Nhi"
-            placeholder="NHI (optional)"
+            name="nhi"
+            placeholder="NHI"
             disabled
             value={autofillData.nhi}
           />
