@@ -25,10 +25,20 @@ const PatientCommentsHistory = ({ fullProfileData }) => {
 };
 
 const PatientBillingHistory = ({ prevApts }) => {
+  const [loadAll, setLoadAll] = useState(false);
+  const [prevAptsFilter, setPrevAptsFilter] = useState([]);
+
+  useEffect(() => {
+    if (loadAll === true) {
+      setPrevAptsFilter(prevApts);
+    } else {
+      setPrevAptsFilter(prevApts.slice(0, 3));
+    }
+  }, [loadAll, prevApts]);
   return (
     <div className="patient-histories__wrapper">
       <h4>Billing History</h4>
-      {prevApts?.slice(0, 3).map((bill, index) => (
+      {prevAptsFilter.slice(0, 3).map((bill, index) => (
         <div className="patient-billinghistory__wrapper" key={bill.id}>
           <div>
             <label>${bill.appointmentPayments.total}</label>
@@ -47,39 +57,36 @@ const PatientBillingHistory = ({ prevApts }) => {
           </div>
         </div>
       ))}
-      {/* <div className="patient-billinghistory__wrapper">
-        <div>
-          <label>$20NZD</label>
-          <p>20/12/2024</p>
-        </div>
-        <div>
-          <p>Paid</p>
-        </div>
-      </div>
-      <div className="patient-billinghistory__wrapper">
-        <div>
-          <label>$20NZD</label>
-          <p>20/12/2024</p>
-        </div>
-        <div>
-          <p>Paid</p>
-        </div>
-      </div> */}
 
       <div style={{ textAlign: "center", marginTop: "40px" }}>
-        <button className="patient-histories__btn">See all</button>
+        <button
+          className="patient-histories__btn"
+          onClick={() => setLoadAll(!loadAll)}
+        >
+          {loadAll === true ? "Load less" : "Load more"}
+        </button>
       </div>
     </div>
   );
 };
 
 const PatientAppointmentsHistory = ({ prevApts }) => {
+  const [loadAll, setLoadAll] = useState(false);
+  const [prevAptsFilter, setPrevAptsFilter] = useState([]);
+
+  useEffect(() => {
+    if (loadAll === true) {
+      setPrevAptsFilter(prevApts);
+    } else {
+      setPrevAptsFilter(prevApts.slice(0, 3));
+    }
+  }, [loadAll, prevApts]);
   return (
     <div className="patient-histories__wrapper">
       <h4>Appointment History</h4>
       <div>
         <br />
-        {prevApts?.slice(0, 3).map((apt, index) => (
+        {prevAptsFilter.map((apt, index) => (
           <div
             className="patient-appointmentHistory-contents__wrapper"
             key={apt.id}
@@ -93,17 +100,14 @@ const PatientAppointmentsHistory = ({ prevApts }) => {
             </p>
           </div>
         ))}
-        {/* <br />
-        <label>Check-up Appointment</label>
-        <p>Dr. Manny Jones</p>
-        <p>14/12/2024</p>
-        <br />
-        <label>Check-up Appointment</label>
-        <p>Dr. Manny Jones</p>
-        <p>14/12/2024</p>
-        <br /> */}
+
         <div style={{ textAlign: "center" }}>
-          <button className="patient-histories__btn">See all</button>
+          <button
+            className="patient-histories__btn"
+            onClick={() => setLoadAll(!loadAll)}
+          >
+            {loadAll === true ? "Load less" : "Load more"}
+          </button>
         </div>
       </div>
     </div>
@@ -158,17 +162,25 @@ const PatientMedicalRecords = () => {
   );
 };
 
-const PatientVitals = () => {
+const PatientVitals = ({ fullProfileData }) => {
+  //to calculate BMI
+  const bmi =
+    Math.round(
+      (fullProfileData?.width /
+        (fullProfileData?.height * fullProfileData?.height)) *
+        10000 *
+        10
+    ) / 10;
   return (
     <div style={{ display: "flex", gap: "100px", marginTop: "40px" }}>
       <div className="patientvitals-circle__wrapper">
-        <p>Height: 177cm</p>
+        <p>Height: {fullProfileData?.height || 0} cm</p>
       </div>
       <div className="patientvitals-circle__wrapper">
-        <p>Weight: 70kg</p>
+        <p>Weight: {fullProfileData?.weight || 0} kg</p>
       </div>
       <div className="patientvitals-circle__wrapper">
-        <p>BMI: 120</p>
+        <p>BMI: {bmi || 0}</p>
       </div>
     </div>
   );
@@ -406,7 +418,7 @@ const FullProfile = ({ patientProfileId, setOpenFullProfile }) => {
           <PatientEmergencyContacts fullProfileData={fullProfileData} />
         </div>
         <div>
-          <PatientVitals />
+          <PatientVitals fullProfileData={fullProfileData} />
           <br />
           <br />
           <br />
