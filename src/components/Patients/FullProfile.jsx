@@ -166,7 +166,7 @@ const PatientVitals = ({ fullProfileData }) => {
   //to calculate BMI
   const bmi =
     Math.round(
-      (fullProfileData?.width /
+      (fullProfileData?.weight /
         (fullProfileData?.height * fullProfileData?.height)) *
         10000 *
         10

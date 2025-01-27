@@ -33,8 +33,10 @@ import "../../styles/accountstyles.css";
 const Profile = ({ loggedUserData, setLoadData }) => {
   const [openEdit, setOpenEdit] = useState(false);
   const [fullName, setFullName] = useState(loggedUserData.fullName || ""); //if loggedUserData is refreshed then use the original value else use ""
+  const [height, setHeight] = useState(loggedUserData.height || 0);
+  const [weight, setWeight] = useState(loggedUserData.weight || 0);
   const [mobilePhone, setMobilePhone] = useState(
-    loggedUserData.mobile || loggedUserData.mobileNumber || ""
+    loggedUserData.mobileNumber || ""
   );
   const [emailAddress, setEmailAddress] = useState(
     loggedUserData.emailAddress || ""
@@ -42,6 +44,8 @@ const Profile = ({ loggedUserData, setLoadData }) => {
   const [homeAddress, setHomeAddress] = useState(
     loggedUserData.homeAddress || ""
   );
+
+  const bmi = Math.round((weight / (height * height)) * 10000 * 10) / 10;
 
   const [dob, setDob] = useState(loggedUserData.dob || "");
   const formatDOB = new Date(dob).toLocaleDateString("en-NZ");
@@ -59,7 +63,7 @@ const Profile = ({ loggedUserData, setLoadData }) => {
         },
         body: JSON.stringify({
           FullName: fullName,
-          Mobile: mobilePhone,
+          MobileNumber: mobilePhone,
           EmailAddress: emailAddress,
           HomeAddress: homeAddress,
         }),
@@ -82,6 +86,8 @@ const Profile = ({ loggedUserData, setLoadData }) => {
           MobileNumber: mobilePhone,
           EmailAddress: emailAddress,
           HomeAddress: homeAddress,
+          Weight: weight,
+          Height: height,
           Dob: dob,
         }),
       })
@@ -99,9 +105,11 @@ const Profile = ({ loggedUserData, setLoadData }) => {
     if (openEdit === true) {
       //if the openEdit is true (which means when the user cancels updating then it will refresh the values to its original value/initial value)
       setFullName(loggedUserData.fullName);
-      setMobilePhone(loggedUserData.mobile);
+      setMobilePhone(loggedUserData.mobileNumber);
       setEmailAddress(loggedUserData.emailAddress);
       setHomeAddress(loggedUserData.homeAddress);
+      setWeight(loggedUserData.weight);
+      setHeight(loggedUserData.height);
     }
   };
 
@@ -178,6 +186,87 @@ const Profile = ({ loggedUserData, setLoadData }) => {
             }}
           >
             <div>
+              <p className="account-profile__text profilelabel">Height (cm)</p>
+            </div>
+            <div>
+              {openEdit === false ? (
+                <p className="account-profile__text profiledetails">
+                  {height} cm
+                </p>
+              ) : (
+                <input
+                  className="update-details__input"
+                  type="text"
+                  value={height}
+                  onChange={(e) => setHeight(e.target.value)}
+                />
+              )}
+            </div>
+          </div>
+          <div
+            style={{
+              marginTop: "10px",
+              display: "flex",
+
+              justifyContent: "space-between",
+              width: "300px",
+            }}
+          >
+            <div>
+              <p className="account-profile__text profilelabel">Weight (kg)</p>
+            </div>
+            <div>
+              {openEdit === false ? (
+                <p className="account-profile__text profiledetails">
+                  {weight} kg
+                </p>
+              ) : (
+                <input
+                  className="update-details__input"
+                  type="text"
+                  value={weight}
+                  onChange={(e) => setWeight(e.target.value)}
+                />
+              )}
+            </div>
+          </div>
+
+          <div
+            style={{
+              marginTop: "10px",
+              display: "flex",
+
+              justifyContent: "space-between",
+              width: "300px",
+            }}
+          >
+            <div>
+              <p className="account-profile__text profilelabel">BMI</p>
+            </div>
+            <div>
+              {openEdit === false ? (
+                <p className="account-profile__text profiledetails">{bmi}</p>
+              ) : (
+                <input
+                  className="update-details__input"
+                  type="text"
+                  value={bmi}
+                  disabled
+                />
+              )}
+            </div>
+          </div>
+
+          <div
+            style={{
+              marginTop: "10px",
+              display: "flex",
+
+              justifyContent: "space-between",
+              width: "300px",
+            }}
+          >
+            <div>
               <p className="account-profile__text profilelabel">DOB</p>
             </div>
             <div>
@@ -208,7 +297,7 @@ const Profile = ({ loggedUserData, setLoadData }) => {
 
             {openEdit === false ? (
               <p className="account-profile__text profiledetails">
-                {loggedUserData.mobile || loggedUserData.mobileNumber}
+                {loggedUserData.mobileNumber}
               </p>
             ) : (
               <input

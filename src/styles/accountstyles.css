@@ -1,6 +1,6 @@
 .account-profile__wrapper {
   width: 500px;
-  height: 200px;
+  height: 300px;
   border: 1px solid rgba(0, 0, 0, 0.05);
   padding: 10px;
   border-radius: 10px;
@@ -279,7 +279,7 @@
 
 .insurance-details__wrapper {
   width: 500px;
-  height: 200px;
+  height: 300px;
   border: 1px solid rgba(0, 0, 0, 0.05);
   padding: 10px;
   border-radius: 10px;
