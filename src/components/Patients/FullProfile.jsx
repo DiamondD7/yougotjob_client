@@ -166,7 +166,7 @@ const PatientVitals = ({ fullProfileData }) => {
   //to calculate BMI
   const bmi =
     Math.round(
-      (fullProfileData?.width /
+      (fullProfileData?.weight /
         (fullProfileData?.height * fullProfileData?.height)) *
         10000 *
         10
@@ -389,7 +389,7 @@ const FullProfile = ({ patientProfileId, setOpenFullProfile }) => {
     fetch(`${GetPatientPreviousApt}/${patientProfileId}`)
       .then((res) => res.json())
       .then((res) => {
-        console.log(res);
+        //console.log(res);
         setPrevApts(res.returnStatus.data);
       });
   }, []);

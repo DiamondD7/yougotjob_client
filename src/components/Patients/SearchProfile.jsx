@@ -86,7 +86,7 @@ const SearchProfile = ({
       fetch(`${GetPreviousApt}/${id}`)
         .then((res) => res.json())
         .then((res) => {
-          //console.log(res);
+          console.log(res);
           setPatients(res.returnStatus.data);
         });
     } catch (error) {
@@ -162,19 +162,7 @@ const SearchProfile = ({
                 alt="test-img"
                 className="search-profile__img"
               /> */}
-              <div>
-                <p className="search-profile-header__texts">
-                  Nationality: {items.nationality}
-                </p>
-                <p className="search-profile-header__texts">DOB: {items.dob}</p>
-                <p className="search-profile-header__texts">Age: {items.age}</p>
-                <p className="search-profile-header__texts">
-                  Height: {items.height} cm
-                </p>
-                <p className="search-profile-header__texts">
-                  Weight: {items.weight} kg
-                </p>
-              </div>
+
               <div>
                 <button
                   className="search-profile-header__btn"
