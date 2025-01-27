@@ -398,9 +398,7 @@ const NextAptView = ({ nextApt, activateGoTo, setNextAptBtn }) => {
             >
               <div>
                 <div>
-                  <p style={{ fontSize: "12px" }}>
-                    Full name: {nextApt.fullName}
-                  </p>
+                  <p style={{ fontSize: "12px" }}>{nextApt.fullName}</p>
                   <p style={{ fontSize: "12px" }}>{nextApt.emailAddress}</p>
                   <p style={{ fontSize: "12px" }}>{nextApt.contactNumber}</p>
                   <br />
@@ -436,6 +434,11 @@ const NextAptView = ({ nextApt, activateGoTo, setNextAptBtn }) => {
                   ))}
                 </div>
               )}
+
+              <textarea
+                className="nextapt-textarea__wrapper"
+                value={nextApt.comments}
+              ></textarea>
             </div>
             <button
               // className={`dashboard-patient-info__btn ${
@@ -524,6 +527,8 @@ const ZoomMeetingFinishConfirmation = ({ nextApt, setNextAptBtn }) => {
       >
         Yes
       </button>
+
+      <button className="zoomreschedule-btn">Reschedule</button>
     </div>
   );
 };
