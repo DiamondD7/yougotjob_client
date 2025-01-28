@@ -512,23 +512,102 @@ const ZoomMeetingFinishConfirmation = ({ nextApt, setNextAptBtn }) => {
       });
   };
 
+  const PrescribedMedicationsContainer = () => {
+    return (
+      <div>
+        <div>
+          <p>
+            Are there any medication prescribed? List all medication prescribed
+            to the patient
+          </p>
+
+          <div style={{ display: "flex", marginTop: "10px" }}>
+            <label>DRUG NAME</label>
+            <input className="prescription-med__input" type="text" />
+          </div>
+
+          <div style={{ display: "flex", marginTop: "10px" }}>
+            <label>ROUTE</label>
+            <input className="prescription-med__input" type="text" />
+          </div>
+          <div style={{ display: "flex", marginTop: "10px" }}>
+            <label>DOSAGE</label>
+            <input className="prescription-med__input" type="text" />
+          </div>
+
+          <button className="prescription-med-add__btn">Add</button>
+          <button
+            style={{
+              border: "none",
+              fontSize: "12px",
+              backgroundColor: "transparent",
+              cursor: "pointer",
+            }}
+          >
+            Clear
+          </button>
+        </div>
+        <div>
+          <table className="prescription-med__table">
+            <thead>
+              <tr>
+                <th>DRUG NAME</th>
+                <th>ROUTE</th>
+                <th>DOSAGE</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+    );
+  };
+
+  const PatientAllergiesContainer = () => {
+    return (
+      <div>
+        <div>
+          <p>Does the patient have any allergies?</p>
+          <textarea
+            className="zoomconfirmation-textarea"
+            placeholder="Allergies..."
+          ></textarea>
+        </div>
+      </div>
+    );
+  };
+
   return (
-    <div>
-      <h4>Conclusion</h4>
+    <div className="zoomconfirmation__wrapper">
+      <p>Explain the diagnosis of the patient:</p>
       <textarea
         className="zoomconfirmation-textarea"
-        placeholder="Conclusion/findings..."
+        placeholder="Diagnosis..."
         onChange={(e) => setConclusion(e.target.value)}
       ></textarea>
-      <p style={{ fontSize: "12px" }}>Conclude appointment?</p>
+      <br />
+      <br />
+      <PatientAllergiesContainer />
+      <br />
+      <PrescribedMedicationsContainer />
+      <br />
+
+      <p style={{ marginTop: "10px" }}>
+        Any feedback on this particular patient?
+      </p>
+      <textarea
+        className="comments-on-patient__textarea"
+        placeholder="Put your feedback here..."
+      ></textarea>
+      <br />
+      <br />
+      <p>Conclude appointment?</p>
       <button
         className="zoomconfirmation-btn"
         onClick={(e) => handleCompleteAppointment(e)}
       >
         Yes
       </button>
-
-      <button className="zoomreschedule-btn">Reschedule</button>
     </div>
   );
 };

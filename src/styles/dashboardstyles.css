@@ -84,10 +84,10 @@
 
 .nextaptview__wrapper {
   position: absolute;
-  top: 30%;
+  top: 40%;
   left: 50%;
   transform: translate(-50%, -50%);
-  padding: 10px;
+  padding: 20px;
 
   border-radius: 10px;
   background-color: #eff6ff;
@@ -111,6 +111,56 @@
   overflow: auto;
 }
 
+.zoomconfirmation__wrapper p {
+  font-size: 12px;
+}
+
+.zoomconfirmation__wrapper label {
+  font-size: 12px;
+  width: 100px;
+}
+
+.prescription-med__input {
+  font-size: 12px;
+  padding: 1px 5px;
+  width: 250px;
+  margin-left: 10px;
+
+  outline: none;
+  border: 1px solid #808080;
+  border-radius: 5px;
+}
+
+.prescription-med-add__btn {
+  cursor: pointer;
+  border: none;
+  background-color: transparent;
+  margin: 20px 10px 0 0;
+
+  font-weight: bold;
+}
+
+.prescription-med__table {
+  width: 80%;
+  border: 1px solid #808080;
+  border-right: none;
+  border-left: none;
+  margin-top: 40px;
+  border-collapse: collapse;
+}
+
+.prescription-med__table thead th {
+  text-align: start;
+  font-size: 12px;
+  padding: 5px 0;
+}
+
+.prescription-med__table tbody tr td {
+  text-align: start;
+  font-size: 12px;
+  padding: 5px 0;
+}
+
 .zoomconfirmation-btn {
   cursor: pointer;
   background-color: #9dcd5a;
@@ -132,8 +182,21 @@
   font-size: 12px;
 
   margin-top: 5px;
-  min-width: 290px;
-  max-width: 290px;
+  min-width: 100%;
+  max-width: 100%;
+  min-height: 50px;
+  max-height: 50px;
+
+  outline: none;
+  padding: 5px;
+  border-radius: 5px;
+}
+.comments-on-patient__textarea {
+  font-size: 12px;
+
+  margin-top: 5px;
+  min-width: 100%;
+  max-width: 100%;
   min-height: 50px;
   max-height: 50px;
 
