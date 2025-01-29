@@ -13,6 +13,8 @@ import {
   GetChartData,
   GetFiles,
   GetFile,
+  GetAllMedication,
+  AddPrescriptionMedications,
 } from "../../assets/js/serverApi";
 import { exportedMonthsArray } from "../../assets/js/months";
 import {
@@ -471,7 +473,13 @@ const NextAptView = ({ nextApt, activateGoTo, setNextAptBtn }) => {
 };
 
 const ZoomMeetingFinishConfirmation = ({ nextApt, setNextAptBtn }) => {
-  const [conclusion, setConclusion] = useState("");
+  const [userData, setUserData] = useState({
+    Id: nextApt.id,
+    Allergies: "",
+    Feedback: "",
+    Diagnosis: "",
+  });
+
   const handleCompleteAppointment = (e) => {
     e.preventDefault();
     //TODO: set appointmentCompleted to true in the db
@@ -481,10 +489,7 @@ const ZoomMeetingFinishConfirmation = ({ nextApt, setNextAptBtn }) => {
         "Content-Type": "application/json",
         Accept: "application/json",
       },
-      body: JSON.stringify({
-        Id: nextApt.id,
-        Conclusion: conclusion,
-      }),
+      body: JSON.stringify(userData),
     })
       .then((res) => res.json())
       .then((res) => {
@@ -512,7 +517,56 @@ const ZoomMeetingFinishConfirmation = ({ nextApt, setNextAptBtn }) => {
       });
   };
 
+  const handleInputChange = (e) => {
+    console.log(e.target.name, e.target.value);
+    setUserData({
+      ...userData,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  //prescribed medications container
   const PrescribedMedicationsContainer = () => {
+    const [medicationTable, setMedicationTable] = useState([]);
+    const [medications, setMedications] = useState({
+      AppointmentId: nextApt.id,
+      MedicationName: "",
+      Route: "",
+      Dosage: "",
+    });
+
+    useEffect(() => {
+      fetch(`${GetAllMedication}/${nextApt.id}`)
+        .then((res) => res.json())
+        .then((res) => {
+          //console.log(res);
+          setMedicationTable(res.returnStatus.data);
+        });
+    }, []);
+
+    const handleMedicationChange = (e) => {
+      setMedications({
+        ...medications,
+        [e.target.name]: e.target.value,
+      });
+    };
+
+    const updateMedications = async (e) => {
+      e.preventDefault();
+      await fetch(AddPrescriptionMedications, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify(medications),
+      })
+        .then((res) => res.json())
+        .then((res) => {
+          //console.log(res);
+        });
+    };
+
     return (
       <div>
         <div>
@@ -523,19 +577,39 @@ const ZoomMeetingFinishConfirmation = ({ nextApt, setNextAptBtn }) => {
 
           <div style={{ display: "flex", marginTop: "10px" }}>
             <label>DRUG NAME</label>
-            <input className="prescription-med__input" type="text" />
+            <input
+              className="prescription-med__input"
+              type="text"
+              name="MedicationName"
+              onChange={(e) => handleMedicationChange(e)}
+            />
           </div>
 
           <div style={{ display: "flex", marginTop: "10px" }}>
             <label>ROUTE</label>
-            <input className="prescription-med__input" type="text" />
+            <input
+              className="prescription-med__input"
+              type="text"
+              name="Route"
+              onChange={(e) => handleMedicationChange(e)}
+            />
           </div>
           <div style={{ display: "flex", marginTop: "10px" }}>
             <label>DOSAGE</label>
-            <input className="prescription-med__input" type="text" />
+            <input
+              className="prescription-med__input"
+              type="text"
+              name="Dosage"
+              onChange={(e) => handleMedicationChange(e)}
+            />
           </div>
 
-          <button className="prescription-med-add__btn">Add</button>
+          <button
+            className="prescription-med-add__btn"
+            onClick={(e) => updateMedications(e)}
+          >
+            Add
+          </button>
           <button
             style={{
               border: "none",
@@ -556,22 +630,16 @@ const ZoomMeetingFinishConfirmation = ({ nextApt, setNextAptBtn }) => {
                 <th>DOSAGE</th>
               </tr>
             </thead>
-            <tbody></tbody>
+            <tbody>
+              {medicationTable.map((items, index) => (
+                <tr key={items.id}>
+                  <td>{items.medicationName}</td>
+                  <td>{items.route}</td>
+                  <td>{items.dosage}</td>
+                </tr>
+              ))}
+            </tbody>
           </table>
-        </div>
-      </div>
-    );
-  };
-
-  const PatientAllergiesContainer = () => {
-    return (
-      <div>
-        <div>
-          <p>Does the patient have any allergies?</p>
-          <textarea
-            className="zoomconfirmation-textarea"
-            placeholder="Allergies..."
-          ></textarea>
         </div>
       </div>
     );
@@ -583,11 +651,20 @@ const ZoomMeetingFinishConfirmation = ({ nextApt, setNextAptBtn }) => {
       <textarea
         className="zoomconfirmation-textarea"
         placeholder="Diagnosis..."
-        onChange={(e) => setConclusion(e.target.value)}
+        name="Diagnosis"
+        onChange={(e) => handleInputChange(e)}
       ></textarea>
       <br />
       <br />
-      <PatientAllergiesContainer />
+      <div>
+        <p>Does the patient have any allergies?</p>
+        <textarea
+          className="zoomconfirmation-textarea"
+          placeholder="Allergies..."
+          name="Allergies"
+          onChange={(e) => handleInputChange(e)}
+        ></textarea>
+      </div>
       <br />
       <PrescribedMedicationsContainer />
       <br />
@@ -598,6 +675,8 @@ const ZoomMeetingFinishConfirmation = ({ nextApt, setNextAptBtn }) => {
       <textarea
         className="comments-on-patient__textarea"
         placeholder="Put your feedback here..."
+        name="Feedback"
+        onChange={(e) => handleInputChange(e)}
       ></textarea>
       <br />
       <br />
