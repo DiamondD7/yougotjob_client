@@ -25,11 +25,11 @@
 }
 
 .nav-btns__wrapper {
-  margin-top: 50px;
+  margin-top: 30px;
   padding: 0 10px;
   display: flex;
-  gap: 100px;
-  border-top: 0.5px solid rgba(0, 0, 0, 0.05);
+  gap: 120px;
+  /* border-bottom: 0.5px solid rgba(0, 0, 0, 0.05); */
 }
 
 .nav-btns__wrapper button {
@@ -39,6 +39,29 @@
   font-size: 11px;
 }
 
-/* .nav-btns__wrapper button:hover {
-  color: #81bb30;
-} */
+.left-side-container__wrapper {
+  background-color: #f6fcff;
+  border: 1px solid rgba(0, 0, 0, 0.3);
+  border-radius: 5px;
+  padding: 10px;
+  width: 400px;
+  height: 800px;
+}
+
+.right-side-container__wrapper {
+  background-color: #f6fcff;
+  border: 1px solid rgba(0, 0, 0, 0.3);
+  border-radius: 5px;
+  padding: 10px;
+  width: 1250px;
+  height: 800px;
+}
+
+.left-side-container__wrapper label {
+  font-size: 12px;
+}
+
+.left-side-container__wrapper p {
+  font-size: 12px;
+  font-weight: bold;
+}
