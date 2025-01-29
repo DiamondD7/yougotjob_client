@@ -15,6 +15,7 @@ import {
   GetFile,
   GetAllMedication,
   AddPrescriptionMedications,
+  DeleteMedication,
 } from "../../assets/js/serverApi";
 import { exportedMonthsArray } from "../../assets/js/months";
 import {
@@ -527,6 +528,7 @@ const ZoomMeetingFinishConfirmation = ({ nextApt, setNextAptBtn }) => {
 
   //prescribed medications container
   const PrescribedMedicationsContainer = () => {
+    const [loadData, setLoadData] = useState(false);
     const [medicationTable, setMedicationTable] = useState([]);
     const [medications, setMedications] = useState({
       AppointmentId: nextApt.id,
@@ -536,13 +538,24 @@ const ZoomMeetingFinishConfirmation = ({ nextApt, setNextAptBtn }) => {
     });
 
     useEffect(() => {
+      handleRefreshMedicationTable();
+    }, [loadData]);
+
+    const handleRefreshMedicationTable = () => {
       fetch(`${GetAllMedication}/${nextApt.id}`)
         .then((res) => res.json())
         .then((res) => {
           //console.log(res);
           setMedicationTable(res.returnStatus.data);
+          setLoadData(false);
+          setMedications({
+            AppointmentId: nextApt.id,
+            MedicationName: "",
+            Route: "",
+            Dosage: "",
+          });
         });
-    }, []);
+    };
 
     const handleMedicationChange = (e) => {
       setMedications({
@@ -550,10 +563,10 @@ const ZoomMeetingFinishConfirmation = ({ nextApt, setNextAptBtn }) => {
         [e.target.name]: e.target.value,
       });
     };
-
-    const updateMedications = async (e) => {
+    //adds medications to the db
+    const updateMedications = (e) => {
       e.preventDefault();
-      await fetch(AddPrescriptionMedications, {
+      fetch(AddPrescriptionMedications, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -564,6 +577,22 @@ const ZoomMeetingFinishConfirmation = ({ nextApt, setNextAptBtn }) => {
         .then((res) => res.json())
         .then((res) => {
           //console.log(res);
+          setLoadData(true); //refreshes the table
+        });
+    };
+
+    const handleRemoveMedication = (e, id) => {
+      e.preventDefault();
+      fetch(`${DeleteMedication}/${id}`, {
+        method: "DELETE",
+        headers: {
+          Accept: "application/json",
+        },
+      })
+        .then((res) => res.json())
+        .then((res) => {
+          //console.log(res);
+          setLoadData(true); //refreshes the table
         });
     };
 
@@ -581,6 +610,7 @@ const ZoomMeetingFinishConfirmation = ({ nextApt, setNextAptBtn }) => {
               className="prescription-med__input"
               type="text"
               name="MedicationName"
+              value={medications.MedicationName}
               onChange={(e) => handleMedicationChange(e)}
             />
           </div>
@@ -591,6 +621,7 @@ const ZoomMeetingFinishConfirmation = ({ nextApt, setNextAptBtn }) => {
               className="prescription-med__input"
               type="text"
               name="Route"
+              value={medications.Route}
               onChange={(e) => handleMedicationChange(e)}
             />
           </div>
@@ -600,6 +631,7 @@ const ZoomMeetingFinishConfirmation = ({ nextApt, setNextAptBtn }) => {
               className="prescription-med__input"
               type="text"
               name="Dosage"
+              value={medications.Dosage}
               onChange={(e) => handleMedicationChange(e)}
             />
           </div>
@@ -610,24 +642,15 @@ const ZoomMeetingFinishConfirmation = ({ nextApt, setNextAptBtn }) => {
           >
             Add
           </button>
-          <button
-            style={{
-              border: "none",
-              fontSize: "12px",
-              backgroundColor: "transparent",
-              cursor: "pointer",
-            }}
-          >
-            Clear
-          </button>
         </div>
-        <div>
+        <div className="prescription-med-table__wrapper">
           <table className="prescription-med__table">
             <thead>
               <tr>
                 <th>DRUG NAME</th>
                 <th>ROUTE</th>
                 <th>DOSAGE</th>
+                <th></th>
               </tr>
             </thead>
             <tbody>
@@ -636,6 +659,13 @@ const ZoomMeetingFinishConfirmation = ({ nextApt, setNextAptBtn }) => {
                   <td>{items.medicationName}</td>
                   <td>{items.route}</td>
                   <td>{items.dosage}</td>
+                  <td>
+                    <button
+                      onClick={(e) => handleRemoveMedication(e, items.id)}
+                    >
+                      remove
+                    </button>
+                  </td>
                 </tr>
               ))}
             </tbody>
