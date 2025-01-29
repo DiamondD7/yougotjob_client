@@ -151,8 +151,13 @@
   border: 1px solid rgba(0, 0, 0, 0.3);
 }
 
-.patient-appointmentHistory-contents__wrapper {
+.patient-appointmentHistory-contents-container__wrapper {
   height: 225px;
+  overflow: auto;
+}
+
+.patient-appointmentHistory-contents__wrapper {
+  margin-top: 10px;
 }
 
 .patient-appointmentHistory-contents__wrapper label {
@@ -169,11 +174,15 @@
   cursor: pointer;
 }
 
+.patient-billinghistory-container__wrapper {
+  height: 225px;
+  overflow: auto;
+}
+
 .patient-billinghistory__wrapper {
   display: flex;
   justify-content: space-between;
-  margin-top: 30px;
-  height: 174px;
+  margin-top: 10px;
 }
 
 .patient-billinghistory__wrapper label {
@@ -184,6 +193,15 @@
 .patient-billinghistory__wrapper p {
   font-size: 12px;
 }
+.patient-commentsHistory-container__wrapper {
+  height: 225px;
+  overflow: auto;
+}
+
+.patient-commentsHistory__wrapper {
+  margin-top: 10px;
+}
+
 .patient-commentsHistory__wrapper label {
   font-size: 12px;
   font-weight: bold;
