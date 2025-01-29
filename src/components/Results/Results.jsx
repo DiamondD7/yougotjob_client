@@ -173,7 +173,7 @@ const Results = () => {
                       <td>{data.nhi}</td>
                       <td>
                         {new Date(
-                          data.preferredAppointmentDate
+                          data.appointmentDateCompleted
                         ).toLocaleDateString("en-nz")}
                       </td>
                       <td>{data.fullName}</td>
