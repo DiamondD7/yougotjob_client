@@ -519,160 +519,78 @@ const ZoomMeetingFinishConfirmation = ({ nextApt, setNextAptBtn }) => {
   };
 
   const handleInputChange = (e) => {
-    console.log(e.target.name, e.target.value);
     setUserData({
       ...userData,
       [e.target.name]: e.target.value,
     });
   };
 
-  //prescribed medications container
-  const PrescribedMedicationsContainer = () => {
-    const [loadData, setLoadData] = useState(false);
-    const [medicationTable, setMedicationTable] = useState([]);
-    const [medications, setMedications] = useState({
-      AppointmentId: nextApt.id,
-      MedicationName: "",
-      Route: "",
-      Dosage: "",
-    });
+  const [loadData, setLoadData] = useState(false);
+  const [medicationTable, setMedicationTable] = useState([]);
+  const [medications, setMedications] = useState({
+    AppointmentId: nextApt.id,
+    MedicationName: "",
+    Route: "",
+    Dosage: "",
+  });
 
-    useEffect(() => {
-      handleRefreshMedicationTable();
-    }, [loadData]);
+  useEffect(() => {
+    handleRefreshMedicationTable();
+  }, [loadData]);
 
-    const handleRefreshMedicationTable = () => {
-      fetch(`${GetAllMedication}/${nextApt.id}`)
-        .then((res) => res.json())
-        .then((res) => {
-          //console.log(res);
-          setMedicationTable(res.returnStatus.data);
-          setLoadData(false);
-          setMedications({
-            AppointmentId: nextApt.id,
-            MedicationName: "",
-            Route: "",
-            Dosage: "",
-          });
+  const handleRefreshMedicationTable = () => {
+    fetch(`${GetAllMedication}/${nextApt.id}`)
+      .then((res) => res.json())
+      .then((res) => {
+        //console.log(res);
+        setMedicationTable(res.returnStatus.data);
+        setLoadData(false);
+        setMedications({
+          AppointmentId: nextApt.id,
+          MedicationName: "",
+          Route: "",
+          Dosage: "",
         });
-    };
-
-    const handleMedicationChange = (e) => {
-      setMedications({
-        ...medications,
-        [e.target.name]: e.target.value,
       });
-    };
-    //adds medications to the db
-    const updateMedications = (e) => {
-      e.preventDefault();
-      fetch(AddPrescriptionMedications, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-        body: JSON.stringify(medications),
-      })
-        .then((res) => res.json())
-        .then((res) => {
-          //console.log(res);
-          setLoadData(true); //refreshes the table
-        });
-    };
+  };
 
-    const handleRemoveMedication = (e, id) => {
-      e.preventDefault();
-      fetch(`${DeleteMedication}/${id}`, {
-        method: "DELETE",
-        headers: {
-          Accept: "application/json",
-        },
-      })
-        .then((res) => res.json())
-        .then((res) => {
-          //console.log(res);
-          setLoadData(true); //refreshes the table
-        });
-    };
+  const handleMedicationChange = (e) => {
+    setMedications({
+      ...medications,
+      [e.target.name]: e.target.value,
+    });
+  };
+  //adds medications to the db
+  const updateMedications = (e) => {
+    e.preventDefault();
+    fetch(AddPrescriptionMedications, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify(medications),
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        //console.log(res);
+        setLoadData(true); //refreshes the table
+      });
+  };
 
-    return (
-      <div>
-        <div>
-          <p>
-            Are there any medication prescribed? List all medication prescribed
-            to the patient
-          </p>
-
-          <div style={{ display: "flex", marginTop: "10px" }}>
-            <label>DRUG NAME</label>
-            <input
-              className="prescription-med__input"
-              type="text"
-              name="MedicationName"
-              value={medications.MedicationName}
-              onChange={(e) => handleMedicationChange(e)}
-            />
-          </div>
-
-          <div style={{ display: "flex", marginTop: "10px" }}>
-            <label>ROUTE</label>
-            <input
-              className="prescription-med__input"
-              type="text"
-              name="Route"
-              value={medications.Route}
-              onChange={(e) => handleMedicationChange(e)}
-            />
-          </div>
-          <div style={{ display: "flex", marginTop: "10px" }}>
-            <label>DOSAGE</label>
-            <input
-              className="prescription-med__input"
-              type="text"
-              name="Dosage"
-              value={medications.Dosage}
-              onChange={(e) => handleMedicationChange(e)}
-            />
-          </div>
-
-          <button
-            className="prescription-med-add__btn"
-            onClick={(e) => updateMedications(e)}
-          >
-            Add
-          </button>
-        </div>
-        <div className="prescription-med-table__wrapper">
-          <table className="prescription-med__table">
-            <thead>
-              <tr>
-                <th>DRUG NAME</th>
-                <th>ROUTE</th>
-                <th>DOSAGE</th>
-                <th></th>
-              </tr>
-            </thead>
-            <tbody>
-              {medicationTable.map((items, index) => (
-                <tr key={items.id}>
-                  <td>{items.medicationName}</td>
-                  <td>{items.route}</td>
-                  <td>{items.dosage}</td>
-                  <td>
-                    <button
-                      onClick={(e) => handleRemoveMedication(e, items.id)}
-                    >
-                      remove
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </div>
-    );
+  const handleRemoveMedication = (e, id) => {
+    e.preventDefault();
+    fetch(`${DeleteMedication}/${id}`, {
+      method: "DELETE",
+      headers: {
+        Accept: "application/json",
+      },
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        //console.log(res);
+        setLoadData(true); //refreshes the table
+      });
   };
 
   return (
@@ -682,6 +600,7 @@ const ZoomMeetingFinishConfirmation = ({ nextApt, setNextAptBtn }) => {
         className="zoomconfirmation-textarea"
         placeholder="Diagnosis..."
         name="Diagnosis"
+        value={userData.Diagnosis}
         onChange={(e) => handleInputChange(e)}
       ></textarea>
       <br />
@@ -692,11 +611,84 @@ const ZoomMeetingFinishConfirmation = ({ nextApt, setNextAptBtn }) => {
           className="zoomconfirmation-textarea"
           placeholder="Allergies..."
           name="Allergies"
+          value={userData.Allergies}
           onChange={(e) => handleInputChange(e)}
         ></textarea>
       </div>
       <br />
-      <PrescribedMedicationsContainer />
+      {/* BELOW: prescription medication table */}
+      <div>
+        <p>
+          Are there any medication prescribed? List all medication prescribed to
+          the patient
+        </p>
+
+        <div style={{ display: "flex", marginTop: "10px" }}>
+          <label>DRUG NAME</label>
+          <input
+            className="prescription-med__input"
+            type="text"
+            name="MedicationName"
+            value={medications.MedicationName}
+            onChange={(e) => handleMedicationChange(e)}
+          />
+        </div>
+
+        <div style={{ display: "flex", marginTop: "10px" }}>
+          <label>ROUTE</label>
+          <input
+            className="prescription-med__input"
+            type="text"
+            name="Route"
+            value={medications.Route}
+            onChange={(e) => handleMedicationChange(e)}
+          />
+        </div>
+        <div style={{ display: "flex", marginTop: "10px" }}>
+          <label>DOSAGE</label>
+          <input
+            className="prescription-med__input"
+            type="text"
+            name="Dosage"
+            value={medications.Dosage}
+            onChange={(e) => handleMedicationChange(e)}
+          />
+        </div>
+
+        <button
+          className="prescription-med-add__btn"
+          onClick={(e) => updateMedications(e)}
+        >
+          Add
+        </button>
+      </div>
+      <div className="prescription-med-table__wrapper">
+        <table className="prescription-med__table">
+          <thead>
+            <tr>
+              <th>DRUG NAME</th>
+              <th>ROUTE</th>
+              <th>DOSAGE</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            {medicationTable.map((items, index) => (
+              <tr key={items.id}>
+                <td>{items.medicationName}</td>
+                <td>{items.route}</td>
+                <td>{items.dosage}</td>
+                <td>
+                  <button onClick={(e) => handleRemoveMedication(e, items.id)}>
+                    remove
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
       <br />
 
       <p style={{ marginTop: "10px" }}>
@@ -706,6 +698,7 @@ const ZoomMeetingFinishConfirmation = ({ nextApt, setNextAptBtn }) => {
         className="comments-on-patient__textarea"
         placeholder="Put your feedback here..."
         name="Feedback"
+        value={userData.Feedback}
         onChange={(e) => handleInputChange(e)}
       ></textarea>
       <br />
