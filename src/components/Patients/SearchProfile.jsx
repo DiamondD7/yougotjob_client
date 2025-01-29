@@ -3,6 +3,7 @@ import {
   GetPatients,
   ValidatePrac,
   GetPreviousApt,
+  GetAptToSearch,
 } from "../../assets/js/serverApi";
 import { CaretRight, MagnifyingGlass, SmileySad } from "@phosphor-icons/react";
 import { useNavigate } from "react-router-dom";
@@ -57,7 +58,7 @@ const SearchProfile = ({
   };
 
   //this api route is from the Patient API.
-  const handleGetPatients = async (retry = true) => {
+  const handleGetPatients = () => {
     try {
       // const response = await fetch(GetPatients, {
       //   method: "GET",
@@ -83,7 +84,7 @@ const SearchProfile = ({
       // setPatients(data);
 
       const id = parseInt(sessionStorage.getItem("id"));
-      fetch(`${GetPreviousApt}/${id}`)
+      fetch(`${GetAptToSearch}/${id}`)
         .then((res) => res.json())
         .then((res) => {
           console.log(res);

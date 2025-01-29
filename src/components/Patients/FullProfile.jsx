@@ -5,20 +5,27 @@ import {
   GetPatient,
   GetPatientEmergencyContact,
   GetPatientPreviousApt,
+  GetAptFeedback,
 } from "../../assets/js/serverApi";
 import { useNavigate } from "react-router-dom";
 
-const PatientCommentsHistory = ({ fullProfileData }) => {
-  const test =
-    " Lorem ipsum dolor, sit amet consectetur adipisicing elit. DucimusLorem ipsum dolor, sit amet consectetur adipisicing elit. DucimusLorem ipsum dolor, sit amet consectetur adipisicing elit. DucimusLorem ipsum dolor, sit amet consectetur adipisicing elit. DucimusLorem ipsum dolor, sit amet consectetur adipisicing elit. DucimusLorem ipsum dolor, sit amet consectetur adipisicing elit. DucimusLorem ipsum dolor, sit amet consectetur adipisicing elit. DucimusLorem ipsum dolor, sit amet consectetur adipisicing elit. Ducimus ";
+const PatientCommentsHistory = ({ feedback }) => {
   return (
     <div className="patient-histories__wrapper">
       <h4>Comments</h4>
       <br />
-      <div className="patient-commentsHistory__wrapper">
-        <label>Dr. Manny Jones</label>
-        <p>15/12/2024</p>
-        <p>{test.substring(0, 150)}</p>
+      <div className="patient-commentsHistory-container__wrapper">
+        {feedback.map((items, index) => (
+          <div className="patient-commentsHistory__wrapper" key={items.id}>
+            <label>{items.practitionerName}</label>
+            <p>
+              {new Date(items.appointmentDateCompleted).toLocaleDateString(
+                "en-nz"
+              )}
+            </p>
+            <p>{items.feedback.substring(0, 150)}</p>
+          </div>
+        ))}
       </div>
     </div>
   );
@@ -38,27 +45,30 @@ const PatientBillingHistory = ({ prevApts }) => {
   return (
     <div className="patient-histories__wrapper">
       <h4>Billing History</h4>
-      {prevAptsFilter.slice(0, 3).map((bill, index) => (
-        <div className="patient-billinghistory__wrapper" key={bill.id}>
-          <div>
-            <label>${bill.appointmentPayments.total}</label>
-            <p>20/12/2024</p>
+      <br />
+      <div className="patient-billinghistory-container__wrapper">
+        {prevAptsFilter.slice(0, 3).map((bill, index) => (
+          <div className="patient-billinghistory__wrapper" key={bill.id}>
+            <div>
+              <label>${bill.appointmentPayments.total}</label>
+              <p>20/12/2024</p>
+            </div>
+            <div>
+              <p
+                style={
+                  bill.appointmentPayments.isPaid === false
+                    ? { color: "#d7c60f" }
+                    : {}
+                }
+              >
+                {bill.appointmentPayments.isPaid === false ? "Pending" : "Paid"}
+              </p>
+            </div>
           </div>
-          <div>
-            <p
-              style={
-                bill.appointmentPayments.isPaid === false
-                  ? { color: "#d7c60f" }
-                  : {}
-              }
-            >
-              {bill.appointmentPayments.isPaid === false ? "Pending" : "Paid"}
-            </p>
-          </div>
-        </div>
-      ))}
+        ))}
+      </div>
 
-      <div style={{ textAlign: "center", marginTop: "40px" }}>
+      <div style={{ textAlign: "center" }}>
         <button
           className="patient-histories__btn"
           onClick={() => setLoadAll(!loadAll)}
@@ -86,20 +96,22 @@ const PatientAppointmentsHistory = ({ prevApts }) => {
       <h4>Appointment History</h4>
       <div>
         <br />
-        {prevAptsFilter.map((apt, index) => (
-          <div
-            className="patient-appointmentHistory-contents__wrapper"
-            key={apt.id}
-          >
-            <label>{apt.appointmentAgenda}</label>
-            <p>{apt.practitionerName}</p>
-            <p>
-              {new Date(apt.appointmentDateCompleted).toLocaleDateString(
-                "en-nz"
-              )}
-            </p>
-          </div>
-        ))}
+        <div className="patient-appointmentHistory-contents-container__wrapper">
+          {prevAptsFilter.map((apt, index) => (
+            <div
+              className="patient-appointmentHistory-contents__wrapper"
+              key={apt.id}
+            >
+              <label>{apt.appointmentAgenda}</label>
+              <p>{apt.practitionerName}</p>
+              <p>
+                {new Date(apt.appointmentDateCompleted).toLocaleDateString(
+                  "en-nz"
+                )}
+              </p>
+            </div>
+          ))}
+        </div>
 
         <div style={{ textAlign: "center" }}>
           <button
@@ -191,6 +203,7 @@ const PatientEmergencyContacts = ({ fullProfileData }) => {
   const [emergencyContacts, setEmergencyContacts] = useState([]);
 
   useEffect(() => {
+    if (fullProfileData.id === undefined) return;
     const handleFetchContacts = async (retry = true) => {
       try {
         const response = await fetch(
@@ -350,6 +363,7 @@ const FullProfile = ({ patientProfileId, setOpenFullProfile }) => {
   const navigate = useNavigate();
   const [fullProfileData, setFullProfileData] = useState([]);
   const [prevApts, setPrevApts] = useState([]);
+  const [feedback, setFeedback] = useState([]);
 
   useEffect(() => {
     handleFetchPatient();
@@ -378,9 +392,20 @@ const FullProfile = ({ patientProfileId, setOpenFullProfile }) => {
       }
       const data = await response.json();
       setFullProfileData(data);
+      handleFetchData(data.id); //CALLING API TO FETCH FEEDBACK USING PATIENT ID
     } catch (error) {
       console.log("Error fetching data:", error.message);
     }
+  };
+
+  //CALLING API TO FETCH FEEDBACK
+  const handleFetchData = async (profileId) => {
+    await fetch(`${GetAptFeedback}/${profileId}`)
+      .then((res) => res.json())
+      .then((res) => {
+        //console.log(res);
+        setFeedback(res.returnStatus.data);
+      });
   };
 
   // fetch appointment history data
@@ -438,7 +463,7 @@ const FullProfile = ({ patientProfileId, setOpenFullProfile }) => {
             <PatientAppointmentsHistory prevApts={prevApts} />
 
             <PatientBillingHistory prevApts={prevApts} />
-            <PatientCommentsHistory fullProfileData={fullProfileData} />
+            <PatientCommentsHistory feedback={feedback} />
           </div>
         </div>
       </div>
