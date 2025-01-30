@@ -308,7 +308,7 @@ const PreviousAppointment = ({ apts, setPreviousAptModal }) => {
   );
 };
 
-const RecentDiagnosis = () => {
+const RecentDiagnosis = ({ apts }) => {
   return (
     <div>
       <div className="recent-diagnosis__wrapper">
@@ -324,51 +324,21 @@ const RecentDiagnosis = () => {
           </thead>
 
           <tbody>
-            <tr>
-              <td>1</td>
-              <td>Broken Tendon</td>
-              <td>Dr. Johnson</td>
-              <td>02/11/2023</td>
-              <td>
-                <button className="recent-diagnosis-btn">view</button>
-              </td>
-            </tr>
-            <tr>
-              <td>2</td>
-              <td>Broken Heart</td>
-              <td>Dr. Sharma</td>
-              <td>02/11/2023</td>
-              <td>
-                <button className="recent-diagnosis-btn">view</button>
-              </td>
-            </tr>
-            <tr>
-              <td>3</td>
-              <td>Bahog Ilok</td>
-              <td>Dr. Johnson</td>
-              <td>02/11/2023</td>
-              <td>
-                <button className="recent-diagnosis-btn">view</button>
-              </td>
-            </tr>
-            <tr>
-              <td>4</td>
-              <td>Bayot</td>
-              <td>Dr. Sharma</td>
-              <td>02/11/2023</td>
-              <td>
-                <button className="recent-diagnosis-btn">view</button>
-              </td>
-            </tr>
-            <tr>
-              <td>5</td>
-              <td>Pulled Achilles</td>
-              <td>Dr. Sharma</td>
-              <td>02/11/2023</td>
-              <td>
-                <button className="recent-diagnosis-btn">view</button>
-              </td>
-            </tr>
+            {apts?.map((items, index) => (
+              <tr key={items.id}>
+                <td>{index + 1}</td>
+                <td>{items.diagnosis}</td>
+                <td>{items.practitionerName}</td>
+                <td>
+                  {new Date(items.appointmentDateCompleted).toLocaleDateString(
+                    "en-nz"
+                  )}
+                </td>
+                {/* <td>
+                  <button className="recent-diagnosis-btn">view</button>
+                </td> */}
+              </tr>
+            ))}
           </tbody>
         </table>
       </div>
@@ -770,7 +740,7 @@ const DashboardPatient = () => {
         <SummaryCards apts={apts} setPreviousAptModal={setPreviousAptModal} />
       </div>
       <div style={{ display: "flex", gap: "10px", padding: "10px" }}>
-        <RecentDiagnosis />
+        <RecentDiagnosis apts={apts} />
         <PreferredPractitioner />
         <PrescriptionContainer />
       </div>
