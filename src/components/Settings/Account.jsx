@@ -66,6 +66,7 @@ const Profile = ({ loggedUserData, setLoadData }) => {
           MobileNumber: mobilePhone,
           EmailAddress: emailAddress,
           HomeAddress: homeAddress,
+          Dob: dob,
         }),
       })
         .then((res) => res.json())
@@ -176,86 +177,96 @@ const Profile = ({ loggedUserData, setLoadData }) => {
             </div>
           </div>
 
-          <div
-            style={{
-              marginTop: "10px",
-              display: "flex",
+          {sessionStorage.getItem("role") === "Patient" && (
+            <>
+              <div
+                style={{
+                  marginTop: "10px",
+                  display: "flex",
 
-              justifyContent: "space-between",
-              width: "300px",
-            }}
-          >
-            <div>
-              <p className="account-profile__text profilelabel">Height (cm)</p>
-            </div>
-            <div>
-              {openEdit === false ? (
-                <p className="account-profile__text profiledetails">
-                  {height} cm
-                </p>
-              ) : (
-                <input
-                  className="update-details__input"
-                  type="text"
-                  value={height}
-                  onChange={(e) => setHeight(e.target.value)}
-                />
-              )}
-            </div>
-          </div>
-          <div
-            style={{
-              marginTop: "10px",
-              display: "flex",
+                  justifyContent: "space-between",
+                  width: "300px",
+                }}
+              >
+                <div>
+                  <p className="account-profile__text profilelabel">
+                    Height (cm)
+                  </p>
+                </div>
+                <div>
+                  {openEdit === false ? (
+                    <p className="account-profile__text profiledetails">
+                      {height} cm
+                    </p>
+                  ) : (
+                    <input
+                      className="update-details__input"
+                      type="text"
+                      value={height}
+                      onChange={(e) => setHeight(e.target.value)}
+                    />
+                  )}
+                </div>
+              </div>
+              <div
+                style={{
+                  marginTop: "10px",
+                  display: "flex",
 
-              justifyContent: "space-between",
-              width: "300px",
-            }}
-          >
-            <div>
-              <p className="account-profile__text profilelabel">Weight (kg)</p>
-            </div>
-            <div>
-              {openEdit === false ? (
-                <p className="account-profile__text profiledetails">
-                  {weight} kg
-                </p>
-              ) : (
-                <input
-                  className="update-details__input"
-                  type="text"
-                  value={weight}
-                  onChange={(e) => setWeight(e.target.value)}
-                />
-              )}
-            </div>
-          </div>
+                  justifyContent: "space-between",
+                  width: "300px",
+                }}
+              >
+                <div>
+                  <p className="account-profile__text profilelabel">
+                    Weight (kg)
+                  </p>
+                </div>
+                <div>
+                  {openEdit === false ? (
+                    <p className="account-profile__text profiledetails">
+                      {weight} kg
+                    </p>
+                  ) : (
+                    <input
+                      className="update-details__input"
+                      type="text"
+                      value={weight}
+                      onChange={(e) => setWeight(e.target.value)}
+                    />
+                  )}
+                </div>
+              </div>
 
-          <div
-            style={{
-              marginTop: "10px",
-              display: "flex",
+              <div
+                style={{
+                  marginTop: "10px",
+                  display: "flex",
 
-              justifyContent: "space-between",
-              width: "300px",
-            }}
-          >
-            <div>
-              <p className="account-profile__text profilelabel">BMI</p>
-            </div>
-            <div>
-              {openEdit === false ? (
-                <p className="account-profile__text profiledetails">{bmi}</p>
-              ) : (
-                <input
-                  className="update-details__input"
-                  type="text"
-                  value={bmi}
-                  disabled
-                />
-              )}
-            </div>
-          </div>
+                  justifyContent: "space-between",
+                  width: "300px",
+                }}
+              >
+                <div>
+                  <p className="account-profile__text profilelabel">BMI</p>
+                </div>
+                <div>
+                  {openEdit === false ? (
+                    <p className="account-profile__text profiledetails">
+                      {bmi}
+                    </p>
+                  ) : (
+                    <input
+                      className="update-details__input"
+                      type="text"
+                      value={bmi}
+                      disabled
+                    />
+                  )}
+                </div>
+              </div>
+            </>
+          )}
 
           <div
             style={{

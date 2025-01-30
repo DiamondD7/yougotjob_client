@@ -10,11 +10,12 @@ import {
   ChatCenteredText,
   Link,
   EnvelopeOpen,
+  CalendarSlash,
 } from "@phosphor-icons/react";
+import Payment from "../Stripe/Payment";
 
 import "../../styles/patientdashboard.css";
-import Payment from "../Stripe/Payment";
-const SummaryCards = () => {
+const SummaryCards = ({ apts }) => {
   const [days, setDays] = useState(0);
   const [hours, setHours] = useState(0);
   const [minutes, setMinutes] = useState(0);
@@ -22,6 +23,7 @@ const SummaryCards = () => {
 
   const [inputDate, setInputDate] = useState("7 Aug 2024 20:00"); //can be changed to mm/dd/yyyy
 
+  const prevApt = apts[0] || "";
   const [nextApt, setNextApt] = useState([]);
 
   useEffect(() => {
@@ -84,28 +86,39 @@ const SummaryCards = () => {
             </div>
             <h5>Next appointment</h5>
           </div>
-          <div className="dashboard-patient-card__wrapper">
-            <div>
-              <h3>{nextApt.practitionerName} </h3>
-              <label className="patient-card-id__label">
-                {nextApt.healthPractitionerType}
-              </label>
+          {nextApt.length <= 0 ? (
+            <div style={{ textAlign: "center", marginTop: "30px" }}>
+              <CalendarSlash size={25} color="rgba(0,0,0,0.4)" />
+              <p style={{ color: "rgba(0,0,0,0.3)", fontSize: "13px" }}>
+                No upcoming appointment
+              </p>
             </div>
-          </div>
-          <div className="dashboard-patient-card-details__wrapper">
-            <h2 className="dashboard-patient-card-details-h2-schedule">
-              {new Date(nextApt.preferredAppointmentDate).toLocaleString(
-                "en-nz"
-              )}
-            </h2>
-            <h2 className="dashboard-patient-card-details-h2-countdown">
-              {days}
-              {day} : {hours}
-              {hour} : {minutes}
-              {min} : {seconds}
-              {sec}
-            </h2>
-          </div>
+          ) : (
+            <>
+              <div className="dashboard-patient-card__wrapper">
+                <div>
+                  <h3>{nextApt.practitionerName} </h3>
+                  <label className="patient-card-id__label">
+                    {nextApt.healthPractitionerType}
+                  </label>
+                </div>
+              </div>
+              <div className="dashboard-patient-card-details__wrapper">
+                <h2 className="dashboard-patient-card-details-h2-schedule">
+                  {new Date(nextApt.preferredAppointmentDate).toLocaleString(
+                    "en-nz"
+                  )}
+                </h2>
+                <h2 className="dashboard-patient-card-details-h2-countdown">
+                  {days}
+                  {day} : {hours}
+                  {hour} : {minutes}
+                  {min} : {seconds}
+                  {sec}
+                </h2>
+              </div>
+            </>
+          )}
         </div>
 
         <div className="dashboard-cards__wrapper">
@@ -117,14 +130,22 @@ const SummaryCards = () => {
           </div>
           <div className="dashboard-patient-card__wrapper">
             <div>
-              <h3>Dr. Johnson</h3>
-              <label className="patient-card-id__label">ID:30004997</label>
+              <h3>{prevApt.practitionerName}</h3>
+              {/* <label className="patient-card-id__label">
+                {prevApt.registrationNumber}
+              </label> */}
             </div>
           </div>
 
           <div className="dashboard-patient-card-details__wrapper">
             <h2 className="dashboard-patient-card-details-h2-schedule">
-              19/01/2024 8:40am
+              {new Date(prevApt.appointmentDateCompleted).toLocaleString(
+                "en-nz"
+              )}
+            </h2>
+            <h2 className="dashboard-patient-card-details-h2-schedule">
+              Accepted at{" "}
+              {new Date(prevApt.acceptedJobDate).toLocaleString("en-nz")}
             </h2>
             <div className="previous-patient-view__wrapper">
               <button className="previous-patient-view__btn">view</button>
@@ -146,7 +167,7 @@ const SummaryCards = () => {
             </p>
           </div>
         </div>
-        <div className="dashboard-cards__wrapper">
+        {/* <div className="dashboard-cards__wrapper">
           <div className="dashboard-card-title__wrapper">
             <div>
               <ChatCenteredText size={19} color="#9DCD5A" />
@@ -159,7 +180,7 @@ const SummaryCards = () => {
               No new messages
             </p>
           </div>
-        </div>
+        </div> */}
       </div>
     </div>
   );
@@ -265,22 +286,11 @@ const PreferredPractitioner = () => {
   );
 };
 
-const PaymentContainer = () => {
+const PaymentContainer = ({ apts }) => {
   const [paymentClick, setPaymentClick] = useState(false);
   const [chosenPayment, setChosenPayment] = useState([]);
   const [chosenAptId, setChosenAptId] = useState(0);
   const [chosenAptEmail, setChosenAptEmail] = useState("");
-
-  const [apts, setApts] = useState([]);
-
-  useEffect(() => {
-    const id = parseInt(sessionStorage.getItem("id"));
-    fetch(`${GetPatientPreviousApt}/${id}`)
-      .then((res) => res.json())
-      .then((res) => {
-        setApts(res.returnStatus.data);
-      });
-  }, []);
 
   const handlePaymentModal = (e, data, id, email) => {
     e.preventDefault();
@@ -601,7 +611,16 @@ const TablesContainer = () => {
 };
 
 const DashboardPatient = () => {
-  const [paymentClick, setPaymentClick] = useState(false);
+  const [apts, setApts] = useState([]);
+
+  useEffect(() => {
+    const id = parseInt(sessionStorage.getItem("id"));
+    fetch(`${GetPatientPreviousApt}/${id}`)
+      .then((res) => res.json())
+      .then((res) => {
+        setApts(res.returnStatus.data);
+      });
+  }, []);
   return (
     <div>
       {/* {paymentClick === true ? <div className="overlay"></div> : ""}
@@ -613,7 +632,7 @@ const DashboardPatient = () => {
         ""
       )} */}
       <div style={{ display: "flex" }}>
-        <SummaryCards />
+        <SummaryCards apts={apts} />
       </div>
       <div style={{ display: "flex", gap: "10px", padding: "10px" }}>
         <RecentDiagnosis />
@@ -621,7 +640,7 @@ const DashboardPatient = () => {
         <PrescriptionContainer />
       </div>
       <div style={{ padding: "10px", display: "flex", gap: "10px" }}>
-        <PaymentContainer setPaymentClick={setPaymentClick} />
+        <PaymentContainer apts={apts} />
         <TablesContainer />
       </div>
     </div>

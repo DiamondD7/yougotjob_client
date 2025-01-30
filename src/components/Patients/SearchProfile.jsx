@@ -133,7 +133,7 @@ const SearchProfile = ({
                   fontSize: "15px",
                 }}
               >
-                search their names or their NHI number
+                search your patients by name
               </p>
             </div>
           ) : (
@@ -157,6 +157,8 @@ const SearchProfile = ({
       <div>
         {filterData.map((items, index) => (
           <div style={{ marginTop: "20px" }} key={index}>
+            <p className="search-profile-name__text">{items.fullName}</p>
+            {/* <p className="search-profile-nhi__text">NHI: {items.nhi}</p> */}
             <div className="search-profile-header__wrapper">
               {/* <img
                 src={items.picture}
@@ -169,13 +171,10 @@ const SearchProfile = ({
                   className="search-profile-header__btn"
                   onClick={(e) => openingFullProfileClick(e, items.patientsId)}
                 >
-                  Full Profile <CaretRight size={13} color="#454545" />
+                  Full Profile <CaretRight size={13} color="#f3f3f3" />
                 </button>
               </div>
             </div>
-
-            <p className="search-profile-name__text">{items.fullName}</p>
-            <p className="search-profile-nhi__text">NHI: {items.nhi}</p>
           </div>
         ))}
       </div>
