@@ -15,7 +15,7 @@ import DashboardPatient from "../Dashboard/DashboardPatient";
 import LabResults from "../PatientNAVS/LabResults";
 import TestResults from "../PatientNAVS/TestResults";
 import Immunisation from "../PatientNAVS/Immunisation";
-import Prescriptions from "../PatientNAVS/Prescriptions";
+import Prescriptions from "../GPNavs/Prescriptions";
 import Appointment from "../PatientNAVS/Appointment";
 import Jobs from "../Jobs/Jobs";
 const Display = ({ displayed, setEditChanges }) => {

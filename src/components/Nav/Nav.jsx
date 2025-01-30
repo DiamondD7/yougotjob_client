@@ -93,6 +93,28 @@ const NavPractitioner = ({ activeDisplay, minimizedNav, onClickDisplayed }) => {
           {minimizedNav === true ? "" : "Calendar"}
         </button>
       </li>
+      <li
+        className={minimizedNav === true ? "minimizednav-icons" : ""}
+        style={
+          activeDisplay === "prescription" ? { backgroundColor: "#D6E8FF" } : {}
+        }
+      >
+        <button
+          className={minimizedNav === true ? "btn-normal" : "icon-label"}
+          onClick={() => onClickDisplayed("prescriptions")}
+          style={
+            minimizedNav === false
+              ? activeDisplay === "prescriptions"
+                ? { backgroundColor: "#D6E8FF" }
+                : {}
+              : {}
+          }
+        >
+          <Prescription size={20} color="#454545" />
+          &nbsp;
+          {minimizedNav === true ? "" : "Prescriptions"}
+        </button>
+      </li>
 
       <li
         className={minimizedNav === true ? "minimizednav-icons" : ""}
@@ -310,7 +332,7 @@ const NavPatient = ({ minimizedNav, activeDisplay, onClickDisplayed }) => {
           {minimizedNav === true ? "" : "Communication"}
         </button>
       </li>
-      <li
+      {/* <li
         className={minimizedNav === true ? "minimizednav-icons" : ""}
         style={
           activeDisplay === "prescriptions"
@@ -333,7 +355,7 @@ const NavPatient = ({ minimizedNav, activeDisplay, onClickDisplayed }) => {
           &nbsp;
           {minimizedNav === true ? "" : "Prescriptions"}
         </button>
-      </li>
+      </li> */}
       <li
         className={minimizedNav === true ? "minimizednav-icons" : ""}
         style={
