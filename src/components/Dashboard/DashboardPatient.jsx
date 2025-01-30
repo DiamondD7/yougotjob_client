@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import {
   GetNextAppointmentForPatient,
   GetPatientPreviousApt,
+  GetMostAppointmentsForPatient,
 } from "../../assets/js/serverApi";
 import {
   User,
@@ -346,15 +347,17 @@ const RecentDiagnosis = ({ apts }) => {
   );
 };
 
-const PreferredPractitioner = () => {
+const PreferredPractitioner = ({ preferredPractitioner }) => {
   return (
     <div className="preferred-practitioner__wrapper">
       <h5 className="preferred-practitioner-h5-title">
-        Preferred Practitioner
+        Preferred General Practitioner
       </h5>
       <div className="preferred-practitioner-details__wrapper">
-        <h3>Dr. Mahachit Sharma</h3>
-        <p className="preferred-practitioner-id__text">ID: 800976543</p>
+        <h3>{preferredPractitioner.name}</h3>
+        <p className="preferred-practitioner-id__text">
+          {preferredPractitioner.type}
+        </p>
       </div>
 
       <div>
@@ -362,16 +365,15 @@ const PreferredPractitioner = () => {
           <h5>Recent Appointment</h5>
 
           <p className="preferred-practitioner-recent-appointment-result">
-            01/07/2024
+            {preferredPractitioner.recentDate}
           </p>
         </div>
-        <div className="preferred-practitioner-total-appointment__wrapper">
-          <h5>Recent Appointment</h5>
-          <p className="preferred-practitioner-total-appointment-result">13</p>
-        </div>
+
         <div className="preferred-practitioner-total-appointment__wrapper">
           <h5>Total Appointment</h5>
-          <p className="preferred-practitioner-total-appointment-result">13</p>
+          <p className="preferred-practitioner-total-appointment-result">
+            {preferredPractitioner.totalAppointments}
+          </p>
         </div>
       </div>
     </div>
@@ -705,15 +707,38 @@ const TablesContainer = () => {
 const DashboardPatient = () => {
   const [previousAptModal, setPreviousAptModal] = useState(false);
   const [apts, setApts] = useState([]);
+  const [preferredPractitioner, setPreferredPractitioner] = useState({
+    name: "",
+    type: "",
+    totalAppointments: 0,
+    recentDate: "",
+  });
+  const id = parseInt(sessionStorage.getItem("id"));
 
   useEffect(() => {
-    const id = parseInt(sessionStorage.getItem("id"));
     fetch(`${GetPatientPreviousApt}/${id}`)
       .then((res) => res.json())
       .then((res) => {
         setApts(res.returnStatus.data);
+        handleFetchPreferredPractitioner(); //calling the function to get the preferred practitioner
       });
   }, []);
+
+  const handleFetchPreferredPractitioner = () => {
+    fetch(`${GetMostAppointmentsForPatient}/${id}`)
+      .then((res) => res.json())
+      .then((res) => {
+        console.log(res);
+        setPreferredPractitioner({
+          name: res.returnStatus.name,
+          type: res.returnStatus.type,
+          totalAppointments: res.returnStatus.count,
+          recentDate: new Date(res.returnStatus.recentDate).toLocaleDateString(
+            "en-nz"
+          ),
+        });
+      });
+  };
   return (
     <div>
       {/* {paymentClick === true ? <div className="overlay"></div> : ""}
@@ -741,7 +766,7 @@ const DashboardPatient = () => {
       </div>
       <div style={{ display: "flex", gap: "10px", padding: "10px" }}>
         <RecentDiagnosis apts={apts} />
-        <PreferredPractitioner />
+        <PreferredPractitioner preferredPractitioner={preferredPractitioner} />
         <PrescriptionContainer />
       </div>
       <div style={{ padding: "10px", display: "flex", gap: "10px" }}>
