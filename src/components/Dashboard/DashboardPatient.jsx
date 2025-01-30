@@ -11,11 +11,12 @@ import {
   Link,
   EnvelopeOpen,
   CalendarSlash,
+  X,
 } from "@phosphor-icons/react";
 import Payment from "../Stripe/Payment";
 
 import "../../styles/patientdashboard.css";
-const SummaryCards = ({ apts }) => {
+const SummaryCards = ({ apts, setPreviousAptModal }) => {
   const [days, setDays] = useState(0);
   const [hours, setHours] = useState(0);
   const [minutes, setMinutes] = useState(0);
@@ -24,6 +25,7 @@ const SummaryCards = ({ apts }) => {
   const [inputDate, setInputDate] = useState("7 Aug 2024 20:00"); //can be changed to mm/dd/yyyy
 
   const prevApt = apts[0] || "";
+
   const [nextApt, setNextApt] = useState([]);
 
   useEffect(() => {
@@ -148,7 +150,12 @@ const SummaryCards = ({ apts }) => {
               {new Date(prevApt.acceptedJobDate).toLocaleString("en-nz")}
             </h2>
             <div className="previous-patient-view__wrapper">
-              <button className="previous-patient-view__btn">view</button>
+              <button
+                className="previous-patient-view__btn"
+                onClick={() => setPreviousAptModal(true)}
+              >
+                view
+              </button>
             </div>
           </div>
         </div>
@@ -181,6 +188,121 @@ const SummaryCards = ({ apts }) => {
             </p>
           </div>
         </div> */}
+      </div>
+    </div>
+  );
+};
+
+const PreviousAppointment = ({ apts, setPreviousAptModal }) => {
+  const aptDetails = apts[0] || "";
+  return (
+    <div>
+      <div className="previous-appointment__wrapper">
+        <button
+          style={{
+            backgroundColor: "transparent",
+            border: "none",
+            cursor: "pointer",
+          }}
+          onClick={() => setPreviousAptModal(false)}
+        >
+          <X size={12} color="#202020" />
+        </button>
+        <div style={{ display: "flex", gap: "20px", padding: "10px" }}>
+          <div>
+            <h5>Your details</h5>
+            <br />
+            <div className="previous-appointment-details__wrapper">
+              <label>Name</label>
+              <p>{aptDetails.fullName}</p>
+            </div>
+            <div className="previous-appointment-details__wrapper">
+              <label>Email</label>
+              <p>{aptDetails.emailAddress}</p>
+            </div>
+            <div className="previous-appointment-details__wrapper">
+              <label>Mobile</label>
+              <p>{aptDetails.contactNumber}</p>
+            </div>
+            {aptDetails.appointmentType === "on-site" ? (
+              <div className="previous-appointment-details__wrapper">
+                <label>Address</label>
+                <p>
+                  {aptDetails.streetAddress} {aptDetails.suburb}{" "}
+                  {aptDetails.city} {aptDetails.postCode}
+                </p>
+              </div>
+            ) : (
+              ""
+            )}
+          </div>
+          <div>
+            <h5>Practitioner details</h5>
+            <br />
+            <div className="previous-appointment-details__wrapper">
+              <label>Type</label>
+              <p>{aptDetails.healthPractitionerType}</p>
+            </div>
+            <div className="previous-appointment-details__wrapper">
+              <label>Name</label>
+              <p>{aptDetails.practitionerName}</p>
+            </div>
+            <div className="previous-appointment-details__wrapper">
+              <label>Email</label>
+              <p>{aptDetails.practitionerEmail}</p>
+            </div>
+          </div>
+        </div>
+        <br />
+        <h5 style={{ padding: "10px" }}>Appointment details</h5>
+        <div style={{ display: "flex", gap: "20px", padding: "10px" }}>
+          <div>
+            <div className="previous-appointment-details__wrapper">
+              <label>Type</label>
+              <p>{aptDetails.appointmentType}</p>
+            </div>
+            <div className="previous-appointment-details__wrapper">
+              <label>Preferred date</label>
+              <p>
+                {new Date(aptDetails.preferredAppointmentDate).toLocaleString(
+                  "en-nz"
+                )}
+              </p>
+            </div>
+            <div className="previous-appointment-details__wrapper">
+              <label>Accepted date</label>
+              <p>
+                {new Date(aptDetails.acceptedJobDate).toLocaleString("en-nz")}
+              </p>
+            </div>
+          </div>
+
+          <div>
+            <div className="previous-appointment-details__wrapper">
+              <label>Agenda</label>
+              <p>{aptDetails.appointmentAgenda}</p>
+            </div>
+            <div className="previous-appointment-details__wrapper">
+              <label>Complete date</label>
+              <p>
+                {new Date(aptDetails.appointmentDateCompleted).toLocaleString(
+                  "en-nz"
+                )}
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div style={{ display: "flex", gap: "30px", padding: "10px" }}>
+          <div className="previous-appointment-contents__wrapper">
+            <p>Patient's comments</p>
+            <textarea value={aptDetails.comments}></textarea>
+          </div>
+          <div className="previous-appointment-contents__wrapper">
+            <p>Diagnosis</p>
+            <textarea value={aptDetails.diagnosis}></textarea>
+          </div>
+        </div>
       </div>
     </div>
   );
@@ -611,6 +733,7 @@ const TablesContainer = () => {
 };
 
 const DashboardPatient = () => {
+  const [previousAptModal, setPreviousAptModal] = useState(false);
   const [apts, setApts] = useState([]);
 
   useEffect(() => {
@@ -631,8 +754,20 @@ const DashboardPatient = () => {
       ) : (
         ""
       )} */}
+
+      {previousAptModal === true ? (
+        <>
+          <div className="overlay"></div>
+          <PreviousAppointment
+            apts={apts}
+            setPreviousAptModal={setPreviousAptModal}
+          />
+        </>
+      ) : (
+        ""
+      )}
       <div style={{ display: "flex" }}>
-        <SummaryCards apts={apts} />
+        <SummaryCards apts={apts} setPreviousAptModal={setPreviousAptModal} />
       </div>
       <div style={{ display: "flex", gap: "10px", padding: "10px" }}>
         <RecentDiagnosis />
