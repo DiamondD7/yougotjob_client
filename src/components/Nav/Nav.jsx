@@ -165,7 +165,7 @@ const NavPractitioner = ({ activeDisplay, minimizedNav, onClickDisplayed }) => {
         </button>
       </li>
 
-      <li
+      {/* <li
         className={minimizedNav === true ? "minimizednav-icons" : ""}
         style={
           activeDisplay === "records" ? { backgroundColor: "#D6E8FF" } : {}
@@ -186,7 +186,7 @@ const NavPractitioner = ({ activeDisplay, minimizedNav, onClickDisplayed }) => {
           &nbsp;
           {minimizedNav === true ? "" : "Records"}
         </button>
-      </li>
+      </li> */}
 
       <li
         className={minimizedNav === true ? "minimizednav-icons" : ""}
