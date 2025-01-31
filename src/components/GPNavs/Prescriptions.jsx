@@ -63,7 +63,47 @@ const Prescriptions = () => {
             placeholder="Dosage"
           />
         </div>
-        <button className="prescription-treatment__btn">Add</button>
+
+        <table className="prescription-treatment__table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Medication Name</th>
+              <th>Route</th>
+              <th>Dosage</th>
+              <th>Frequency (hr/day)</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>1</td>
+              <td>Paracetamol</td>
+              <td>Oral</td>
+              <td>500mg</td>
+              <td>4</td>
+            </tr>
+          </tbody>
+        </table>
+        <button className="prescription-treatment__btn">Add medication</button>
+
+        <br />
+        <br />
+        <p>Prescriber details</p>
+        <div style={{ display: "flex", gap: "10px" }}>
+          <input
+            className="prescription-name__input"
+            type="text"
+            placeholder="First name"
+          />
+          <input
+            className="prescription-name__input"
+            type="text"
+            placeholder="Last name"
+          />
+        </div>
+        <br />
+        <button className="prescription-form__btn">Submit</button>
       </form>
     </div>
   );
