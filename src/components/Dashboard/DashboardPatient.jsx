@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import {
   GetNextAppointmentForPatient,
   GetPatientPreviousApt,
+  GetMostAppointmentsForPatient,
 } from "../../assets/js/serverApi";
 import {
   User,
@@ -11,11 +12,12 @@ import {
   Link,
   EnvelopeOpen,
   CalendarSlash,
+  X,
 } from "@phosphor-icons/react";
 import Payment from "../Stripe/Payment";
 
 import "../../styles/patientdashboard.css";
-const SummaryCards = ({ apts }) => {
+const SummaryCards = ({ apts, setPreviousAptModal }) => {
   const [days, setDays] = useState(0);
   const [hours, setHours] = useState(0);
   const [minutes, setMinutes] = useState(0);
@@ -24,6 +26,7 @@ const SummaryCards = ({ apts }) => {
   const [inputDate, setInputDate] = useState("7 Aug 2024 20:00"); //can be changed to mm/dd/yyyy
 
   const prevApt = apts[0] || "";
+
   const [nextApt, setNextApt] = useState([]);
 
   useEffect(() => {
@@ -148,7 +151,12 @@ const SummaryCards = ({ apts }) => {
               {new Date(prevApt.acceptedJobDate).toLocaleString("en-nz")}
             </h2>
             <div className="previous-patient-view__wrapper">
-              <button className="previous-patient-view__btn">view</button>
+              <button
+                className="previous-patient-view__btn"
+                onClick={() => setPreviousAptModal(true)}
+              >
+                view
+              </button>
             </div>
           </div>
         </div>
@@ -186,7 +194,122 @@ const SummaryCards = ({ apts }) => {
   );
 };
 
-const RecentDiagnosis = () => {
+const PreviousAppointment = ({ apts, setPreviousAptModal }) => {
+  const aptDetails = apts[0] || "";
+  return (
+    <div>
+      <div className="previous-appointment__wrapper">
+        <button
+          style={{
+            backgroundColor: "transparent",
+            border: "none",
+            cursor: "pointer",
+          }}
+          onClick={() => setPreviousAptModal(false)}
+        >
+          <X size={12} color="#202020" />
+        </button>
+        <div style={{ display: "flex", gap: "20px", padding: "10px" }}>
+          <div>
+            <h5>Your details</h5>
+            <br />
+            <div className="previous-appointment-details__wrapper">
+              <label>Name</label>
+              <p>{aptDetails.fullName}</p>
+            </div>
+            <div className="previous-appointment-details__wrapper">
+              <label>Email</label>
+              <p>{aptDetails.emailAddress}</p>
+            </div>
+            <div className="previous-appointment-details__wrapper">
+              <label>Mobile</label>
+              <p>{aptDetails.contactNumber}</p>
+            </div>
+            {aptDetails.appointmentType === "on-site" ? (
+              <div className="previous-appointment-details__wrapper">
+                <label>Address</label>
+                <p>
+                  {aptDetails.streetAddress} {aptDetails.suburb}{" "}
+                  {aptDetails.city} {aptDetails.postCode}
+                </p>
+              </div>
+            ) : (
+              ""
+            )}
+          </div>
+          <div>
+            <h5>Practitioner details</h5>
+            <br />
+            <div className="previous-appointment-details__wrapper">
+              <label>Type</label>
+              <p>{aptDetails.healthPractitionerType}</p>
+            </div>
+            <div className="previous-appointment-details__wrapper">
+              <label>Name</label>
+              <p>{aptDetails.practitionerName}</p>
+            </div>
+            <div className="previous-appointment-details__wrapper">
+              <label>Email</label>
+              <p>{aptDetails.practitionerEmail}</p>
+            </div>
+          </div>
+        </div>
+        <br />
+        <h5 style={{ padding: "10px" }}>Appointment details</h5>
+        <div style={{ display: "flex", gap: "20px", padding: "10px" }}>
+          <div>
+            <div className="previous-appointment-details__wrapper">
+              <label>Type</label>
+              <p>{aptDetails.appointmentType}</p>
+            </div>
+            <div className="previous-appointment-details__wrapper">
+              <label>Preferred date</label>
+              <p>
+                {new Date(aptDetails.preferredAppointmentDate).toLocaleString(
+                  "en-nz"
+                )}
+              </p>
+            </div>
+            <div className="previous-appointment-details__wrapper">
+              <label>Accepted date</label>
+              <p>
+                {new Date(aptDetails.acceptedJobDate).toLocaleString("en-nz")}
+              </p>
+            </div>
+          </div>
+
+          <div>
+            <div className="previous-appointment-details__wrapper">
+              <label>Agenda</label>
+              <p>{aptDetails.appointmentAgenda}</p>
+            </div>
+            <div className="previous-appointment-details__wrapper">
+              <label>Complete date</label>
+              <p>
+                {new Date(aptDetails.appointmentDateCompleted).toLocaleString(
+                  "en-nz"
+                )}
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div style={{ display: "flex", gap: "30px", padding: "10px" }}>
+          <div className="previous-appointment-contents__wrapper">
+            <p>Patient's comments</p>
+            <textarea value={aptDetails.comments}></textarea>
+          </div>
+          <div className="previous-appointment-contents__wrapper">
+            <p>Diagnosis</p>
+            <textarea value={aptDetails.diagnosis}></textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const RecentDiagnosis = ({ apts }) => {
   return (
     <div>
       <div className="recent-diagnosis__wrapper">
@@ -202,51 +325,21 @@ const RecentDiagnosis = () => {
           </thead>
 
           <tbody>
-            <tr>
-              <td>1</td>
-              <td>Broken Tendon</td>
-              <td>Dr. Johnson</td>
-              <td>02/11/2023</td>
-              <td>
-                <button className="recent-diagnosis-btn">view</button>
-              </td>
-            </tr>
-            <tr>
-              <td>2</td>
-              <td>Broken Heart</td>
-              <td>Dr. Sharma</td>
-              <td>02/11/2023</td>
-              <td>
-                <button className="recent-diagnosis-btn">view</button>
-              </td>
-            </tr>
-            <tr>
-              <td>3</td>
-              <td>Bahog Ilok</td>
-              <td>Dr. Johnson</td>
-              <td>02/11/2023</td>
-              <td>
-                <button className="recent-diagnosis-btn">view</button>
-              </td>
-            </tr>
-            <tr>
-              <td>4</td>
-              <td>Bayot</td>
-              <td>Dr. Sharma</td>
-              <td>02/11/2023</td>
-              <td>
-                <button className="recent-diagnosis-btn">view</button>
-              </td>
-            </tr>
-            <tr>
-              <td>5</td>
-              <td>Pulled Achilles</td>
-              <td>Dr. Sharma</td>
-              <td>02/11/2023</td>
-              <td>
-                <button className="recent-diagnosis-btn">view</button>
-              </td>
-            </tr>
+            {apts?.map((items, index) => (
+              <tr key={items.id}>
+                <td>{index + 1}</td>
+                <td>{items.diagnosis}</td>
+                <td>{items.practitionerName}</td>
+                <td>
+                  {new Date(items.appointmentDateCompleted).toLocaleDateString(
+                    "en-nz"
+                  )}
+                </td>
+                {/* <td>
+                  <button className="recent-diagnosis-btn">view</button>
+                </td> */}
+              </tr>
+            ))}
           </tbody>
         </table>
       </div>
@@ -254,15 +347,17 @@ const RecentDiagnosis = () => {
   );
 };
 
-const PreferredPractitioner = () => {
+const PreferredPractitioner = ({ preferredPractitioner }) => {
   return (
     <div className="preferred-practitioner__wrapper">
       <h5 className="preferred-practitioner-h5-title">
-        Preferred Practitioner
+        Preferred General Practitioner
       </h5>
       <div className="preferred-practitioner-details__wrapper">
-        <h3>Dr. Mahachit Sharma</h3>
-        <p className="preferred-practitioner-id__text">ID: 800976543</p>
+        <h3>{preferredPractitioner.name}</h3>
+        <p className="preferred-practitioner-id__text">
+          {preferredPractitioner.type}
+        </p>
       </div>
 
       <div>
@@ -270,16 +365,15 @@ const PreferredPractitioner = () => {
           <h5>Recent Appointment</h5>
 
           <p className="preferred-practitioner-recent-appointment-result">
-            01/07/2024
+            {preferredPractitioner.recentDate}
           </p>
         </div>
-        <div className="preferred-practitioner-total-appointment__wrapper">
-          <h5>Recent Appointment</h5>
-          <p className="preferred-practitioner-total-appointment-result">13</p>
-        </div>
+
         <div className="preferred-practitioner-total-appointment__wrapper">
           <h5>Total Appointment</h5>
-          <p className="preferred-practitioner-total-appointment-result">13</p>
+          <p className="preferred-practitioner-total-appointment-result">
+            {preferredPractitioner.totalAppointments}
+          </p>
         </div>
       </div>
     </div>
@@ -611,16 +705,40 @@ const TablesContainer = () => {
 };
 
 const DashboardPatient = () => {
+  const [previousAptModal, setPreviousAptModal] = useState(false);
   const [apts, setApts] = useState([]);
+  const [preferredPractitioner, setPreferredPractitioner] = useState({
+    name: "",
+    type: "",
+    totalAppointments: 0,
+    recentDate: "",
+  });
+  const id = parseInt(sessionStorage.getItem("id"));
 
   useEffect(() => {
-    const id = parseInt(sessionStorage.getItem("id"));
     fetch(`${GetPatientPreviousApt}/${id}`)
       .then((res) => res.json())
       .then((res) => {
         setApts(res.returnStatus.data);
+        handleFetchPreferredPractitioner(); //calling the function to get the preferred practitioner
       });
   }, []);
+
+  const handleFetchPreferredPractitioner = () => {
+    fetch(`${GetMostAppointmentsForPatient}/${id}`)
+      .then((res) => res.json())
+      .then((res) => {
+        console.log(res);
+        setPreferredPractitioner({
+          name: res.returnStatus.name,
+          type: res.returnStatus.type,
+          totalAppointments: res.returnStatus.count,
+          recentDate: new Date(res.returnStatus.recentDate).toLocaleDateString(
+            "en-nz"
+          ),
+        });
+      });
+  };
   return (
     <div>
       {/* {paymentClick === true ? <div className="overlay"></div> : ""}
@@ -631,12 +749,24 @@ const DashboardPatient = () => {
       ) : (
         ""
       )} */}
+
+      {previousAptModal === true ? (
+        <>
+          <div className="overlay"></div>
+          <PreviousAppointment
+            apts={apts}
+            setPreviousAptModal={setPreviousAptModal}
+          />
+        </>
+      ) : (
+        ""
+      )}
       <div style={{ display: "flex" }}>
-        <SummaryCards apts={apts} />
+        <SummaryCards apts={apts} setPreviousAptModal={setPreviousAptModal} />
       </div>
       <div style={{ display: "flex", gap: "10px", padding: "10px" }}>
-        <RecentDiagnosis />
-        <PreferredPractitioner />
+        <RecentDiagnosis apts={apts} />
+        <PreferredPractitioner preferredPractitioner={preferredPractitioner} />
         <PrescriptionContainer />
       </div>
       <div style={{ padding: "10px", display: "flex", gap: "10px" }}>
