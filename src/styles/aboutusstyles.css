@@ -1,0 +1,11 @@
+.aboutus-container__wrapper {
+  width: 90%;
+}
+
+.aboutus-content__wrapper {
+  margin: 20px 0 0 0;
+}
+
+.aboutus-content__text {
+  line-height: 1.5;
+}
