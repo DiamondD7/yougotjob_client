@@ -14,7 +14,7 @@ import {
   ChalkboardTeacher,
   Folders,
   Gear,
-  Invoice,
+  Copyright,
   House,
   CalendarPlus,
   ClipboardText,
@@ -566,6 +566,22 @@ const Nav = ({ setDisplayed, dateSettings }) => {
               </button>
               {minimizedNav === false ? getDateTime() : ""}
             </li>
+            {minimizedNav === false ? (
+              <li
+                style={{
+                  fontSize: "12px",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "5px",
+                  color: "rgba(0,0,0,0.3)",
+                }}
+              >
+                <Copyright size={12} color="rgba(0,0,0,0.3)" /> Aaron Julian
+                Sierra
+              </li>
+            ) : (
+              ""
+            )}
           </div>
         </ul>
       </div>
