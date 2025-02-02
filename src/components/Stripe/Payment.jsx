@@ -1,5 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { CreatePayment } from "../../assets/js/serverApi";
+import {
+  CreatePayment,
+  GetAnAppointment,
+  GetPractitionerStripeId,
+} from "../../assets/js/serverApi";
 import {
   Elements,
   useStripe,
@@ -71,6 +75,11 @@ const Payment = ({
   const [latestCharge, setLatestCharge] = useState([]);
 
   useEffect(() => {
+    handleGetPractitionerId();
+  }, []);
+
+  //STEP 3. Create payment intent for customer/patient to pay the amount and for the practitioner to be paid using its(stripeID)
+  const handleCreatePaymentIntent = (stripeId) => {
     fetch(CreatePayment, {
       method: "POST",
       headers: {
@@ -78,6 +87,7 @@ const Payment = ({
         Accept: "application/json",
       },
       body: JSON.stringify({
+        StripeId: stripeId, //this is for the payout practitioner id
         Amount: convertToCents,
         ReceiptEmail: chosenAptEmail,
       }),
@@ -87,7 +97,25 @@ const Payment = ({
         handleOpt(data.returnStatus.paymentIntent.clientSecret);
         setLatestCharge(data.returnStatus.paymentIntent);
       });
-  }, []);
+  };
+
+  //STEP 2. Once practitionerId is acquired, then put the practitioner stripe account id so that the practitioner gets paid
+  const handleGetPractitionerStripeId = (id) => {
+    fetch(`${GetPractitionerStripeId}/${id}`)
+      .then((res) => res.json())
+      .then((res) => {
+        handleCreatePaymentIntent(res.returnStatus.stripeId);
+      });
+  };
+
+  //STEP 1. find the practitionerId to get the stripeID
+  const handleGetPractitionerId = () => {
+    fetch(`${GetAnAppointment}/${chosenAptId}`)
+      .then((res) => res.json())
+      .then((res) => {
+        handleGetPractitionerStripeId(res.returnStatus.data.practitionerId);
+      });
+  };
 
   console.log(latestCharge);
   const handleOpt = (clientSecret) => {
