@@ -6,6 +6,7 @@ import Account from "./Account";
 import Security from "./Security";
 import Notifications from "./Notifications";
 import Billing from "./Billing";
+import Aboutus from "./Aboutus";
 const Settings = ({ setEditChanges }) => {
   const [activeDisplay, setActiveDisplay] = useState("");
 
@@ -98,7 +99,7 @@ const Settings = ({ setEditChanges }) => {
             </button>
           </li>
         </ul>
-        <div style={{ marginTop: "50px" }}>
+        <div style={{ marginTop: "50px", width: "70%" }}>
           {activeDisplay === "account" ? (
             <Account setEditChanges={setEditChanges} /> //setEditChanges will change the time on the Nav from changing it in the Settings/Account
           ) : activeDisplay === "security" ? (
@@ -107,6 +108,8 @@ const Settings = ({ setEditChanges }) => {
             <Notifications />
           ) : activeDisplay === "billing" ? (
             <Billing />
+          ) : activeDisplay === "about" ? (
+            <Aboutus />
           ) : (
             ""
           )}
