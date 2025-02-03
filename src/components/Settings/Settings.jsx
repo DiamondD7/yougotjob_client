@@ -9,6 +9,7 @@ import Billing from "./Billing";
 import Aboutus from "./Aboutus";
 const Settings = ({ setEditChanges }) => {
   const [activeDisplay, setActiveDisplay] = useState("");
+  const role = sessionStorage.getItem("role");
 
   return (
     <div>
@@ -106,7 +107,7 @@ const Settings = ({ setEditChanges }) => {
             <Security />
           ) : activeDisplay === "notifications" ? (
             <Notifications />
-          ) : activeDisplay === "billing" ? (
+          ) : activeDisplay === "billing" && role === "Practitioner" ? (
             <Billing />
           ) : activeDisplay === "about" ? (
             <Aboutus />

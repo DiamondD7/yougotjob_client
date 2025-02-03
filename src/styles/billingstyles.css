@@ -1,40 +1,25 @@
-.settings-billing__wrapper {
-  width: 344px;
-  border: 1px solid rgba(0, 0, 0, 0.05);
-  padding: 20px;
-  border-radius: 10px;
-  font-size: 12px;
-}
-
-.settings-billing__input {
-  width: 300px;
-  outline: none;
-  padding: 2px 5px;
-  border: 1px solid rgba(0, 0, 0, 0.3);
+.stripeLogo__btn {
+  background-color: #5433ff;
+  border: 1px solid #5433ff;
   border-radius: 5px;
-}
-
-.billing-form-clear__btn {
-  cursor: pointer;
-  background-color: transparent;
-  border: none;
-  margin-right: 10px;
-}
-
-.billing-form-save__btn {
-  cursor: pointer;
-  background-color: #9dcd5a;
-  border: 1px solid #9dcd5a;
   color: #f3f3f3;
-  border-radius: 5px;
-  padding: 2px 10px;
+  width: 152px;
+
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 5px;
 }
 
-.billing-update__btn {
-  cursor: pointer;
-  background-color: #9dcd5a;
-  border: 1px solid #9dcd5a;
-  color: #f3f3f3;
-  border-radius: 5px;
-  padding: 2px 10px;
+.stripeLoading {
+  animation: stripeLoad 1s infinite;
+}
+
+@keyframes stripeLoad {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }

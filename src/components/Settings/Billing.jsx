@@ -6,12 +6,14 @@ import {
   GenerateOnboardingLink,
 } from "../../assets/js/serverApi";
 import { useNavigate } from "react-router-dom";
+import { StripeLogo, CircleNotch } from "@phosphor-icons/react";
 
 import "../../styles/billingstyles.css";
 const Billing = () => {
   const navigate = useNavigate();
   const pracId = parseInt(sessionStorage.getItem("id"));
   const [user, setUser] = useState([]);
+  const [stripeLoad, setStripeLoad] = useState(false);
 
   useEffect(() => {
     fetchData();
@@ -84,12 +86,14 @@ const Billing = () => {
     })
       .then((res) => res.json())
       .then((res) => {
-        console.log(res);
+        setStripeLoad(false);
+        window.open(res.url, "_blank", "noreferrer");
       });
   };
 
   const handleCreateStripeAccount = async (e) => {
     e.preventDefault();
+    setStripeLoad(true);
     await fetch(CreateStripeAccount, {
       method: "POST",
       headers: {
@@ -111,51 +115,29 @@ const Billing = () => {
   };
   return (
     <div>
-      <h3 style={{ color: "#9dcd5a", fontWeight: "bold" }}>
-        Billing Information
-      </h3>
-      <div className="settings-billing__wrapper">
-        <p className="setting-billing-label__text">
-          Make sure you update your billing details and address
-        </p>
-        <br />
+      <h3 style={{ color: "#9dcd5a", fontWeight: "bold" }}>Billing</h3>
+      <p style={{ fontSize: "12px" }}>
+        Make sure your details are correct, when linking your details to Stripe
+      </p>
+      <br />
 
-        <div style={{ display: "flex", gap: "80px" }}>
-          <div>
-            <p className="setting-billing-label__text">Name on card</p>
-            <p className="setting-billing-name__text">Mahichit Sharma</p>
-            <br />
-            <div style={{ display: "flex", gap: "50px" }}>
-              <div>
-                <p className="setting-billing-label__text">Card number</p>
-                <p className="setting-billing-name__text">
-                  &#x2022;&#x2022;&#x2022;&#x2022;
-                  &#x2022;&#x2022;&#x2022;&#x2022;
-                  &#x2022;&#x2022;&#x2022;&#x2022; 1234
-                </p>
-              </div>
-              <div>
-                <p className="setting-billing-label__text">CVV</p>
-                <p className="setting-billing-name__text">
-                  &#x2022;&#x2022;&#x2022;
-                </p>
-              </div>
-              <div>
-                <p className="setting-billing-label__text">Expiry</p>
-                <p className="setting-billing-name__text">05/30</p>
-              </div>
-            </div>
-          </div>
-          <div>
-            <p className="setting-billing-label__text">Billing address</p>
-            <p className="setting-billing-name__text">
-              1/99 Henderson Drive <br /> 2020 Auckland <br /> New Zealand
-            </p>
-          </div>
-        </div>
-      </div>
-      <button onClick={(e) => handleCreateStripeAccount(e)}>
-        Link details on Stripe
+      <button
+        className="stripeLogo__btn"
+        onClick={(e) => handleCreateStripeAccount(e)}
+      >
+        <StripeLogo
+          className="stripeLogo"
+          size={25}
+          color="#f3f3f3"
+          weight="fill"
+        />
+        {stripeLoad === false ? (
+          <label style={{ color: "#f3f3f3", fontSize: "12px" }}>
+            Link details on Stripe
+          </label>
+        ) : (
+          <CircleNotch size={13} color="#f3f3f3" className={"stripeLoading"} />
+        )}
       </button>
     </div>
   );
