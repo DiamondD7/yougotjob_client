@@ -102,7 +102,7 @@ const SearchProfile = ({
   };
 
   const ReturnSearchData = () => {
-    const filterData = patients.filter(
+    const filterData = patients?.filter(
       (item) =>
         item.fullName.toLowerCase().includes(searchField.toLowerCase()) ||
         item.nhi.toLowerCase().includes(searchField.toLowerCase())
