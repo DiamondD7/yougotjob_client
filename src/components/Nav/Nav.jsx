@@ -20,7 +20,7 @@ import {
   ClipboardText,
 } from "@phosphor-icons/react";
 import { Link } from "react-router-dom";
-import NavLogo from "../../assets/img/HauoraNav.png";
+import NavLogo from "../../assets/img/HauoraLogo.png";
 import moment from "moment-timezone";
 import { Logout } from "../../assets/js/serverApi";
 
