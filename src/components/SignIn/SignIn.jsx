@@ -371,6 +371,7 @@ const GeneralPracitionerSignIn = ({ localData, today }) => {
 
           if (data.returnStatus.userDetails) {
             //if the user signs up using google
+            generateJwtTokens(data.returnStatus.userDetails);
             localData(data);
             navigate("/home");
           } else {

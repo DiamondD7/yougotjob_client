@@ -30,7 +30,7 @@ import moment from "moment";
 import momtimezone from "moment-timezone";
 
 import "../../styles/accountstyles.css";
-const Profile = ({ loggedUserData, setLoadData }) => {
+const Profile = ({ loggedUserData, setLoadData, navigate }) => {
   const [openEdit, setOpenEdit] = useState(false);
   const [fullName, setFullName] = useState(loggedUserData.fullName || ""); //if loggedUserData is refreshed then use the original value else use ""
   const [height, setHeight] = useState(loggedUserData.height || 0);
@@ -54,28 +54,53 @@ const Profile = ({ loggedUserData, setLoadData }) => {
     e.preventDefault();
     const id = parseInt(sessionStorage.getItem("id"));
     const role = sessionStorage.getItem("role");
-    if (role === "Practitioner") {
-      fetch(`${UpdateHealthPractitionerData}/${id}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-        body: JSON.stringify({
-          FullName: fullName,
-          MobileNumber: mobilePhone,
-          EmailAddress: emailAddress,
-          HomeAddress: homeAddress,
-          Dob: dob,
-        }),
-      })
-        .then((res) => res.json())
-        .then((res) => {
-          console.log(res); //delete c.log
-          setOpenEdit(false);
-          setLoadData(true);
+
+    const updatePractitionerData = async (retry = true) => {
+      try {
+        const response = await fetch(UpdateHealthPractitionerData, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+          credentials: "include",
+          body: JSON.stringify({
+            Id: id,
+            FullName: fullName,
+            MobileNumber: mobilePhone,
+            EmailAddress: emailAddress,
+            HomeAddress: homeAddress,
+            Dob: dob,
+          }),
         });
-    } else if (role === "Patient") {
+
+        if (response.status === 302) {
+          console.warn("301 detected, redirecting...");
+          navigate("/");
+          return;
+        }
+
+        if (response.status === 401 && retry) {
+          console.warn("401 detected, retrying request...");
+          return updatePractitionerData(false);
+        }
+
+        if (!response.ok) {
+          throw new Error(`HTTP ERROR: status ${response.status}`);
+        }
+
+        const data = await response.json();
+        //console.log(data);
+        setOpenEdit(false);
+        setLoadData(true);
+      } catch (err) {
+        console.log(`Error caught: ${err.message}`);
+      }
+    };
+
+    if (role === "Practitioner") {
+      updatePractitionerData();
+    } else {
       fetch(`${UpdatePatient}/${id}`, {
         method: "PUT",
         headers: {
@@ -1408,7 +1433,7 @@ const TimezonesSettings = ({ setEditChanges }) => {
       fetch(`${GetATimePreference}/${id}`)
         .then((res) => res.json())
         .then((res) => {
-          console.log(res);
+          //console.log(res);
           setLoadData(false);
           setEditData(res.returnStatus.data);
         });
@@ -1423,7 +1448,7 @@ const TimezonesSettings = ({ setEditChanges }) => {
       })
         .then((res) => res.json())
         .then((data) => {
-          console.log(data);
+          //console.log(data);
           setLoadData(false);
           setEditData(data.returnStatus.data);
         });
@@ -1754,6 +1779,7 @@ const Account = ({ setEditChanges }) => {
             <Profile
               loggedUserData={loggedUserData}
               setLoadData={setLoadData}
+              navigate={navigate}
             />
           )}
 
