@@ -117,3 +117,19 @@
 .security-password-rules-lists li {
   color: rgba(0, 0, 0, 0.6);
 }
+
+.security-password-error__text {
+  margin-top: 40px;
+  font-size: 12px;
+  color: red;
+}
+
+.disabledBtn {
+  cursor: default;
+  color: rgba(0, 0, 0, 0.3);
+  background-color: transparent;
+}
+
+.inputError {
+  border: 1px solid red;
+}
