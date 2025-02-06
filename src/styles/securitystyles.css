@@ -45,6 +45,14 @@
   font-size: 12px;
 }
 
+.emailrec__input {
+  outline: none;
+  border: 1px solid rgba(0, 0, 0, 0.3);
+  border-radius: 5px;
+  width: 170px;
+  padding: 0 2px;
+}
+
 .security-settings__wrapper {
   width: 700px;
   border: 1px solid rgba(0, 0, 0, 0.05);

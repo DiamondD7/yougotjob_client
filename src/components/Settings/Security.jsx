@@ -7,7 +7,7 @@ import {
 import { CheckCircle } from "@phosphor-icons/react";
 
 import "../../styles/securitystyles.css";
-const TwoFactorAuth = ({ userData, navigate }) => {
+const TwoFactorAuth = ({ userData, navigate, handleFetchUserData }) => {
   const [editEmailRec, setEditEmailRec] = useState(false);
   const [emailrec, setEmailRec] = useState("");
 
@@ -45,6 +45,8 @@ const TwoFactorAuth = ({ userData, navigate }) => {
 
       const data = await response.json();
       console.log(data);
+      handleFetchUserData(); //calling this function, to refresh users data
+      setEditEmailRec(false); //close the edit form
     } catch (err) {
       console.log(`Error caught: ${err.message}`);
     }
@@ -96,6 +98,7 @@ const TwoFactorAuth = ({ userData, navigate }) => {
             ) : (
               <input
                 type="text"
+                className="emailrec__input"
                 placeholder="email"
                 onChange={(e) => setEmailRec(e.target.value)}
               />
@@ -226,8 +229,7 @@ const PasswordChange = ({ navigate }) => {
     });
   };
 
-  const handleOpenCloseChangePw = (e) => {
-    e.preventDefault();
+  const handleOpenCloseChangePw = () => {
     setActiveChangePassword(false);
     setShowErrorMsg(false);
     setErrorMessage("");
@@ -315,7 +317,7 @@ const PasswordChange = ({ navigate }) => {
                 <br />
                 <button
                   className="security-password-cancelchange__btn"
-                  onClick={(e) => handleOpenCloseChangePw(e)}
+                  onClick={() => handleOpenCloseChangePw()}
                 >
                   Cancel
                 </button>
@@ -395,10 +397,18 @@ const Security = () => {
 
   return (
     <div>
-      <TwoFactorAuth userData={userData} navigate={navigate} />
+      <TwoFactorAuth
+        userData={userData}
+        navigate={navigate}
+        handleFetchUserData={handleFetchUserData}
+      />
       <br />
       <br />
-      <PasswordChange navigate={navigate} />
+      {userData.authProvider === "local" ? (
+        <PasswordChange navigate={navigate} />
+      ) : (
+        ""
+      )}
     </div>
   );
 };
