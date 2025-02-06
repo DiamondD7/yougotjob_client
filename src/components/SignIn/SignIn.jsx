@@ -367,18 +367,17 @@ const GeneralPracitionerSignIn = ({ localData, today }) => {
             //checking if the status from the error is false or true
             console.log(data.returnStatus.message); //error message
             setErrorMessage(data.returnStatus.message);
-          }
-
-          if (data.returnStatus.userDetails) {
-            //if the user signs up using google
-            generateJwtTokens(data.returnStatus.userDetails);
-            localData(data);
-            navigate("/home");
           } else {
-            //else if the user signs up using local sign in
-
-            handleTwoFactorAuth();
-            setOpenAuthForm(true);
+            if (data.returnStatus.userDetails) {
+              //if the user signs up using google
+              generateJwtTokens(data.returnStatus.userDetails);
+              localData(data);
+              navigate("/home");
+            } else {
+              //else if the user signs up using local sign in
+              handleTwoFactorAuth();
+              setOpenAuthForm(true);
+            }
           }
           setIsLoadingSignIn(false);
         })
