@@ -1,21 +1,25 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
+  GetPatient,
   GetaHealthPractitioner,
   UpdateHealthPractitionerData,
+  UpdatePatient,
 } from "../../assets/js/serverApi";
 import { CheckCircle } from "@phosphor-icons/react";
 
 import "../../styles/securitystyles.css";
-const TwoFactorAuth = ({ userData, navigate, handleFetchUserData }) => {
+const TwoFactorAuth = ({ userData, navigate, handleFunctions }) => {
   const [editEmailRec, setEditEmailRec] = useState(false);
   const [emailrec, setEmailRec] = useState("");
+  const id = parseInt(sessionStorage.getItem("id"));
+  const role = sessionStorage.getItem("role");
 
   const handleUpdateEmail = async (retry = true) => {
-    const id = parseInt(sessionStorage.getItem("id"));
-
+    let roleController =
+      role === "Practitioner" ? UpdateHealthPractitionerData : UpdatePatient;
     try {
-      const response = await fetch(UpdateHealthPractitionerData, {
+      const response = await fetch(roleController, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -45,7 +49,7 @@ const TwoFactorAuth = ({ userData, navigate, handleFetchUserData }) => {
 
       const data = await response.json();
       console.log(data);
-      handleFetchUserData(); //calling this function, to refresh users data
+      handleFunctions(); //calling this function, to refresh users data
       setEditEmailRec(false); //close the edit form
     } catch (err) {
       console.log(`Error caught: ${err.message}`);
@@ -165,6 +169,10 @@ const PasswordChange = ({ navigate }) => {
 
   const handleChangePassword = async (retry = true) => {
     const id = parseInt(sessionStorage.getItem("id"));
+    const role = sessionStorage.getItem("role");
+    const roleController =
+      role === "Practitioner" ? UpdateHealthPractitionerData : UpdatePatient;
+
     const isPwdValid = PWD_REGEX.test(userPassData.NewPassword);
     if (!validPwMatch) {
       console.log("Password do not match");
@@ -176,7 +184,7 @@ const PasswordChange = ({ navigate }) => {
     }
 
     try {
-      const response = await fetch(UpdateHealthPractitionerData, {
+      const response = await fetch(roleController, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -354,44 +362,86 @@ const PasswordChange = ({ navigate }) => {
 
 const Security = () => {
   const id = parseInt(sessionStorage.getItem("id"));
+  const role = sessionStorage.getItem("role");
   const navigate = useNavigate();
 
   const [userData, setUserData] = useState([]);
 
   useEffect(() => {
-    handleFetchUserData();
+    handleFunctions();
   }, []);
 
-  const handleFetchUserData = async (retry = true) => {
-    try {
-      const response = await fetch(`${GetaHealthPractitioner}/${id}`, {
-        method: "GET",
-        headers: {
-          Accept: "application/json",
-        },
-        credentials: "include",
-      });
+  const handleFunctions = () => {
+    const handleFetchUserData = async (retry = true) => {
+      try {
+        const response = await fetch(`${GetaHealthPractitioner}/${id}`, {
+          method: "GET",
+          headers: {
+            Accept: "application/json",
+          },
+          credentials: "include",
+        });
 
-      if (response.status === 302) {
-        console.warn("Detected a 302, redirecting...");
-        navigate("/");
-        return;
+        if (response.status === 302) {
+          console.warn("Detected a 302, redirecting...");
+          navigate("/");
+          return;
+        }
+
+        if (response.status === 401 && retry) {
+          // Retry the request once if a 401 status is detected
+          console.warn("401 detected, retrying request...");
+          return handleFetchUserData(false);
+        }
+
+        if (!response.ok) {
+          throw new Error(`HTTP error: status ${response.status}`);
+        }
+
+        const data = await response.json();
+        setUserData(data);
+      } catch (err) {
+        console.log("Error fetching data:", err.message);
       }
+    };
 
-      if (response.status === 401 && retry) {
-        // Retry the request once if a 401 status is detected
-        console.warn("401 detected, retrying request...");
-        return handleFetchUserData(false);
+    const handleFetchPatientData = async (retry = true) => {
+      try {
+        const response = await fetch(`${GetPatient}/${id}`, {
+          method: "GET",
+          headers: {
+            Accept: "application/json",
+          },
+          credentials: "include",
+        });
+
+        if (response.status === 302) {
+          console.warn("Detected a 302, redirecting...");
+          navigate("/");
+          return;
+        }
+
+        if (response.status === 401 && retry) {
+          // Retry the request once if a 401 status is detected
+          console.warn("401 detected, retrying request...");
+          return handleFetchPatientData(false);
+        }
+
+        if (!response.ok) {
+          throw new Error(`HTTP error: status ${response.status}`);
+        }
+
+        const data = await response.json();
+        setUserData(data);
+      } catch (err) {
+        console.log("Error fetching data:", err.message);
       }
+    };
 
-      if (!response.ok) {
-        throw new Error(`HTTP error: status ${response.status}`);
-      }
-
-      const data = await response.json();
-      setUserData(data);
-    } catch (err) {
-      console.log("Error fetching data:", err.message);
+    if (role === "Practitioner") {
+      handleFetchUserData();
+    } else {
+      handleFetchPatientData();
     }
   };
 
@@ -400,7 +450,7 @@ const Security = () => {
       <TwoFactorAuth
         userData={userData}
         navigate={navigate}
-        handleFetchUserData={handleFetchUserData}
+        handleFunctions={handleFunctions}
       />
       <br />
       <br />
