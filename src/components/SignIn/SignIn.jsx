@@ -16,6 +16,8 @@ import {
   VerifyTwoFactorAuthPatient,
   EmailTwoFactorAuthPatient,
 } from "../../assets/js/serverApi";
+import PatientLogo from "../../assets/img/patientLogo.png";
+import PractitionerLogo from "../../assets/img/practitionerLogo.png";
 import { Link, useNavigate } from "react-router-dom";
 import { CircleNotch, LockKey } from "@phosphor-icons/react";
 import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google";
@@ -35,25 +37,25 @@ const SignUpOptions = ({
       <div className="signupform-options-container__wrapper">
         <h2 className="signupas-title">Sign up as</h2>
         <div className="signup-options__wrapper">
-          <button
-            className="signup-options__btns"
-            onClick={() => setPatientOption(true)}
-          >
-            Patient
-          </button>
-          <button
-            className="signup-options__btns"
-            onClick={() => setHealthPractitionerOption("General Practitioner")}
-          >
-            General Practitioner
-          </button>
-          <button
+          <div className="signup-options__btns">
+            <p style={{ fontSize: "12px" }}>Patient</p>
+            <button onClick={() => setPatientOption(true)}>
+              <img src={PatientLogo} alt="patientLogo" />
+            </button>
+          </div>
+          <div className="signup-options__btns">
+            <p style={{ fontSize: "12px" }}>Practitioner</p>
+            <button onClick={() => setHealthPractitionerOption("Practitioner")}>
+              <img src={PractitionerLogo} alt="patientLogo" />
+            </button>
+          </div>
+          {/* <button
             className="signup-options__btns"
             onClick={() => setHealthPractitionerOption("Nurse")}
           >
             Nurse
-          </button>
-          <button className="signup-options__btns">Therapist</button>
+          </button> */}
+          {/* <button className="signup-options__btns">Therapist</button>
           <button className="signup-options__btns">Audiologist</button>
           <button className="signup-options__btns">Acupuncturist</button>
           <button className="signup-options__btns">Chiropractor</button>
@@ -61,7 +63,7 @@ const SignUpOptions = ({
           <button className="signup-options__btns">Nutritionists</button>
           <button className="signup-options__btns">Health Coaches</button>
           <button className="signup-options__btns">Personal Trainers</button>
-          <button className="signup-options__btns">Pilates Instructors</button>
+          <button className="signup-options__btns">Pilates Instructors</button> */}
         </div>
         <button
           className="signup-options-back__btn"
@@ -320,7 +322,7 @@ const PatientSignUp = ({ setPatientOption }) => {
   );
 };
 
-const GeneralPracitionerSignIn = ({ localData, today }) => {
+const PracitionerSignIn = ({ localData, today }) => {
   const [signinEmailAddress, setSigninEmailAddress] = useState("");
   const [signinPassword, setSigninPassword] = useState("");
   const [signInGoogleId, setSignInGoogleId] = useState("");
@@ -475,7 +477,7 @@ const GeneralPracitionerSignIn = ({ localData, today }) => {
         <div className="logo"></div>
 
         <div className="signinform-container__wrapper">
-          <h1>General Pracitioner</h1>
+          <h1>Pracitioner</h1>
           {openAuthForm ? (
             <div>
               <br />
@@ -1223,9 +1225,9 @@ const SignIn = ({ localData }) => {
   const [optionClicked, setOptionClicked] = useState(false);
   const [component, setComponent] = useState("");
   const handleSigninOption = (role) => {
-    if (role === "General Practitioner") {
+    if (role === "Practitioner") {
       setOptionClicked(true);
-      setComponent("General Pracitioner");
+      setComponent("Pracitioner");
     } else if (role === "Patient") {
       setOptionClicked(true);
       setComponent("Patient");
@@ -1244,8 +1246,8 @@ const SignIn = ({ localData }) => {
 
         {optionClicked === true ? (
           <div>
-            {component === "General Pracitioner" && (
-              <GeneralPracitionerSignIn localData={localData} today={today} />
+            {component === "Pracitioner" && (
+              <PracitionerSignIn localData={localData} today={today} />
             )}
 
             {component === "Patient" && (
@@ -1264,11 +1266,9 @@ const SignIn = ({ localData }) => {
                   <option value="">Choose...</option>
                   <option value=""></option>
                   <option value="Patient">Patient</option>
-                  <option value="General Practitioner">
-                    General Practitioner
-                  </option>
-                  <option value="Nurse">Nurses</option>
-                  <option value="Therapist">Therapist</option>
+                  <option value="Practitioner">Practitioner</option>
+                  {/* <option value="Nurse">Nurses</option>
+                  <option value="Therapist">Therapist</option> */}
                 </select>
                 <br />
                 <button

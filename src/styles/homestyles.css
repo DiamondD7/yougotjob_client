@@ -38,6 +38,7 @@
 .settings-preference-ul__wrapper {
   list-style: decimal;
   padding: 0px 20px;
+  font-size: 12px;
 }
 
 .settings-preference-ul__wrapper li {

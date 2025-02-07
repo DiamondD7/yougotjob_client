@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import SignIn from "./components/SignIn/SignIn";
-import GeneralPractioner from "./components/HomeDepartments/GeneralPractioner";
+import PractitionerHome from "./components/HomeDepartments/PractitionerHome";
 import PatientsHome from "./components/HomeDepartments/PatientsHome";
 import { Route, Routes } from "react-router-dom";
 
@@ -26,7 +26,7 @@ function App() {
 
     sessionStorage.setItem("auth", "true");
     sessionStorage.setItem("id", userData.id);
-    sessionStorage.setItem("role", userData.role);
+    sessionStorage.setItem("role", userData.departmentRole);
     handleRoute(); //calling this when a user logs in
   };
 
@@ -44,7 +44,7 @@ function App() {
         </Routes>
         {currentRole === "Practitioner" ? (
           <Routes>
-            <Route path="/home" element={<GeneralPractioner />} />
+            <Route path="/home" element={<PractitionerHome />} />
           </Routes>
         ) : (
           ""
