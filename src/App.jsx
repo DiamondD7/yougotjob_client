@@ -26,7 +26,7 @@ function App() {
 
     sessionStorage.setItem("auth", "true");
     sessionStorage.setItem("id", userData.id);
-    sessionStorage.setItem("role", userData.role);
+    sessionStorage.setItem("role", userData.departmentRole);
     handleRoute(); //calling this when a user logs in
   };
 

@@ -3,7 +3,6 @@ import Nav from "../Nav/Nav";
 import Display from "../Display/Display";
 import {
   GetATimePreference,
-  UpdateWorkPreference,
   UpdateHealthPractitionerData,
 } from "../../assets/js/serverApi";
 import { useNavigate } from "react-router-dom";
@@ -95,49 +94,6 @@ const SettingsPreference = () => {
       console.log(`Error caught: ${err.message}`);
     }
   };
-
-  // const handleFormSubmit = async (retry = true) => {
-  //   const id = parseInt(sessionStorage.getItem("id"));
-
-  //   try {
-  //     const response = await fetch(UpdateWorkPreference, {
-  //       method: "PUT",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //         Accept: "application/json",
-  //       },
-  //       credentials: "include",
-  //       body: JSON.stringify({
-  //         Id: id,
-  //         WorkPreference: workPref,
-  //       }),
-  //     });
-
-  //     if (response.status === 302) {
-  //       //302 is redericting to sign in screen because refresh token and jwt are expired.
-  //       console.warn("302 detected, redirecting...");
-  //       // Redirect to the new path
-  //       navigate("/");
-  //       return; // Exit the function to prevent further execution
-  //     }
-
-  //     if (response.status === 401 && retry) {
-  //       // Retry the request once if a 401 status is detected
-  //       console.warn("401 detected, retrying request...");
-  //       return handleFormSubmit(false); // Call with `retry` set to false
-  //     }
-
-  //     if (!response.ok) {
-  //       throw new Error(`HTTP error! status: ${response.status}`);
-  //     }
-
-  //     const data = await response.json();
-  //     console.log(data);
-  //     setNext(true);
-  //   } catch (err) {
-  //     console.log(err.message);
-  //   }
-  // };
 
   return (
     <div style={{ zIndex: "10" }}>
