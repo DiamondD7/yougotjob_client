@@ -16,6 +16,8 @@ import {
   VerifyTwoFactorAuthPatient,
   EmailTwoFactorAuthPatient,
 } from "../../assets/js/serverApi";
+import PatientLogo from "../../assets/img/patientLogo.png";
+import PractitionerLogo from "../../assets/img/practitionerLogo.png";
 import { Link, useNavigate } from "react-router-dom";
 import { CircleNotch, LockKey } from "@phosphor-icons/react";
 import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google";
@@ -35,18 +37,18 @@ const SignUpOptions = ({
       <div className="signupform-options-container__wrapper">
         <h2 className="signupas-title">Sign up as</h2>
         <div className="signup-options__wrapper">
-          <button
-            className="signup-options__btns"
-            onClick={() => setPatientOption(true)}
-          >
-            Patient
-          </button>
-          <button
-            className="signup-options__btns"
-            onClick={() => setHealthPractitionerOption("Practitioner")}
-          >
-            Practitioner
-          </button>
+          <div className="signup-options__btns">
+            <p style={{ fontSize: "12px" }}>Patient</p>
+            <button onClick={() => setPatientOption(true)}>
+              <img src={PatientLogo} alt="patientLogo" />
+            </button>
+          </div>
+          <div className="signup-options__btns">
+            <p style={{ fontSize: "12px" }}>Practitioner</p>
+            <button onClick={() => setHealthPractitionerOption("Practitioner")}>
+              <img src={PractitionerLogo} alt="patientLogo" />
+            </button>
+          </div>
           {/* <button
             className="signup-options__btns"
             onClick={() => setHealthPractitionerOption("Nurse")}
