@@ -65,17 +65,21 @@ const Settings = ({ setEditChanges }) => {
               Language
             </button>
           </li>
-          <li>
-            <button
-              value="billing"
-              onClick={(e) => setActiveDisplay(e.target.value)}
-              className={`settings-nav__btn ${
-                activeDisplay === "billing" ? "activeDisplay" : ""
-              }`}
-            >
-              Billing
-            </button>
-          </li>
+          {role === "Practitioner" ? (
+            <li>
+              <button
+                value="billing"
+                onClick={(e) => setActiveDisplay(e.target.value)}
+                className={`settings-nav__btn ${
+                  activeDisplay === "billing" ? "activeDisplay" : ""
+                }`}
+              >
+                Billing
+              </button>
+            </li>
+          ) : (
+            ""
+          )}
 
           <li>
             <button

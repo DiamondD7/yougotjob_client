@@ -4,6 +4,7 @@ import Display from "../Display/Display";
 import {
   GetATimePreference,
   UpdateWorkPreference,
+  UpdateHealthPractitionerData,
 } from "../../assets/js/serverApi";
 import { useNavigate } from "react-router-dom";
 
@@ -14,7 +15,7 @@ const EndWelcome = () => {
     window.location.reload();
   };
   return (
-    <div>
+    <div style={{ zIndex: "10" }}>
       <div>
         <h2>Thank You for Getting Started!</h2>
         <p>
@@ -41,20 +42,20 @@ const EndWelcome = () => {
 };
 
 const SettingsPreference = () => {
-  const [workPref, setWorkPref] = useState("");
-  const [next, setNext] = useState(false);
   const navigate = useNavigate();
+  const [workPref, setWorkPref] = useState("");
+  const [healthRole, setHealthRole] = useState("");
+  const [next, setNext] = useState(false);
 
   const formSubmit = (e) => {
     e.preventDefault();
-    handleFormSubmit();
+    handleFormSubmit(); //update work preference
   };
 
   const handleFormSubmit = async (retry = true) => {
     const id = parseInt(sessionStorage.getItem("id"));
-
     try {
-      const response = await fetch(UpdateWorkPreference, {
+      const response = await fetch(UpdateHealthPractitionerData, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -63,43 +64,90 @@ const SettingsPreference = () => {
         credentials: "include",
         body: JSON.stringify({
           Id: id,
+          Role: healthRole,
           WorkPreference: workPref,
         }),
       });
 
       if (response.status === 302) {
-        //302 is redericting to sign in screen because refresh token and jwt are expired.
-        console.warn("302 detected, redirecting...");
-        // Redirect to the new path
+        console.warn("301 detected, redirecting...");
         navigate("/");
-        return; // Exit the function to prevent further execution
+        return;
       }
 
       if (response.status === 401 && retry) {
-        // Retry the request once if a 401 status is detected
         console.warn("401 detected, retrying request...");
-        return handleFormSubmit(false); // Call with `retry` set to false
+        return handleFormSubmit(false);
+      }
+
+      if (response.status === 400) {
+        console.warn("400 detected");
       }
 
       if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+        throw new Error(`HTTP ERROR: status ${response.status}`);
       }
 
       const data = await response.json();
       console.log(data);
       setNext(true);
     } catch (err) {
-      console.log(err.message);
+      console.log(`Error caught: ${err.message}`);
     }
   };
 
+  // const handleFormSubmit = async (retry = true) => {
+  //   const id = parseInt(sessionStorage.getItem("id"));
+
+  //   try {
+  //     const response = await fetch(UpdateWorkPreference, {
+  //       method: "PUT",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //         Accept: "application/json",
+  //       },
+  //       credentials: "include",
+  //       body: JSON.stringify({
+  //         Id: id,
+  //         WorkPreference: workPref,
+  //       }),
+  //     });
+
+  //     if (response.status === 302) {
+  //       //302 is redericting to sign in screen because refresh token and jwt are expired.
+  //       console.warn("302 detected, redirecting...");
+  //       // Redirect to the new path
+  //       navigate("/");
+  //       return; // Exit the function to prevent further execution
+  //     }
+
+  //     if (response.status === 401 && retry) {
+  //       // Retry the request once if a 401 status is detected
+  //       console.warn("401 detected, retrying request...");
+  //       return handleFormSubmit(false); // Call with `retry` set to false
+  //     }
+
+  //     if (!response.ok) {
+  //       throw new Error(`HTTP error! status: ${response.status}`);
+  //     }
+
+  //     const data = await response.json();
+  //     console.log(data);
+  //     setNext(true);
+  //   } catch (err) {
+  //     console.log(err.message);
+  //   }
+  // };
+
   return (
-    <div>
+    <div style={{ zIndex: "10" }}>
       {next === false ? (
         <div>
-          <h2>Set you work preference</h2>
-          <p>Let your patients know how you work!</p>
-          <p>Choose your availability:</p>
+          <h4>Set you work preference & specific role</h4>
+          <p style={{ fontSize: "12px" }}>
+            Let your patients know how you work!
+          </p>
+          <p style={{ fontSize: "12px" }}>Choose your availability:</p>
           <ul className="settings-preference-ul__wrapper">
             <li>
               <strong>Online</strong>: Virtual consultations only.
@@ -111,20 +159,43 @@ const SettingsPreference = () => {
               <strong>Flexible</strong>: A mix of online and onsite options.
             </li>
           </ul>
-          <p>Your transparency makes all the difference!</p>
+
+          <p style={{ fontSize: "12px" }}>
+            Let your patients know how you work!
+          </p>
+          <p style={{ fontSize: "12px" }}>&</p>
+          <p style={{ fontSize: "12px" }}>Choose your health role</p>
+
+          <p style={{ fontSize: "12px" }}>
+            Your transparency makes all the difference!
+          </p>
           <br />
           <form onSubmit={formSubmit}>
-            <select
-              className="form-select__wrapper"
-              onChange={(e) => setWorkPref(e.target.value)}
-            >
-              <option value="">Choose Work Preference</option>
-              <option value=""></option>
-              <option value="online">Online</option>
-              <option value="on-site">On-site</option>
-              <option value="flexible">Flexible</option>
-            </select>
-            <br />
+            <div style={{ display: "flex", gap: "10px" }}>
+              <select
+                className="form-select__wrapper"
+                onChange={(e) => setHealthRole(e.target.value)}
+              >
+                <option value="">Specific health role</option>
+                <option value=""></option>
+                <option value="General Practitioner">
+                  General Practitioner
+                </option>
+                <option value="Nurse">Nurse</option>
+                <option value="Therapist">Therapist</option>
+              </select>
+
+              <select
+                className="form-select__wrapper"
+                onChange={(e) => setWorkPref(e.target.value)}
+              >
+                <option value="">Choose Work Preference</option>
+                <option value=""></option>
+                <option value="online">Online</option>
+                <option value="on-site">On-site</option>
+                <option value="flexible">Flexible</option>
+              </select>
+            </div>
             <button className="welcome-btn" type="submit">
               Next
             </button>
@@ -141,7 +212,7 @@ const InitialSettings = () => {
   const [next, setNext] = useState(false);
 
   return (
-    <div>
+    <div style={{ zIndex: "10" }}>
       {next === false ? (
         <div>
           <h2>Get Started with Hauora!</h2>
@@ -156,8 +227,8 @@ const InitialSettings = () => {
               your needs.
             </li>
             <li>
-              Connect Your Account (Optional): Link any necessary accounts for a
-              seamless experience.
+              Make sure to change your specific role (eg. Nurse, General
+              Practitioner, Therapist)
             </li>
           </ul>
           <p>
@@ -180,7 +251,7 @@ const InitialMessage = () => {
   const [next, setNext] = useState(false);
 
   return (
-    <div className="welcome-modal__wrapper">
+    <div style={{ zIndex: "10" }} className="welcome-modal__wrapper">
       {next === false ? (
         <div>
           <div>
@@ -211,7 +282,7 @@ const InitialMessage = () => {
   );
 };
 
-const GeneralPractioner = () => {
+const PractionerHome = () => {
   const [displayed, setDisplayed] = useState("dashboard");
   const [dateSettings, setDateSettings] = useState([]);
   const [loadData, setLoadData] = useState(false);
@@ -253,4 +324,4 @@ const GeneralPractioner = () => {
   );
 };
 
-export default GeneralPractioner;
+export default PractionerHome;
