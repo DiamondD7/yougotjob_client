@@ -18,6 +18,7 @@ import Payment from "../Stripe/Payment";
 
 import "../../styles/patientdashboard.css";
 const SummaryCards = ({ apts, setPreviousAptModal }) => {
+  const [appointments, setAppointments] = useState(apts || []); //temporary fix?
   const [days, setDays] = useState(0);
   const [hours, setHours] = useState(0);
   const [minutes, setMinutes] = useState(0);
@@ -25,7 +26,7 @@ const SummaryCards = ({ apts, setPreviousAptModal }) => {
 
   const [inputDate, setInputDate] = useState("7 Aug 2024 20:00"); //can be changed to mm/dd/yyyy
 
-  const prevApt = apts[0] || "";
+  const prevApt = appointments.length > 0 ? apts[0] : []; //temporary fix?
 
   const [nextApt, setNextApt] = useState([]);
 
@@ -34,13 +35,15 @@ const SummaryCards = ({ apts, setPreviousAptModal }) => {
     fetch(`${GetNextAppointmentForPatient}/${id}`)
       .then((res) => res.json())
       .then((res) => {
-        setNextApt(res.returnStatus.data[0]);
-        //format date and setting for timer
-        const dateFormat = new Date(
-          res.returnStatus.data[0].preferredAppointmentDate
-        );
+        if (res.returnStatus.status === true) {
+          setNextApt(res.returnStatus.data[0]);
+          //format date and setting for timer
+          const dateFormat = new Date(
+            res.returnStatus.data[0].preferredAppointmentDate
+          );
 
-        setInputDate(dateFormat.toLocaleString());
+          setInputDate(dateFormat.toLocaleString());
+        }
       });
   }, []);
 
@@ -729,14 +732,15 @@ const DashboardPatient = () => {
       .then((res) => res.json())
       .then((res) => {
         console.log(res);
-        setPreferredPractitioner({
-          name: res.returnStatus.name,
-          type: res.returnStatus.type,
-          totalAppointments: res.returnStatus.count,
-          recentDate: new Date(res.returnStatus.recentDate).toLocaleDateString(
-            "en-nz"
-          ),
-        });
+        if (res.returnStatus.status === true)
+          setPreferredPractitioner({
+            name: res.returnStatus.name,
+            type: res.returnStatus.type,
+            totalAppointments: res.returnStatus.count,
+            recentDate: new Date(
+              res.returnStatus.recentDate
+            ).toLocaleDateString("en-nz"),
+          });
       });
   };
   return (

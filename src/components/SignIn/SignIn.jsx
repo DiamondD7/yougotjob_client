@@ -13,6 +13,8 @@ import {
   CheckGoogleEmail,
   EmailTwoFactorAuth,
   VerifyTwoFactorAuth,
+  VerifyTwoFactorAuthPatient,
+  EmailTwoFactorAuthPatient,
 } from "../../assets/js/serverApi";
 import { Link, useNavigate } from "react-router-dom";
 import { CircleNotch, LockKey } from "@phosphor-icons/react";
@@ -432,10 +434,6 @@ const GeneralPracitionerSignIn = ({ localData, today }) => {
       },
       body: JSON.stringify({
         EmailAddress: signinEmailAddress,
-        UserPassword: signinPassword,
-        GoogleId: signInGoogleId,
-        Role: "Practitioner",
-        DOB: today,
         UserTwoFactorAuth: {
           Code: code,
         },
@@ -610,6 +608,10 @@ const PatientSignIn = ({ localData, today }) => {
   const [errorMessage, setErrorMessage] = useState("");
   const [isLoadingSignIn, setIsLoadingSignIn] = useState(false);
 
+  const [openAuthForm, setOpenAuthForm] = useState(false);
+  const [isUnAuthorized, setIsUnAuthorized] = useState(false);
+  const [code, setCode] = useState("");
+
   const navigate = useNavigate();
 
   //handle the form submit
@@ -630,21 +632,28 @@ const PatientSignIn = ({ localData, today }) => {
         },
         body: JSON.stringify({
           EmailAddress: signinEmailAddress,
-          Password: signinPassword,
+          UserPassword: signinPassword,
           NHI: "",
           GoogleId: googleId,
         }),
       })
         .then((res) => res.json())
         .then((data) => {
-          generateJwtTokens(data.returnStatus.userDetails);
           if (data.returnStatus.status === false) {
             //checking if the status from the error is false or true
             console.log(data.returnStatus.message); //error message
             setErrorMessage(data.returnStatus.message);
           } else {
-            localData(data); //setData and auth
-            navigate("/home");
+            if (data.returnStatus.userDetails) {
+              //if the user signs up using google
+              generateJwtTokens(data.returnStatus.userDetails);
+              localData(data);
+              navigate("/home");
+            } else {
+              //else if the user signs up using local sign in
+              handleTwoFactorAuth();
+              setOpenAuthForm(true);
+            }
           }
           setIsLoadingSignIn(false);
         })
@@ -668,6 +677,54 @@ const PatientSignIn = ({ localData, today }) => {
       .then((res) => res.json())
       .then((res) => {
         console.log(res);
+        if (res.returnStatus.status === true) {
+          navigate("/home");
+        }
+      });
+  };
+
+  const handleTwoFactorAuth = () => {
+    fetch(EmailTwoFactorAuthPatient, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify(signinEmailAddress),
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        console.log(res);
+      });
+  };
+
+  const handleTwoFactorAuthVerify = (e) => {
+    e.preventDefault();
+    fetch(VerifyTwoFactorAuthPatient, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify({
+        EmailAddress: signinEmailAddress,
+        UserTwoFactorAuth: {
+          Code: code,
+        },
+      }),
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        console.log(res);
+        if (res.returnStatus.status === false) {
+          setIsUnAuthorized(true);
+          setTimeout(() => {
+            window.location.reload();
+          }, 5000);
+        } else {
+          generateJwtTokens(res.returnStatus.userDetails);
+          localData(res); //setData and auth
+        }
       });
   };
 
@@ -693,76 +750,118 @@ const PatientSignIn = ({ localData, today }) => {
 
         <div className="signinform-container__wrapper">
           <h1>Patient</h1>
-          {isLoadingSignIn === true ? (
+
+          {openAuthForm ? (
             <div>
-              <CircleNotch
-                size={26}
-                color="#202020"
-                className={"loading-icon"}
-              />
-            </div>
-          ) : (
-            <div>
-              <form>
-                {errorMessage && (
-                  <p className="signinform-errormessage__text">
-                    {errorMessage}
-                  </p>
-                )}
+              <br />
+              <br />
+              <div style={{ textAlign: "center" }}>
+                <LockKey size={32} weight="fill" color="rgba(0,0,0,0.2)" />
+                <h3>Two Factor Authentication</h3>
+                <label style={{ fontSize: "12px" }}>
+                  A verification code is sent to your email. This code will be
+                  valid for only 30 seconds. <br />
+                  Do not forget to check your spam folder
+                </label>
+              </div>
+              <br />
+              <div style={{ textAlign: "center" }}>
                 <input
-                  className="signin-signup-form__input"
                   type="text"
-                  placeholder="Email"
-                  onChange={(e) => setSigninEmailAddress(e.target.value)}
-                />
-                <br />
-                <input
-                  className="signin-signup-form__input"
-                  type="password"
-                  placeholder="Password"
-                  onChange={(e) => setSigninPassword(e.target.value)}
+                  className="verification-code__input"
+                  placeholder="Type your code here..."
+                  onChange={(e) => setCode(e.target.value)}
                 />
                 <br />
                 <Link
                   className="signin-submit__btn"
-                  onClick={handleFormData}
+                  onClick={handleTwoFactorAuthVerify}
                   to="/home"
                 >
-                  Submit
+                  Verify
                 </Link>
-                <button
-                  className="signup-back__btn"
-                  onClick={() => {
-                    window.location.reload();
-                  }}
-                >
-                  back
-                </button>
-
-                <p>Or</p>
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "center",
-                    marginTop: "15px",
-                  }}
-                >
-                  <GoogleOAuthProvider
-                    clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}
-                  >
-                    <GoogleLogin
-                      onSuccess={googleAuthSignIn}
-                      onError={(err) => console.log(err)}
-                      text="signin_with"
-                      width="330px"
-                      shape="pill"
-                    />
-                  </GoogleOAuthProvider>
+              </div>
+              <br />
+              {isUnAuthorized && (
+                <p style={{ color: "red" }}>
+                  Unauthorized. You can try again, you will be redirected back
+                  to the log-in screen in a few seconds.
+                </p>
+              )}
+            </div>
+          ) : (
+            <div>
+              {isLoadingSignIn === true ? (
+                <div>
+                  <CircleNotch
+                    size={26}
+                    color="#202020"
+                    className={"loading-icon"}
+                  />
                 </div>
-              </form>
+              ) : (
+                <div>
+                  <form>
+                    {errorMessage && (
+                      <p className="signinform-errormessage__text">
+                        {errorMessage}
+                      </p>
+                    )}
+                    <input
+                      className="signin-signup-form__input"
+                      type="text"
+                      placeholder="Email"
+                      onChange={(e) => setSigninEmailAddress(e.target.value)}
+                    />
+                    <br />
+                    <input
+                      className="signin-signup-form__input"
+                      type="password"
+                      placeholder="Password"
+                      onChange={(e) => setSigninPassword(e.target.value)}
+                    />
+                    <br />
+                    <button
+                      className="signin-submit__btn"
+                      onClick={handleFormData}
+                    >
+                      Submit
+                    </button>
+                    <button
+                      className="signup-back__btn"
+                      onClick={() => {
+                        window.location.reload();
+                      }}
+                    >
+                      back
+                    </button>
 
-              <p>Contact</p>
-              <p className="contact-number__text">0800-5553-4340</p>
+                    <p>Or</p>
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "center",
+                        marginTop: "15px",
+                      }}
+                    >
+                      <GoogleOAuthProvider
+                        clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}
+                      >
+                        <GoogleLogin
+                          onSuccess={googleAuthSignIn}
+                          onError={(err) => console.log(err)}
+                          text="signin_with"
+                          width="330px"
+                          shape="pill"
+                        />
+                      </GoogleOAuthProvider>
+                    </div>
+                  </form>
+
+                  <p>Contact</p>
+                  <p className="contact-number__text">0800-5553-4340</p>
+                </div>
+              )}
             </div>
           )}
         </div>
