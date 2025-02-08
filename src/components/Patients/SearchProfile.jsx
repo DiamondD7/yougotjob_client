@@ -107,7 +107,7 @@ const SearchProfile = ({
         item.fullName.toLowerCase().includes(searchField.toLowerCase()) ||
         item.nhi.toLowerCase().includes(searchField.toLowerCase())
     );
-    if (searchField === "" || filterData.length === 0) {
+    if (searchField === "" || filterData?.length === 0) {
       return (
         <div>
           {searchField === "" ? (
@@ -155,7 +155,7 @@ const SearchProfile = ({
     }
     return (
       <div>
-        {filterData.map((items, index) => (
+        {filterData?.map((items, index) => (
           <div style={{ marginTop: "20px" }} key={index}>
             <p className="search-profile-name__text">{items.fullName}</p>
             {/* <p className="search-profile-nhi__text">NHI: {items.nhi}</p> */}
