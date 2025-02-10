@@ -314,3 +314,15 @@
   color: #f3f3f3;
 }
 /* ------------------------------------------------------------------- */
+
+.success-signup__btn {
+  cursor: pointer;
+
+  font-size: 12px;
+  border: 1px solid #9dcd5a;
+  background-color: #9dcd5a;
+  border-radius: 5px;
+  padding: 3px 20px;
+  color: #f3f3f3;
+  text-decoration: none;
+}

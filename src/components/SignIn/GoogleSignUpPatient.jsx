@@ -3,6 +3,7 @@ import React from "react";
 const GoogleSignUpPatient = ({ email, nhi, setNhi }) => {
   return (
     <div>
+      <h1>THIS COMPONENT IS NOT RENDERED NOR USED</h1>
       <div className="signup-google__wrapper ">
         <p>
           Please provide your NHI number for verification. Your NHI number will
