@@ -232,7 +232,7 @@ const AppointmentWait = ({ autofillData }) => {
   const id = parseInt(sessionStorage.getItem("id"));
   const [startDate, setStartDate] = useState();
   const [appointmentData, setAppointmentData] = useState({
-    nhi: autofillData.nhi,
+    // nhi: autofillData.nhi,
     PractitionerId: 0,
     PatientsId: id,
     Duration: 0,
@@ -392,7 +392,7 @@ const AppointmentWait = ({ autofillData }) => {
             />
           </div>
 
-          <br />
+          {/* <br />
           <input
             className="appointment-wait-form-full__input"
             type="text"
@@ -400,7 +400,7 @@ const AppointmentWait = ({ autofillData }) => {
             placeholder="NHI"
             disabled
             value={autofillData.nhi}
-          />
+          /> */}
 
           {appointmentData.AppointmentType === "on-site" ? (
             <div>

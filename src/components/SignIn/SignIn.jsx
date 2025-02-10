@@ -26,6 +26,7 @@ import GoogleSignUpPatient from "./GoogleSignUpPatient";
 import GoogleSignUp from "./GoogleSignUp";
 
 import "../../styles/signinstyles.css";
+import SuccessfulSignUp from "./Success/SuccessfulSignUp";
 
 const SignUpOptions = ({
   setSignupOptionsClicked,
@@ -76,9 +77,9 @@ const SignUpOptions = ({
   );
 };
 
-const PatientSignUp = ({ setPatientOption }) => {
+const PatientSignUp = ({ setPatientOption, setSuccessfulSignUp }) => {
   const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
-  const [nhi, setNhi] = useState("");
+  // const [nhi, setNhi] = useState("");
   const [googleId, setGoogleId] = useState("");
   const [authProvider, setAuthProvider] = useState("local");
   const [fullName, setFullName] = useState("");
@@ -89,7 +90,7 @@ const PatientSignUp = ({ setPatientOption }) => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [matchedPw, setMatchedPw] = useState(false);
   const [validPw, setValidPw] = useState(false);
-  const [emailNhiError, setEmailNhiError] = useState(false);
+  // const [emailNhiError, setEmailNhiError] = useState(false);
   const [signupWithGoogle, setSignUpWithGoogle] = useState(false);
 
   const [error, setError] = useState("");
@@ -116,7 +117,6 @@ const PatientSignUp = ({ setPatientOption }) => {
 
   const handleAddPatient = (e) => {
     e.preventDefault();
-    const role = "Patient";
     fetch(AddPatient, {
       method: "POST",
       headers: {
@@ -124,15 +124,14 @@ const PatientSignUp = ({ setPatientOption }) => {
         Accept: "application/json",
       },
       body: JSON.stringify({
-        NHI: nhi,
         GoogleId: googleId,
         AuthProvider: authProvider,
-        Role: "Patient",
+        DepartmentRole: "Patient",
         FullName: fullName,
         GivenName: givenName,
         FamilyName: familyName,
         EmailAddress: email,
-        Password: password,
+        UserPassword: password,
       }),
     })
       .then((res) => res.json())
@@ -141,13 +140,15 @@ const PatientSignUp = ({ setPatientOption }) => {
         if (res.returnStatus.status !== false) {
           handlePatientDateTime(res.returnStatus.id);
           setPatientOption(false);
-          setEmailNhiError(false);
-        } else if (res.returnStatus.code === "400") {
-          console.log("error");
-          setError("Error: Email/NHI already taken");
-        } else {
-          setEmailNhiError(true);
+          setSuccessfulSignUp(true);
+          // setEmailNhiError(false);
         }
+        // else if (res.returnStatus.code === "400") {
+        //   console.log("error");
+        //   setError("Error: Email/NHI already taken");
+        // } else {
+        //   setEmailNhiError(true);
+        // }
       });
   };
 
@@ -169,12 +170,43 @@ const PatientSignUp = ({ setPatientOption }) => {
   const handleGoogleSignUp = (res) => {
     const decoded = jwtDecode(res.credential);
     setSignUpWithGoogle(true);
-    setFullName(decoded.name);
-    setEmail(decoded.email);
-    setGivenName(decoded.given_name);
-    setFamilyName(decoded.family_name);
-    setGoogleId(decoded.sub);
-    setAuthProvider("google");
+
+    fetch(AddPatient, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify({
+        GoogleId: decoded.sub,
+        AuthProvider: "google",
+        DepartmentRole: "Patient",
+        FullName: decoded.name,
+        GivenName: decoded.given_name,
+        FamilyName: decoded.family_name,
+        EmailAddress: decoded.email,
+        UserPassword: "",
+      }),
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        console.log(res);
+        if (res.returnStatus.status !== false) {
+          handlePatientDateTime(res.returnStatus.id);
+          setPatientOption(false);
+          setSuccessfulSignUp(true);
+          // setEmailNhiError(false);
+        } else if (
+          res.returnStatus.code === "400" ||
+          res.returnStatus.status === false
+        ) {
+          console.log("error");
+          setError("Error: Email/NHI already taken");
+        }
+        //else {
+        //   setEmailNhiError(true);
+        // }
+      });
   };
 
   return (
@@ -182,130 +214,88 @@ const PatientSignUp = ({ setPatientOption }) => {
       <div className="signupform-options-container__wrapper">
         <h1 style={{ textAlign: "center" }}>Patient Sign up</h1>
         <form className="signup-form" onSubmit={handleAddPatient}>
-          {signupWithGoogle === false ? (
-            <div>
-              <p
-                className={
-                  emailNhiError === true ? "emailtaken-error" : "error-default"
-                }
-              >
-                Email/NHI already registered
-              </p>
-              <input
+          <div>
+            {error && (
+              <p className="emailtaken-error">Email already registered</p>
+            )}
+
+            {/* <input
                 className="signin-signup-form__input"
                 type="text"
                 placeholder="NHI"
                 onChange={(e) => setNhi(e.target.value)}
-              />
-              <input
-                className="signin-signup-form__input"
-                type="text"
-                placeholder="Full name"
-                onChange={(e) => setFullName(e.target.value)}
-              />
-              <input
-                required
-                className="signin-signup-form__input"
-                type="text"
-                placeholder="Email"
-                onChange={(e) => setEmail(e.target.value)}
-              />
-              <input
-                required
-                className="signin-signup-form__input"
-                type="password"
-                placeholder="Password"
-                onChange={(e) => setPassword(e.target.value)}
-              />
-              <input
-                required
-                type="password"
-                placeholder="Confirm password"
-                className="signin-signup-form__input"
-                onChange={(e) => setConfirmPassword(e.target.value)}
-              />
-              <p
-                className={
-                  validPw === false ? "pwd-validate-error" : "pwd-default"
-                }
-              >
-                8 to 24 characters. Must include uppercase and lowercase
-                letters, a number and a special character. <br />
-                Allowed special characters: ! @ # $ %
-              </p>
-              <p
-                className={
-                  password !== confirmPassword
-                    ? "pwd-donotmatch"
-                    : "pwd-default"
-                }
-              >
-                Password do not match!
-              </p>
+              /> */}
+            <input
+              className="signin-signup-form__input"
+              type="text"
+              placeholder="Full name"
+              onChange={(e) => setFullName(e.target.value)}
+            />
+            <input
+              required
+              className="signin-signup-form__input"
+              type="text"
+              placeholder="Email"
+              onChange={(e) => setEmail(e.target.value)}
+            />
+            <input
+              required
+              className="signin-signup-form__input"
+              type="password"
+              placeholder="Password"
+              onChange={(e) => setPassword(e.target.value)}
+            />
+            <input
+              required
+              type="password"
+              placeholder="Confirm password"
+              className="signin-signup-form__input"
+              onChange={(e) => setConfirmPassword(e.target.value)}
+            />
+            <p
+              className={
+                validPw === false ? "pwd-validate-error" : "pwd-default"
+              }
+            >
+              8 to 24 characters. Must include uppercase and lowercase letters,
+              a number and a special character. <br />
+              Allowed special characters: ! @ # $ %
+            </p>
+            <p
+              className={
+                password !== confirmPassword ? "pwd-donotmatch" : "pwd-default"
+              }
+            >
+              Password do not match!
+            </p>
 
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "center",
-                  textAlign: "center",
-                }}
-              >
-                <p className="termsofuse__text">
-                  By signing up to create an account: I accept Terms of Use and
-                  Privacy Policy
-                </p>
-              </div>
-              <div style={{ textAlign: "center" }}>
-                <button
-                  className="signup-signin-submit__btn"
-                  style={
-                    matchedPw === false
-                      ? {
-                          cursor: "default",
-                          backgroundColor: "transparent",
-                          color: "rgba(0,0,0,0.5)",
-                        }
-                      : { cursor: "pointer" }
-                  }
-                  disabled={matchedPw === false ? true : false}
-                  type="submit"
-                >
-                  Submit
-                </button>
-                <button
-                  className="signup-back__btn"
-                  onClick={() => setPatientOption(false)}
-                >
-                  Back
-                </button>
-              </div>
-              <br />
-              <p>Or</p>
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "center",
-                  marginTop: "15px",
-                }}
-              >
-                <GoogleOAuthProvider
-                  clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}
-                >
-                  <GoogleLogin
-                    onSuccess={handleGoogleSignUp}
-                    onError={(err) => console.log(err)}
-                    text="signup_with"
-                    width="330px"
-                    shape="pill"
-                  />
-                </GoogleOAuthProvider>
-              </div>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                textAlign: "center",
+              }}
+            >
+              <p className="termsofuse__text">
+                By signing up to create an account: I accept Terms of Use and
+                Privacy Policy
+              </p>
             </div>
-          ) : (
             <div style={{ textAlign: "center" }}>
-              <p style={{ color: "red", marginBottom: "10px" }}>{error}</p>
-              <GoogleSignUpPatient email={email} nhi={nhi} setNhi={setNhi} />
-              <button className="signup-signin-submit__btn" type="submit">
+              <button
+                className="signup-signin-submit__btn"
+                style={
+                  matchedPw === false
+                    ? {
+                        cursor: "default",
+                        backgroundColor: "transparent",
+                        color: "rgba(0,0,0,0.5)",
+                      }
+                    : { cursor: "pointer" }
+                }
+                disabled={matchedPw === false ? true : false}
+                type="submit"
+              >
                 Submit
               </button>
               <button
@@ -315,7 +305,37 @@ const PatientSignUp = ({ setPatientOption }) => {
                 Back
               </button>
             </div>
-          )}
+            <br />
+            <p>Or</p>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                marginTop: "15px",
+              }}
+            >
+              <GoogleOAuthProvider
+                clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}
+              >
+                <GoogleLogin
+                  onSuccess={handleGoogleSignUp}
+                  onError={(err) => console.log(err)}
+                  text="signup_with"
+                  width="330px"
+                  shape="pill"
+                />
+              </GoogleOAuthProvider>
+            </div>
+          </div>
+          <button className="signup-signin-submit__btn" type="submit">
+            Submit
+          </button>
+          <button
+            className="signup-back__btn"
+            onClick={() => setPatientOption(false)}
+          >
+            Back
+          </button>
         </form>
       </div>
     </div>
@@ -635,7 +655,8 @@ const PatientSignIn = ({ localData, today }) => {
         body: JSON.stringify({
           EmailAddress: signinEmailAddress,
           UserPassword: signinPassword,
-          NHI: "",
+          // NHI: "",
+          DepartmentRole: "Patient",
           GoogleId: googleId,
         }),
       })
@@ -1211,6 +1232,7 @@ const SignUpOpt = ({ healthPractitionerOption }) => {
 };
 
 const SignIn = ({ localData }) => {
+  const [successfulSignUp, setSuccessfulSignUp] = useState(false);
   // SIGNUP-OPTIONS
   const [patientOption, setPatientOption] = useState(false);
   const [healthPractitionerOption, setHealthPractitionerOption] = useState("");
@@ -1239,83 +1261,93 @@ const SignIn = ({ localData }) => {
     sessionStorage.setItem("id", 0); //reset id in the session
     sessionStorage.setItem("role", undefined);
   }, []);
+
   return (
     <div>
-      <div className="signin__wrapper">
-        <div className="logo"></div>
+      {successfulSignUp === true ? (
+        <SuccessfulSignUp />
+      ) : (
+        <div className="signin__wrapper">
+          <div className="logo"></div>
 
-        {optionClicked === true ? (
           <div>
-            {component === "Pracitioner" && (
-              <PracitionerSignIn localData={localData} today={today} />
-            )}
+            {optionClicked === true ? (
+              <div>
+                {component === "Pracitioner" && (
+                  <PracitionerSignIn localData={localData} today={today} />
+                )}
 
-            {component === "Patient" && (
-              <PatientSignIn localData={localData} today={today} />
-            )}
-          </div>
-        ) : (
-          <div>
-            {signupOptionsClicked === false ? (
-              <div className="signinas-form__wrapper">
-                <h1>Sign in as:</h1>
-                <select
-                  className="select-option__wrapper"
-                  onChange={(e) => setSignInOption(e.target.value)}
-                >
-                  <option value="">Choose...</option>
-                  <option value=""></option>
-                  <option value="Patient">Patient</option>
-                  <option value="Practitioner">Practitioner</option>
-                  {/* <option value="Nurse">Nurses</option>
-                  <option value="Therapist">Therapist</option> */}
-                </select>
-                <br />
-                <button
-                  className="signinas-btn"
-                  onClick={() => handleSigninOption(signInOption)}
-                >
-                  Confirm
-                </button>
-
-                <br />
-                <br />
-                <br />
-                <p>or</p>
-                <br />
-                <h1>No account?</h1>
-                <br />
-                <div style={{ textAlign: "center" }}>
-                  <button
-                    className="signin-signup__btn"
-                    onClick={() => setSignupOptionsClicked(true)}
-                  >
-                    Sign up here
-                  </button>
-                </div>
+                {component === "Patient" && (
+                  <PatientSignIn localData={localData} today={today} />
+                )}
               </div>
             ) : (
               <div>
-                <SignUpOptions
-                  setSignupOptionsClicked={setSignupOptionsClicked}
-                  setPatientOption={setPatientOption}
-                  setHealthPractitionerOption={setHealthPractitionerOption}
-                />
-                {patientOption === true ? (
-                  <PatientSignUp setPatientOption={setPatientOption} />
+                {signupOptionsClicked === false ? (
+                  <div className="signinas-form__wrapper">
+                    <h1>Sign in as:</h1>
+                    <select
+                      className="select-option__wrapper"
+                      onChange={(e) => setSignInOption(e.target.value)}
+                    >
+                      <option value="">Choose...</option>
+                      <option value=""></option>
+                      <option value="Patient">Patient</option>
+                      <option value="Practitioner">Practitioner</option>
+                      {/* <option value="Nurse">Nurses</option>
+                  <option value="Therapist">Therapist</option> */}
+                    </select>
+                    <br />
+                    <button
+                      className="signinas-btn"
+                      onClick={() => handleSigninOption(signInOption)}
+                    >
+                      Confirm
+                    </button>
+
+                    <br />
+                    <br />
+                    <br />
+                    <p>or</p>
+                    <br />
+                    <h1>No account?</h1>
+                    <br />
+                    <div style={{ textAlign: "center" }}>
+                      <button
+                        className="signin-signup__btn"
+                        onClick={() => setSignupOptionsClicked(true)}
+                      >
+                        Sign up here
+                      </button>
+                    </div>
+                  </div>
                 ) : (
-                  ""
-                )}
-                {healthPractitionerOption && (
-                  <SignUpOpt
-                    healthPractitionerOption={healthPractitionerOption}
-                  />
+                  <div>
+                    <SignUpOptions
+                      setSignupOptionsClicked={setSignupOptionsClicked}
+                      setPatientOption={setPatientOption}
+                      setHealthPractitionerOption={setHealthPractitionerOption}
+                    />
+                    {patientOption === true ? (
+                      <PatientSignUp
+                        setPatientOption={setPatientOption}
+                        setSuccessfulSignUp={setSuccessfulSignUp}
+                      />
+                    ) : (
+                      ""
+                    )}
+                    {healthPractitionerOption && (
+                      <SignUpOpt
+                        healthPractitionerOption={healthPractitionerOption}
+                      />
+                    )}
+                  </div>
                 )}
               </div>
             )}
           </div>
-        )}
-      </div>
+        </div>
+      )}
     </div>
   );
 };
