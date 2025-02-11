@@ -12,13 +12,15 @@ function App() {
   const [currentRole, setCurrentRole] = useState(
     sessionStorage.getItem("role")
   ); //setting the sessionStorage initially for when refreshing the page.
+  const [currentUser, setCurrentUser] = useState([]);
 
   const localData = (data) => {
     const userData = data.returnStatus.userDetails;
+    setCurrentUser(data.returnStatus.userDetails);
 
     //if statement that checks whether this is the first time that the user logged and setting a session firstTime to a bool value.
     //this is to run a welcome to the app modal when the user logs in first time.
-    if (userData.accessToken === null && userData.refreshToken === null) {
+    if (userData.refreshToken === null) {
       sessionStorage.setItem("firstTime", "true");
     } else {
       sessionStorage.setItem("firstTime", "false");
@@ -51,7 +53,10 @@ function App() {
         )}
         {currentRole === "Patient" ? (
           <Routes>
-            <Route path="/home" element={<PatientsHome />} />
+            <Route
+              path="/home"
+              element={<PatientsHome currentUser={currentUser} />}
+            />
           </Routes>
         ) : (
           ""
