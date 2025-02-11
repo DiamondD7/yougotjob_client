@@ -8,14 +8,7 @@ const SuccessfulSignUp = () => {
         <CheckCircle size={62} weight="fill" color="#9dcd5a" />
 
         <p style={{ color: "rgba(0,0,0,0.3)", fontWeight: "bold" }}>
-          Successful Payment
-        </p>
-        <br />
-        <p style={{ fontSize: "12px", color: "rgba(0,0,0,0.3)" }}>
-          You will be redirected back to the home page shortly
-        </p>
-        <p style={{ fontSize: "12px", color: "rgba(0,0,0,0.3)" }}>
-          or click here to return to home page
+          Successful Login
         </p>
 
         <br />
