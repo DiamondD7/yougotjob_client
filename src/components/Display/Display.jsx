@@ -21,22 +21,27 @@ import Jobs from "../Jobs/Jobs";
 import "../../styles/displaystyles.css";
 const Display = ({ displayed, setEditChanges }) => {
   const role = sessionStorage.getItem("role");
+  const isVerified = sessionStorage.getItem("isVerified");
   return (
     <>
       <div className="display__wrapper">
         {/* this is the banner for when the account is still being verified */}
-        <div className="verification-banner__wrapper">
-          <p
-            style={{
-              fontSize: "12px",
-              fontWeight: "bold",
-              color: "#f3f3f3",
-              letterSpacing: "1px",
-            }}
-          >
-            ACCOUNT VERIFICATION IN PROGRESS
-          </p>
-        </div>
+        {isVerified === "false" ? (
+          <div className="verification-banner__wrapper">
+            <p
+              style={{
+                fontSize: "12px",
+                fontWeight: "bold",
+                color: "#f3f3f3",
+                letterSpacing: "1px",
+              }}
+            >
+              ACCOUNT VERIFICATION IN PROGRESS
+            </p>
+          </div>
+        ) : (
+          ""
+        )}
         {displayed === "calendar" ? (
           <Calendar />
         ) : displayed === "patients" ? (
