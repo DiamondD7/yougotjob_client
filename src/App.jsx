@@ -29,6 +29,7 @@ function App() {
     sessionStorage.setItem("auth", "true");
     sessionStorage.setItem("id", userData.id);
     sessionStorage.setItem("role", userData.departmentRole);
+    sessionStorage.setItem("isVerified", userData.isVerified);
     handleRoute(); //calling this when a user logs in
   };
 
