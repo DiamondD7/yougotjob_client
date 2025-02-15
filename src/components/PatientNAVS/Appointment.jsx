@@ -468,8 +468,9 @@ const AppointmentWait = ({ autofillData }) => {
                   onChange={(e) => handleAppointmentType(e)}
                 >
                   <option value=""></option>
+                  <option value="phone">Phone call</option>
                   <option value="online" name="AppointmentType">
-                    Online
+                    Online (ZOOM)
                   </option>
                   <option value="on-site" name="AppointmentType">
                     On-site

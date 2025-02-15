@@ -418,7 +418,7 @@ const NextAptView = ({ nextApt, activateGoTo, setNextAptBtn }) => {
               ) : (
                 <div>
                   <p style={{ fontSize: "12px" }}>Files:</p>
-                  {files.map((items) => (
+                  {files?.map((items) => (
                     <a
                       key={items.id}
                       href={`${GetFile}/${items.id}`}
@@ -443,20 +443,33 @@ const NextAptView = ({ nextApt, activateGoTo, setNextAptBtn }) => {
                 value={nextApt.comments}
               ></textarea>
             </div>
-            <button
-              // className={`dashboard-patient-info__btn ${
-              //   activateGoTo === false || nextApt.isZoomMeetingCreated === false
-              //     ? "btnDisabled"
-              //     : ""
-              // }`}
-              onClick={(e) => handleGoToZoomMeeting(e)}
-              // disabled={activateGoTo === true ? false : true}
-            >
-              Go to the meeting
-            </button>
+            {nextApt.appointmentType === "online" ? (
+              <button
+                // className={`dashboard-patient-info__btn ${
+                //   activateGoTo === false || nextApt.isZoomMeetingCreated === false
+                //     ? "btnDisabled"
+                //     : ""
+                // }`}
+                onClick={(e) => handleGoToZoomMeeting(e)}
+                // disabled={activateGoTo === true ? false : true}
+              >
+                Go to the meeting
+              </button>
+            ) : (
+              ""
+            )}
+
+            {nextApt.appointmentType === "phone" ? (
+              <p style={{ fontSize: "12px" }}>
+                This appointment type is a phone call appointment
+              </p>
+            ) : (
+              ""
+            )}
 
             {/* if the practitioner created a zoom meeting, then isZoomMeetingCreated is true which will lead to the button to disappear */}
-            {nextApt.isZoomMeetingCreated === false ? (
+            {nextApt.isZoomMeetingCreated === false &&
+            nextApt.appointmentType === "online" ? (
               <button
                 className="dashboard-patient-card__btn"
                 onClick={(e) => handleFinaliseAuth(e)}
