@@ -6,6 +6,7 @@ import {
   PaperPlaneRight,
   X,
   Files,
+  MapPin,
 } from "@phosphor-icons/react";
 import {
   GetHealthPractitionerData,
@@ -29,41 +30,83 @@ const ChosenPractitioner = ({ practitionerData, setPractitionerClicked }) => {
           }}
           onClick={() => setPractitionerClicked(false)}
         >
-          <X size={13} color="#202020" />
+          <X size={16} color="#202020" />
         </button>
-        <h3>{practitionerData.fullName}</h3>
-        <p style={{ fontSize: "12px" }}>{practitionerData.departmentRole}</p>
-        <br />
-        <p style={{ fontSize: "12px" }}>
-          Email: {practitionerData.emailAddress}
-        </p>
-        <p style={{ fontSize: "12px" }}>Mobile: {practitionerData.mobile}</p>
-        <p style={{ fontSize: "12px" }}>
-          Preference: {practitionerData.workPreference}
-        </p>
 
-        <br />
-        <p style={{ fontSize: "11px" }}>
-          Send a message to {practitionerData.fullName}
-        </p>
-        <div style={{ display: "flex", gap: "5px", marginTop: "5px" }}>
-          <input
-            className="chosen-pracitioner-inputmessage__input"
-            type="text"
-            placeholder="Send a message..."
-          />
-          <button className="chosen-practitioner__btn">
-            <PaperPlaneRight size={13} color="#f3f3f3" />
-          </button>
+        <div style={{ padding: "20px" }}>
+          <div style={{ display: "flex", gap: "20px" }}>
+            <img
+              src="https://plus.unsplash.com/premium_photo-1661764878654-3d0fc2eefcca?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+              className="chosen-practitioner__img"
+            />
+            <div>
+              <h3>{practitionerData.fullName}</h3>
+              {/* <p>{practitionerData.role}</p> */}
+
+              <div className="chosen-profile-details__wrapper">
+                <label style={{ fontSize: "12px" }}>Gender: </label>
+                <label style={{ fontSize: "12px", fontWeight: "bold" }}>
+                  Male
+                </label>
+                <br />
+                <label style={{ fontSize: "12px" }}>Email: </label>
+                <label style={{ fontSize: "12px", fontWeight: "bold" }}>
+                  {practitionerData.emailAddress || "N/A"}
+                </label>
+                <br />
+                <label style={{ fontSize: "12px" }}>Mobile: </label>
+                <label style={{ fontSize: "12px", fontWeight: "bold" }}>
+                  {practitionerData.mobileNumber || "N/A"}
+                </label>
+              </div>
+
+              <div className="chosen-profile-details__wrapper">
+                <label style={{ fontSize: "12px" }}>Registration #: </label>
+                <label style={{ fontSize: "12px", fontWeight: "bold" }}>
+                  {practitionerData.registrationNumber || "N/A"}
+                </label>
+                <br />
+                <label style={{ fontSize: "12px" }}>
+                  Years of experience:{" "}
+                </label>
+                <label style={{ fontSize: "12px", fontWeight: "bold" }}>
+                  10
+                </label>
+                <br />
+                <label style={{ fontSize: "12px" }}>Work preference: </label>
+                <label style={{ fontSize: "12px", fontWeight: "bold" }}>
+                  {practitionerData.workPreference || "N/A"}
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <>
+            <br />
+            <h4>Professional testimony</h4>
+            <div className="chosen-professional-details__wrapper">
+              <p className="chosen-professional-details__p">
+                Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                Distinctio vero fugiat velit cumque tenetur aliquam praesentium
+                accusantium laborum, labore itaque. Recusandae inventore maiores
+                tempore praesentium, officiis consectetur autem. Minima,
+                accusamus.
+              </p>
+            </div>
+          </>
         </div>
       </div>
     </div>
   );
 };
 
-const SearchResults = ({ filterSearch }) => {
+const SearchResults = ({
+  filterSearch,
+  practitionerClicked,
+  setPractitionerClicked,
+}) => {
   const [practitioners, setPractioners] = useState([]);
-  const [practitionerClicked, setPractitionerClicked] = useState(false);
+
   const [practitionerData, setPractitionerData] = useState([]);
 
   const navigate = useNavigate();
@@ -127,63 +170,74 @@ const SearchResults = ({ filterSearch }) => {
     setPractitionerClicked(true);
   };
   return (
-    <div className="result-cards-container__wrapper">
-      <div className={practitionerClicked === true ? "overlay" : ""}></div>
+    <>
       {practitionerClicked === true ? (
-        <ChosenPractitioner
-          practitionerData={practitionerData}
-          setPractitionerClicked={setPractitionerClicked}
-        />
+        <div>
+          <ChosenPractitioner
+            practitionerData={practitionerData}
+            setPractitionerClicked={setPractitionerClicked}
+          />
+        </div>
       ) : (
-        ""
-      )}
-      {practitioners
-        .filter((data) =>
-          filterSearch
-            ? data.fullName
-                ?.toLowerCase()
-                .includes(filterSearch.toLowerCase()) ||
-              data.departmentRole
-                ?.toLowerCase()
-                .includes(filterSearch.toLowerCase()) ||
-              data.workPreference
-                ?.toLowerCase()
-                .includes(filterSearch.toLowerCase())
-            : true
-        )
-        .map((data, index) => (
-          <div key={data.id}>
-            <button
-              className="result-cards__wrapper"
-              onClick={() => handleChosenPractitioner(data)}
-            >
-              <img
-                src="https://plus.unsplash.com/premium_photo-1661764878654-3d0fc2eefcca?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                className="result-card__img"
-              />
-              <div style={{ justifyItems: "start" }}>
-                <h4>{data.fullName}</h4>
-                <div style={{ fontSize: "12px", justifyItems: "start" }}>
-                  <p>{data.departmentRole}</p>
-                  <br />
-                  <div>
-                    <Check size={12} color="limegreen" />{" "}
-                    <label>{data.workPreference}</label>
+        <div className="result-cards-container__wrapper">
+          {/* <div className={practitionerClicked === true ? "overlay" : ""}></div> */}
+          {/* {practitionerClicked === true ? (
+          <ChosenPractitioner
+            practitionerData={practitionerData}
+            setPractitionerClicked={setPractitionerClicked}
+          />
+        ) : (
+          ""
+        )} */}
+          {practitioners
+            .filter((data) =>
+              filterSearch
+                ? data.fullName
+                    ?.toLowerCase()
+                    .includes(filterSearch.toLowerCase()) ||
+                  data.role
+                    ?.toLowerCase()
+                    .includes(filterSearch.toLowerCase()) ||
+                  data.workPreference
+                    ?.toLowerCase()
+                    .includes(filterSearch.toLowerCase())
+                : true
+            )
+            .map((data, index) => (
+              <div key={data.id}>
+                <button
+                  className="result-cards__wrapper"
+                  onClick={() => handleChosenPractitioner(data)}
+                >
+                  <img
+                    src="https://plus.unsplash.com/premium_photo-1661764878654-3d0fc2eefcca?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                    className="result-card__img"
+                  />
+                  <div style={{ justifyItems: "start" }}>
+                    <h4>{data.fullName}</h4>
+                    <div style={{ fontSize: "12px", justifyItems: "start" }}>
+                      <p>{data.role}</p>
+                      <br />
+                      <div>
+                        <Check size={12} color="limegreen" />{" "}
+                        <label>{data.workPreference}</label>
+                      </div>
+                      <div>
+                        <Check size={12} color="limegreen" />{" "}
+                        <label>Verified</label>
+                      </div>
+                      <div>
+                        <Check size={12} color="limegreen" />{" "}
+                        <label>Experienced</label>
+                      </div>
+                    </div>
                   </div>
-                  <div>
-                    <Check size={12} color="limegreen" />{" "}
-                    <label>Verified</label>
-                  </div>
-                  <div>
-                    <Check size={12} color="limegreen" />{" "}
-                    <label>Experienced</label>
-                  </div>
-                </div>
+                </button>
               </div>
-            </button>
-          </div>
-        ))}
-    </div>
+            ))}
+        </div>
+      )}
+    </>
   );
 };
 
@@ -565,6 +619,7 @@ const AppointmentWait = ({ autofillData }) => {
 };
 
 const Appointment = () => {
+  const [practitionerClicked, setPractitionerClicked] = useState(false);
   const [filterSearch, setFilterSearch] = useState("");
   //const [onlineRadio, setOnlineRadio] = useState("online");
   const [getStartedClicked, setGetStartedClicked] = useState(false);
@@ -617,28 +672,47 @@ const Appointment = () => {
   return (
     <div style={{ margin: "50px 0 0 100px" }}>
       <div style={{ display: "flex", gap: "50px" }}>
-        {/* <div>
-          <div style={{ display: "flex", alignItems: "center", gap: "20px" }}>
-            <div className="appointment-search-container__wrapper">
-              <div>
-                <MagnifyingGlass size={15} />
-                <input
-                  className="appointment__input"
-                  type="text"
-                  placeholder="what are you looking for..."
-                  onChange={(e) => setFilterSearch(e.target.value)}
-                />
-              </div>
-            </div>
-            <AppointmentSearch
-              filterSearch={filterSearch}
-              setFilterSearch={setFilterSearch}
-            />
-          </div>
-          <SearchResults filterSearch={filterSearch} />
-        </div> */}
-
         <div>
+          {practitionerClicked === false ? (
+            <div style={{ display: "flex", alignItems: "center", gap: "20px" }}>
+              <div className="appointment-search-container__wrapper">
+                <div>
+                  <MagnifyingGlass size={15} />
+                  <input
+                    className="appointment__input"
+                    type="text"
+                    placeholder="Practitioner or service"
+                    onChange={(e) => setFilterSearch(e.target.value)}
+                  />
+                </div>
+              </div>
+              <div className="appointment-search-container__wrapper">
+                <div>
+                  <MapPin size={15} />
+                  <input
+                    className="appointment__input"
+                    type="text"
+                    placeholder="City or postal code"
+                    onChange={(e) => setFilterSearch(e.target.value)}
+                  />
+                </div>
+              </div>
+              <AppointmentSearch
+                filterSearch={filterSearch}
+                setFilterSearch={setFilterSearch}
+              />
+            </div>
+          ) : (
+            ""
+          )}
+          <SearchResults
+            filterSearch={filterSearch}
+            practitionerClicked={practitionerClicked}
+            setPractitionerClicked={setPractitionerClicked}
+          />
+        </div>
+
+        {/* <div>
           {getStartedClicked === true ? (
             <AppointmentWait autofillData={autofillData} />
           ) : (
@@ -656,7 +730,7 @@ const Appointment = () => {
               </button>
             </div>
           )}
-        </div>
+        </div> */}
       </div>
     </div>
   );
