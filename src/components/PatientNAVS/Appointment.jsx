@@ -24,7 +24,33 @@ import DatePicker from "react-datepicker";
 
 import "react-datepicker/dist/react-datepicker.css";
 import "../../styles/appointmentstyles.css";
-const CalendarView = () => {
+const CalendarConfirmation = ({ openConfimation }) => {
+  return (
+    <div
+      className={`calendar-confirmation__wrapper ${
+        openConfimation === true ? "openModalConfirmation" : ""
+      }`}
+    >
+      <div className="calendar-confirmation-times__wrapper">
+        <button>8:00</button>
+        <button>9:00</button>
+        <button>10:00</button>
+        <button>11:00</button>
+        <button>12:00</button>
+        <button>13:00</button>
+        <button>14:00</button>
+        <button>15:00</button>
+        <button>16:00</button>
+        <button>17:00</button>
+        <button>18:00</button>
+        <button>19:00</button>
+      </div>
+      <button className="calendar-confirmation-submit__btn">Confirm</button>
+    </div>
+  );
+};
+
+const CalendarView = ({ setOpenConfirmation }) => {
   const daysOfWeek = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 
   const months = [
@@ -50,6 +76,8 @@ const CalendarView = () => {
 
   const [selectedMonth, setSelectedMonth] = useState(months[today.getMonth()]); //
   const [selectedMaxMonthDays, setSelectedMaxMonthDays] = useState(0); //sets the max days of each month.
+  const [selectedDay, setSelectedDay] = useState(0);
+
   const nextMonthDays = getNextMonthDays(
     today.getFullYear(),
     months,
@@ -95,9 +123,13 @@ const CalendarView = () => {
       setSelectedMonth(months[indexOfPreviousMonth]);
     }
   };
+
+  const handleSelectedDay = (day) => {
+    setSelectedDay(day);
+    setOpenConfirmation(true);
+  };
   return (
     <div>
-      <h4>Availability</h4>
       <div className="calendar-view__wrapper">
         <div style={{ display: "flex", alignContent: "center", gap: "10px" }}>
           <button
@@ -157,8 +189,14 @@ const CalendarView = () => {
                 </button>
               ) : (
                 <button
-                  className="calendar-days-avail__btn" //buttonPressed color change
+                  className={`calendar-days-avail__btn ${
+                    selectedDay === day &&
+                    months.indexOf(selectedMonth) === today.getMonth()
+                      ? "selectedDay"
+                      : ""
+                  }`}
                   key={index}
+                  onClick={() => handleSelectedDay(day)}
                 >
                   {day}
                 </button>
@@ -180,6 +218,7 @@ const CalendarView = () => {
 };
 
 const ChosenPractitioner = ({ practitionerData, setPractitionerClicked }) => {
+  const [openConfimation, setOpenConfirmation] = useState(false);
   return (
     <div>
       <div className="chosen-practitioner__wrapper">
@@ -242,8 +281,7 @@ const ChosenPractitioner = ({ practitionerData, setPractitionerClicked }) => {
             </div>
           </div>
 
-          <>
-            <br />
+          <div style={{ marginTop: "10px" }}>
             <h4>Professional testimony</h4>
             <div className="chosen-professional-details__wrapper">
               <p className="chosen-professional-details__p">
@@ -254,10 +292,12 @@ const ChosenPractitioner = ({ practitionerData, setPractitionerClicked }) => {
                 accusamus.
               </p>
             </div>
-          </>
+          </div>
           <br />
-          <div>
-            <CalendarView />
+          <h4>Availability</h4>
+          <div style={{ display: "flex" }}>
+            <CalendarView setOpenConfirmation={setOpenConfirmation} />
+            <CalendarConfirmation openConfimation={openConfimation} />
           </div>
         </div>
       </div>

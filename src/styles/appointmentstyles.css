@@ -115,7 +115,7 @@
 
   border-radius: 5px;
   padding: 5px;
-  width: 95%;
+  width: 725px;
 }
 
 .chosen-professional-details__p {
@@ -206,7 +206,57 @@
 
   border-radius: 5px;
   padding: 5px;
-  width: 95%;
+  width: 725px;
+}
+.calendar-confirmation__wrapper {
+  display: none;
+  margin-top: 10px;
+
+  font-size: 12px;
+  box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px,
+    rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
+
+  border-radius: 5px;
+  width: 0;
+}
+
+.openModalConfirmation {
+  display: block;
+  padding: 10px;
+  width: 100%;
+  animation: calendarConfirmAnimate 0.5s ease-in-out;
+}
+
+.calendar-confirmation-times__wrapper button {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 10px 30px;
+}
+
+@keyframes calendarConfirmAnimate {
+  0% {
+    width: 0;
+  }
+  100% {
+    width: 100%;
+  }
+}
+
+.calendar-confirmation-times__wrapper {
+  height: 270px;
+  overflow: auto;
+}
+
+.calendar-confirmation-submit__btn {
+  margin-top: 110px;
+  padding: 5px 30px;
+  border-radius: 5px;
+  border: 1px solid #9dcd5a;
+  background-color: #9dcd5a;
+  color: #f3f3f3;
+  font-weight: 500;
+  cursor: pointer;
 }
 
 .calendar-view-days__wrapper {
@@ -228,11 +278,17 @@
   background-color: transparent;
   border-radius: 5px;
   border: 1px solid rgba(0, 0, 0, 0.3);
-  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px,
+    rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
   padding: 5px;
   height: 50px;
   cursor: pointer;
   display: flex;
+  transition: all 0.3s ease-in-out;
+}
+.calendar-days-avail__btn:hover {
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  transition: all 0.3s ease-in-out;
 }
 .calendar-prevMonthDays__btn {
   background-color: transparent;
@@ -252,4 +308,11 @@
   box-shadow: none;
   cursor: default;
   color: rgba(0, 0, 0, 0.3);
+}
+
+.selectedDay {
+  box-shadow: rgba(0, 0, 0, 0.5) 0px 3px 8px;
+  font-weight: bold;
+  border-radius: 5px;
+  padding: 5px;
 }
