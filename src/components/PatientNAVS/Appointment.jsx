@@ -122,11 +122,13 @@ const CalendarView = ({ setOpenConfirmation }) => {
       let indexOfPreviousMonth = months.indexOf(selectedMonth) - 1;
       setSelectedMonth(months[indexOfPreviousMonth]);
     }
+
+    handleSelectedDay(0, false);
   };
 
-  const handleSelectedDay = (day) => {
+  const handleSelectedDay = (day, isOpened) => {
     setSelectedDay(day);
-    setOpenConfirmation(true);
+    setOpenConfirmation(isOpened);
   };
   return (
     <div>
@@ -190,13 +192,10 @@ const CalendarView = ({ setOpenConfirmation }) => {
               ) : (
                 <button
                   className={`calendar-days-avail__btn ${
-                    selectedDay === day &&
-                    months.indexOf(selectedMonth) === today.getMonth()
-                      ? "selectedDay"
-                      : ""
+                    selectedDay === day ? "selectedDay" : ""
                   }`}
                   key={index}
-                  onClick={() => handleSelectedDay(day)}
+                  onClick={() => handleSelectedDay(day, true)}
                 >
                   {day}
                 </button>
