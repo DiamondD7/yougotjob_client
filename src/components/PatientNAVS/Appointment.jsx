@@ -3,9 +3,9 @@ import { useNavigate } from "react-router-dom";
 import {
   MagnifyingGlass,
   Check,
-  PaperPlaneRight,
   X,
-  Files,
+  ArrowLeft,
+  ArrowRight,
   MapPin,
 } from "@phosphor-icons/react";
 import {
@@ -14,10 +14,171 @@ import {
   AddAppointmentFromForm,
   UploadFile,
 } from "../../assets/js/serverApi";
+import {
+  getDaysFromPreviousMonth,
+  getNextMonthDays,
+  currentYear,
+  handleYearChange,
+} from "../../assets/js/months";
 import DatePicker from "react-datepicker";
 
 import "react-datepicker/dist/react-datepicker.css";
 import "../../styles/appointmentstyles.css";
+const CalendarView = () => {
+  const daysOfWeek = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+
+  const months = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
+  ];
+  const days = [
+    1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21,
+    22, 23, 24, 25, 26, 27, 28, 29, 30, 31,
+  ];
+
+  let today = new Date();
+
+  const [selectedMonth, setSelectedMonth] = useState(months[today.getMonth()]); //
+  const [selectedMaxMonthDays, setSelectedMaxMonthDays] = useState(0); //sets the max days of each month.
+  const nextMonthDays = getNextMonthDays(
+    today.getFullYear(),
+    months,
+    selectedMonth
+  );
+  const previousMonthDays = getDaysFromPreviousMonth(
+    today.getFullYear(),
+    months,
+    selectedMonth
+  );
+  const [selectedYear, setSelectedYear] = useState(currentYear); //sets its current year
+  const [fullDate, setFullDate] = useState(
+    handleYearChange(today.getFullYear()) //calling a function from months.js file to update the month list.
+  );
+
+  useEffect(() => {
+    refreshCalendarList(); //use this to refresh the whole calendar. Incase there might be changes.
+  }, [fullDate, selectedMonth]); //will run this again once it senses that there is a change in 'fullDate'.
+
+  const refreshCalendarList = () => {
+    fullDate.map((month) => {
+      if (month.monthName === selectedMonth) {
+        setSelectedMaxMonthDays(month.maxDays);
+        setSelectedMonth(month.monthName);
+      } //handles the current month and the current month's max days.
+    });
+  };
+  useEffect(() => {
+    setFullDate(handleYearChange(parseInt(selectedYear))); //updating the full calendar date if there is changes in year.
+  }, [selectedYear]); //this will only run when the state got change
+
+  const handleMonthChanged = (month, isIncrease) => {
+    if (month === "Jan" && isIncrease === false) {
+      setSelectedMonth(months[0]);
+    } else if (month === "Dec" && isIncrease === true) {
+      setSelectedMonth(months[11]);
+    } else if (isIncrease === true) {
+      // setSelectedMonth(selectedMonth + 1);
+      let indexOfNextMonth = months.indexOf(selectedMonth) + 1;
+      setSelectedMonth(months[indexOfNextMonth]);
+    } else {
+      let indexOfPreviousMonth = months.indexOf(selectedMonth) - 1;
+      setSelectedMonth(months[indexOfPreviousMonth]);
+    }
+  };
+  return (
+    <div>
+      <h4>Availability</h4>
+      <div className="calendar-view__wrapper">
+        <div style={{ display: "flex", alignContent: "center", gap: "10px" }}>
+          <button
+            style={{
+              backgroundColor: "transparent",
+              border: "none",
+              cursor: "pointer",
+            }}
+            onClick={() => handleMonthChanged(selectedMonth, false)}
+          >
+            <ArrowLeft size={12} />
+          </button>
+          <p>
+            <strong>
+              {selectedMonth} {today.getFullYear()}
+            </strong>
+          </p>
+          <button
+            style={{
+              backgroundColor: "transparent",
+              border: "none",
+              cursor: "pointer",
+            }}
+            onClick={() => handleMonthChanged(selectedMonth, true)}
+          >
+            <ArrowRight size={12} />
+          </button>
+        </div>
+        <div className="calendar-view-days__wrapper">
+          {daysOfWeek.map((day, index) => (
+            <label key={index}>{day}</label>
+          ))}
+        </div>
+        <div className="calendar-view-daysMonth__wrapper">
+          {previousMonthDays.map((day, index) => (
+            <div
+              className="calendar-prevMonthDays__btn prev-nextMonthDays"
+              key={index}
+            >
+              {day}
+            </div>
+          ))}
+          {days.map(
+            (day, index) => (
+              days.splice(selectedMaxMonthDays),
+              (day <= today.getDate() &&
+                selectedMonth === months[today.getMonth()] &&
+                parseInt(selectedYear) === currentYear) ||
+              months.indexOf(selectedMonth) < //getting the index of selectedMonth from 0 to 11: 0 means Jan
+                months.indexOf(months[today.getMonth()]) ? ( //is LESS than the indexOf the currentMonth. because if we dont do indexOf then the output will just be a string eg. "Mar"
+                <button
+                  className="calendar-prevMonthDays__btn daysDisabled"
+                  disabled={true}
+                  key={index}
+                >
+                  {day}
+                </button>
+              ) : (
+                <button
+                  className="calendar-days-avail__btn" //buttonPressed color change
+                  key={index}
+                >
+                  {day}
+                </button>
+              )
+            )
+          )}
+          {nextMonthDays.map((day, index) => (
+            <div
+              className="calendar-prevMonthDays__btn prev-nextMonthDays"
+              key={index}
+            >
+              {day}
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+};
+
 const ChosenPractitioner = ({ practitionerData, setPractitionerClicked }) => {
   return (
     <div>
@@ -33,7 +194,7 @@ const ChosenPractitioner = ({ practitionerData, setPractitionerClicked }) => {
           <X size={16} color="#202020" />
         </button>
 
-        <div style={{ padding: "20px" }}>
+        <div>
           <div style={{ display: "flex", gap: "20px" }}>
             <img
               src="https://plus.unsplash.com/premium_photo-1661764878654-3d0fc2eefcca?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
@@ -94,6 +255,10 @@ const ChosenPractitioner = ({ practitionerData, setPractitionerClicked }) => {
               </p>
             </div>
           </>
+          <br />
+          <div>
+            <CalendarView />
+          </div>
         </div>
       </div>
     </div>
