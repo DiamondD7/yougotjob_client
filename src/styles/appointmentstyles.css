@@ -196,3 +196,60 @@
   font-weight: 500;
   cursor: pointer;
 }
+
+.calendar-view__wrapper {
+  margin-top: 10px;
+
+  font-size: 12px;
+  box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px,
+    rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
+
+  border-radius: 5px;
+  padding: 5px;
+  width: 95%;
+}
+
+.calendar-view-days__wrapper {
+  /* display: flex;
+  justify-content: space-around; */
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 10px;
+  padding: 10px;
+}
+.calendar-view-daysMonth__wrapper {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 10px;
+  padding: 10px;
+}
+
+.calendar-days-avail__btn {
+  background-color: transparent;
+  border-radius: 5px;
+  border: 1px solid rgba(0, 0, 0, 0.3);
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  padding: 5px;
+  height: 50px;
+  cursor: pointer;
+  display: flex;
+}
+.calendar-prevMonthDays__btn {
+  background-color: transparent;
+  border: none;
+  padding: 5px;
+  height: 50px;
+  cursor: pointer;
+  display: flex;
+}
+
+.daysDisabled {
+  cursor: default;
+  box-shadow: none;
+}
+
+.prev-nextMonthDays {
+  box-shadow: none;
+  cursor: default;
+  color: rgba(0, 0, 0, 0.3);
+}
