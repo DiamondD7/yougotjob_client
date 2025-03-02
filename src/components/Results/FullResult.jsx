@@ -85,28 +85,28 @@ const AppointmentDetails = ({ chosenView }) => {
         <p style={{ fontSize: "12px" }}>Patient's comments</p>
         <textarea
           className="fullres-textarea-comments"
-          value={chosenView.comments}
+          value={chosenView.comments || ""}
         ></textarea>
       </div>
       <div>
         <p style={{ fontSize: "12px" }}>Practitioner's findings</p>
         <textarea
           className="fullres-textarea-comments"
-          value={chosenView.conclusion}
+          value={chosenView.conclusion || ""}
         ></textarea>
       </div>
     </div>
   );
 };
 
-const ConclusionContainer = ({ chosenView }) => {
+//NOT IN MVP YET
+const RescheduleContainer = ({ chosenView }) => {
   return (
     <div className="fullres-details__wrapper">
-      <h5>Conclusion</h5>
       <div className="fullres-details-infos__wrapper">
         <div>
-          <p>Reschedule meeting: No</p>
-          <p>New meeting date: </p>
+          <p>Reschedule appointment: No</p>
+          <p>New appointment date: </p>
           <p>Reasons for reschedule (if yes):</p>
         </div>
         <div>
@@ -126,7 +126,7 @@ const ConclusionContainer = ({ chosenView }) => {
   );
 };
 
-const DocumentsContainer = ({ chosenView }) => {
+const SupportingDocumentsContainer = ({ chosenView }) => {
   const [files, setFiles] = useState([]);
   useEffect(() => {
     try {
@@ -141,7 +141,7 @@ const DocumentsContainer = ({ chosenView }) => {
   }, []);
   return (
     <div className="fullres-documents__wrapper">
-      <h5>Documents</h5>
+      <h5>Supporting Documents</h5>
       <table className="fullres-documents__table">
         <thead>
           <tr>
@@ -193,6 +193,7 @@ const DocumentsContainer = ({ chosenView }) => {
     </div>
   );
 };
+
 const FullResult = ({ setOpenResult, chosenView }) => {
   const newPlugin = defaultLayoutPlugin();
   return (
@@ -210,11 +211,11 @@ const FullResult = ({ setOpenResult, chosenView }) => {
           <PractitionerDetails chosenView={chosenView} />
           <AppointmentDetails chosenView={chosenView} />
 
-          <ConclusionContainer chosenView={chosenView} />
+          {/* <RescheduleContainer chosenView={chosenView} /> */}
         </div>
 
         <div>
-          <DocumentsContainer chosenView={chosenView} />
+          <SupportingDocumentsContainer chosenView={chosenView} />
           {/* <div className="pdf-container__wrapper">
             <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.4.120/build/pdf.worker.min.js">
               <Viewer fileUrl={ViewPDF} plugins={[newPlugin]} />

@@ -95,7 +95,7 @@ const Documents = () => {
           onClick={() => setOpenNewIn2024(!openNewIn2024)}
         >
           <Folder size={16} weight="fill" color="#F5C800" />
-          New in 2024
+          New in 2025
           {openNewIn2024 === false ? (
             <CaretUp size={16} style={{ marginLeft: "10px" }} />
           ) : (
