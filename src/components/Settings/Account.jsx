@@ -98,30 +98,55 @@ const Profile = ({ loggedUserData, setLoadData, navigate }) => {
       }
     };
 
+    const updatePatientData = async (retry = true) => {
+      try {
+        const response = await fetch(UpdatePatient, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+          credentials: "include",
+          body: JSON.stringify({
+            Id: id,
+            FullName: fullName,
+            MobileNumber: mobilePhone,
+            EmailAddress: emailAddress,
+            HomeAddress: homeAddress,
+            Weight: weight,
+            Height: height,
+            Dob: dob,
+          }),
+        });
+
+        if (response.status === 302) {
+          console.warn("301 detected, redirecting...");
+          navigate("/");
+          return;
+        }
+
+        if (response.status === 401 && retry) {
+          console.warn("401 detected, retrying request...");
+          return updatePatientData(false);
+        }
+
+        if (!response.ok) {
+          throw new Error(`HTTP ERROR: status ${response.status}`);
+        }
+
+        const data = await response.json();
+        //console.log(data);
+        setOpenEdit(false);
+        setLoadData(true);
+      } catch (err) {
+        console.log(`Error caught: ${err.message}`);
+      }
+    };
+
     if (role === "Practitioner") {
       updatePractitionerData();
     } else {
-      fetch(`${UpdatePatient}/${id}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-        body: JSON.stringify({
-          FullName: fullName,
-          MobileNumber: mobilePhone,
-          EmailAddress: emailAddress,
-          HomeAddress: homeAddress,
-          Weight: weight,
-          Height: height,
-          Dob: dob,
-        }),
-      })
-        .then((res) => res.json())
-        .then((res) => {
-          setOpenEdit(false);
-          setLoadData(true);
-        });
+      updatePatientData();
     }
   };
 

@@ -4,6 +4,17 @@ import "../../styles/prescriptionstyles.css";
 const Prescriptions = () => {
   return (
     <div>
+      <div style={{ backgroundColor: "orange", textAlign: "center" }}>
+        <p
+          style={{
+            fontSize: "12px",
+            color: "#f3f3f3",
+            letterSpacing: "1px",
+          }}
+        >
+          This feature will be available soon, but not at this moment
+        </p>
+      </div>
       <form className="prescription-form">
         <h4>Medical Prescription Form</h4>
         <br />

@@ -876,7 +876,7 @@ const Appointment = () => {
   return (
     <div style={{ margin: "50px 0 0 100px" }}>
       <div style={{ display: "flex", gap: "50px" }}>
-        <div>
+        {/* <div>
           {practitionerClicked === false ? (
             <div style={{ display: "flex", alignItems: "center", gap: "20px" }}>
               <div className="appointment-search-container__wrapper">
@@ -914,18 +914,24 @@ const Appointment = () => {
             practitionerClicked={practitionerClicked}
             setPractitionerClicked={setPractitionerClicked}
           />
-        </div>
+        </div> */}
 
-        {/* <div>
+        <div>
           {getStartedClicked === true ? (
             <AppointmentWait autofillData={autofillData} />
           ) : (
-            <div style={{ textAlign: "center", margin: "90px 0 0 130px" }}>
-              <h2 style={{ width: "650px", lineHeight: "1.5" }}>
-                To make the process easier, we offer the option to book an
-                appointment based on the type of service or care you need and
-                get seen by all, rather than selecting a specific practitioner.
+            <div style={{ textAlign: "center", margin: "100px 0 0 0" }}>
+              <h2 style={{ lineHeight: "1.5" }}>
+                To streamline the booking process, we currently offer a simple
+                way to schedule an appointment based on the type of service or
+                care you need, rather than selecting a specific practitioner.
               </h2>
+
+              <p>
+                This feature is available as part of our initial MVP launch, and
+                we are continuously working to expand our platform. Stay tuned
+                for more updates!
+              </p>
               <button
                 className="get-started__btn"
                 onClick={(e) => handleAutoFill(e)}
@@ -934,7 +940,7 @@ const Appointment = () => {
               </button>
             </div>
           )}
-        </div> */}
+        </div>
       </div>
     </div>
   );
