@@ -5,7 +5,9 @@ import {
   GetNextAppointment,
   GetWeeklyAppointment,
   UpdateIsAppointmentCompleted,
+  UpdateAppointment,
   GetPreviousApt,
+  CancelJob,
   CreateNote,
   DeleteNote,
   GetSpecificNotes,
@@ -331,11 +333,12 @@ const PrevAptView = ({ prevApt, setPrevAptBtn }) => {
   );
 };
 
-const NextAptView = ({ nextApt, activateGoTo, setNextAptBtn }) => {
+const NextAptView = ({ nextApt, activateGoTo, setNextAptBtn, refreshList }) => {
   const [openMeeting, setOpenMeeting] = useState(false);
   const [files, setFiles] = useState([]);
 
   useEffect(() => {
+    refreshList(); //calls the function to refresh the list when the container first runs
     try {
       fetch(`${GetFiles}/${nextApt.id}`)
         .then((res) => res.json())
@@ -359,12 +362,54 @@ const NextAptView = ({ nextApt, activateGoTo, setNextAptBtn }) => {
       "_blank",
       "noreferrer"
     );
+    window.location.reload(); //loads the page
   };
 
   const handleGoToZoomMeeting = (e) => {
     e.preventDefault();
     setOpenMeeting(true);
     window.open(nextApt.startZoomLink, "_blank", "noreferrer");
+  };
+
+  const handleUpdatePhoneAppointmentComplete = async (e) => {
+    e.preventDefault();
+    const response = await fetch(UpdateAppointment, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify({
+        Id: nextApt.id,
+      }),
+    });
+
+    if (!response.ok) {
+      console.error("Error updating phone appointment");
+    }
+
+    const data = await response.json();
+    console.log(data);
+    handleAddAppointmentPayment(nextApt.id);
+  };
+
+  //Change this to async await function
+  const handleAddAppointmentPayment = (id) => {
+    fetch(AddAppointmentPayment, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify({
+        Id: id,
+      }),
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        //console.log(res);
+        window.location.reload();
+      });
   };
 
   return (
@@ -443,42 +488,57 @@ const NextAptView = ({ nextApt, activateGoTo, setNextAptBtn }) => {
                 value={nextApt.comments}
               ></textarea>
             </div>
-            {nextApt.appointmentType === "online" ? (
-              <button
-                // className={`dashboard-patient-info__btn ${
-                //   activateGoTo === false || nextApt.isZoomMeetingCreated === false
-                //     ? "btnDisabled"
-                //     : ""
-                // }`}
-                onClick={(e) => handleGoToZoomMeeting(e)}
-                // disabled={activateGoTo === true ? false : true}
-              >
-                Go to the meeting
-              </button>
-            ) : (
-              ""
-            )}
 
+            <div>
+              {nextApt.appointmentType === "online" &&
+              nextApt.isZoomMeetingCreated === true ? (
+                <button
+                  className={`dashboard-patient-info__btn ${
+                    activateGoTo === false ? "btnDisabled" : ""
+                  }`}
+                  onClick={(e) => handleGoToZoomMeeting(e)}
+                  disabled={activateGoTo === true ? false : true}
+                >
+                  Go to appointment
+                </button>
+              ) : (
+                ""
+              )}
+
+              {/* if the practitioner created a zoom meeting, then isZoomMeetingCreated is true which will lead to the button to disappear */}
+              {nextApt.isZoomMeetingCreated === false &&
+              nextApt.appointmentType === "online" ? (
+                <button
+                  className="dashboard-patient-card__btn"
+                  onClick={(e) => handleFinaliseAuth(e)}
+                >
+                  Finalise & Authorize
+                </button>
+              ) : (
+                ""
+              )}
+            </div>
             {nextApt.appointmentType === "phone" ? (
-              <p style={{ fontSize: "12px" }}>
-                This appointment type is a phone call appointment
-              </p>
+              <>
+                <br />
+                <p style={{ fontSize: "12px" }}>
+                  Has the phone appointment finished?
+                </p>
+                <button
+                  className="phone-apt__btn"
+                  onClick={(e) => handleUpdatePhoneAppointmentComplete(e)}
+                >
+                  Appointment finished
+                </button>
+              </>
             ) : (
               ""
             )}
 
-            {/* if the practitioner created a zoom meeting, then isZoomMeetingCreated is true which will lead to the button to disappear */}
-            {nextApt.isZoomMeetingCreated === false &&
-            nextApt.appointmentType === "online" ? (
-              <button
-                className="dashboard-patient-card__btn"
-                onClick={(e) => handleFinaliseAuth(e)}
-              >
-                Finalise & Authorize
-              </button>
-            ) : (
-              ""
-            )}
+            <p style={{ marginTop: "10px" }}>Or</p>
+            <button className="dashboard-patient-card-cancelation__btn">
+              Cancel appointment
+            </button>
           </div>
         )}
       </div>
@@ -1451,6 +1511,7 @@ const Dashboard = () => {
             nextApt={nextApt}
             activateGoTo={activateGoTo}
             setNextAptBtn={setNextAptBtn}
+            refreshList={refreshList}
           />{" "}
         </div>
       ) : (
