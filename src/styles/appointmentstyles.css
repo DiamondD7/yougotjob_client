@@ -316,3 +316,7 @@
   border-radius: 5px;
   padding: 5px;
 }
+
+.appointmentImage {
+  width: 700px;
+}
