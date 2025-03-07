@@ -510,63 +510,7 @@ const PrescriptionContainer = () => {
                 <th>Status</th>
               </tr>
             </thead>
-            <tbody>
-              <tr>
-                <td>1</td>
-                <td>26/06/2024</td>
-                <td>Otrivin Plus</td>
-                <td>Dr. Johnson</td>
-                <td>Haleon Jackson</td>
-                <td className="prescription-pending__btn">pending</td>
-                <td>
-                  <button className="btnclear">view</button>
-                </td>
-              </tr>
-              <tr>
-                <td>2</td>
-                <td>2/05/2024</td>
-                <td>Codral PSE</td>
-                <td>Dr. Johnson</td>
-                <td>Haleon Jackson</td>
-                <td>paid</td>
-                <td>
-                  <button className="btnclear">view</button>
-                </td>
-              </tr>
-              <tr>
-                <td>2</td>
-                <td>2/05/2024</td>
-                <td>Codral PSE</td>
-                <td>Dr. Johnson</td>
-                <td>Haleon Jackson</td>
-                <td>paid</td>
-                <td>
-                  <button className="btnclear">view</button>
-                </td>
-              </tr>
-              <tr>
-                <td>2</td>
-                <td>2/05/2024</td>
-                <td>Codral PSE</td>
-                <td>Dr. Johnson</td>
-                <td>Haleon Jackson</td>
-                <td>paid</td>
-                <td>
-                  <button className="btnclear">view</button>
-                </td>
-              </tr>
-              <tr>
-                <td>2</td>
-                <td>2/05/2024</td>
-                <td>Codral PSE</td>
-                <td>Dr. Johnson</td>
-                <td>Haleon Jackson</td>
-                <td>paid</td>
-                <td>
-                  <button className="btnclear">view</button>
-                </td>
-              </tr>
-            </tbody>
+            <tbody></tbody>
           </table>
         </div>
       </div>
@@ -697,11 +641,11 @@ const TablesContainer = () => {
             Lab results
           </button>
         </div>
-        <div>
+        {/* <div>
           {chosenTopic === "Test results" ? <TestResults /> : ""}
           {chosenTopic === "Immunisations" ? <Immunisations /> : ""}
           {chosenTopic === "Lab results" ? <LabResulls /> : ""}
-        </div>
+        </div> */}
       </div>
     </div>
   );

@@ -308,7 +308,7 @@ const NavPatient = ({ minimizedNav, activeDisplay, onClickDisplayed }) => {
         </button>
       </li>
 
-      <li
+      {/* <li
         className={minimizedNav === true ? "minimizednav-icons" : ""}
         style={
           activeDisplay === "communication"
@@ -331,7 +331,7 @@ const NavPatient = ({ minimizedNav, activeDisplay, onClickDisplayed }) => {
           &nbsp;
           {minimizedNav === true ? "" : "Communication"}
         </button>
-      </li>
+      </li> */}
       {/* <li
         className={minimizedNav === true ? "minimizednav-icons" : ""}
         style={
@@ -356,7 +356,7 @@ const NavPatient = ({ minimizedNav, activeDisplay, onClickDisplayed }) => {
           {minimizedNav === true ? "" : "Prescriptions"}
         </button>
       </li> */}
-      <li
+      {/* <li
         className={minimizedNav === true ? "minimizednav-icons" : ""}
         style={
           activeDisplay === "immunisation" ? { backgroundColor: "#D6E8FF" } : {}
@@ -422,7 +422,7 @@ const NavPatient = ({ minimizedNav, activeDisplay, onClickDisplayed }) => {
           &nbsp;
           {minimizedNav === true ? "" : "Lab results"}
         </button>
-      </li>
+      </li> */}
     </>
   );
 };

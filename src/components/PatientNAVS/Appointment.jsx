@@ -21,6 +21,7 @@ import {
   handleYearChange,
 } from "../../assets/js/months";
 import DatePicker from "react-datepicker";
+import AppointmentImage from "../../assets/img/AppointmentImage.png";
 
 import "react-datepicker/dist/react-datepicker.css";
 import "../../styles/appointmentstyles.css";
@@ -920,24 +921,41 @@ const Appointment = () => {
           {getStartedClicked === true ? (
             <AppointmentWait autofillData={autofillData} />
           ) : (
-            <div style={{ textAlign: "center", margin: "100px 0 0 0" }}>
-              <h2 style={{ lineHeight: "1.5" }}>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                margin: "100px 0 0 0",
+                padding: "10px",
+              }}
+            >
+              <div style={{ width: "500px" }}>
+                <h2 style={{ lineHeight: "1.5" }}>
+                  Seamless & Efficient Booking – Connecting You Instantly!
+                </h2>
+                {/* <h2 style={{ lineHeight: "1.5", width: "500px" }}>
                 To streamline the booking process, we currently offer a simple
                 way to schedule an appointment based on the type of service or
                 care you need, rather than selecting a specific practitioner.
-              </h2>
+              </h2> */}
 
-              <p>
-                This feature is available as part of our initial MVP launch, and
-                we are continuously working to expand our platform. Stay tuned
-                for more updates!
-              </p>
-              <button
-                className="get-started__btn"
-                onClick={(e) => handleAutoFill(e)}
-              >
-                Get Started
-              </button>
+                <p>
+                  An appointment form is available{" "}
+                  <strong>at the moment</strong> as part of our initial{" "}
+                  <strong>MVP</strong> launch, and we are continuously working
+                  to expand this booking feature. Stay tuned for more updates!
+                </p>
+                <button
+                  className="get-started__btn"
+                  onClick={(e) => handleAutoFill(e)}
+                >
+                  Book an appointment
+                </button>
+              </div>
+
+              <div>
+                <img src={AppointmentImage} className="appointmentImage" />
+              </div>
             </div>
           )}
         </div>
