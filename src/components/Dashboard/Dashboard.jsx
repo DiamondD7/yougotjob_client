@@ -412,6 +412,36 @@ const NextAptView = ({ nextApt, activateGoTo, setNextAptBtn, refreshList }) => {
       });
   };
 
+  const cancelClicked = (e) => {
+    e.preventDefault();
+
+    const handleCancelJob = async () => {
+      try {
+        const response = await fetch(CancelJob, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+          body: JSON.stringify({
+            Id: nextApt.id,
+          }),
+        });
+
+        if (!response.ok) {
+          console.error("Error cancelling job");
+        }
+
+        const data = await response.json();
+        console.log(data);
+        window.location.reload();
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    handleCancelJob();
+  };
+
   return (
     <div>
       <div className="nextaptview__wrapper">
@@ -534,11 +564,19 @@ const NextAptView = ({ nextApt, activateGoTo, setNextAptBtn, refreshList }) => {
             ) : (
               ""
             )}
-
-            <p style={{ marginTop: "10px" }}>Or</p>
-            <button className="dashboard-patient-card-cancelation__btn">
-              Cancel appointment
-            </button>
+            {new Date(nextApt.preferredAppointmentDate) > new Date() ? (
+              <>
+                <p style={{ marginTop: "10px" }}>Or</p>
+                <button
+                  className="dashboard-patient-card-cancelation__btn"
+                  onClick={(e) => cancelClicked(e)}
+                >
+                  Cancel appointment
+                </button>
+              </>
+            ) : (
+              ""
+            )}
           </div>
         )}
       </div>
