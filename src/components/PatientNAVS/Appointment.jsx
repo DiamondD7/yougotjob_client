@@ -876,8 +876,9 @@ const Appointment = () => {
 
   return (
     <div style={{ margin: "50px 0 0 100px" }}>
-      <div style={{ display: "flex", gap: "50px" }}>
-        {/* <div>
+      {sessionStorage.getItem("isVerified") === "true" ? (
+        <div style={{ display: "flex", gap: "50px" }}>
+          {/* <div>
           {practitionerClicked === false ? (
             <div style={{ display: "flex", alignItems: "center", gap: "20px" }}>
               <div className="appointment-search-container__wrapper">
@@ -917,49 +918,59 @@ const Appointment = () => {
           />
         </div> */}
 
-        <div>
-          {getStartedClicked === true ? (
-            <AppointmentWait autofillData={autofillData} />
-          ) : (
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                margin: "100px 0 0 0",
-                padding: "10px",
-              }}
-            >
-              <div style={{ width: "500px" }}>
-                <h2 style={{ lineHeight: "1.5" }}>
-                  Seamless & Efficient Booking – Connecting You Instantly!
-                </h2>
-                {/* <h2 style={{ lineHeight: "1.5", width: "500px" }}>
+          <div>
+            {getStartedClicked === true ? (
+              <AppointmentWait autofillData={autofillData} />
+            ) : (
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  margin: "100px 0 0 0",
+                  padding: "10px",
+                }}
+              >
+                <div style={{ width: "500px" }}>
+                  <h2 style={{ lineHeight: "1.5" }}>
+                    Seamless & Efficient Booking – Connecting You Instantly!
+                  </h2>
+                  {/* <h2 style={{ lineHeight: "1.5", width: "500px" }}>
                 To streamline the booking process, we currently offer a simple
                 way to schedule an appointment based on the type of service or
                 care you need, rather than selecting a specific practitioner.
               </h2> */}
 
-                <p>
-                  An appointment form is available{" "}
-                  <strong>at the moment</strong> as part of our initial{" "}
-                  <strong>MVP</strong> launch, and we are continuously working
-                  to expand this booking feature. Stay tuned for more updates!
-                </p>
-                <button
-                  className="get-started__btn"
-                  onClick={(e) => handleAutoFill(e)}
-                >
-                  Book an appointment
-                </button>
-              </div>
+                  <p>
+                    An appointment form is available{" "}
+                    <strong>at the moment</strong> as part of our initial{" "}
+                    <strong>MVP</strong> launch, and we are continuously working
+                    to expand this booking feature. Stay tuned for more updates!
+                  </p>
+                  <button
+                    className="get-started__btn"
+                    onClick={(e) => handleAutoFill(e)}
+                  >
+                    Book an appointment
+                  </button>
+                </div>
 
-              <div>
-                <img src={AppointmentImage} className="appointmentImage" />
+                <div>
+                  <img src={AppointmentImage} className="appointmentImage" />
+                </div>
               </div>
-            </div>
-          )}
+            )}
+          </div>
         </div>
-      </div>
+      ) : (
+        <>
+          <h2>Account is not verified</h2>
+          <br />
+          <p>
+            You can not request an appointment yet, you need your account to be
+            verified by our team first.
+          </p>
+        </>
+      )}
     </div>
   );
 };

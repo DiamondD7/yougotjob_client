@@ -18,6 +18,7 @@ import {
   House,
   CalendarPlus,
   ClipboardText,
+  CalendarDots,
 } from "@phosphor-icons/react";
 import { Link } from "react-router-dom";
 import NavLogo from "../../assets/img/HauoraLogo.png";
@@ -285,6 +286,28 @@ const NavPatient = ({ minimizedNav, activeDisplay, onClickDisplayed }) => {
         </button>
       </li>
 
+      <li
+        className={minimizedNav === true ? "minimizednav-icons" : ""}
+        style={
+          activeDisplay === "schedules" ? { backgroundColor: "#D6E8FF" } : {}
+        }
+      >
+        <button
+          className={minimizedNav === true ? "btn-normal" : "icon-label"}
+          onClick={() => onClickDisplayed("schedules")}
+          style={
+            minimizedNav === false
+              ? activeDisplay === "schedules"
+                ? { backgroundColor: "#D6E8FF" }
+                : {}
+              : {}
+          }
+        >
+          <CalendarDots size={20} color="#454545" />
+          &nbsp;
+          {minimizedNav === true ? "" : "Schedules"}
+        </button>
+      </li>
       <li
         className={minimizedNav === true ? "minimizednav-icons" : ""}
         style={

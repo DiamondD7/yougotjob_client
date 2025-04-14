@@ -19,6 +19,7 @@ import Appointment from "../PatientNAVS/Appointment";
 import Jobs from "../Jobs/Jobs";
 
 import "../../styles/displaystyles.css";
+import Schedules from "../PatientNAVS/Schedules";
 const Display = ({ displayed, setEditChanges }) => {
   const role = sessionStorage.getItem("role");
   const isVerified = sessionStorage.getItem("isVerified");
@@ -76,6 +77,8 @@ const Display = ({ displayed, setEditChanges }) => {
           <Appointment />
         ) : displayed === "jobs" ? (
           <Jobs />
+        ) : displayed === "schedules" ? (
+          <Schedules />
         ) : (
           ""
         )}

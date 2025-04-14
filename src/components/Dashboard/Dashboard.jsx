@@ -1160,7 +1160,10 @@ const WeeklyScheduleContainer = () => {
                   //this code compares if the data.preferredDate is
                   //the same with the day of the week.
                   <p className="weekly-contents-day__p" key={data.id}>
-                    {new Date(data.preferredAppointmentDate).getDate() === day
+                    {new Date(data.preferredAppointmentDate).getDate() ===
+                      day &&
+                    new Date(data.preferredAppointmentDate).getMonth() ===
+                      today.getMonth()
                       ? //this shows the name and the time of this
                         //particular appointment
                         `${data.fullName} @ ${new Date(
