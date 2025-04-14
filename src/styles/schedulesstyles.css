@@ -1,0 +1,21 @@
+.schedules-container__wrapper {
+  padding: 50px;
+}
+
+.schedules-items__wrapper {
+  width: 600px;
+  padding: 10px;
+  display: flex;
+  justify-content: space-between;
+}
+.schedules-items__wrapper p {
+  font-size: 12px;
+}
+
+.completed-text {
+  color: limegreen;
+}
+
+.overdue-text {
+  color: red;
+}

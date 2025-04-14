@@ -104,8 +104,8 @@ const SearchProfile = ({
   const ReturnSearchData = () => {
     const filterData = patients?.filter(
       (item) =>
-        item.fullName.toLowerCase().includes(searchField.toLowerCase()) ||
-        item.nhi.toLowerCase().includes(searchField.toLowerCase())
+        item.fullName?.toLowerCase().includes(searchField.toLowerCase()) ||
+        item.nhi?.toLowerCase().includes(searchField.toLowerCase())
     );
     if (searchField === "" || filterData?.length === 0) {
       return (
