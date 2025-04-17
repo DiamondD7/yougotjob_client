@@ -209,12 +209,23 @@ const JobsCards = ({
         if (res.returnStatus.status === false) {
           console.log("bad request");
         }
-
+        handleFinaliseAuth(data.id); //finalises zoom auth
         fetchAvailableJobs();
       })
       .catch((err) => {
         console.log(err.message);
       });
+  };
+
+  const handleFinaliseAuth = (id) => {
+    const cliendId = import.meta.env.VITE_ZOOM_CLIENT_ID;
+    const redirectUri = import.meta.env.VITE_ZOOM_REDIRECT_URI;
+    window.open(
+      `https://zoom.us/oauth/authorize?response_type=code&client_id=${cliendId}&redirect_uri=${redirectUri}?id=${id}`,
+      "_blank",
+      "noreferrer"
+    );
+    window.location.reload(); //loads the page
   };
   return (
     <div>
@@ -272,7 +283,7 @@ const JobsCards = ({
                       className="jobs-content-card__btn"
                       onClick={(e) => handleAcceptJob(e, item)}
                     >
-                      Accept Job
+                      Accept & Finalise
                     </button>
                   </div>
                   <div

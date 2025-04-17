@@ -63,13 +63,14 @@
 }
 
 .dashboard-patient-card__btn {
-  cursor: pointer;
+  font-size: 15px;
+  margin: 5px 0 0 10px;
+  padding: 2px 10px 2px 10px;
   background-color: #9dcd5a;
-  border: 1px solid #9dcd5a;
-  border-radius: 5px;
   color: #f3f3f3;
-  margin-top: 10px;
-  padding: 2px 10px;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
 }
 
 .dashboard-patient-info__btn {

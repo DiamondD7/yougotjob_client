@@ -3,6 +3,28 @@ import { CircleNotch } from "@phosphor-icons/react";
 import { GetAppointmentsForPatientUser } from "../../assets/js/serverApi";
 
 import "../../styles/schedulesstyles.css";
+const RemoveBtn = ({ apts }) => {
+  const today = new Date();
+  const preferredDate = new Date(apts.preferredAppointmentDate);
+
+  const threeHoursBefore = new Date(
+    preferredDate.getTime() - 3 * 60 * 60 * 1000
+  );
+
+  return (
+    <div>
+      {apts.acceptedJobDate !== null && threeHoursBefore > today ? (
+        <button>Remove</button>
+      ) : apts.acceptedJobDate === null &&
+        new Date(apts.preferredAppointmentDate) > new Date(today) ? (
+        <button>Remove</button>
+      ) : (
+        ""
+      )}
+    </div>
+  );
+};
+
 const Schedules = () => {
   const [appointments, setAppointments] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -34,6 +56,8 @@ const Schedules = () => {
     }
   };
 
+  const today = new Date();
+
   return (
     <div className="schedules-container__wrapper">
       {loading === true ? (
@@ -55,13 +79,35 @@ const Schedules = () => {
                     "en-nz"
                   )}
                 </p>
+
+                {/* below is for editing a pending appointment.. ?? */}
+
+                {/* {new Date(apts.preferredAppointmentDate) > new Date(today) ? (
+                  <button>Remove</button>
+                ) : (
+                  ""
+                )} */}
+
+                <RemoveBtn apts={apts} />
               </div>
               <div>
-                {apts.practitionerId === 0 && apts.acceptedJobDate === null ? (
+                {new Date(apts.preferredAppointmentDate) > new Date(today) ? (
+                  <p className="pending-text">Pending</p>
+                ) : apts.practitionerId === 0 &&
+                  apts.acceptedJobDate === null ? (
                   <p className="overdue-text">Not Complete</p>
                 ) : (
                   <p className="completed-text">Completed</p>
                 )}
+
+                {/* {apts.practitionerId === 0 && apts.acceptedJobDate === null ? (
+                  <p className="overdue-text">Not Complete</p>
+                ) : new Date(apts.preferredAppointmentDate) >
+                  new Date(today) ? (
+                  <p className="completed-text">Pending</p>
+                ) : (
+                  <p className="completed-text">Completed</p>
+                )} */}
               </div>
             </div>
           ))}
