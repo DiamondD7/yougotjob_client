@@ -1,9 +1,15 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { CircleNotch } from "@phosphor-icons/react";
-import { GetAppointmentsForPatientUser } from "../../assets/js/serverApi";
+import {
+  GetAppointmentsForPatientUser,
+  DeleteApt,
+  GetPatient,
+  ID,
+} from "../../assets/js/serverApi";
 
 import "../../styles/schedulesstyles.css";
-const RemoveBtn = ({ apts }) => {
+const RemoveBtn = ({ apts, navigate, fetchData }) => {
   const today = new Date();
   const preferredDate = new Date(apts.preferredAppointmentDate);
 
@@ -11,13 +17,77 @@ const RemoveBtn = ({ apts }) => {
     preferredDate.getTime() - 3 * 60 * 60 * 1000
   );
 
+  const authUserDelete = async (retry = true) => {
+    try {
+      const response = await fetch(`${GetPatient}/${ID}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        credentials: "include",
+      });
+
+      if (response.status === 302) {
+        console.warn("302 detected. Redirecting...");
+        navigate("/");
+        return;
+      }
+
+      if (response.status === 401 && retry) {
+        console.warn("401 detected. Retrying...");
+        return authUserDelete(false);
+      }
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const data = await response.json();
+
+      console.log(data);
+      await handleDelete(); //handle delete function is called here, when user is auth.
+    } catch (error) {
+      console.log("Error fetching data:", error.message);
+      console.log("Error:", error);
+    }
+  };
+
+  const handleDelete = async () => {
+    try {
+      const response = await fetch(DeleteApt, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({
+          Id: apts.id,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+
+      const data = await response.json();
+      if (data.returnStatus.code !== "200") {
+        console.error("Error deleting appointment:", data.returnStatus.message);
+        return;
+      }
+      console.log(data);
+      fetchData(); // Call fetchData to refresh the appointments list
+    } catch (error) {
+      console.error("Error deleting appointment:", error);
+    }
+  };
   return (
     <div>
       {apts.acceptedJobDate !== null && threeHoursBefore > today ? (
-        <button>Remove</button>
+        <button onClick={() => authUserDelete()}>Remove</button>
       ) : apts.acceptedJobDate === null &&
         new Date(apts.preferredAppointmentDate) > new Date(today) ? (
-        <button>Remove</button>
+        <button onClick={() => authUserDelete()}>Remove</button>
       ) : (
         ""
       )}
@@ -28,6 +98,7 @@ const RemoveBtn = ({ apts }) => {
 const Schedules = () => {
   const [appointments, setAppointments] = useState([]);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchData();
@@ -88,7 +159,11 @@ const Schedules = () => {
                   ""
                 )} */}
 
-                <RemoveBtn apts={apts} />
+                <RemoveBtn
+                  apts={apts}
+                  navigate={navigate}
+                  fetchData={fetchData}
+                />
               </div>
               <div>
                 {new Date(apts.preferredAppointmentDate) > new Date(today) ? (
