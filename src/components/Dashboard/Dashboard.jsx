@@ -144,7 +144,7 @@ const SummaryCards = ({
                   className="dashboard-patient-card__btn"
                   onClick={(e) => handleNextAptView(e)}
                 >
-                  View
+                  view
                 </button>
               </div>
             </>

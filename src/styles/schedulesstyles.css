@@ -19,3 +19,7 @@
 .overdue-text {
   color: red;
 }
+
+.pending-text {
+  color: orange;
+}
