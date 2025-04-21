@@ -1799,7 +1799,7 @@ const Account = ({ setEditChanges }) => {
     <div>
       <div className="setting-contents-display-container__wrapper">
         <h3 style={{ color: "#9dcd5a", fontWeight: "bold" }}>Profile</h3>
-        <div style={{ display: "flex", gap: "30px" }}>
+        <div className="settings-first-tier__wrapper">
           {loadDetails && (
             <Profile
               loggedUserData={loggedUserData}

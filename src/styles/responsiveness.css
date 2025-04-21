@@ -7,10 +7,6 @@
     height: 160px;
   }
 
-  .dashboard-cards__wrapper {
-    height: 160px;
-  }
-
   /* dashboard-graph */
   .dashboard-graph-container__wrapper {
     margin: 0px 0 0 10px;
@@ -118,6 +114,8 @@
   .records-invoice-display-payment-details__wrapper {
     margin-left: 0;
   }
+
+  /* --------------------------------PATIENT NAVS-------------------------------- */
 }
 
 @media (max-width: 1750px) {
@@ -201,6 +199,13 @@
     width: 200px;
   }
   /* -----------------------------LEARNING------------------------------------- */
+
+  /* --------------------------------PATIENT NAVS-------------------------------- */
+
+  .prescription-container__wrapper,
+  .tables-container__wrapper {
+    width: 510px;
+  }
 }
 
 @media (max-width: 1600px) {
@@ -306,6 +311,25 @@
     width: 400px;
   }
   /* --------------------------------COMMUNICATION------------------------------- */
+
+  /* --------------------------------PATIENT NAVS-------------------------------- */
+
+  .prescription-container__wrapper {
+    width: 230px;
+  }
+
+  .patientdashboard-invoice-container__wrapper,
+  .recent-diagnosis__wrapper {
+    width: 350px;
+  }
+
+  .tables-container__wrapper {
+    width: 490px;
+  }
+
+  .appointmentImage {
+    width: 400px;
+  }
 }
 
 @media (max-width: 1400px) {
@@ -359,6 +383,16 @@
     overflow: auto;
   }
   /* --------------------------------COMMUNICATION------------------------------- */
+
+  /* --------------------------------PATIENT NAVS-------------------------------- */
+  .settings-first-tier__wrapper {
+    display: block;
+  }
+
+  .settings-nav-flex {
+    overflow: auto;
+    height: 100vh;
+  }
 }
 @media (max-width: 1300px) {
   .signup-options__btns {
@@ -369,7 +403,6 @@
   }
 
   .dashboard-cards__wrapper {
-    width: 190px;
     font-size: 12px;
   }
 
@@ -428,6 +461,12 @@
   .signin-submit__btn {
     padding: 3px 80px;
   }
+
+  /* --------------------------------PATIENT NAVS-------------------------------- */
+
+  .appointment-get-started__wrapper {
+    display: block;
+  }
 }
 @media (max-width: 1000px) {
   .signin-submit__btn {
@@ -438,6 +477,42 @@
   }
   .signup-options__wrapper {
     gap: 5px;
+  }
+
+  /* --------------------------------PATIENT NAVS-------------------------------- */
+
+  .dashboard-patient-container__wrapper {
+    overflow: auto;
+    height: 100vh;
+  }
+
+  .dashboard-first-tier__wrapper,
+  .dashboard-second-tier__wrapper,
+  .dashboard-third-tier__wrapper {
+    display: block;
+  }
+
+  .patientdashboard-invoice-container__wrapper,
+  .recent-diagnosis__wrapper,
+  .dashboard-cards__wrapper,
+  .prescription-container__wrapper,
+  .prescription-container__wrapper,
+  .tables-container__wrapper,
+  .preferred-practitioner__wrapper {
+    width: 350px;
+  }
+
+  .nav-copyright {
+    font-size: 10px;
+    display: none;
+  }
+
+  .nav-date-time {
+    display: none;
+  }
+
+  .schedules-items__wrapper {
+    width: 300px;
   }
 }
 
@@ -482,5 +557,21 @@
 @media (max-width: 800px) {
   .signin-submit__btn {
     padding: 3px 40px;
+  }
+
+  /* --------------------------------PATIENT NAVS-------------------------------- */
+
+  .get-started-paragraph__text h2 {
+    font-size: 20px;
+    width: 300px;
+  }
+
+  .get-started-paragraph__text p {
+    font-size: 15px;
+    width: 300px;
+  }
+
+  .appointmentImage {
+    width: 300px;
   }
 }

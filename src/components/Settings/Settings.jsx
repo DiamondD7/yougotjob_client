@@ -13,7 +13,7 @@ const Settings = ({ setEditChanges }) => {
 
   return (
     <div>
-      <div style={{ display: "flex", gap: "30px" }}>
+      <div className="settings-nav-flex">
         <ul className="settings-nav-container__wrapper">
           <li>
             <strong className="settings-nav-settings">

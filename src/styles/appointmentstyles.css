@@ -317,6 +317,17 @@
   padding: 5px;
 }
 
+.appointment-get-started__wrapper {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 100px;
+  padding: 10px;
+}
+
+.get-started-paragraph__text {
+  width: 500px;
+}
+
 .appointmentImage {
   width: 700px;
 }

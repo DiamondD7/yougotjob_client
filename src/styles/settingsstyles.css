@@ -1,3 +1,8 @@
+.settings-nav-flex {
+  display: flex;
+  gap: 30px;
+}
+
 .settings-nav-settings {
   display: flex;
   align-items: center;
