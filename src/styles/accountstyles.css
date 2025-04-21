@@ -10,6 +10,11 @@
   font-size: 12px;
 }
 
+.settings-first-tier__wrapper {
+  display: flex;
+  gap: 30px;
+}
+
 .profileheader {
   font-size: 14px;
   font-weight: bold;

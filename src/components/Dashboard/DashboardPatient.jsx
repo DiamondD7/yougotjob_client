@@ -18,7 +18,7 @@ import Payment from "../Stripe/Payment";
 
 import "../../styles/patientdashboard.css";
 const SummaryCards = ({ apts, setPreviousAptModal }) => {
-  const [appointments, setAppointments] = useState(apts || []); //temporary fix?
+  const [appointments, setAppointments] = useState(apts || []); //temporary fix? DELETE?????
   const [days, setDays] = useState(0);
   const [hours, setHours] = useState(0);
   const [minutes, setMinutes] = useState(0);
@@ -26,8 +26,9 @@ const SummaryCards = ({ apts, setPreviousAptModal }) => {
 
   const [inputDate, setInputDate] = useState("7 Aug 2024 20:00"); //can be changed to mm/dd/yyyy
 
-  const prevApt = appointments.length > 0 ? apts[0] : []; //temporary fix?
+  const prevApt = apts.length > 0 ? apts[0] : []; //temporary fix?
 
+  console.log("ehl");
   const [nextApt, setNextApt] = useState([]);
 
   useEffect(() => {
@@ -48,34 +49,56 @@ const SummaryCards = ({ apts, setPreviousAptModal }) => {
   }, []);
 
   //handles countdown
+  // useEffect(() => {
+  //   const changingDate = new Date(inputDate);
+  //   const currentDate = new Date();
+  //   const totalSeconds = (changingDate - currentDate) / 1000;
+
+  //   if (totalSeconds <= 0) {
+  //     setDays(0);
+  //     setHours(0);
+  //     setMinutes(0);
+  //     setSeconds(0);
+  //   } else if (totalSeconds > 0) {
+  //     setDays(Math.floor(totalSeconds / 3600 / 24));
+  //     setHours(Math.floor(totalSeconds / 3600) % 24);
+  //     setMinutes(Math.floor(totalSeconds / 60) % 60);
+  //   }
+
+  //   let interval = setInterval(() => {
+  //     setSeconds((prevSeconds) => {
+  //       if (prevSeconds === 0) {
+  //         clearInterval(interval);
+  //       }
+  //       return Math.floor(totalSeconds % 60);
+  //     });
+  //   }, 1000);
+
+  //   // Cleanup function to clear the interval when the component unmounts or the effect is re-run
+  //   return () => clearInterval(interval);
+  // }, [days, minutes, hours, seconds]);
   useEffect(() => {
-    const changingDate = new Date(inputDate);
-    const currentDate = new Date();
-    const totalSeconds = (changingDate - currentDate) / 1000;
+    const interval = setInterval(() => {
+      const changingDate = new Date(inputDate);
+      const currentDate = new Date();
+      const totalSeconds = Math.floor((changingDate - currentDate) / 1000);
 
-    if (totalSeconds <= 0) {
-      setDays(0);
-      setHours(0);
-      setMinutes(0);
-      setSeconds(0);
-    } else if (totalSeconds > 0) {
-      setDays(Math.floor(totalSeconds / 3600 / 24));
-      setHours(Math.floor(totalSeconds / 3600) % 24);
-      setMinutes(Math.floor(totalSeconds / 60) % 60);
-    }
-
-    let interval = setInterval(() => {
-      setSeconds((prevSeconds) => {
-        if (prevSeconds === 0) {
-          clearInterval(interval);
-        }
-        return Math.floor(totalSeconds % 60);
-      });
+      if (totalSeconds <= 0) {
+        setDays(0);
+        setHours(0);
+        setMinutes(0);
+        setSeconds(0);
+        clearInterval(interval);
+      } else {
+        setDays(Math.floor(totalSeconds / 3600 / 24));
+        setHours(Math.floor((totalSeconds / 3600) % 24));
+        setMinutes(Math.floor((totalSeconds / 60) % 60));
+        setSeconds(totalSeconds % 60);
+      }
     }, 1000);
 
-    // Cleanup function to clear the interval when the component unmounts or the effect is re-run
     return () => clearInterval(interval);
-  }, [days, minutes, hours, seconds]);
+  }, [inputDate]);
 
   const day = <label className="time-indication">d</label>;
   const hour = <label className="time-indication">hr</label>;
@@ -84,7 +107,7 @@ const SummaryCards = ({ apts, setPreviousAptModal }) => {
 
   return (
     <div>
-      <div style={{ padding: "10px", display: "flex", gap: "10px" }}>
+      <div className="dashboard-first-tier__wrapper">
         <div className="header-cards__wrapper">
           <div className="dashboard-card-title__wrapper">
             <div>
@@ -199,6 +222,7 @@ const SummaryCards = ({ apts, setPreviousAptModal }) => {
 
 const PreviousAppointment = ({ apts, setPreviousAptModal }) => {
   const aptDetails = apts[0] || "";
+
   return (
     <div>
       <div className="previous-appointment__wrapper">
@@ -688,7 +712,7 @@ const DashboardPatient = () => {
       });
   };
   return (
-    <div>
+    <div className="dashboard-patient-container__wrapper">
       {/* {paymentClick === true ? <div className="overlay"></div> : ""}
       {paymentClick === true ? (
         <div>
@@ -709,15 +733,15 @@ const DashboardPatient = () => {
       ) : (
         ""
       )}
-      <div style={{ display: "flex" }}>
+      <div>
         <SummaryCards apts={apts} setPreviousAptModal={setPreviousAptModal} />
       </div>
-      <div style={{ display: "flex", gap: "10px", padding: "10px" }}>
+      <div className="dashboard-second-tier__wrapper">
         <RecentDiagnosis apts={apts} />
         <PreferredPractitioner preferredPractitioner={preferredPractitioner} />
         <PrescriptionContainer />
       </div>
-      <div style={{ padding: "10px", display: "flex", gap: "10px" }}>
+      <div className="dashboard-third-tier__wrapper">
         <PaymentContainer apts={apts} />
         <TablesContainer />
       </div>

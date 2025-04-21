@@ -1,3 +1,21 @@
+.dashboard-first-tier__wrapper {
+  display: flex;
+
+  gap: 10px;
+  padding: 10px;
+}
+
+.dashboard-second-tier__wrapper {
+  display: flex;
+  gap: 10px;
+  padding: 10px;
+}
+.dashboard-third-tier__wrapper {
+  display: flex;
+  gap: 10px;
+  padding: 10px;
+}
+
 .header-cards__wrapper {
   height: 205px;
   width: 350px;

@@ -587,18 +587,12 @@ const Nav = ({ setDisplayed, dateSettings }) => {
                   <SignOut size={20} color="#454545" />
                 </Link>
               </button>
-              {minimizedNav === false ? getDateTime() : ""}
+              <p className="nav-date-time">
+                {minimizedNav === false ? getDateTime() : ""}
+              </p>
             </li>
             {minimizedNav === false ? (
-              <li
-                style={{
-                  fontSize: "12px",
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "5px",
-                  color: "rgba(0,0,0,0.3)",
-                }}
-              >
+              <li className="nav-copyright">
                 <Copyright size={12} color="rgba(0,0,0,0.3)" /> Aaron Julian
                 Sierra
               </li>

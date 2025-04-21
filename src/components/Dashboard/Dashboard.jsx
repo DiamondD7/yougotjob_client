@@ -920,7 +920,16 @@ const AppointmentContainer = ({ aptDue }) => {
   const [openAppointmentContainer, setOpenAppointmentContainer] =
     useState(false);
 
-  const appointmentTotalDue = aptDue.length;
+  const aptsToday = aptDue.filter((items) => {
+    const today = new Date();
+    const appointmentDate = new Date(items.preferredAppointmentDate);
+    return (
+      appointmentDate.getFullYear() === today.getFullYear() &&
+      appointmentDate.getMonth() === today.getMonth() &&
+      appointmentDate.getDate() === today.getDate()
+    );
+  });
+
   return (
     <div>
       <button
@@ -942,7 +951,7 @@ const AppointmentContainer = ({ aptDue }) => {
               gap: "10px",
             }}
           >
-            <h1 style={{ color: "#9dcd5a" }}>{appointmentTotalDue}</h1>
+            <h1 style={{ color: "#9dcd5a" }}>{aptsToday.length}</h1>
             <h4 style={{ width: "100px", fontSize: "13px" }}>
               appointments due today
             </h4>
@@ -980,7 +989,7 @@ const AppointmentContainer = ({ aptDue }) => {
             </tr>
           </thead>
           <tbody>
-            {aptDue.map((items, index) => (
+            {aptsToday.map((items, index) => (
               <tr key={items.id}>
                 <td>{index + 1}</td>
                 <td>{items.fullName}</td>

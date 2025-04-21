@@ -922,15 +922,8 @@ const Appointment = () => {
             {getStartedClicked === true ? (
               <AppointmentWait autofillData={autofillData} />
             ) : (
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  margin: "100px 0 0 0",
-                  padding: "10px",
-                }}
-              >
-                <div style={{ width: "500px" }}>
+              <div className="appointment-get-started__wrapper">
+                <div className="get-started-paragraph__text">
                   <h2 style={{ lineHeight: "1.5" }}>
                     Seamless & Efficient Booking – Connecting You Instantly!
                   </h2>
