@@ -28,7 +28,6 @@ const SummaryCards = ({ apts, setPreviousAptModal }) => {
 
   const prevApt = apts.length > 0 ? apts[0] : []; //temporary fix?
 
-  console.log("ehl");
   const [nextApt, setNextApt] = useState([]);
 
   useEffect(() => {

@@ -184,7 +184,7 @@ const PatientVitals = ({ fullProfileData }) => {
         10
     ) / 10;
   return (
-    <div style={{ display: "flex", gap: "100px", marginTop: "40px" }}>
+    <div className="patientvitals-container__wrapper">
       <div className="patientvitals-circle__wrapper">
         <p>Height: {fullProfileData?.height || 0} cm</p>
       </div>
@@ -419,7 +419,7 @@ const FullProfile = ({ patientProfileId, setOpenFullProfile }) => {
       });
   }, []);
   return (
-    <div style={{ margin: "10px 0 0 10px" }}>
+    <div className="patient-profile-full-display-container__wrapper">
       <button
         className="fullres-close__btn"
         onClick={() => setOpenFullProfile(false)}
@@ -432,7 +432,7 @@ const FullProfile = ({ patientProfileId, setOpenFullProfile }) => {
         <h3 style={{ color: "rgba(0,0,0,0.5)" }}>{fullProfileData.fullName}</h3>
       </div>
 
-      <div style={{ display: "flex", gap: "100px" }}>
+      <div className="full-profile-container__wrapper">
         <div>
           <PatientDetails fullProfileData={fullProfileData} />
           {/* <br />
@@ -453,13 +453,7 @@ const FullProfile = ({ patientProfileId, setOpenFullProfile }) => {
           <br />
           <br />
 
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-evenly",
-              gap: "20px",
-            }}
-          >
+          <div className="patient-histories-container__wrapper">
             <PatientAppointmentsHistory prevApts={prevApts} />
 
             <PatientBillingHistory prevApts={prevApts} />
