@@ -4,18 +4,8 @@
   }
 
   .notes__wrapper {
-    height: 160px;
+    width: 300px;
   }
-
-  /* dashboard-graph */
-  .dashboard-graph-container__wrapper {
-    margin: 0px 0 0 10px;
-  }
-
-  .dashboard-graph__wrapper {
-    height: 280px;
-  }
-  /* dashboard-graph */
 
   /* continue-learning */
   .continue-learning-container__wrapper {
@@ -35,6 +25,7 @@
 
   .weekly-container__wrapper {
     margin: 40px 115px 0 0;
+    width: 560px;
   }
 
   .fullsize-appointment {
@@ -123,25 +114,24 @@
     padding: 3px 130px;
   }
 
-  .dashboard-cards__wrapper {
+  .dashboard-cards__wrapper,
+  .notes__wrapper {
     width: 314px;
   }
 
-  .dashboard-graph__wrapper {
+  .dashboard-graph__wrapper,
+  .dashboard-invoice-container__wrapper {
     width: 513px;
   }
 
   .weekly-container__wrapper {
-    width: 550px;
-  }
-
-  .notes__wrapper {
-    width: 390px;
+    width: 470px;
   }
 
   .continue-learning-container__wrapper {
     width: 470px;
   }
+
   /* ------------------------------CALENDAR------------------------------------ */
   .calendar-grid__wrapper {
     grid-template-columns: repeat(7, 170px);
@@ -252,6 +242,24 @@
   .appointment-container__wrapper {
     width: 200px;
   }
+
+  /* ------------------------------------PATIENT SEARCH------------------------------------------- */
+  .patientvitals-container__wrapper {
+    gap: 10px;
+  }
+
+  .patient-medicalrecords__wrapper {
+    width: 60%;
+  }
+
+  .patient-histories__wrapper {
+    width: 150px;
+  }
+  .patient-histories-container__wrapper {
+    justify-content: start;
+  }
+
+  /* ------------------------------------PATIENT SEARCH------------------------------------------- */
 }
 
 @media (max-width: 1550px) {
@@ -335,6 +343,18 @@
 @media (max-width: 1400px) {
   .signin-submit__btn {
     padding: 3px 100px;
+  }
+
+  .full-profile-container__wrapper {
+    display: block;
+  }
+
+  .patient-histories-container__wrapper {
+    justify-content: start;
+  }
+
+  .patient-medicalrecords__wrapper {
+    width: 50%;
   }
 
   /* ------------------------------CALENDAR------------------------------------ */
@@ -442,6 +462,16 @@
     font-size: 11px;
   }
 
+  /* -----------------------------JOB CONTAINER------------------------------------- */
+  .jobs-search-filter__wrapper {
+    width: 170px;
+  }
+
+  .jobs-empty-results-icon__wrapper {
+    top: 30%;
+    right: 0%;
+  }
+
   /* -----------------------------LEARNING------------------------------------- */
   .learning-results__wrapper {
     grid-template-columns: repeat(3, 200px);
@@ -462,11 +492,56 @@
     padding: 3px 80px;
   }
 
+  .cards-container__wrapper {
+    display: block;
+  }
+
+  .weekly-container__wrapper {
+    margin: 40px 0px 0 0;
+  }
+
   /* --------------------------------PATIENT NAVS-------------------------------- */
 
   .appointment-get-started__wrapper {
     display: block;
   }
+
+  /* ------------------------------CALENDAR------------------------------------ */
+  .calendar-grid__wrapper {
+    grid-template-columns: repeat(7, 90px);
+    grid-template-rows: repeat(6, 100px);
+  }
+
+  .calendar-grid-day__wrapper {
+    height: 100px;
+    width: 90px;
+  }
+
+  .daysOfWeek__wrapper label:nth-child(1) {
+    margin-right: 80px;
+  }
+
+  .daysOfWeek__wrapper label:nth-child(2) {
+    margin-right: 85px;
+  }
+
+  .daysOfWeek__wrapper label:nth-child(3) {
+    margin-right: 80px;
+  }
+
+  .daysOfWeek__wrapper label:nth-child(4) {
+    margin-right: 85px;
+  }
+
+  .daysOfWeek__wrapper label:nth-child(5) {
+    margin-right: 85px;
+  }
+
+  .daysOfWeek__wrapper label:nth-child(6) {
+    margin-right: 85px;
+  }
+
+  /* ------------------------------CALENDAR------------------------------------ */
 }
 @media (max-width: 1000px) {
   .signin-submit__btn {
@@ -477,6 +552,24 @@
   }
   .signup-options__wrapper {
     gap: 5px;
+  }
+
+  .dashboard-graph-container__wrapper {
+    display: block;
+  }
+
+  .dashboard-payment-weekly-container__wrapper {
+    display: block;
+  }
+
+  .dashboard-summary-cards__wrapper {
+    display: block;
+    height: 100%;
+  }
+
+  .dashboard-display-container__wrapper {
+    overflow-y: auto;
+    height: 100vh;
   }
 
   /* --------------------------------PATIENT NAVS-------------------------------- */
@@ -514,45 +607,6 @@
   .schedules-items__wrapper {
     width: 300px;
   }
-}
-
-@media (max-width: 1200px) {
-  /* ------------------------------CALENDAR------------------------------------ */
-  .calendar-grid__wrapper {
-    grid-template-columns: repeat(7, 90px);
-    grid-template-rows: repeat(6, 100px);
-  }
-
-  .calendar-grid-day__wrapper {
-    height: 100px;
-    width: 90px;
-  }
-
-  .daysOfWeek__wrapper label:nth-child(1) {
-    margin-right: 80px;
-  }
-
-  .daysOfWeek__wrapper label:nth-child(2) {
-    margin-right: 85px;
-  }
-
-  .daysOfWeek__wrapper label:nth-child(3) {
-    margin-right: 80px;
-  }
-
-  .daysOfWeek__wrapper label:nth-child(4) {
-    margin-right: 85px;
-  }
-
-  .daysOfWeek__wrapper label:nth-child(5) {
-    margin-right: 85px;
-  }
-
-  .daysOfWeek__wrapper label:nth-child(6) {
-    margin-right: 85px;
-  }
-
-  /* ------------------------------CALENDAR------------------------------------ */
 }
 @media (max-width: 800px) {
   .signin-submit__btn {

@@ -1,3 +1,7 @@
+.cards-container__wrapper {
+  display: flex;
+}
+
 .dashboard-summary-cards__wrapper {
   /* background-color: yellow; */
   display: flex;
@@ -411,6 +415,10 @@
   object-fit: cover;
   object-position: center center;
   border-radius: 50%;
+}
+
+.dashboard-payment-weekly-container__wrapper {
+  display: flex;
 }
 
 .weekly-schedule-container__wrapper {

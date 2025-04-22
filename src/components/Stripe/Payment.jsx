@@ -19,6 +19,7 @@ const Checkout = ({ chosenAptId }) => {
   const elements = useElements();
   const [loading, setLoading] = useState(false);
 
+  console.log(chosenAptId);
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -37,6 +38,7 @@ const Checkout = ({ chosenAptId }) => {
 
     if (error) {
       console.error(error.message);
+      console.error(error);
     }
   };
 

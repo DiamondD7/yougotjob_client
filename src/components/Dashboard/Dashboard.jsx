@@ -1552,7 +1552,7 @@ const Dashboard = () => {
       });
   };
   return (
-    <div>
+    <div className="dashboard-display-container__wrapper">
       {nextAptBtn === true ? (
         <div>
           {" "}
@@ -1580,7 +1580,7 @@ const Dashboard = () => {
 
       {loading === false ? (
         <div>
-          <div style={{ display: "flex" }}>
+          <div className="cards-container__wrapper">
             <SummaryCards
               setNextAptBtn={setNextAptBtn}
               setPrevAptBtn={setPrevAptBtn}
@@ -1603,7 +1603,7 @@ const Dashboard = () => {
               <ContinueLearningContainer />
             </div> */}
           </div>
-          <div style={{ display: "flex" }}>
+          <div className="dashboard-payment-weekly-container__wrapper">
             <div
               style={{
                 margin: "20px 0 0 20px",

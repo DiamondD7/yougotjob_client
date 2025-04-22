@@ -51,6 +51,23 @@
   margin: 100px 0 0 380px;
 }
 
+.patient-profile-full-display-container__wrapper {
+  margin: 10px 0 0 10px;
+  overflow: auto;
+  height: 99vh;
+}
+
+.full-profile-container__wrapper {
+  display: flex;
+  gap: 100px;
+}
+
+.patient-histories-container__wrapper {
+  display: flex;
+  gap: 20px;
+  justify-content: space-evenly;
+}
+
 .full-profile__btn {
   background-color: transparent;
   border: none;
@@ -116,6 +133,12 @@
 
 .contact__wrapper {
   font-size: 12px;
+}
+
+.patientvitals-container__wrapper {
+  display: flex;
+  gap: 100px;
+  margin-top: 40px;
 }
 
 .patientvitals-circle__wrapper {
