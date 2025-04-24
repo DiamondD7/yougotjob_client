@@ -263,6 +263,25 @@
 }
 
 @media (max-width: 1550px) {
+  .jobs-search-filter__wrapper {
+    width: 200px;
+  }
+
+  .patientsId-search__wrapper {
+    margin: 10px 0 0 80px;
+  }
+
+  .patientID__input {
+    width: 500px;
+
+    font-size: 21px;
+  }
+
+  .no-search__wrapper {
+    width: 500px;
+
+    margin: 100px 0 0 80px;
+  }
   /* ------------------------------CALENDAR------------------------------------ */
   .calendar-grid__wrapper {
     grid-template-columns: repeat(7, 140px);
@@ -355,6 +374,38 @@
 
   .patient-medicalrecords__wrapper {
     width: 50%;
+  }
+
+  .jobs__wrapper {
+    display: block;
+
+    margin-top: 50px;
+    margin-left: 20px;
+  }
+
+  .jobs-search-filter__wrapper {
+    height: 100%;
+    width: 100%;
+  }
+
+  .jobs-contents__wrapper {
+    height: 61vh;
+    width: 100%;
+    padding-left: 10px;
+  }
+
+  .jobs-clear-filter__btn {
+    margin-top: 10px;
+    width: 100%;
+  }
+
+  .jobs-filter-apply__btn {
+    width: 100%;
+  }
+
+  .jobs-empty-results-icon__wrapper {
+    top: 60%;
+    left: 60%;
   }
 
   /* ------------------------------CALENDAR------------------------------------ */
@@ -463,14 +514,6 @@
   }
 
   /* -----------------------------JOB CONTAINER------------------------------------- */
-  .jobs-search-filter__wrapper {
-    width: 170px;
-  }
-
-  .jobs-empty-results-icon__wrapper {
-    top: 30%;
-    right: 0%;
-  }
 
   /* -----------------------------LEARNING------------------------------------- */
   .learning-results__wrapper {
@@ -500,6 +543,22 @@
     margin: 40px 0px 0 0;
   }
 
+  .jobs-content-card__wrapper {
+    width: 100%;
+  }
+
+  .jobs-search-filter__wrapper {
+    width: 50%;
+  }
+
+  .jobs-contents__wrapper {
+    padding: 0px;
+    width: 50%;
+  }
+
+  .jobs-content-card-header__wrapper {
+    display: block;
+  }
   /* --------------------------------PATIENT NAVS-------------------------------- */
 
   .appointment-get-started__wrapper {

@@ -34,6 +34,11 @@
   padding: 20px;
 }
 
+.jobs-content-card-header__wrapper {
+  display: flex;
+  justify-content: space-between;
+}
+
 .jobs-content-card__btn {
   cursor: pointer;
   background-color: #9dcd5a;
