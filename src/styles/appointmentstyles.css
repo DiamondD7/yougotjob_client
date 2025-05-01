@@ -331,3 +331,28 @@
 .appointmentImage {
   width: 700px;
 }
+
+.appointment-form__container-wrapper {
+  margin: 10px 0 0 500px;
+  padding: 10px;
+}
+
+.appointment-form-btn {
+  cursor: pointer;
+  padding: 5px 10px;
+  width: 300px;
+  margin-top: 10px;
+
+  /* background-color: #d6e8ff; */
+  background-color: #e5f0ff;
+  border: 1px solid #202020;
+  border-radius: 5px;
+}
+.appointment-form-btn:hover {
+  background-color: #d6e8ff;
+}
+
+.appointment-form-btns__wrapper {
+  height: 125px;
+  overflow: auto;
+}

@@ -823,6 +823,137 @@ const AppointmentWait = ({ autofillData }) => {
   );
 };
 
+const AppointmentForm = () => {
+  const [stage, setStage] = useState(1);
+
+  // -----------------------------DISPLAYS
+
+  const Stage3 = () => {
+    const [selectedDate, setSelectedDate] = useState(null);
+
+    const getMinTime = () => {
+      const minTime = new Date();
+      minTime.setHours(8, 0, 0, 0);
+      return minTime;
+    };
+
+    const getMaxTime = () => {
+      const maxTime = new Date();
+      maxTime.setHours(23, 0, 0, 0);
+      return maxTime;
+    };
+    return (
+      <div>
+        <h2>Pick a date and time</h2>
+        <DatePicker
+          placeholderText="Select date and time"
+          selected={selectedDate}
+          onChange={(date) => setSelectedDate(date)}
+          filterDate={(date) => {
+            const day = date.getDay(); // Sunday = 0, Monday = 1, ..., Saturday = 6
+            return day >= 3 && day <= 5; // Wednesday (3), Thursday (4), Friday (5)
+          }}
+          className="datePicker"
+          dateFormat="dd/MM/YYYY - hh:mm a"
+          minDate={new Date()}
+          showTimeSelect
+          timeIntervals={30}
+          timeFormat="hh:mm a"
+          minTime={getMinTime()}
+          maxTime={getMaxTime()}
+        />
+      </div>
+    );
+  };
+
+  const Stage2 = ({ setStage }) => {
+    const handleBtnClicked = (e) => {
+      e.preventDefault();
+      setStage(3);
+    };
+    return (
+      <div>
+        <h2>Do you have a preferred GP?</h2>
+        <div className="appointment-form-btns__wrapper">
+          <button
+            className="appointment-form-btn"
+            onClick={(e) => handleBtnClicked(e)}
+          >
+            Dr Aaron Julian
+          </button>
+          <br />
+          <button
+            className="appointment-form-btn"
+            onClick={(e) => handleBtnClicked(e)}
+          >
+            Dr Tiara Kaleena
+          </button>
+          <br />
+          <button
+            className="appointment-form-btn"
+            onClick={(e) => handleBtnClicked(e)}
+          >
+            Dr Jerome Johnson
+          </button>
+        </div>
+        <br />
+        <br />
+        <br />
+        <button
+          className="appointment-form-btn"
+          onClick={(e) => handleBtnClicked(e)}
+        >
+          Anyone who is available immediately
+        </button>
+      </div>
+    );
+  };
+
+  const Stage1 = ({ setStage }) => {
+    const handleStageClick = (e) => {
+      e.preventDefault();
+      setStage(2);
+    };
+    return (
+      <div>
+        <form className="appointment-form__wrapper">
+          <h2>Who is the appointment for?</h2>
+          <br />
+          <button
+            className="appointment-form-btn"
+            onClick={(e) => handleStageClick(e)}
+          >
+            For me
+          </button>
+          <br />
+          <button
+            className="appointment-form-btn"
+            onClick={(e) => handleStageClick(e)}
+          >
+            For someone else
+          </button>
+        </form>
+      </div>
+    );
+  };
+
+  // -----------------------------DISPLAYS
+
+  return (
+    <div className="appointment-form__container-wrapper">
+      {stage === 1 ? (
+        <Stage1 setStage={setStage} />
+      ) : stage === 2 ? (
+        <Stage2 setStage={setStage} />
+      ) : stage === 3 ? (
+        <Stage3 />
+      ) : (
+        ""
+      )}
+    </div>
+  );
+};
+
 const Appointment = () => {
   const [practitionerClicked, setPractitionerClicked] = useState(false);
   const [filterSearch, setFilterSearch] = useState("");
@@ -920,7 +1051,8 @@ const Appointment = () => {
 
           <div>
             {getStartedClicked === true ? (
-              <AppointmentWait autofillData={autofillData} />
+              // <AppointmentWait autofillData={autofillData} />
+              <AppointmentForm />
             ) : (
               <div className="appointment-get-started__wrapper">
                 <div className="get-started-paragraph__text">
