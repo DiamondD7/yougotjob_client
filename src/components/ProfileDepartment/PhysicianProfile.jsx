@@ -17,6 +17,9 @@ import { GetaHealthPractitioner } from "../../assets/js/serverApi";
 import "../../styles/physicianprofilestyles.css";
 
 const OverviewProfile = ({ loggedUser }) => {
+  const [availableDates, setAvailableDates] = useState([]);
+
+  console.log("Available Dates:", availableDates);
   return (
     <div style={{ padding: "0 10px" }}>
       <div style={{ display: "flex", gap: "3px" }}>
@@ -92,8 +95,324 @@ const OverviewProfile = ({ loggedUser }) => {
             </div>
           </div>
         </div>
-        <div className="right-side-container__wrapper"></div>
+        <div className="right-side-container__wrapper">
+          <br />
+          <h4>Availability</h4>
+          <br />
+          <TimeSelectorContainer setAvailableDates={setAvailableDates} />
+        </div>
       </div>
+    </div>
+  );
+};
+
+const TimeSelectorContainer = ({ setAvailableDates }) => {
+  const [isMondayChecked, setIsMondayChecked] = useState(false);
+  const [isTuesdayChecked, setIsTuesdayChecked] = useState(false);
+  const [isWednesdayChecked, setIsWednesdayChecked] = useState(false);
+  const [isThursdayChecked, setIsThursdayChecked] = useState(false);
+  const [isFridayChecked, setIsFridayChecked] = useState(false);
+  const [isSaturdayChecked, setIsSaturdayChecked] = useState(false);
+  const [isSundayChecked, setIsSundayChecked] = useState(false);
+
+  const [fromTime, setFromTime] = useState("");
+  const [toTime, setToTime] = useState("");
+
+  const [day, setDay] = useState("");
+
+  const handleonChange = (e, day) => {
+    setDay(day);
+    if (day === "Monday") {
+      setIsMondayChecked(e.target.checked);
+    } else if (day === "Tuesday") {
+      setIsTuesdayChecked(e.target.checked);
+    } else if (day === "Wednesday") {
+      setIsWednesdayChecked(e.target.checked);
+    } else if (day === "Thursday") {
+      setIsThursdayChecked(e.target.checked);
+    } else if (day === "Friday") {
+      setIsFridayChecked(e.target.checked);
+    } else if (day === "Saturday") {
+      setIsSaturdayChecked(e.target.checked);
+    } else if (day === "Sunday") {
+      setIsSundayChecked(e.target.checked);
+    }
+
+    setAvailableDates((prevDates) => {
+      if (prevDates[day]) {
+        // Remove the day
+        const updated = { ...prevDates };
+        delete updated[day];
+        return updated;
+      }
+
+      // Add/update the day
+      return {
+        ...prevDates,
+        [day]: {
+          fromTime: "", // or whatever initial value
+          toTime: "",
+        },
+      };
+    });
+  };
+
+  return (
+    <div>
+      <div className="date-availability__wrapper">
+        <div style={{ display: "flex", gap: "10px" }}>
+          <input
+            type="checkbox"
+            onChange={(e) => handleonChange(e, "Monday")}
+          />
+          <h5>Monday</h5>
+        </div>
+        {isMondayChecked && (
+          <div style={{ display: "flex", gap: "10px" }}>
+            <label style={{ fontSize: "12px" }}>From</label>
+            <TimeSlot
+              isMinTime={true}
+              isMaxTime={false}
+              day="Monday"
+              setAvailableDates={setAvailableDates}
+            />
+            <label style={{ fontSize: "12px" }}>To</label>
+            <TimeSlot
+              isMinTime={false}
+              isMaxTime={true}
+              day="Monday"
+              setAvailableDates={setAvailableDates}
+            />
+          </div>
+        )}
+      </div>
+      <div className="date-availability__wrapper">
+        <div style={{ display: "flex", gap: "10px" }}>
+          <input
+            type="checkbox"
+            onChange={(e) => handleonChange(e, "Tuesday")}
+          />
+          <h5>Tuesday</h5>
+        </div>
+
+        {isTuesdayChecked && (
+          <div style={{ display: "flex", gap: "10px" }}>
+            <label style={{ fontSize: "12px" }}>From</label>
+            <TimeSlot
+              isMinTime={true}
+              day="Tuesday"
+              setAvailableDates={setAvailableDates}
+            />
+            <label style={{ fontSize: "12px" }}>To</label>
+            <TimeSlot
+              isMinTime={false}
+              day="Tuesday"
+              setAvailableDates={setAvailableDates}
+            />
+          </div>
+        )}
+      </div>
+      <div className="date-availability__wrapper">
+        <div style={{ display: "flex", gap: "10px" }}>
+          <input
+            type="checkbox"
+            onChange={(e) => handleonChange(e, "Wednesday")}
+          />
+          <h5>Wednesday</h5>
+        </div>
+        {isWednesdayChecked && (
+          <div style={{ display: "flex", gap: "10px" }}>
+            <label style={{ fontSize: "12px" }}>From</label>
+            <TimeSlot
+              isMinTime={true}
+              day="Wednesday"
+              setAvailableDates={setAvailableDates}
+            />
+            <label style={{ fontSize: "12px" }}>To</label>
+            <TimeSlot
+              isMinTime={false}
+              day="Wednesday"
+              setAvailableDates={setAvailableDates}
+            />
+          </div>
+        )}
+      </div>
+      <div className="date-availability__wrapper">
+        <div style={{ display: "flex", gap: "10px" }}>
+          <input
+            type="checkbox"
+            onChange={(e) => handleonChange(e, "Thursday")}
+          />
+          <h5>Thursday</h5>
+        </div>
+        {isThursdayChecked && (
+          <div style={{ display: "flex", gap: "10px" }}>
+            <label style={{ fontSize: "12px" }}>From</label>
+            <TimeSlot
+              isMinTime={true}
+              day="Thursday"
+              setAvailableDates={setAvailableDates}
+            />
+            <label style={{ fontSize: "12px" }}>To</label>
+            <TimeSlot
+              isMinTime={false}
+              day="Thursday"
+              setAvailableDates={setAvailableDates}
+            />
+          </div>
+        )}
+      </div>
+      <div className="date-availability__wrapper">
+        <div style={{ display: "flex", gap: "10px" }}>
+          <input
+            type="checkbox"
+            onChange={(e) => handleonChange(e, "Friday")}
+          />
+          <h5>Friday</h5>
+        </div>
+        {isFridayChecked && (
+          <div style={{ display: "flex", gap: "10px" }}>
+            <label style={{ fontSize: "12px" }}>From</label>
+
+            <TimeSlot
+              isMinTime={true}
+              day="Friday"
+              setAvailableDates={setAvailableDates}
+            />
+            <label style={{ fontSize: "12px" }}>To</label>
+            <TimeSlot
+              isMinTime={false}
+              day="Friday"
+              setAvailableDates={setAvailableDates}
+            />
+          </div>
+        )}
+      </div>
+      <div className="date-availability__wrapper">
+        <div style={{ display: "flex", gap: "10px" }}>
+          <input
+            type="checkbox"
+            onChange={(e) => handleonChange(e, "Saturday")}
+          />
+          <h5>Saturday</h5>
+        </div>
+        {isSaturdayChecked && (
+          <div style={{ display: "flex", gap: "10px" }}>
+            <label style={{ fontSize: "12px" }}>From</label>
+            <TimeSlot
+              isMinTime={true}
+              day="Saturday"
+              setAvailableDates={setAvailableDates}
+            />
+            <label style={{ fontSize: "12px" }}>To</label>
+            <TimeSlot
+              isMinTime={false}
+              day="Saturday"
+              setAvailableDates={setAvailableDates}
+            />
+          </div>
+        )}
+      </div>
+      <div className="date-availability__wrapper">
+        <div style={{ display: "flex", gap: "10px" }}>
+          <input
+            type="checkbox"
+            onChange={(e) => handleonChange(e, "Sunday")}
+          />
+          <h5>Sunday</h5>
+        </div>
+        {isSundayChecked && (
+          <div style={{ display: "flex", gap: "10px" }}>
+            <label style={{ fontSize: "12px" }}>From</label>
+            <TimeSlot
+              isMinTime={true}
+              day="Sunday"
+              setAvailableDates={setAvailableDates}
+            />
+            <label style={{ fontSize: "12px" }}>To</label>
+            <TimeSlot
+              isMinTime={false}
+              day="Sunday"
+              setAvailableDates={setAvailableDates}
+            />
+          </div>
+        )}
+      </div>
+      <p style={{ fontSize: "12px", marginTop: "10px" }}>
+        By proceeding, you are committing to a two-week work schedule. If you do
+        not wish to make a permanent commitment, you will need to update your
+        availability every second week. To opt for a permanent commitment,
+        please select the checkbox below. You may change your preference at any
+        time.
+      </p>
+      <br />
+      <div style={{ display: "flex", gap: "10px" }}>
+        <input type="checkbox" />
+        <label style={{ fontSize: "12px" }}>
+          Will this be your permanent commitment?
+        </label>
+      </div>
+    </div>
+  );
+};
+
+const TimeSlot = ({ isMinTime, day, setAvailableDates }) => {
+  const handleonTimeChange = (e) => {
+    if (isMinTime) {
+      setAvailableDates((prevDates) => ({
+        ...prevDates,
+        [day]: {
+          ...prevDates[day],
+          fromTime: e.target.value, //update the time slot value
+        },
+      }));
+    } else {
+      setAvailableDates((prevDates) => ({
+        ...prevDates,
+        [day]: {
+          ...prevDates[day],
+          toTime: e.target.value, //update the time slot value
+        },
+      }));
+    }
+  };
+
+  return (
+    <div>
+      <select
+        className="time-selector__wrapper"
+        onChange={(e) => handleonTimeChange(e)}
+      >
+        <option value=""></option>
+        <option value="9:00">9:00</option>
+        <option value="9:30">9:30</option>
+        <option value="10:00">10:00</option>
+        <option value="10:30">10:30</option>
+        <option value="11:00">11:00</option>
+        <option value="11:30">11:30</option>
+        <option value="12:00">12:00</option>
+        <option value="12:30">12:30</option>
+        <option value="13:00">13:00</option>
+        <option value="13:30">13:30</option>
+        <option value="14:00">14:00</option>
+        <option value="14:30">14:30</option>
+        <option value="15:00">15:00</option>
+        <option value="15:30">15:30</option>
+        <option value="16:00">16:00</option>
+        <option value="16:30">16:30</option>
+        <option value="17:00">17:00</option>
+        <option value="17:30">17:30</option>
+        <option value="18:00">18:00</option>
+        <option value="18:30">18:30</option>
+        <option value="19:00">19:00</option>
+        <option value="19:30">19:30</option>
+        <option value="20:00">20:00</option>
+        <option value="20:30">20:30</option>
+        <option value="21:00">21:00</option>
+        <option value="21:30">21:30</option>
+        <option value="22:00">22:00</option>
+        <option value="22:30">22:30</option>
+      </select>
     </div>
   );
 };
