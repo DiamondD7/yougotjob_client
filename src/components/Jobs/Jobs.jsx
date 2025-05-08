@@ -262,9 +262,7 @@ const JobsCards = ({
               )
               .map((item, index) => (
                 <div className="jobs-content-card__wrapper" key={item.id}>
-                  <div
-                    style={{ display: "flex", justifyContent: "space-between" }}
-                  >
+                  <div className="jobs-content-card-header__wrapper">
                     <div style={{ display: "flex", gap: "20px" }}>
                       <div>
                         <h4>{item.fullName}</h4>
@@ -389,12 +387,14 @@ const Jobs = () => {
             fetchAvailableJobs={fetchAvailableJobs}
           />
         </div>
-        <JobsCards
-          jobsData={jobsData}
-          fetchAvailableJobs={fetchAvailableJobs}
-          userFullName={userAuth.fullName}
-          searchField={searchField}
-        />
+        <div>
+          <JobsCards
+            jobsData={jobsData}
+            fetchAvailableJobs={fetchAvailableJobs}
+            userFullName={userAuth.fullName}
+            searchField={searchField}
+          />
+        </div>
       </div>
     </div>
   );
