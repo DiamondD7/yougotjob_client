@@ -387,6 +387,7 @@ const PracitionerSignIn = ({ localData, today }) => {
       })
         .then((res) => res.json())
         .then((data) => {
+          console.log(data);
           if (data.returnStatus.status === false) {
             //checking if the status from the error is false or true
             console.log(data.returnStatus.message); //error message

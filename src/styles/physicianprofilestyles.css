@@ -79,3 +79,20 @@
 
   margin-top: 5px;
 }
+
+.workavail-container__wrapper {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+
+  font-size: 12px;
+
+  width: 250px;
+}
+
+.workavail-update__btn {
+  cursor: pointer;
+  padding: 2px 10px;
+  margin-top: 20px;
+  font-size: 12px;
+}

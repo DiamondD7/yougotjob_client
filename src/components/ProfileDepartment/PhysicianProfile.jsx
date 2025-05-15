@@ -11,15 +11,18 @@ import {
   Calendar,
   MapPin,
   Video,
+  CircleNotch,
 } from "@phosphor-icons/react";
-import { GetaHealthPractitioner } from "../../assets/js/serverApi";
+import {
+  GetaHealthPractitioner,
+  AddWorkTimes,
+  GetWorkTimes,
+} from "../../assets/js/serverApi";
 
 import "../../styles/physicianprofilestyles.css";
 
 const OverviewProfile = ({ loggedUser }) => {
-  const [availableDates, setAvailableDates] = useState([]);
-
-  console.log("Available Dates:", availableDates);
+  const [isUpdate, setIsUpdate] = useState(false); //initialisation of the update state, started out as false
   return (
     <div style={{ padding: "0 10px" }}>
       <div style={{ display: "flex", gap: "3px" }}>
@@ -99,14 +102,91 @@ const OverviewProfile = ({ loggedUser }) => {
           <br />
           <h4>Availability</h4>
           <br />
-          <TimeSelectorContainer setAvailableDates={setAvailableDates} />
+
+          {isUpdate === false ? (
+            <WorkAvailability
+              userId={loggedUser.id}
+              setIsUpdate={setIsUpdate}
+            />
+          ) : (
+            <TimeSelectorContainer
+              userId={loggedUser.id}
+              setIsUpdate={setIsUpdate}
+            />
+          )}
         </div>
       </div>
     </div>
   );
 };
 
-const TimeSelectorContainer = ({ setAvailableDates }) => {
+const WorkAvailability = ({ userId, setIsUpdate }) => {
+  const [workAvailabilityData, setWorkAvailabilityData] = useState([]); //initialisation of the work availability data state, started out as an empty array
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    fetchWorkTimes();
+  }, []);
+
+  const fetchWorkTimes = async (retry = true) => {
+    try {
+      const response = await fetch(`${GetWorkTimes}/${userId}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        credentials: "include",
+      });
+
+      if (response.status === 302) {
+        //302 is redericting to sign in screen because refresh token and jwt are expired.
+        console.warn("302 detected, redirecting...");
+        // Redirect to the new path
+        navigate("/");
+        return; // Exit the function to prevent further execution
+      }
+
+      if (response.status === 401 && retry) {
+        // Retry the request once if a 401 status is detected
+        console.warn("401 detected, retrying request...");
+        return fetchWorkTimes(false); // Call with `retry` set to false
+      }
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const data = await response.json();
+      setWorkAvailabilityData(data);
+    } catch (error) {
+      console.error("Error fetching work times:", error);
+    }
+  };
+  return (
+    <div>
+      {workAvailabilityData.map((item, index) => (
+        <div key={item.id} className="workavail-container__wrapper">
+          <label>{item.day}</label>
+          <div>
+            <p>From: {item.fromTime}</p>
+            <p>To: {item.toTime}</p>
+          </div>
+        </div>
+      ))}
+
+      <button
+        className="workavail-update__btn"
+        onClick={() => setIsUpdate(true)}
+      >
+        Update Availability
+      </button>
+    </div>
+  );
+};
+
+const TimeSelectorContainer = ({ userId, setIsUpdate }) => {
   const [isMondayChecked, setIsMondayChecked] = useState(false);
   const [isTuesdayChecked, setIsTuesdayChecked] = useState(false);
   const [isWednesdayChecked, setIsWednesdayChecked] = useState(false);
@@ -115,13 +195,62 @@ const TimeSelectorContainer = ({ setAvailableDates }) => {
   const [isSaturdayChecked, setIsSaturdayChecked] = useState(false);
   const [isSundayChecked, setIsSundayChecked] = useState(false);
 
-  const [fromTime, setFromTime] = useState("");
-  const [toTime, setToTime] = useState("");
+  const [availableDates, setAvailableDates] = useState([]);
+  const [isPermanentCommitment, setIsPermanentCommitment] = useState(false);
 
-  const [day, setDay] = useState("");
+  const navigate = useNavigate();
+
+  const handleUpdateWorkTimes = (e) => {
+    e.preventDefault();
+
+    const handleFetch = async (retry = true) => {
+      try {
+        const response = await fetch(
+          `${AddWorkTimes}?id=${userId}&isPermanent=${isPermanentCommitment}`,
+          {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+              Accept: "application/json",
+            },
+            credentials: "include",
+            body: JSON.stringify(availableDates),
+          }
+        );
+
+        if (response.status === 302) {
+          //302 is redericting to sign in screen because refresh token and jwt are expired.
+          console.warn("302 detected, redirecting...");
+          // Redirect to the new path
+          navigate("/");
+          return; // Exit the function to prevent further execution
+        }
+
+        if (response.status === 401 && retry) {
+          // Retry the request once if a 401 status is detected
+          console.warn("401 detected, retrying request...");
+          return handleFetch(false); // Call with `retry` set to false
+        }
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        if (data.returnStatus.status === false) {
+          console.log("Work times updated successfully:", data);
+        }
+
+        setIsUpdate(false); // Close the update form after successful submission
+      } catch (error) {
+        console.error("Error updating work times:", error);
+      }
+    };
+
+    handleFetch();
+  };
 
   const handleonChange = (e, day) => {
-    setDay(day);
     if (day === "Monday") {
       setIsMondayChecked(e.target.checked);
     } else if (day === "Tuesday") {
@@ -159,199 +288,209 @@ const TimeSelectorContainer = ({ setAvailableDates }) => {
 
   return (
     <div>
-      <div className="date-availability__wrapper">
-        <div style={{ display: "flex", gap: "10px" }}>
-          <input
-            type="checkbox"
-            onChange={(e) => handleonChange(e, "Monday")}
-          />
-          <h5>Monday</h5>
-        </div>
-        {isMondayChecked && (
+      <form onSubmit={(e) => handleUpdateWorkTimes(e)}>
+        <div className="date-availability__wrapper">
           <div style={{ display: "flex", gap: "10px" }}>
-            <label style={{ fontSize: "12px" }}>From</label>
-            <TimeSlot
-              isMinTime={true}
-              isMaxTime={false}
-              day="Monday"
-              setAvailableDates={setAvailableDates}
+            <input
+              type="checkbox"
+              onChange={(e) => handleonChange(e, "Monday")}
             />
-            <label style={{ fontSize: "12px" }}>To</label>
-            <TimeSlot
-              isMinTime={false}
-              isMaxTime={true}
-              day="Monday"
-              setAvailableDates={setAvailableDates}
-            />
+            <h5>Monday</h5>
           </div>
-        )}
-      </div>
-      <div className="date-availability__wrapper">
+          {isMondayChecked && (
+            <div style={{ display: "flex", gap: "10px" }}>
+              <label style={{ fontSize: "12px" }}>From</label>
+              <TimeSlot
+                isMinTime={true}
+                isMaxTime={false}
+                day="Monday"
+                setAvailableDates={setAvailableDates}
+              />
+              <label style={{ fontSize: "12px" }}>To</label>
+              <TimeSlot
+                isMinTime={false}
+                isMaxTime={true}
+                day="Monday"
+                setAvailableDates={setAvailableDates}
+              />
+            </div>
+          )}
+        </div>
+        <div className="date-availability__wrapper">
+          <div style={{ display: "flex", gap: "10px" }}>
+            <input
+              type="checkbox"
+              onChange={(e) => handleonChange(e, "Tuesday")}
+            />
+            <h5>Tuesday</h5>
+          </div>
+
+          {isTuesdayChecked && (
+            <div style={{ display: "flex", gap: "10px" }}>
+              <label style={{ fontSize: "12px" }}>From</label>
+              <TimeSlot
+                isMinTime={true}
+                day="Tuesday"
+                setAvailableDates={setAvailableDates}
+              />
+              <label style={{ fontSize: "12px" }}>To</label>
+              <TimeSlot
+                isMinTime={false}
+                day="Tuesday"
+                setAvailableDates={setAvailableDates}
+              />
+            </div>
+          )}
+        </div>
+        <div className="date-availability__wrapper">
+          <div style={{ display: "flex", gap: "10px" }}>
+            <input
+              type="checkbox"
+              onChange={(e) => handleonChange(e, "Wednesday")}
+            />
+            <h5>Wednesday</h5>
+          </div>
+          {isWednesdayChecked && (
+            <div style={{ display: "flex", gap: "10px" }}>
+              <label style={{ fontSize: "12px" }}>From</label>
+              <TimeSlot
+                isMinTime={true}
+                day="Wednesday"
+                setAvailableDates={setAvailableDates}
+              />
+              <label style={{ fontSize: "12px" }}>To</label>
+              <TimeSlot
+                isMinTime={false}
+                day="Wednesday"
+                setAvailableDates={setAvailableDates}
+              />
+            </div>
+          )}
+        </div>
+        <div className="date-availability__wrapper">
+          <div style={{ display: "flex", gap: "10px" }}>
+            <input
+              type="checkbox"
+              onChange={(e) => handleonChange(e, "Thursday")}
+            />
+            <h5>Thursday</h5>
+          </div>
+          {isThursdayChecked && (
+            <div style={{ display: "flex", gap: "10px" }}>
+              <label style={{ fontSize: "12px" }}>From</label>
+              <TimeSlot
+                isMinTime={true}
+                day="Thursday"
+                setAvailableDates={setAvailableDates}
+              />
+              <label style={{ fontSize: "12px" }}>To</label>
+              <TimeSlot
+                isMinTime={false}
+                day="Thursday"
+                setAvailableDates={setAvailableDates}
+              />
+            </div>
+          )}
+        </div>
+        <div className="date-availability__wrapper">
+          <div style={{ display: "flex", gap: "10px" }}>
+            <input
+              type="checkbox"
+              onChange={(e) => handleonChange(e, "Friday")}
+            />
+            <h5>Friday</h5>
+          </div>
+          {isFridayChecked && (
+            <div style={{ display: "flex", gap: "10px" }}>
+              <label style={{ fontSize: "12px" }}>From</label>
+
+              <TimeSlot
+                isMinTime={true}
+                day="Friday"
+                setAvailableDates={setAvailableDates}
+              />
+              <label style={{ fontSize: "12px" }}>To</label>
+              <TimeSlot
+                isMinTime={false}
+                day="Friday"
+                setAvailableDates={setAvailableDates}
+              />
+            </div>
+          )}
+        </div>
+        <div className="date-availability__wrapper">
+          <div style={{ display: "flex", gap: "10px" }}>
+            <input
+              type="checkbox"
+              onChange={(e) => handleonChange(e, "Saturday")}
+            />
+            <h5>Saturday</h5>
+          </div>
+          {isSaturdayChecked && (
+            <div style={{ display: "flex", gap: "10px" }}>
+              <label style={{ fontSize: "12px" }}>From</label>
+              <TimeSlot
+                isMinTime={true}
+                day="Saturday"
+                setAvailableDates={setAvailableDates}
+              />
+              <label style={{ fontSize: "12px" }}>To</label>
+              <TimeSlot
+                isMinTime={false}
+                day="Saturday"
+                setAvailableDates={setAvailableDates}
+              />
+            </div>
+          )}
+        </div>
+        <div className="date-availability__wrapper">
+          <div style={{ display: "flex", gap: "10px" }}>
+            <input
+              type="checkbox"
+              onChange={(e) => handleonChange(e, "Sunday")}
+            />
+            <h5>Sunday</h5>
+          </div>
+          {isSundayChecked && (
+            <div style={{ display: "flex", gap: "10px" }}>
+              <label style={{ fontSize: "12px" }}>From</label>
+              <TimeSlot
+                isMinTime={true}
+                day="Sunday"
+                setAvailableDates={setAvailableDates}
+              />
+              <label style={{ fontSize: "12px" }}>To</label>
+              <TimeSlot
+                isMinTime={false}
+                day="Sunday"
+                setAvailableDates={setAvailableDates}
+              />
+            </div>
+          )}
+        </div>
+        <p style={{ fontSize: "12px", marginTop: "10px" }}>
+          By proceeding, you are committing to a two-week work schedule. If you
+          do not wish to make a permanent commitment, you will need to update
+          your availability every second week. To opt for a permanent
+          commitment, please select the checkbox below. You may change your
+          preference at any time.
+        </p>
+        <br />
         <div style={{ display: "flex", gap: "10px" }}>
           <input
             type="checkbox"
-            onChange={(e) => handleonChange(e, "Tuesday")}
+            onChange={(e) => setIsPermanentCommitment(e.target.checked)}
           />
-          <h5>Tuesday</h5>
+          <label style={{ fontSize: "12px" }}>
+            Will this be your permanent commitment?
+          </label>
         </div>
 
-        {isTuesdayChecked && (
-          <div style={{ display: "flex", gap: "10px" }}>
-            <label style={{ fontSize: "12px" }}>From</label>
-            <TimeSlot
-              isMinTime={true}
-              day="Tuesday"
-              setAvailableDates={setAvailableDates}
-            />
-            <label style={{ fontSize: "12px" }}>To</label>
-            <TimeSlot
-              isMinTime={false}
-              day="Tuesday"
-              setAvailableDates={setAvailableDates}
-            />
-          </div>
-        )}
-      </div>
-      <div className="date-availability__wrapper">
-        <div style={{ display: "flex", gap: "10px" }}>
-          <input
-            type="checkbox"
-            onChange={(e) => handleonChange(e, "Wednesday")}
-          />
-          <h5>Wednesday</h5>
+        <div style={{ display: "flex", gap: "10px", marginTop: "20px" }}>
+          <button onClick={() => setIsUpdate(false)}>Cancel</button>
+          <button type="submit">Save</button>
         </div>
-        {isWednesdayChecked && (
-          <div style={{ display: "flex", gap: "10px" }}>
-            <label style={{ fontSize: "12px" }}>From</label>
-            <TimeSlot
-              isMinTime={true}
-              day="Wednesday"
-              setAvailableDates={setAvailableDates}
-            />
-            <label style={{ fontSize: "12px" }}>To</label>
-            <TimeSlot
-              isMinTime={false}
-              day="Wednesday"
-              setAvailableDates={setAvailableDates}
-            />
-          </div>
-        )}
-      </div>
-      <div className="date-availability__wrapper">
-        <div style={{ display: "flex", gap: "10px" }}>
-          <input
-            type="checkbox"
-            onChange={(e) => handleonChange(e, "Thursday")}
-          />
-          <h5>Thursday</h5>
-        </div>
-        {isThursdayChecked && (
-          <div style={{ display: "flex", gap: "10px" }}>
-            <label style={{ fontSize: "12px" }}>From</label>
-            <TimeSlot
-              isMinTime={true}
-              day="Thursday"
-              setAvailableDates={setAvailableDates}
-            />
-            <label style={{ fontSize: "12px" }}>To</label>
-            <TimeSlot
-              isMinTime={false}
-              day="Thursday"
-              setAvailableDates={setAvailableDates}
-            />
-          </div>
-        )}
-      </div>
-      <div className="date-availability__wrapper">
-        <div style={{ display: "flex", gap: "10px" }}>
-          <input
-            type="checkbox"
-            onChange={(e) => handleonChange(e, "Friday")}
-          />
-          <h5>Friday</h5>
-        </div>
-        {isFridayChecked && (
-          <div style={{ display: "flex", gap: "10px" }}>
-            <label style={{ fontSize: "12px" }}>From</label>
-
-            <TimeSlot
-              isMinTime={true}
-              day="Friday"
-              setAvailableDates={setAvailableDates}
-            />
-            <label style={{ fontSize: "12px" }}>To</label>
-            <TimeSlot
-              isMinTime={false}
-              day="Friday"
-              setAvailableDates={setAvailableDates}
-            />
-          </div>
-        )}
-      </div>
-      <div className="date-availability__wrapper">
-        <div style={{ display: "flex", gap: "10px" }}>
-          <input
-            type="checkbox"
-            onChange={(e) => handleonChange(e, "Saturday")}
-          />
-          <h5>Saturday</h5>
-        </div>
-        {isSaturdayChecked && (
-          <div style={{ display: "flex", gap: "10px" }}>
-            <label style={{ fontSize: "12px" }}>From</label>
-            <TimeSlot
-              isMinTime={true}
-              day="Saturday"
-              setAvailableDates={setAvailableDates}
-            />
-            <label style={{ fontSize: "12px" }}>To</label>
-            <TimeSlot
-              isMinTime={false}
-              day="Saturday"
-              setAvailableDates={setAvailableDates}
-            />
-          </div>
-        )}
-      </div>
-      <div className="date-availability__wrapper">
-        <div style={{ display: "flex", gap: "10px" }}>
-          <input
-            type="checkbox"
-            onChange={(e) => handleonChange(e, "Sunday")}
-          />
-          <h5>Sunday</h5>
-        </div>
-        {isSundayChecked && (
-          <div style={{ display: "flex", gap: "10px" }}>
-            <label style={{ fontSize: "12px" }}>From</label>
-            <TimeSlot
-              isMinTime={true}
-              day="Sunday"
-              setAvailableDates={setAvailableDates}
-            />
-            <label style={{ fontSize: "12px" }}>To</label>
-            <TimeSlot
-              isMinTime={false}
-              day="Sunday"
-              setAvailableDates={setAvailableDates}
-            />
-          </div>
-        )}
-      </div>
-      <p style={{ fontSize: "12px", marginTop: "10px" }}>
-        By proceeding, you are committing to a two-week work schedule. If you do
-        not wish to make a permanent commitment, you will need to update your
-        availability every second week. To opt for a permanent commitment,
-        please select the checkbox below. You may change your preference at any
-        time.
-      </p>
-      <br />
-      <div style={{ display: "flex", gap: "10px" }}>
-        <input type="checkbox" />
-        <label style={{ fontSize: "12px" }}>
-          Will this be your permanent commitment?
-        </label>
-      </div>
+      </form>
     </div>
   );
 };
@@ -646,6 +785,7 @@ const BodyProfile = ({ loggedUser, clickNav }) => {
 };
 
 const PhysicianProfile = () => {
+  const [loading, setLoading] = useState(true); //initialisation of the loading state, started out as true
   const [clickNav, setClickNav] = useState("overview"); //initialisation of the click navigation state, started out as "overview"
   const [loggedUser, setLoggedUser] = useState({});
   const navigate = useNavigate();
@@ -684,6 +824,7 @@ const PhysicianProfile = () => {
 
       const data = await response.json();
       setLoggedUser(data);
+      setLoading(false);
     } catch (error) {
       console.log("Error fetching data:", error.message);
     }
@@ -692,13 +833,21 @@ const PhysicianProfile = () => {
   return (
     <div>
       <h3 style={{ padding: "10px 0 0 30px" }}>Profile</h3>
-      <div>
-        <NavProfile clickNav={clickNav} setClickNav={setClickNav} />
-      </div>
+      {loading === true ? (
+        <div className="display-loading-icon__wrapper">
+          <CircleNotch size={45} color="#202020" className={"loading-icon"} />
+        </div>
+      ) : (
+        <>
+          <div>
+            <NavProfile clickNav={clickNav} setClickNav={setClickNav} />
+          </div>
 
-      <div>
-        <BodyProfile loggedUser={loggedUser} clickNav={clickNav} />
-      </div>
+          <div>
+            <BodyProfile loggedUser={loggedUser} clickNav={clickNav} />
+          </div>
+        </>
+      )}
     </div>
   );
 };
