@@ -13,6 +13,7 @@ import {
   GetPatient,
   AddAppointmentFromForm,
   UploadFile,
+  GetWorkTimes,
 } from "../../assets/js/serverApi";
 import {
   getDaysFromPreviousMonth,
@@ -823,13 +824,230 @@ const AppointmentWait = ({ autofillData }) => {
   );
 };
 
-const AppointmentForm = () => {
+const AppointmentForm = ({ setGetStartedClicked }) => {
   const [stage, setStage] = useState(1);
+  const [practitioners, setPractitioners] = useState([]);
+  const [practId, setPractId] = useState(0);
+  useEffect(() => {
+    handleGetPractitioners();
+  }, []);
+
+  const handleGetPractitioners = async () => {
+    try {
+      const response = await fetch(GetHealthPractitionerData, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const data = await response.json();
+
+      setPractitioners(data);
+    } catch (ex) {
+      console.log(ex);
+    }
+  };
 
   // -----------------------------DISPLAYS
 
-  const Stage3 = () => {
+  const Stage4 = ({ setStage, setGetStartedClicked }) => {
+    return (
+      <div>
+        <h4>Appointment Confirmation</h4>
+        <div className="appointment-confirmation-container__wrapper">
+          <div style={{ textAlign: "center" }}>
+            <p>Your Details</p>
+          </div>
+          <div
+            style={{
+              display: "flex",
+              gap: "20px",
+              justifyContent: "space-between",
+            }}
+          >
+            <div>
+              <label>Patient</label>
+              <p>
+                <strong>Aaron Sierra</strong>
+              </p>
+              <br />
+              <label>Email</label>
+              <p>
+                <strong>aaronjuliansierra@gmail.com</strong>
+              </p>
+            </div>
+
+            <div>
+              <div>
+                <label>Mobile</label>
+                <p>
+                  <strong>021021021021</strong>
+                </p>
+              </div>
+              <div>
+                <label>Address</label>
+                <p>
+                  <strong>N/A</strong>
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <br />
+          <br />
+          <div style={{ textAlign: "center" }}>
+            <p>Appointment Details</p>
+          </div>
+          <div
+            style={{
+              display: "flex",
+              gap: "20px",
+              justifyContent: "space-between",
+            }}
+          >
+            <div>
+              <label>Practitioner</label>
+              <p>
+                <strong>Dr. Henderson James</strong>
+              </p>
+              <br />
+              <label>Appointment Type</label>
+              <p>
+                <strong>Video Confenrence</strong>
+              </p>
+            </div>
+
+            <div>
+              <div>
+                <label>Appointment Schedule</label>
+                <p>
+                  <strong>11/02/2025, 11:30 am</strong>
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <br />
+
+          <div>
+            <label>Comments</label>
+            <p>
+              <strong>
+                Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                Reprehenderit, consectetur voluptatem ipsam incidunt doloribus
+                amet corrupti culpa error esse alias ab corporis quas sint rem
+                facere at vero magnam sapiente?
+              </strong>
+            </p>
+          </div>
+        </div>
+        <label style={{ fontSize: "12px" }}>
+          {"   "}* Confirm to consent to the processing of my information for
+          scheduling purposes.
+        </label>
+        <br />
+        <button
+          className="appointment-cancel-confirm__btn"
+          onClick={() => setGetStartedClicked(false)}
+        >
+          Cancel
+        </button>
+        <button className="appointment-agree-confirm__btn">
+          Agree & Confirm
+        </button>
+      </div>
+    );
+  };
+
+  const Stage3 = ({ practId, setStage }) => {
+    const [practitionersDateTime, setPractitionersDateTime] = useState([]);
+    const dateOfWeek = [
+      "Sunday",
+      "Monday",
+      "Tuesday",
+      "Wednesday",
+      "Thursday",
+      "Friday",
+      "Saturday",
+    ];
     const [selectedDate, setSelectedDate] = useState(null);
+
+    useEffect(() => {
+      handleGetDateTime(practId);
+    }, []);
+
+    useEffect(() => {
+      if (practitionersDateTime.length > 0) {
+        handleAvailabilityOfDates();
+      }
+    }, [practitionersDateTime]);
+
+    const handleGetDateTime = async (practId) => {
+      try {
+        const response = await fetch(`${GetWorkTimes}/${practId}`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        setPractitionersDateTime(data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    //console.log(practitionersDateTime[0]?.day);
+    const [dates, setDates] = useState([]);
+    const [times, setTimes] = useState([]);
+
+    const handleAvailabilityOfDates = () => {
+      let counter = 0;
+      while (counter < practitionersDateTime.length) {
+        for (let i = 0; i < dateOfWeek.length; i++) {
+          if (dateOfWeek[i] === practitionersDateTime[counter]?.day) {
+            setDates((prevDates) => [...prevDates, i]);
+          }
+        }
+        counter++;
+      }
+    };
+
+    const handleSelectDate = (date) => {
+      setSelectedDate(date);
+      const indexOfDay = new Date(date).getDay(); // Get the day of the week (0-6)
+      const dayName = dateOfWeek[indexOfDay]; // Get the name of the day
+
+      for (let i = 0; i < practitionersDateTime.length; i++) {
+        if (dayName === practitionersDateTime[i]?.day) {
+          const fromTime = parseInt(practitionersDateTime[i]?.fromTime); //parses it, as it is a string
+          const toTime = parseInt(practitionersDateTime[i]?.toTime);
+          setTimes({ fromTime: fromTime, toTime: toTime });
+        }
+      }
+    };
+
+    const isAllowedDay = (date) => {
+      // this method helps with filtering the date
+      const day = date.getDay();
+      return dates.includes(day);
+    };
+    const isAllowedTimes = (time) => {
+      // this method helps with filtering the date
+      const hour = time.getHours();
+      return hour >= times.fromTime && hour < times.toTime;
+    };
 
     const getMinTime = () => {
       const minTime = new Date();
@@ -842,17 +1060,21 @@ const AppointmentForm = () => {
       maxTime.setHours(23, 0, 0, 0);
       return maxTime;
     };
+
+    const handleConfirm = (e) => {
+      e.preventDefault();
+      setStage(4);
+    };
+
     return (
       <div>
         <h2>Pick a date and time</h2>
         <DatePicker
           placeholderText="Select date and time"
           selected={selectedDate}
-          onChange={(date) => setSelectedDate(date)}
-          filterDate={(date) => {
-            const day = date.getDay(); // Sunday = 0, Monday = 1, ..., Saturday = 6
-            return day >= 3 && day <= 5; // Wednesday (3), Thursday (4), Friday (5)
-          }}
+          onChange={(date) => handleSelectDate(date)}
+          filterDate={isAllowedDay}
+          filterTime={isAllowedTimes}
           className="datePicker"
           dateFormat="dd/MM/YYYY - hh:mm a"
           minDate={new Date()}
@@ -862,39 +1084,50 @@ const AppointmentForm = () => {
           minTime={getMinTime()}
           maxTime={getMaxTime()}
         />
+
+        <br />
+        <br />
+        <button
+          className="appointment-confirmation-back__btn"
+          onClick={() => setStage(2)}
+        >
+          Back
+        </button>
+        <br />
+        <button
+          className={`appointment-confirmation__btn ${
+            selectedDate !== null ? "" : "btnDisabled"
+          }`}
+          disabled={selectedDate !== null ? false : true}
+          onClick={(e) => handleConfirm(e)}
+        >
+          Confirmation
+        </button>
       </div>
     );
   };
 
-  const Stage2 = ({ setStage }) => {
-    const handleBtnClicked = (e) => {
+  const Stage2 = ({ setStage, practitioners, setPractId }) => {
+    const handleBtnClicked = (e, userId) => {
       e.preventDefault();
       setStage(3);
+      setPractId(userId);
     };
     return (
       <div>
         <h2>Do you have a preferred GP?</h2>
         <div className="appointment-form-btns__wrapper">
-          <button
-            className="appointment-form-btn"
-            onClick={(e) => handleBtnClicked(e)}
-          >
-            Dr Aaron Julian
-          </button>
-          <br />
-          <button
-            className="appointment-form-btn"
-            onClick={(e) => handleBtnClicked(e)}
-          >
-            Dr Tiara Kaleena
-          </button>
-          <br />
-          <button
-            className="appointment-form-btn"
-            onClick={(e) => handleBtnClicked(e)}
-          >
-            Dr Jerome Johnson
-          </button>
+          {practitioners.map((data, index) => (
+            <div key={data.id}>
+              <button
+                className="appointment-form-btn"
+                onClick={(e) => handleBtnClicked(e, data.id)}
+              >
+                {data.fullName}
+              </button>
+              <br />
+            </div>
+          ))}
         </div>
         <br />
         <br />
@@ -944,9 +1177,18 @@ const AppointmentForm = () => {
       {stage === 1 ? (
         <Stage1 setStage={setStage} />
       ) : stage === 2 ? (
-        <Stage2 setStage={setStage} />
+        <Stage2
+          setStage={setStage}
+          practitioners={practitioners}
+          setPractId={setPractId}
+        />
       ) : stage === 3 ? (
-        <Stage3 />
+        <Stage3 practId={practId} setStage={setStage} />
+      ) : stage === 4 ? (
+        <Stage4
+          setStage={setStage}
+          setGetStartedClicked={setGetStartedClicked}
+        />
       ) : (
         ""
       )}
@@ -1052,7 +1294,7 @@ const Appointment = () => {
           <div>
             {getStartedClicked === true ? (
               // <AppointmentWait autofillData={autofillData} />
-              <AppointmentForm />
+              <AppointmentForm setGetStartedClicked={setGetStartedClicked} />
             ) : (
               <div className="appointment-get-started__wrapper">
                 <div className="get-started-paragraph__text">
