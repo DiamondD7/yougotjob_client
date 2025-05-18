@@ -337,6 +337,10 @@
   padding: 10px;
 }
 
+.datePicker {
+  width: 300px;
+}
+
 .appointment-form-btn {
   cursor: pointer;
   padding: 5px 10px;
@@ -357,18 +361,37 @@
   overflow: auto;
 }
 
-.appointment-confirmation__btn {
-  width: 200px;
-  padding: 2px 10px;
-  margin-top: 10px;
-  cursor: pointer;
+.appointment-reasons__textarea {
+  min-width: 450px;
+  max-width: 450px;
+  min-height: 200px;
+  max-height: 200px;
+  padding: 5px;
+  border-radius: 5px;
+
+  outline: none;
 }
 
-.appointment-confirmation-back__btn {
-  cursor: pointer;
+.appointment-reasons__btn {
+  margin-top: 10px;
+  width: 100%;
   padding: 2px 10px;
+  cursor: pointer;
+  background-color: #9dcd5a;
+  border: 1px solid #f3f3f3;
+  border-radius: 5px;
+  color: #f3f3f3;
+}
 
-  width: 200px;
+.appointment-confirmation__btn {
+  margin-top: 10px;
+  width: 100%;
+  padding: 2px 10px;
+  cursor: pointer;
+  background-color: #9dcd5a;
+  border: 1px solid #f3f3f3;
+  border-radius: 5px;
+  color: #f3f3f3;
 }
 
 .appointment-confirmation-container__wrapper {

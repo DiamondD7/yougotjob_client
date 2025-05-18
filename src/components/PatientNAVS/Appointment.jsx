@@ -827,7 +827,19 @@ const AppointmentWait = ({ autofillData }) => {
 const AppointmentForm = ({ setGetStartedClicked }) => {
   const [stage, setStage] = useState(1);
   const [practitioners, setPractitioners] = useState([]);
+  const [chosenPractitioner, setChosenPractitioner] = useState({
+    email: "",
+    fullName: "",
+  });
+  const [chosenPatient, setChosenPatient] = useState({
+    fullName: "",
+    email: "",
+    mobileNumber: "",
+  });
+
+  const [aptComments, setAptComments] = useState("");
   const [practId, setPractId] = useState(0);
+
   useEffect(() => {
     handleGetPractitioners();
   }, []);
@@ -855,7 +867,13 @@ const AppointmentForm = ({ setGetStartedClicked }) => {
 
   // -----------------------------DISPLAYS
 
-  const Stage4 = ({ setStage, setGetStartedClicked }) => {
+  const Stage5 = ({
+    setStage,
+    setGetStartedClicked,
+    chosenPractitioner,
+    chosenPatient,
+    aptComments,
+  }) => {
     return (
       <div>
         <h4>Appointment Confirmation</h4>
@@ -873,12 +891,12 @@ const AppointmentForm = ({ setGetStartedClicked }) => {
             <div>
               <label>Patient</label>
               <p>
-                <strong>Aaron Sierra</strong>
+                <strong>{chosenPatient.fullName}</strong>
               </p>
               <br />
               <label>Email</label>
               <p>
-                <strong>aaronjuliansierra@gmail.com</strong>
+                <strong>{chosenPatient.email}</strong>
               </p>
             </div>
 
@@ -886,9 +904,10 @@ const AppointmentForm = ({ setGetStartedClicked }) => {
               <div>
                 <label>Mobile</label>
                 <p>
-                  <strong>021021021021</strong>
+                  <strong>{chosenPatient.mobileNumber}</strong>
                 </p>
               </div>
+              <br />
               <div>
                 <label>Address</label>
                 <p>
@@ -913,7 +932,7 @@ const AppointmentForm = ({ setGetStartedClicked }) => {
             <div>
               <label>Practitioner</label>
               <p>
-                <strong>Dr. Henderson James</strong>
+                <strong>{chosenPractitioner.fullName}</strong>
               </p>
               <br />
               <label>Appointment Type</label>
@@ -923,6 +942,13 @@ const AppointmentForm = ({ setGetStartedClicked }) => {
             </div>
 
             <div>
+              <div>
+                <label>Email</label>
+                <p>
+                  <strong>{chosenPractitioner.email}</strong>
+                </p>
+              </div>
+              <br />
               <div>
                 <label>Appointment Schedule</label>
                 <p>
@@ -937,12 +963,7 @@ const AppointmentForm = ({ setGetStartedClicked }) => {
           <div>
             <label>Comments</label>
             <p>
-              <strong>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                Reprehenderit, consectetur voluptatem ipsam incidunt doloribus
-                amet corrupti culpa error esse alias ab corporis quas sint rem
-                facere at vero magnam sapiente?
-              </strong>
+              <strong>{aptComments.length > 0 ? aptComments : "N/A"}</strong>
             </p>
           </div>
         </div>
@@ -960,6 +981,36 @@ const AppointmentForm = ({ setGetStartedClicked }) => {
         <button className="appointment-agree-confirm__btn">
           Agree & Confirm
         </button>
+      </div>
+    );
+  };
+
+  const Stage4 = ({ setStage, aptComments, setAptComments }) => {
+    return (
+      <div>
+        <h2>What is the reason for the appointment?</h2>
+        <br />
+        <br />
+        <div style={{ textAlign: "center" }}>
+          <textarea
+            className="appointment-reasons__textarea"
+            onChange={(e) => setAptComments(e.target.value)}
+            value={aptComments}
+          ></textarea>
+          <br />
+          <button
+            className="appointment-cancel-confirm__btn"
+            onClick={() => setStage(3)}
+          >
+            Back: Schedule
+          </button>
+          <button
+            className="appointment-reasons__btn"
+            onClick={() => setStage(5)}
+          >
+            Next: Confirmation
+          </button>
+        </div>
       </div>
     );
   };
@@ -1069,6 +1120,7 @@ const AppointmentForm = ({ setGetStartedClicked }) => {
     return (
       <div>
         <h2>Pick a date and time</h2>
+        <br />
         <DatePicker
           placeholderText="Select date and time"
           selected={selectedDate}
@@ -1088,10 +1140,10 @@ const AppointmentForm = ({ setGetStartedClicked }) => {
         <br />
         <br />
         <button
-          className="appointment-confirmation-back__btn"
+          className="appointment-cancel-confirm__btn"
           onClick={() => setStage(2)}
         >
-          Back
+          Back: Practitioner
         </button>
         <br />
         <button
@@ -1101,17 +1153,26 @@ const AppointmentForm = ({ setGetStartedClicked }) => {
           disabled={selectedDate !== null ? false : true}
           onClick={(e) => handleConfirm(e)}
         >
-          Confirmation
+          Next: Reason for appointment
         </button>
       </div>
     );
   };
 
-  const Stage2 = ({ setStage, practitioners, setPractId }) => {
-    const handleBtnClicked = (e, userId) => {
+  const Stage2 = ({
+    setStage,
+    practitioners,
+    setChosenPractitioner,
+    setPractId,
+  }) => {
+    const handleBtnClicked = (e, data) => {
       e.preventDefault();
       setStage(3);
-      setPractId(userId);
+      setPractId(data.id);
+      setChosenPractitioner({
+        email: data.emailAddress,
+        fullName: data.fullName,
+      });
     };
     return (
       <div>
@@ -1121,7 +1182,7 @@ const AppointmentForm = ({ setGetStartedClicked }) => {
             <div key={data.id}>
               <button
                 className="appointment-form-btn"
-                onClick={(e) => handleBtnClicked(e, data.id)}
+                onClick={(e) => handleBtnClicked(e, data)}
               >
                 {data.fullName}
               </button>
@@ -1142,10 +1203,60 @@ const AppointmentForm = ({ setGetStartedClicked }) => {
     );
   };
 
-  const Stage1 = ({ setStage }) => {
+  const Stage1 = ({ setStage, setChosenPatient }) => {
+    const navigate = useNavigate();
+
     const handleStageClick = (e) => {
       e.preventDefault();
+      if (e.target.value === "myself") {
+        handleAutoFill(); //autofill the current users data
+      } //TODO: else statement if user nominates someone else as the patient
+
       setStage(2);
+    };
+
+    const handleAutoFill = () => {
+      const fetchDataAsync = async (retry = true) => {
+        try {
+          const id = parseInt(sessionStorage.getItem("id"));
+          const response = await fetch(`${GetPatient}/${id}`, {
+            method: "GET",
+            headers: {
+              Accept: "application/json",
+            },
+            credentials: "include",
+          });
+
+          if (response.status === 302) {
+            //302 is redericting to sign in screen because refresh token and jwt are expired.
+            console.warn("302 detected, redirecting...");
+            // Redirect to the new path
+            navigate("/");
+            return; // Exit the function to prevent further execution
+          }
+
+          if (response.status === 401 && retry) {
+            // Retry the request once if a 401 status is detected
+            console.warn("401 detected, retrying request...");
+            return fetchDataAsync(false); // Call with `retry` set to false
+          }
+
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+
+          const data = await response.json();
+
+          setChosenPatient({
+            fullName: data.fullName,
+            email: data.emailAddress,
+            mobileNumber: data.mobileNumber,
+          });
+        } catch (error) {
+          console.log("Error fetching data:", error.message);
+        }
+      };
+      fetchDataAsync();
     };
     return (
       <div>
@@ -1155,6 +1266,7 @@ const AppointmentForm = ({ setGetStartedClicked }) => {
           <button
             className="appointment-form-btn"
             onClick={(e) => handleStageClick(e)}
+            value={"myself"}
           >
             For me
           </button>
@@ -1175,11 +1287,12 @@ const AppointmentForm = ({ setGetStartedClicked }) => {
   return (
     <div className="appointment-form__container-wrapper">
       {stage === 1 ? (
-        <Stage1 setStage={setStage} />
+        <Stage1 setStage={setStage} setChosenPatient={setChosenPatient} />
       ) : stage === 2 ? (
         <Stage2
           setStage={setStage}
           practitioners={practitioners}
+          setChosenPractitioner={setChosenPractitioner}
           setPractId={setPractId}
         />
       ) : stage === 3 ? (
@@ -1187,7 +1300,16 @@ const AppointmentForm = ({ setGetStartedClicked }) => {
       ) : stage === 4 ? (
         <Stage4
           setStage={setStage}
+          aptComments={aptComments}
+          setAptComments={setAptComments}
+        />
+      ) : stage === 5 ? (
+        <Stage5
+          setStage={setStage}
           setGetStartedClicked={setGetStartedClicked}
+          chosenPractitioner={chosenPractitioner}
+          chosenPatient={chosenPatient}
+          aptComments={aptComments}
         />
       ) : (
         ""
