@@ -832,13 +832,32 @@ const AppointmentForm = ({ setGetStartedClicked }) => {
     fullName: "",
   });
   const [chosenPatient, setChosenPatient] = useState({
+    id: sessionStorage.getItem("id"),
     fullName: "",
     email: "",
     mobileNumber: "",
   });
 
+  const [files, setFiles] = useState([]);
+
   const [aptComments, setAptComments] = useState("");
   const [practId, setPractId] = useState(0);
+  const [appointmentData, setAppointmentData] = useState({
+    PractitionerId: practId,
+    PatientsId: chosenPatient.id,
+    Duration: 30,
+    FullName: chosenPatient.fullName,
+    Comments: aptComments,
+    ContactNumber: chosenPatient.mobileNumber || "",
+    EmailAddress: chosenPatient.email,
+    HealthPractitionerType: "General Practitioner",
+    PreferredAppointmentDate: null,
+    AppointmentType: "online",
+    StreetAddress: "",
+    Suburb: "",
+    City: "",
+    PostCode: "",
+  });
 
   useEffect(() => {
     handleGetPractitioners();
@@ -867,12 +886,14 @@ const AppointmentForm = ({ setGetStartedClicked }) => {
 
   // -----------------------------DISPLAYS
 
-  const Stage5 = ({
+  //the props could be more simpler and easy with just using one state instead of having 2 states for chosenPractitioner and chosenPatient :(
+  const Stage6 = ({
     setStage,
     setGetStartedClicked,
     chosenPractitioner,
     chosenPatient,
     aptComments,
+    appointmentData,
   }) => {
     return (
       <div>
@@ -966,6 +987,14 @@ const AppointmentForm = ({ setGetStartedClicked }) => {
               <strong>{aptComments.length > 0 ? aptComments : "N/A"}</strong>
             </p>
           </div>
+
+          <br />
+          <div>
+            <label>Supporting Documents</label>
+            <p>
+              <strong>{files.length > 0 ? "Yes" : "No"}</strong>
+            </p>
+          </div>
         </div>
         <label style={{ fontSize: "12px" }}>
           {"   "}* Confirm to consent to the processing of my information for
@@ -985,7 +1014,91 @@ const AppointmentForm = ({ setGetStartedClicked }) => {
     );
   };
 
-  const Stage4 = ({ setStage, aptComments, setAptComments }) => {
+  const Stage5 = ({ files, setFiles }) => {
+    const handleFileChange = (event) => {
+      // Get the current files selected by the user
+      const newFiles = event.target.files;
+
+      // Convert the FileList to an array and append it to the existing files
+      setFiles((prevFiles) => {
+        return [...prevFiles, ...Array.from(newFiles)];
+      });
+    };
+
+    const handleDeleteFile = (e, indexToRemove) => {
+      e.preventDefault();
+      setFiles((prevItems) =>
+        prevItems.filter((items, index) => index !== indexToRemove)
+      );
+    };
+
+    const handleBack = (e) => {
+      e.preventDefault();
+      setStage(4);
+      setFiles([]);
+    };
+
+    return (
+      <div style={{ textAlign: "center" }}>
+        <h2>Supporting Documents</h2>
+        <br />
+        <br />
+        <input
+          className="documents-file__btn"
+          type="file"
+          multiple
+          onChange={(e) => handleFileChange(e)}
+        />
+        <div className="document-uploaded-files__wrapper">
+          {files.map((item, index) => (
+            <div key={index} className="file__wrapper">
+              <label>{item.name}</label>
+              <button
+                style={{
+                  border: "none",
+                  backgroundColor: "transparent",
+                  cursor: "pointer",
+                }}
+                onClick={(e) => handleDeleteFile(e, index)}
+              >
+                <X size={13} />
+              </button>
+            </div>
+          ))}
+        </div>
+        <button
+          className="appointment-cancel-confirm__btn"
+          onClick={(e) => handleBack(e)}
+        >
+          Back: Comments
+        </button>
+        <button
+          className="appointment-agree-confirm__btn"
+          onClick={(e) => setStage(6)}
+        >
+          Next: Confirmation
+        </button>
+      </div>
+    );
+  };
+
+  const Stage4 = ({
+    setStage,
+    setAptComments,
+    appointmentData,
+    setAppointmentData,
+  }) => {
+    const [comment, setComment] = useState("");
+
+    const handleConfirmComments = (e) => {
+      e.preventDefault();
+      setAptComments(comment);
+      setAppointmentData({
+        ...appointmentData,
+        Comments: comment,
+      });
+      setStage(5);
+    };
     return (
       <div>
         <h2>What is the reason for the appointment?</h2>
@@ -994,8 +1107,8 @@ const AppointmentForm = ({ setGetStartedClicked }) => {
         <div style={{ textAlign: "center" }}>
           <textarea
             className="appointment-reasons__textarea"
-            onChange={(e) => setAptComments(e.target.value)}
-            value={aptComments}
+            onChange={(e) => setComment(e.target.value)}
+            value={comment}
           ></textarea>
           <br />
           <button
@@ -1006,16 +1119,21 @@ const AppointmentForm = ({ setGetStartedClicked }) => {
           </button>
           <button
             className="appointment-reasons__btn"
-            onClick={() => setStage(5)}
+            onClick={(e) => handleConfirmComments(e)}
           >
-            Next: Confirmation
+            Next: Documents
           </button>
         </div>
       </div>
     );
   };
 
-  const Stage3 = ({ practId, setStage }) => {
+  const Stage3 = ({
+    practId,
+    setStage,
+    appointmentData,
+    setAppointmentData,
+  }) => {
     const [practitionersDateTime, setPractitionersDateTime] = useState([]);
     const dateOfWeek = [
       "Sunday",
@@ -1077,6 +1195,7 @@ const AppointmentForm = ({ setGetStartedClicked }) => {
 
     const handleSelectDate = (date) => {
       setSelectedDate(date);
+
       const indexOfDay = new Date(date).getDay(); // Get the day of the week (0-6)
       const dayName = dateOfWeek[indexOfDay]; // Get the name of the day
 
@@ -1114,6 +1233,12 @@ const AppointmentForm = ({ setGetStartedClicked }) => {
 
     const handleConfirm = (e) => {
       e.preventDefault();
+      const dateFormat = new Date(selectedDate);
+      setAppointmentData({
+        ...appointmentData,
+        PreferredAppointmentDate: dateFormat.toISOString(),
+      });
+
       setStage(4);
     };
 
@@ -1164,6 +1289,8 @@ const AppointmentForm = ({ setGetStartedClicked }) => {
     practitioners,
     setChosenPractitioner,
     setPractId,
+    appointmentData,
+    setAppointmentData,
   }) => {
     const handleBtnClicked = (e, data) => {
       e.preventDefault();
@@ -1172,6 +1299,11 @@ const AppointmentForm = ({ setGetStartedClicked }) => {
       setChosenPractitioner({
         email: data.emailAddress,
         fullName: data.fullName,
+      });
+      setAppointmentData({
+        ...appointmentData,
+        PractitionerId: data.id,
+        HealthPractitionerType: data.role,
       });
     };
     return (
@@ -1203,7 +1335,12 @@ const AppointmentForm = ({ setGetStartedClicked }) => {
     );
   };
 
-  const Stage1 = ({ setStage, setChosenPatient }) => {
+  const Stage1 = ({
+    setStage,
+    setChosenPatient,
+    appointmentData,
+    setAppointmentData,
+  }) => {
     const navigate = useNavigate();
 
     const handleStageClick = (e) => {
@@ -1252,6 +1389,14 @@ const AppointmentForm = ({ setGetStartedClicked }) => {
             email: data.emailAddress,
             mobileNumber: data.mobileNumber,
           });
+
+          setAppointmentData({
+            ...appointmentData,
+            PatientsId: id,
+            FullName: data.fullName,
+            EmailAddress: data.emailAddress,
+            ContactNumber: data.mobileNumber,
+          });
         } catch (error) {
           console.log("Error fetching data:", error.message);
         }
@@ -1287,29 +1432,45 @@ const AppointmentForm = ({ setGetStartedClicked }) => {
   return (
     <div className="appointment-form__container-wrapper">
       {stage === 1 ? (
-        <Stage1 setStage={setStage} setChosenPatient={setChosenPatient} />
+        <Stage1
+          setStage={setStage}
+          setChosenPatient={setChosenPatient}
+          appointmentData={appointmentData}
+          setAppointmentData={setAppointmentData}
+        />
       ) : stage === 2 ? (
         <Stage2
           setStage={setStage}
           practitioners={practitioners}
           setChosenPractitioner={setChosenPractitioner}
           setPractId={setPractId}
+          appointmentData={appointmentData}
+          setAppointmentData={setAppointmentData}
         />
       ) : stage === 3 ? (
-        <Stage3 practId={practId} setStage={setStage} />
+        <Stage3
+          practId={practId}
+          setStage={setStage}
+          appointmentData={appointmentData}
+          setAppointmentData={setAppointmentData}
+        />
       ) : stage === 4 ? (
         <Stage4
           setStage={setStage}
-          aptComments={aptComments}
           setAptComments={setAptComments}
+          appointmentData={appointmentData}
+          setAppointmentData={setAppointmentData}
         />
       ) : stage === 5 ? (
-        <Stage5
+        <Stage5 files={files} setFiles={setFiles} />
+      ) : stage === 6 ? (
+        <Stage6
           setStage={setStage}
           setGetStartedClicked={setGetStartedClicked}
           chosenPractitioner={chosenPractitioner}
           chosenPatient={chosenPatient}
           aptComments={aptComments}
+          appointmentData={appointmentData}
         />
       ) : (
         ""
