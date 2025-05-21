@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Binoculars } from "@phosphor-icons/react";
+import { Binoculars, Users, User } from "@phosphor-icons/react";
 import {
+  GetAppointmentsForPractitioner,
   GetAvailableJobs,
   AcceptJob,
   GetaHealthPractitioner,
@@ -10,7 +11,8 @@ import {
 } from "../../assets/js/serverApi";
 
 import "../../styles/jobsstyles.css";
-const JobsFilter = ({ setSearchField, setJobsData, fetchAvailableJobs }) => {
+
+const JobsFilter = ({ setSearchField, setJobsData, fetchOpenJobs }) => {
   const [applyFilter, setApplyFilter] = useState({
     AppointmentType: "",
     HealthPractitionerType: "",
@@ -45,7 +47,7 @@ const JobsFilter = ({ setSearchField, setJobsData, fetchAvailableJobs }) => {
       AppointmentType: "",
       HealthPractitionerType: "",
     });
-    fetchAvailableJobs();
+    fetchOpenJobs();
   };
   return (
     <div>
@@ -181,12 +183,7 @@ const JobsFilter = ({ setSearchField, setJobsData, fetchAvailableJobs }) => {
   );
 };
 
-const JobsCards = ({
-  jobsData,
-  fetchAvailableJobs,
-  userFullName,
-  searchField,
-}) => {
+const JobsCards = ({ jobsData, fetchOpenJobs, userFullName, searchField }) => {
   const handleAcceptJob = (e, data) => {
     e.preventDefault();
 
@@ -210,7 +207,7 @@ const JobsCards = ({
           console.log("bad request");
         }
         handleFinaliseAuth(data.id); //finalises zoom auth
-        fetchAvailableJobs();
+        fetchOpenJobs();
       })
       .catch((err) => {
         console.log(err.message);
@@ -320,12 +317,14 @@ const JobsCards = ({
 };
 
 const Jobs = () => {
+  const [defaultFilter, setDefaultFilter] = useState("Open");
   const [jobsData, setJobsData] = useState([]);
   const [userAuth, setUserAuth] = useState([]);
 
   const [searchField, setSearchField] = useState("");
   const navigate = useNavigate();
 
+  //authorizes the user
   useEffect(() => {
     const id = parseInt(sessionStorage.getItem("id"));
 
@@ -360,15 +359,28 @@ const Jobs = () => {
 
         const data = await response.json();
         setUserAuth(data); //get user data after it is authorized
-        fetchAvailableJobs(); //call if the user is authorized
+        if (defaultFilter === "Open") {
+          fetchOpenJobs(); //call if the user is authorized
+          console.log("Open jobs fetched successfully.");
+        }
       } catch (error) {
         console.log("Error fetching data:", error.message);
       }
     };
     fetchData();
-  }, []);
+  }, [defaultFilter]);
 
-  const fetchAvailableJobs = () => {
+  const fetchDirectJobs = (e, id) => {
+    e.preventDefault();
+    setDefaultFilter("Direct");
+    fetch(`${GetAppointmentsForPractitioner}/${id}`)
+      .then((res) => res.json())
+      .then((res) => {
+        setJobsData(res.returnStatus.data);
+      });
+  };
+
+  const fetchOpenJobs = () => {
     fetch(GetAvailableJobs)
       .then((res) => res.json())
       .then((res) => {
@@ -384,13 +396,33 @@ const Jobs = () => {
           <JobsFilter
             setSearchField={setSearchField}
             setJobsData={setJobsData}
-            fetchAvailableJobs={fetchAvailableJobs}
+            fetchOpenJobs={fetchOpenJobs}
           />
         </div>
         <div>
+          <div style={{ display: "flex", gap: "50px", padding: "0 20px" }}>
+            <button
+              className={`jobs-filters-btn ${
+                defaultFilter === "Open" ? "selected-filter" : ""
+              }`}
+              onClick={() => setDefaultFilter("Open")}
+            >
+              <Users size={20} />
+              <span style={{ marginLeft: "5px" }}>Open Jobs</span>
+            </button>
+            <button
+              className={`jobs-filters-btn ${
+                defaultFilter === "Direct" ? "selected-filter" : ""
+              }`}
+              onClick={(e) => fetchDirectJobs(e, userAuth.id)}
+            >
+              <User size={20} />
+              <span style={{ marginLeft: "5px" }}>Direct Request</span>
+            </button>
+          </div>
           <JobsCards
             jobsData={jobsData}
-            fetchAvailableJobs={fetchAvailableJobs}
+            fetchOpenJobs={fetchOpenJobs}
             userFullName={userAuth.fullName}
             searchField={searchField}
           />
