@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   MagnifyingGlass,
+  CheckCircle,
+  CircleNotch,
   Check,
   X,
   ArrowLeft,
@@ -826,6 +828,7 @@ const AppointmentWait = ({ autofillData }) => {
 
 const AppointmentForm = ({ setGetStartedClicked }) => {
   const [stage, setStage] = useState(1);
+  const [isOpenJobs, setIsOpenJobs] = useState(false);
   const [practitioners, setPractitioners] = useState([]);
   const [chosenPractitioner, setChosenPractitioner] = useState({
     email: "",
@@ -894,122 +897,225 @@ const AppointmentForm = ({ setGetStartedClicked }) => {
     chosenPatient,
     aptComments,
     appointmentData,
+    files,
+    isOpenJobs,
   }) => {
+    const [loading, setLoading] = useState(false);
+    const [success, setSuccess] = useState(false);
+
+    const handleFormSubmit = (e) => {
+      e.preventDefault();
+      setLoading(true);
+      fetch(AddAppointmentFromForm, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify(appointmentData),
+      })
+        .then((res) => res.json())
+        .then((res) => {
+          console.log(res);
+
+          if (files) {
+            handleFilesUpload(res.returnStatus.aptId);
+          }
+
+          setTimeout(() => {
+            setLoading(false);
+            setSuccess(true);
+          }, 3000);
+        })
+        .catch((ex) => {
+          console.log(`Error: ${ex.message}`);
+        });
+    };
+
+    const handleFilesUpload = async (id) => {
+      const formData = new FormData();
+      for (let i = 0; i < files.length; i++) {
+        formData.append("files", files[i]);
+      }
+
+      try {
+        const response = await fetch(`${UploadFile}/${id}`, {
+          method: "POST",
+          body: formData,
+        });
+
+        if (!response.ok) {
+          throw new Error("Error uploading files");
+        }
+
+        const data = await response.json();
+        console.log(data);
+      } catch (ex) {
+        console.log(ex);
+      }
+    };
+
     return (
       <div>
-        <h4>Appointment Confirmation</h4>
-        <div className="appointment-confirmation-container__wrapper">
-          <div style={{ textAlign: "center" }}>
-            <p>Your Details</p>
-          </div>
-          <div
-            style={{
-              display: "flex",
-              gap: "20px",
-              justifyContent: "space-between",
-            }}
-          >
-            <div>
-              <label>Patient</label>
-              <p>
-                <strong>{chosenPatient.fullName}</strong>
-              </p>
-              <br />
-              <label>Email</label>
-              <p>
-                <strong>{chosenPatient.email}</strong>
-              </p>
-            </div>
-
-            <div>
-              <div>
-                <label>Mobile</label>
-                <p>
-                  <strong>{chosenPatient.mobileNumber}</strong>
-                </p>
-              </div>
-              <br />
-              <div>
-                <label>Address</label>
-                <p>
-                  <strong>N/A</strong>
-                </p>
-              </div>
-            </div>
-          </div>
-
-          <br />
-          <br />
-          <div style={{ textAlign: "center" }}>
-            <p>Appointment Details</p>
-          </div>
-          <div
-            style={{
-              display: "flex",
-              gap: "20px",
-              justifyContent: "space-between",
-            }}
-          >
-            <div>
-              <label>Practitioner</label>
-              <p>
-                <strong>{chosenPractitioner.fullName}</strong>
-              </p>
-              <br />
-              <label>Appointment Type</label>
-              <p>
-                <strong>Video Confenrence</strong>
-              </p>
-            </div>
-
-            <div>
-              <div>
-                <label>Email</label>
-                <p>
-                  <strong>{chosenPractitioner.email}</strong>
-                </p>
-              </div>
-              <br />
-              <div>
-                <label>Appointment Schedule</label>
-                <p>
-                  <strong>11/02/2025, 11:30 am</strong>
-                </p>
-              </div>
-            </div>
-          </div>
-
-          <br />
-
-          <div>
-            <label>Comments</label>
-            <p>
-              <strong>{aptComments.length > 0 ? aptComments : "N/A"}</strong>
+        {success === true ? (
+          <div className="appointment-success-confirmation__wrapper">
+            <CheckCircle size={32} weight="fill" color="#f3f3f3" />
+            <h4>Appointment Confirmed</h4>
+            <p style={{ width: "500px", fontSize: "12px" }}>
+              Your request has been successfully sent. We'll notify you once
+              your GP responds.
             </p>
+            <br />
+            <button onClick={() => setGetStartedClicked(false)}>Done</button>
           </div>
+        ) : (
+          <>
+            {loading === true ? (
+              <div>
+                <CircleNotch
+                  size={26}
+                  color="#202020"
+                  className={"loading-icon"}
+                />
+              </div>
+            ) : (
+              <>
+                <h4>Appointment Confirmation</h4>
+                <p style={{ width: "500px", fontSize: "12px" }}>
+                  Please note: This appointment request is pending final
+                  confirmation by the practitioner. You will receive a
+                  notification once it is confirmed.
+                </p>
+                <br />
+                <div className="appointment-confirmation-container__wrapper">
+                  <div style={{ textAlign: "center" }}>
+                    <p>Your Details</p>
+                  </div>
+                  <div
+                    style={{
+                      display: "flex",
+                      gap: "20px",
+                      justifyContent: "space-between",
+                    }}
+                  >
+                    <div>
+                      <label>Patient</label>
+                      <p>
+                        <strong>{chosenPatient.fullName}</strong>
+                      </p>
+                      <br />
+                      <label>Email</label>
+                      <p>
+                        <strong>{chosenPatient.email}</strong>
+                      </p>
+                    </div>
 
-          <br />
-          <div>
-            <label>Supporting Documents</label>
-            <p>
-              <strong>{files.length > 0 ? "Yes" : "No"}</strong>
-            </p>
-          </div>
-        </div>
-        <label style={{ fontSize: "12px" }}>
-          {"   "}* Confirm to consent to the processing of my information for
-          scheduling purposes.
-        </label>
-        <br />
-        <button
-          className="appointment-cancel-confirm__btn"
-          onClick={() => setGetStartedClicked(false)}
-        >
-          Cancel
-        </button>
-        <button className="appointment-agree-confirm__btn">
-          Agree & Confirm
-        </button>
+                    <div>
+                      <div>
+                        <label>Mobile</label>
+                        <p>
+                          <strong>{chosenPatient.mobileNumber}</strong>
+                        </p>
+                      </div>
+                      <br />
+                      <div>
+                        <label>Address</label>
+                        <p>
+                          <strong>N/A</strong>
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <br />
+                  <br />
+                  <div style={{ textAlign: "center" }}>
+                    <p>Appointment Details</p>
+                  </div>
+                  <div
+                    style={{
+                      display: "flex",
+                      gap: "20px",
+                      justifyContent: "space-between",
+                    }}
+                  >
+                    <div>
+                      <label>Practitioner</label>
+                      <p>
+                        <strong>
+                          {isOpenJobs === false
+                            ? chosenPractitioner.fullName
+                            : "N/A"}
+                        </strong>
+                      </p>
+                      <br />
+                      <label>Appointment Type</label>
+                      <p>
+                        <strong>Video Conference</strong>
+                      </p>
+                    </div>
+
+                    <div>
+                      <div>
+                        <label>Email</label>
+                        <p>
+                          <strong>
+                            {isOpenJobs === false
+                              ? chosenPractitioner.email
+                              : "N/A"}
+                          </strong>
+                        </p>
+                      </div>
+                      <br />
+                      <div>
+                        <label>Appointment Schedule</label>
+                        <p>
+                          <strong>11/02/2025, 11:30 am</strong>
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <br />
+
+                  <div>
+                    <label>Comments</label>
+                    <p>
+                      <strong>
+                        {aptComments.length > 0 ? aptComments : "N/A"}
+                      </strong>
+                    </p>
+                  </div>
+
+                  <br />
+                  <div>
+                    <label>Supporting Documents</label>
+                    <p>
+                      <strong>{files.length > 0 ? "Yes" : "No"}</strong>
+                    </p>
+                  </div>
+                </div>
+                <label style={{ fontSize: "12px" }}>
+                  {"   "}* Confirm to consent to the processing of my
+                  information for scheduling purposes.
+                </label>
+                <br />
+                <button
+                  className="appointment-cancel-confirm__btn"
+                  onClick={() => setGetStartedClicked(false)}
+                >
+                  Cancel
+                </button>
+                <button
+                  className="appointment-agree-confirm__btn"
+                  onClick={(e) => handleFormSubmit(e)}
+                >
+                  Agree & Confirm
+                </button>
+              </>
+            )}
+          </>
+        )}
       </div>
     );
   };
@@ -1133,6 +1239,7 @@ const AppointmentForm = ({ setGetStartedClicked }) => {
     setStage,
     appointmentData,
     setAppointmentData,
+    isOpenJobs,
   }) => {
     const [practitionersDateTime, setPractitionersDateTime] = useState([]);
     const dateOfWeek = [
@@ -1246,21 +1353,36 @@ const AppointmentForm = ({ setGetStartedClicked }) => {
       <div>
         <h2>Pick a date and time</h2>
         <br />
-        <DatePicker
-          placeholderText="Select date and time"
-          selected={selectedDate}
-          onChange={(date) => handleSelectDate(date)}
-          filterDate={isAllowedDay}
-          filterTime={isAllowedTimes}
-          className="datePicker"
-          dateFormat="dd/MM/YYYY - hh:mm a"
-          minDate={new Date()}
-          showTimeSelect
-          timeIntervals={30}
-          timeFormat="hh:mm a"
-          minTime={getMinTime()}
-          maxTime={getMaxTime()}
-        />
+        {isOpenJobs === false ? (
+          <DatePicker
+            placeholderText="Select date and time"
+            selected={selectedDate}
+            onChange={(date) => handleSelectDate(date)}
+            filterDate={isAllowedDay}
+            filterTime={isAllowedTimes}
+            className="datePicker"
+            dateFormat="dd/MM/YYYY - hh:mm a"
+            minDate={new Date()}
+            showTimeSelect
+            timeIntervals={30}
+            timeFormat="hh:mm a"
+            minTime={getMinTime()}
+            maxTime={getMaxTime()}
+          />
+        ) : (
+          <DatePicker
+            className="datePicker"
+            dateFormat="dd/MM/YYYY - hh:mm a"
+            selected={selectedDate}
+            onChange={(date) => handleSelectDate(date)}
+            minDate={new Date()}
+            showTimeSelect
+            timeIntervals={30}
+            timeFormat="hh:mm a"
+            minTime={getMinTime()}
+            maxTime={getMaxTime()}
+          />
+        )}
 
         <br />
         <br />
@@ -1306,6 +1428,23 @@ const AppointmentForm = ({ setGetStartedClicked }) => {
         HealthPractitionerType: data.role,
       });
     };
+
+    const handleOpenJobs = (e) => {
+      e.preventDefault();
+
+      setIsOpenJobs(true);
+      setStage(3);
+      setPractId(0);
+      setChosenPractitioner({
+        email: "",
+        fullName: "",
+      });
+      setAppointmentData({
+        ...appointmentData,
+        PractitionerId: 0,
+        HealthPractitionerType: "General Practitioner",
+      });
+    };
     return (
       <div>
         <h2>Do you have a preferred GP?</h2>
@@ -1327,7 +1466,7 @@ const AppointmentForm = ({ setGetStartedClicked }) => {
         <br />
         <button
           className="appointment-form-btn"
-          onClick={(e) => handleBtnClicked(e)}
+          onClick={(e) => handleOpenJobs(e)}
         >
           Anyone who is available immediately
         </button>
@@ -1453,6 +1592,7 @@ const AppointmentForm = ({ setGetStartedClicked }) => {
           setStage={setStage}
           appointmentData={appointmentData}
           setAppointmentData={setAppointmentData}
+          isOpenJobs={isOpenJobs}
         />
       ) : stage === 4 ? (
         <Stage4
@@ -1471,6 +1611,8 @@ const AppointmentForm = ({ setGetStartedClicked }) => {
           chosenPatient={chosenPatient}
           aptComments={aptComments}
           appointmentData={appointmentData}
+          files={files}
+          isOpenJobs={isOpenJobs}
         />
       ) : (
         ""

@@ -1,13 +1,13 @@
 .jobs__wrapper {
   display: flex;
 
-  margin-top: 90px;
+  margin-top: 70px;
   margin-left: 20px;
 }
 
 .jobs-search-filter__wrapper {
   background-color: white;
-  height: 90vh;
+  height: 88vh;
   width: 300px;
   box-shadow: rgba(136, 165, 191, 0.48) 6px 2px 16px 0px,
     rgba(255, 255, 255, 0.8) -6px -2px 16px 0px;
@@ -16,7 +16,7 @@
 }
 
 .jobs-contents__wrapper {
-  height: 89vh;
+  height: 80vh;
   width: 100%;
   padding: 50px;
   overflow: auto;
@@ -61,7 +61,7 @@
 }
 
 .jobs-clear-filter__btn {
-  margin-top: 480px;
+  margin-top: 400px;
   background-color: rgba(157, 154, 154, 0.2);
   border: 1px solid rgba(157, 154, 154, 0.2);
   border-radius: 5px;
@@ -90,4 +90,20 @@
   top: 30%;
   right: 21%;
   transform: translate(-50%, -50%);
+}
+
+.jobs-filters-btn {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  background-color: transparent;
+  border: none;
+
+  cursor: pointer;
+  padding: 20px;
+}
+
+.selected-filter {
+  border-bottom: 2px solid #9dcd5a;
 }

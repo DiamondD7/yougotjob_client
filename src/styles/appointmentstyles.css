@@ -449,3 +449,29 @@
   display: flex;
   justify-content: space-between;
 }
+
+.appointment-success-confirmation__wrapper {
+  text-align: center;
+  padding: 20px;
+  background-color: #9dcd5a;
+  border-radius: 5px;
+  color: #f3f3f3;
+}
+
+.appointment-success-confirmation__wrapper h4 {
+  color: #f3f3f3;
+}
+
+.appointment-success-confirmation__wrapper p {
+  color: #f3f3f3;
+  margin-top: 10px;
+}
+
+.appointment-success-confirmation__wrapper button {
+  background-color: #f3f3f3;
+  border: none;
+  color: #9dcd5a;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+}
