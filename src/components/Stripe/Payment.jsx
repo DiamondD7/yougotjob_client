@@ -10,6 +10,7 @@ import {
   useElements,
   PaymentElement,
 } from "@stripe/react-stripe-js";
+import { useNavigate } from "react-router-dom";
 import { loadStripe } from "@stripe/stripe-js";
 import { X, CircleNotch } from "@phosphor-icons/react";
 
@@ -32,7 +33,7 @@ const Checkout = ({ chosenAptId }) => {
     const { error } = await stripe.confirmPayment({
       elements,
       confirmParams: {
-        return_url: `localhost:5173/success-payment?id=${chosenAptId}`,
+        return_url: `http://localhost:5173/success-payment?id=${chosenAptId}`,
       },
     });
 
@@ -70,6 +71,7 @@ const Payment = ({
   chosenAptId,
   chosenAptEmail,
 }) => {
+  const navigate = useNavigate();
   // Replace with your Stripe Publishable Key
   const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PKEY);
   const [clientSecret, setClientSecret] = useState("");
@@ -102,12 +104,43 @@ const Payment = ({
   };
 
   //STEP 2. Once practitionerId is acquired, then put the practitioner stripe account id so that the practitioner gets paid
-  const handleGetPractitionerStripeId = (id) => {
-    fetch(`${GetPractitionerStripeId}/${id}`)
-      .then((res) => res.json())
-      .then((res) => {
-        handleCreatePaymentIntent(res.returnStatus.stripeId);
+  const handleGetPractitionerStripeId = async (id, retry = true) => {
+    // fetch(`${GetPractitionerStripeId}/${id}`)
+    //   .then((res) => res.json())
+    //   .then((res) => {
+    //     handleCreatePaymentIntent(res.returnStatus.stripeId);
+    //   });
+    try {
+      const response = await fetch(`${GetPractitionerStripeId}/${id}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        credentials: "include",
       });
+
+      if (response.status === 302) {
+        console.warn("301 detected, redirecting...");
+        navigate("/");
+        return;
+      }
+
+      if (response.status === 401 && retry) {
+        console.warn("401 detected, retrying request...");
+        return handleGetPractitionerStripeId(id, false);
+      }
+
+      if (!response.ok) {
+        throw new Error(`HTTP ERROR: status ${response.status}`);
+      }
+
+      const data = await response.json();
+
+      handleCreatePaymentIntent(data.returnStatus.stripeId);
+    } catch (error) {
+      console.error("Error fetching practitioner Stripe ID:", error);
+    }
   };
 
   //STEP 1. find the practitionerId to get the stripeID
@@ -115,7 +148,10 @@ const Payment = ({
     fetch(`${GetAnAppointment}/${chosenAptId}`)
       .then((res) => res.json())
       .then((res) => {
-        handleGetPractitionerStripeId(res.returnStatus.data.practitionerId);
+        handleGetPractitionerStripeId(
+          res.returnStatus.data.practitionerId,
+          true
+        );
       });
   };
 

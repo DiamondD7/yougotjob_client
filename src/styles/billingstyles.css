@@ -23,3 +23,24 @@
     transform: rotate(360deg);
   }
 }
+
+.stripeLinked {
+  background-color: gray;
+  border: 1px solid gray;
+  color: #f3f3f3;
+  width: 152px;
+  cursor: default;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.stripeUrl__wrapper {
+  margin-top: 100px;
+  padding: 10px;
+
+  border: 1px solid rgba(0, 0, 0, 0.3);
+  border-radius: 5px;
+
+  width: 600px;
+}

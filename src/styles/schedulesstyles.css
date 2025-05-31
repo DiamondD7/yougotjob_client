@@ -1,4 +1,6 @@
 .schedules-container__wrapper {
+  height: 89vh;
+  overflow: auto;
   padding: 50px;
 }
 

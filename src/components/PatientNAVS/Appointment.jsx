@@ -847,6 +847,7 @@ const AppointmentForm = ({ setGetStartedClicked }) => {
   const [practId, setPractId] = useState(0);
   const [appointmentData, setAppointmentData] = useState({
     PractitionerId: practId,
+    PractitionerName: "",
     PatientsId: chosenPatient.id,
     Duration: 30,
     FullName: chosenPatient.fullName,
@@ -855,6 +856,7 @@ const AppointmentForm = ({ setGetStartedClicked }) => {
     EmailAddress: chosenPatient.email,
     HealthPractitionerType: "General Practitioner",
     PreferredAppointmentDate: null,
+    IsOpenJob: isOpenJobs,
     AppointmentType: "online",
     StreetAddress: "",
     Suburb: "",
@@ -1413,6 +1415,7 @@ const AppointmentForm = ({ setGetStartedClicked }) => {
     setPractId,
     appointmentData,
     setAppointmentData,
+    setIsOpenJobs,
   }) => {
     const handleBtnClicked = (e, data) => {
       e.preventDefault();
@@ -1425,7 +1428,9 @@ const AppointmentForm = ({ setGetStartedClicked }) => {
       setAppointmentData({
         ...appointmentData,
         PractitionerId: data.id,
+        PractitionerName: data.fullName,
         HealthPractitionerType: data.role,
+        IsOpenJob: false,
       });
     };
 
@@ -1443,6 +1448,7 @@ const AppointmentForm = ({ setGetStartedClicked }) => {
         ...appointmentData,
         PractitionerId: 0,
         HealthPractitionerType: "General Practitioner",
+        IsOpenJob: true,
       });
     };
     return (
@@ -1486,9 +1492,11 @@ const AppointmentForm = ({ setGetStartedClicked }) => {
       e.preventDefault();
       if (e.target.value === "myself") {
         handleAutoFill(); //autofill the current users data
-      } //TODO: else statement if user nominates someone else as the patient
-
-      setStage(2);
+        setStage(2);
+      } else {
+        console.log("This feature is not available yet");
+        //setStage(2);
+      }
     };
 
     const handleAutoFill = () => {
@@ -1557,10 +1565,16 @@ const AppointmentForm = ({ setGetStartedClicked }) => {
           <br />
           <button
             className="appointment-form-btn"
+            value={"someone else"}
             onClick={(e) => handleStageClick(e)}
           >
             For someone else
           </button>
+          <label
+            style={{ marginLeft: "10px", fontSize: "12px", fontWeight: "bold" }}
+          >
+            will be available soon
+          </label>
         </form>
       </div>
     );
@@ -1585,6 +1599,7 @@ const AppointmentForm = ({ setGetStartedClicked }) => {
           setPractId={setPractId}
           appointmentData={appointmentData}
           setAppointmentData={setAppointmentData}
+          setIsOpenJobs={setIsOpenJobs}
         />
       ) : stage === 3 ? (
         <Stage3
