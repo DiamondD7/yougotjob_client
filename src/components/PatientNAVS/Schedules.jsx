@@ -45,7 +45,7 @@ const RemoveBtn = ({ apts, navigate, fetchData }) => {
 
       const data = await response.json();
 
-      console.log(data);
+      //console.log(data);
       await handleDelete(); //handle delete function is called here, when user is auth.
     } catch (error) {
       console.log("Error fetching data:", error.message);
@@ -75,7 +75,7 @@ const RemoveBtn = ({ apts, navigate, fetchData }) => {
         console.error("Error deleting appointment:", data.returnStatus.message);
         return;
       }
-      console.log(data);
+      //console.log(data);
       fetchData(); // Call fetchData to refresh the appointments list
     } catch (error) {
       console.error("Error deleting appointment:", error);
@@ -84,10 +84,10 @@ const RemoveBtn = ({ apts, navigate, fetchData }) => {
   return (
     <div>
       {apts.acceptedJobDate !== null && threeHoursBefore > today ? (
-        <button onClick={() => authUserDelete()}>Remove</button>
+        <button onClick={() => authUserDelete()}>Cancel & Delete</button>
       ) : apts.acceptedJobDate === null &&
         new Date(apts.preferredAppointmentDate) > new Date(today) ? (
-        <button onClick={() => authUserDelete()}>Remove</button>
+        <button onClick={() => authUserDelete()}>Cancel & Delete</button>
       ) : (
         ""
       )}
@@ -130,52 +130,59 @@ const Schedules = () => {
   const today = new Date();
 
   return (
-    <div className="schedules-container__wrapper">
-      {loading === true ? (
-        <div style={{ position: "relative" }}>
-          <CircleNotch size={32} className={"loading__icon"} />
-        </div>
-      ) : (
-        <>
-          <h2>Schedules</h2>
+    <>
+      <h2 style={{ padding: "20px" }}>Schedules</h2>
+      <div className="schedules-container__wrapper">
+        {loading === true ? (
+          <div style={{ position: "relative" }}>
+            <CircleNotch size={32} className={"loading__icon"} />
+          </div>
+        ) : (
+          <>
+            {appointments.map((apts, index) => (
+              <div className="schedules-items__wrapper" key={apts.id}>
+                <div>
+                  <p>
+                    {apts.practitionerId === 0 ? "N/A" : apts.practitionerName}
+                  </p>
+                  <p>{apts.isOpenJob === true ? "Open Job" : "Direct Job"}</p>
+                  <p>
+                    {new Date(apts.preferredAppointmentDate).toLocaleDateString(
+                      "en-nz"
+                    )}
+                  </p>
 
-          {appointments.map((apts, index) => (
-            <div className="schedules-items__wrapper" key={apts.id}>
-              <div>
-                <p>
-                  {apts.practitionerId === 0 ? "N/A" : apts.practitionerName}
-                </p>
-                <p>
-                  {new Date(apts.preferredAppointmentDate).toLocaleDateString(
-                    "en-nz"
-                  )}
-                </p>
+                  {/* below is for editing a pending appointment.. ?? */}
 
-                {/* below is for editing a pending appointment.. ?? */}
-
-                {/* {new Date(apts.preferredAppointmentDate) > new Date(today) ? (
+                  {/* {new Date(apts.preferredAppointmentDate) > new Date(today) ? (
                   <button>Remove</button>
                 ) : (
                   ""
                 )} */}
 
-                <RemoveBtn
-                  apts={apts}
-                  navigate={navigate}
-                  fetchData={fetchData}
-                />
-              </div>
-              <div>
-                {new Date(apts.preferredAppointmentDate) > new Date(today) ? (
-                  <p className="pending-text">Pending</p>
-                ) : apts.practitionerId === 0 &&
-                  apts.acceptedJobDate === null ? (
-                  <p className="overdue-text">Not Complete</p>
-                ) : (
-                  <p className="completed-text">Completed</p>
-                )}
+                  {apts.isCancelled === false ? (
+                    <RemoveBtn
+                      apts={apts}
+                      navigate={navigate}
+                      fetchData={fetchData}
+                    />
+                  ) : (
+                    ""
+                  )}
+                </div>
+                <div>
+                  {new Date(apts.preferredAppointmentDate) > new Date(today) &&
+                  apts.isCancelled === false ? (
+                    <p className="pending-text">Pending</p>
+                  ) : (apts.practitionerId === 0 &&
+                      apts.acceptedJobDate === null) ||
+                    apts.isCancelled === true ? (
+                    <p className="overdue-text">Not Complete</p>
+                  ) : (
+                    <p className="completed-text">Completed</p>
+                  )}
 
-                {/* {apts.practitionerId === 0 && apts.acceptedJobDate === null ? (
+                  {/* {apts.practitionerId === 0 && apts.acceptedJobDate === null ? (
                   <p className="overdue-text">Not Complete</p>
                 ) : new Date(apts.preferredAppointmentDate) >
                   new Date(today) ? (
@@ -183,12 +190,13 @@ const Schedules = () => {
                 ) : (
                   <p className="completed-text">Completed</p>
                 )} */}
+                </div>
               </div>
-            </div>
-          ))}
-        </>
-      )}
-    </div>
+            ))}
+          </>
+        )}
+      </div>
+    </>
   );
 };
 

@@ -1,0 +1,12 @@
+.verification-success-container {
+  text-align: center;
+  background-color: #9dcd5a;
+  width: 500px;
+  border-radius: 5px;
+  padding: 30px;
+
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}

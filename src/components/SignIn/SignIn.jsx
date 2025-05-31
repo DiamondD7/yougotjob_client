@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import {
   AddHealthPractitionerUser,
   GetaHealthPractitioner,
+  AddStripeAccount,
   AddTokens,
   AddTimePreference,
   CheckRegistration,
@@ -1007,12 +1008,37 @@ const SignUpOpt = ({ healthPractitionerOption }) => {
           } else {
             console.log(res); //DELETE
             handleAddInitialTimePref(res.returnStatus.id);
+            handleAddStripeAccount(res.returnStatus.id); //add stripe account
           }
         })
         .catch((err) => {
           console.log(err);
         });
     }, 3000);
+  };
+
+  const handleAddStripeAccount = async (id) => {
+    try {
+      const response = await fetch(AddStripeAccount, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({
+          PractitionerId: id,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+
+      const data = await response.json();
+      console.log("Stripe account added successfully:", data);
+    } catch (error) {
+      console.error("Error adding Stripe account:", error);
+    }
   };
 
   const handleAddInitialTimePref = (id) => {
