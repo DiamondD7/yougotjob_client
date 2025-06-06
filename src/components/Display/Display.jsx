@@ -17,9 +17,10 @@ import Immunisation from "../PatientNAVS/Immunisation";
 import Prescriptions from "../GPNavs/Prescriptions";
 import Appointment from "../PatientNAVS/Appointment";
 import Jobs from "../Jobs/Jobs";
+import Schedules from "../PatientNAVS/Schedules";
 
 import "../../styles/displaystyles.css";
-import Schedules from "../PatientNAVS/Schedules";
+import PatientProfile from "../ProfileDepartment/PatientProfile";
 const Display = ({ displayed, setEditChanges }) => {
   const role = sessionStorage.getItem("role");
   const isVerified = sessionStorage.getItem("isVerified");
@@ -59,8 +60,10 @@ const Display = ({ displayed, setEditChanges }) => {
           <Dashboard />
         ) : displayed === "dashboard" && role === "Patient" ? (
           <DashboardPatient />
-        ) : displayed === "profile" ? (
+        ) : displayed === "profile" && role === "Practitioner" ? (
           <PhysicianProfile />
+        ) : displayed === "profile" && role === "Patient" ? (
+          <PatientProfile />
         ) : displayed === "records" ? (
           <Records />
         ) : displayed === "settings" ? (

@@ -330,3 +330,7 @@
   border-radius: 5px;
   outline: none;
 }
+
+.prescription-table-container__wrapper {
+  text-align: center;
+}

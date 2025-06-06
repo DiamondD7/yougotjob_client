@@ -1,0 +1,18 @@
+.privacy-container__wrapper {
+  height: 90vh;
+  overflow: auto;
+}
+.privacy-container__wrapper p {
+  font-size: 12px;
+  margin-top: 10px;
+  line-height: 1.5;
+}
+
+.ul-lists__wrapper {
+  margin-left: 30px;
+}
+
+.ul-lists__wrapper li {
+  margin-top: 10px;
+  font-size: 12px;
+}

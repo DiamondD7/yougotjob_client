@@ -7,6 +7,8 @@ import Security from "./Security";
 import Notifications from "./Notifications";
 import Billing from "./Billing";
 import Aboutus from "./Aboutus";
+import Privacy from "./Privacy";
+import Termsofuse from "./Termsofuse";
 const Settings = ({ setEditChanges }) => {
   const [activeDisplay, setActiveDisplay] = useState("");
   const role = sessionStorage.getItem("role");
@@ -94,6 +96,17 @@ const Settings = ({ setEditChanges }) => {
           </li>
           <li>
             <button
+              value="termsofuse"
+              onClick={(e) => setActiveDisplay(e.target.value)}
+              className={`settings-nav__btn ${
+                activeDisplay === "termsofuse" ? "activeDisplay" : ""
+              }`}
+            >
+              Terms of use
+            </button>
+          </li>
+          <li>
+            <button
               value="about"
               onClick={(e) => setActiveDisplay(e.target.value)}
               className={`settings-nav__btn ${
@@ -115,6 +128,10 @@ const Settings = ({ setEditChanges }) => {
             <Billing />
           ) : activeDisplay === "about" ? (
             <Aboutus />
+          ) : activeDisplay === "privacy" ? (
+            <Privacy />
+          ) : activeDisplay === "termsofuse" ? (
+            <Termsofuse />
           ) : (
             ""
           )}
