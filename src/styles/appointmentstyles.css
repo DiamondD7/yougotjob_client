@@ -475,3 +475,8 @@
   border-radius: 5px;
   cursor: pointer;
 }
+
+.practitioner-data-loading__wrapper {
+  position: relative;
+  top: 40%;
+}
