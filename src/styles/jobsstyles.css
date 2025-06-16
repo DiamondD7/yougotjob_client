@@ -107,3 +107,8 @@
 .selected-filter {
   border-bottom: 2px solid #9dcd5a;
 }
+
+.btnDisable {
+  background-color: gray;
+  cursor: default;
+}

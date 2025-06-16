@@ -29,7 +29,7 @@ const SummaryCards = ({ apts, setPreviousAptModal }) => {
 
   const [inputDate, setInputDate] = useState("7 Aug 2024 20:00"); //can be changed to mm/dd/yyyy
 
-  const prevApt = apts.length > 0 ? apts[0] : []; //temporary fix?
+  const prevApt = apts?.length > 0 ? apts[0] : []; //temporary fix?
 
   const [nextApt, setNextApt] = useState([]);
 

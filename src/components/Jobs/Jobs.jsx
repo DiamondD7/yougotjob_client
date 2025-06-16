@@ -183,7 +183,13 @@ const JobsFilter = ({ setSearchField, setJobsData, fetchOpenJobs }) => {
   );
 };
 
-const JobsCards = ({ jobsData, fetchOpenJobs, userFullName, searchField }) => {
+const JobsCards = ({
+  userIsVerified,
+  jobsData,
+  fetchOpenJobs,
+  userFullName,
+  searchField,
+}) => {
   const handleAcceptJob = (e, data) => {
     e.preventDefault();
 
@@ -275,8 +281,11 @@ const JobsCards = ({ jobsData, fetchOpenJobs, userFullName, searchField }) => {
                       </p>
                     </div>
                     <button
-                      className="jobs-content-card__btn"
+                      className={`jobs-content-card__btn ${
+                        userIsVerified === false ? "btnDisable" : ""
+                      }`}
                       onClick={(e) => handleAcceptJob(e, item)}
+                      disabled={userIsVerified === false ? true : false} //if the user is not verified then set the diabled to true
                     >
                       Accept & Finalise
                     </button>
@@ -421,6 +430,7 @@ const Jobs = () => {
             </button>
           </div>
           <JobsCards
+            userIsVerified={userAuth.isVerified}
             jobsData={jobsData}
             fetchOpenJobs={fetchOpenJobs}
             userFullName={userAuth.fullName}

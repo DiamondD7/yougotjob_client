@@ -140,7 +140,7 @@ const NavPractitioner = ({ activeDisplay, minimizedNav, onClickDisplayed }) => {
         </button>
       </li>
 
-      <li
+      {/* <li
         className={minimizedNav === true ? "minimizednav-icons" : ""}
         style={
           activeDisplay === "communication"
@@ -163,7 +163,7 @@ const NavPractitioner = ({ activeDisplay, minimizedNav, onClickDisplayed }) => {
           &nbsp;
           {minimizedNav === true ? "" : "Communication"}
         </button>
-      </li>
+      </li> */}
 
       <li
         className={minimizedNav === true ? "minimizednav-icons" : ""}

@@ -1356,6 +1356,11 @@ const AppointmentForm = ({ setGetStartedClicked }) => {
     return (
       <div>
         <h2>Pick a date and time</h2>
+        <p style={{ fontSize: "12px", width: "300px" }}>
+          If there are no available dates to book an appointment with this
+          practitioner, it indicates they have not yet updated their weekly
+          availability.
+        </p>
         <br />
         {isOpenJobs === false ? (
           <DatePicker

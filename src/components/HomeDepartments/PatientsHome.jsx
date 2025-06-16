@@ -43,6 +43,7 @@ const EndWelcome = () => {
 const SettingsPreference = ({ currentUser }) => {
   const [next, setNext] = useState(false);
   const [files, setFiles] = useState([]);
+
   const handleFileChange = (event) => {
     // Get the current files selected by the user
     const newFiles = event.target.files;

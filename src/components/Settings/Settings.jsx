@@ -45,7 +45,7 @@ const Settings = ({ setEditChanges }) => {
               Security
             </button>
           </li>
-          <li>
+          {/* <li>
             <button
               value="notifications"
               onClick={(e) => setActiveDisplay(e.target.value)}
@@ -55,8 +55,8 @@ const Settings = ({ setEditChanges }) => {
             >
               Notifications
             </button>
-          </li>
-          <li>
+          </li> */}
+          {/* <li>
             <button
               value="language"
               onClick={(e) => setActiveDisplay(e.target.value)}
@@ -66,7 +66,7 @@ const Settings = ({ setEditChanges }) => {
             >
               Language
             </button>
-          </li>
+          </li> */}
           {role === "Practitioner" ? (
             <li>
               <button
