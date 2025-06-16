@@ -24,8 +24,9 @@ const Billing = () => {
   const [isStripeUrlExpired, setIsStripeUrlExpired] = useState(false);
 
   useEffect(() => {
+    console.log("refreshed"); //DELETE WHEN DONE
     fetchData();
-  }, []);
+  }, [isStripeUrlExpired, stripeId]);
 
   const fetchData = async (retry = true) => {
     try {
@@ -57,6 +58,7 @@ const Billing = () => {
       }
 
       const data = await response.json();
+
       setUser(data);
       handleGetStripeId(pracId);
     } catch (error) {
@@ -89,24 +91,28 @@ const Billing = () => {
 
       const data = await response.json();
 
-      console.log("Stripe URL:", data.returnStatus.stripeDetails);
-
-      setStripeId(data.returnStatus.stripeDetails.stripeAccountId);
-      setStripeUrl(data.returnStatus.stripeDetails.stripeUrlVerification);
-      setIsStripeVerified(data.returnStatus.stripeDetails.accountVerified);
-      setStripeUrlExpiry(data.returnStatus.stripeDetails.urlExpiresAt);
-      setStripeUrlCreated(data.returnStatus.stripeDetails.urlCreatedAt);
+      //console.log("Stripe URL:", data.returnStatus.stripeDetails);
 
       const now = new Date().toLocaleString("en-US", { timeZone: "UTC" });
       const expiry = new Date(
-        data.returnStatus.stripeDetails.urlExpiresAt
+        data.returnStatus.stripeDetails.urlExpiresAt || null
       ).toLocaleString("en-US");
 
       console.log("now > expiry?", now > expiry); //DELETE WHEN DONE
 
-      if ((now > expiry || now === expiry) && isStripeVerified === false) {
+      if (
+        (now > expiry || now === expiry) &&
+        isStripeVerified === false &&
+        data.returnStatus.stripeDetails.urlExpiresAt !== null
+      ) {
         setIsStripeUrlExpired(true);
       }
+
+      setStripeUrl(data.returnStatus.stripeDetails.stripeUrlVerification);
+      setIsStripeVerified(data.returnStatus.stripeDetails.accountVerified);
+      setStripeUrlExpiry(data.returnStatus.stripeDetails.urlExpiresAt);
+      setStripeUrlCreated(data.returnStatus.stripeDetails.urlCreatedAt);
+      setStripeId(data.returnStatus.stripeDetails.stripeAccountId);
     } catch (error) {
       console.log("Error fetching Stripe ID:", error.message);
     }
@@ -163,6 +169,7 @@ const Billing = () => {
 
       const data = await response.json();
       setStripeLoad(false);
+      fetchData(); //refresh data
     } catch (error) {
       console.log("Error updating Stripe account:", error.message);
     }
@@ -179,6 +186,7 @@ const Billing = () => {
     })
       .then((res) => res.json())
       .then((res) => {
+        setIsStripeUrlExpired(false);
         setStripeUrl(res.url);
         handleUpdateStripeAccount(
           stripeId,
@@ -221,8 +229,10 @@ const Billing = () => {
     //console.log("is it expired?", now > expiry || now === expiry);
     if ((now > expiry || now === expiry) && isStripeVerified === false) {
       setIsStripeUrlExpired(true);
+      fetchData(); //refresh data to get the updated stripeId and other details
     } else {
       window.open(stripeUrl, "_blank", "noopener,noreferrer"); //IT WORKS BUT ONLY FOR A PERIOD OF TIME COZ OF THE LINK EXPIRATION (3mins)
+      window.location.reload();
     }
   };
 

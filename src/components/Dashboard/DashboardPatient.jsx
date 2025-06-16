@@ -4,6 +4,7 @@ import {
   GetNextAppointmentForPatient,
   GetPatientPreviousApt,
   GetMostAppointmentsForPatient,
+  ValidatePatient,
 } from "../../assets/js/serverApi";
 import {
   User,
@@ -13,11 +14,13 @@ import {
   EnvelopeOpen,
   CalendarSlash,
   X,
+  SmileyXEyes,
 } from "@phosphor-icons/react";
 import Payment from "../Stripe/Payment";
 
 import "../../styles/patientdashboard.css";
 const SummaryCards = ({ apts, setPreviousAptModal }) => {
+  const navigate = useNavigate();
   const [appointments, setAppointments] = useState(apts || []); //temporary fix? DELETE?????
   const [days, setDays] = useState(0);
   const [hours, setHours] = useState(0);
@@ -26,11 +29,49 @@ const SummaryCards = ({ apts, setPreviousAptModal }) => {
 
   const [inputDate, setInputDate] = useState("7 Aug 2024 20:00"); //can be changed to mm/dd/yyyy
 
-  const prevApt = apts.length > 0 ? apts[0] : []; //temporary fix?
+  const prevApt = apts?.length > 0 ? apts[0] : []; //temporary fix?
 
   const [nextApt, setNextApt] = useState([]);
 
   useEffect(() => {
+    handleValidatePatientToken();
+  }, []);
+
+  const handleValidatePatientToken = async (retry = true) => {
+    try {
+      const response = await fetch(ValidatePatient, {
+        method: "GET",
+        credentials: "include",
+      });
+
+      if (response.status === 302) {
+        //302 is redericting to sign in screen because refresh token and jwt are expired.
+        console.warn("302 detected, redirecting...");
+        // Redirect to the new path
+        navigate("/");
+        return; // Exit the function to prevent further execution
+      }
+
+      if (response.status === 401 && retry) {
+        // Retry the request once if a 401 status is detected
+        console.warn("401 detected, retrying request...");
+
+        return handleValidatePatientToken(false); // Call with `retry` set to false
+      }
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const data = await response.json();
+      console.log(data);
+      handleGetAppointmen(); //calls this function after the validation of the token
+    } catch (err) {
+      console.log(err.message);
+    }
+  };
+
+  const handleGetAppointmen = () => {
     const id = parseInt(sessionStorage.getItem("id"));
     fetch(`${GetNextAppointmentForPatient}/${id}`)
       .then((res) => res.json())
@@ -45,7 +86,7 @@ const SummaryCards = ({ apts, setPreviousAptModal }) => {
           setInputDate(dateFormat.toLocaleString());
         }
       });
-  }, []);
+  };
 
   //handles countdown
   // useEffect(() => {
@@ -535,6 +576,11 @@ const PrescriptionContainer = () => {
             </thead>
             <tbody></tbody>
           </table>
+          <br />
+          <SmileyXEyes size={35} color="rgba(0,0,0,0.4)" />
+          <p style={{ color: "rgba(0,0,0,0.3)", fontSize: "13px" }}>
+            Prescription is not available yet
+          </p>
         </div>
       </div>
     </div>

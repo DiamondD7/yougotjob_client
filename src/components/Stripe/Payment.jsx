@@ -155,7 +155,6 @@ const Payment = ({
       });
   };
 
-  console.log(latestCharge);
   const handleOpt = (clientSecret) => {
     setClientSecret({
       clientSecret,

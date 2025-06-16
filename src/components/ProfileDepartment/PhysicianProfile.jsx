@@ -94,13 +94,17 @@ const OverviewProfile = ({ loggedUser }) => {
             </div>
             <div style={{ display: "flex", gap: "10px", marginTop: "10px" }}>
               <label>Registered on</label>
-              <p>17/01/2025</p>
+              <p>{loggedUser.registeredOn}</p>
             </div>
           </div>
         </div>
         <div className="right-side-container__wrapper">
           <br />
           <h4>Availability</h4>
+          <p style={{ fontSize: "12px" }}>
+            To allow patients to book appointments with you, please update your
+            work time availability below.
+          </p>
           <br />
 
           {isUpdate === false ? (
@@ -635,32 +639,36 @@ const NavProfile = ({ clickNav, setClickNav }) => {
             display: "block",
             textAlign: "center",
             borderBottom:
-              hovered === "records" || clickNav === "records"
+              hovered === "certifications" || clickNav === "certifications"
                 ? "1px solid #81bb30"
                 : "", //change borderTop color if the cursor is hovering on the "overview" button or if the user click on the button
             height: "50px",
             width: "90px",
             color:
-              hovered === "records" || clickNav === "records" ? "#81bb30" : "", //change the fontcolor if the cursor is hovering on the "records" button or if the user click on the button
+              hovered === "certifications" || clickNav === "certifications"
+                ? "#81bb30"
+                : "", //change the fontcolor if the cursor is hovering on the "certifications" button or if the user click on the button
           }}
-          onClick={() => setClickNav("records")}
+          onClick={() => setClickNav("certifications")}
         >
           <div>
             <UserList
               size={20}
               color={
-                hovered === "records" || clickNav === "records" ? "#81bb30" : ""
-              } //change the fontcolor if the cursor is hovering on the "records" button or if the user click on the button
+                hovered === "certifications" || clickNav === "certifications"
+                  ? "#81bb30"
+                  : ""
+              } //change the fontcolor if the cursor is hovering on the "certifications" button or if the user click on the button
               weight={
-                hovered === "records" || clickNav === "records"
+                hovered === "certifications" || clickNav === "certifications"
                   ? "fill"
-                  : "regular" //change the weight of the icon if the cursor is hovering on the "records" button or if the user click on the button
+                  : "regular" //change the weight of the icon if the cursor is hovering on the "certifications" button or if the user click on the button
               }
             />
           </div>
-          records
+          certifications
         </button>
-        <button
+        {/* <button
           className="nav-btns"
           style={{
             display: "block",
@@ -698,7 +706,7 @@ const NavProfile = ({ clickNav, setClickNav }) => {
             )}
           </div>
           documents
-        </button>
+        </button> */}
         <button
           className="nav-btns"
           style={{
@@ -733,42 +741,6 @@ const NavProfile = ({ clickNav, setClickNav }) => {
             />
           </div>
           appointments
-        </button>
-
-        <button
-          className="nav-btns"
-          style={{
-            display: "block",
-            textAlign: "center",
-            borderBottom:
-              hovered === "learning" || clickNav === "learning"
-                ? "1px solid #81bb30"
-                : "", //change borderTop color if the cursor is hovering on the "learning" button or if the user click on the button
-            height: "50px",
-            width: "90px",
-            color:
-              hovered === "learning" || clickNav === "learning"
-                ? "#81bb30"
-                : "", //change font color if the cursor is hovering on the "learning" button or if the user click on the button
-          }}
-          onClick={() => setClickNav("learning")}
-        >
-          <div>
-            <Video
-              size={20}
-              color={
-                hovered === "learning" || clickNav === "learning"
-                  ? "#81bb30"
-                  : "" //change font color if the cursor is hovering on the "learning" button or if the user click on the button
-              }
-              weight={
-                hovered === "learning" || clickNav === "learning"
-                  ? "fill"
-                  : "regular" //change weight of the icon if the cursor is hovering on the "learning" button or if the user click on the button
-              }
-            />
-          </div>
-          learning
         </button>
       </div>
     </div>

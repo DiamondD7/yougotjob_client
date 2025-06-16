@@ -827,6 +827,7 @@ const AppointmentWait = ({ autofillData }) => {
 };
 
 const AppointmentForm = ({ setGetStartedClicked }) => {
+  const [practitionerDataLoaded, setPractitionerDataLoaded] = useState(false);
   const [stage, setStage] = useState(1);
   const [isOpenJobs, setIsOpenJobs] = useState(false);
   const [practitioners, setPractitioners] = useState([]);
@@ -884,6 +885,7 @@ const AppointmentForm = ({ setGetStartedClicked }) => {
       const data = await response.json();
 
       setPractitioners(data);
+      setPractitionerDataLoaded(true);
     } catch (ex) {
       console.log(ex);
     }
@@ -1354,6 +1356,11 @@ const AppointmentForm = ({ setGetStartedClicked }) => {
     return (
       <div>
         <h2>Pick a date and time</h2>
+        <p style={{ fontSize: "12px", width: "300px" }}>
+          If there are no available dates to book an appointment with this
+          practitioner, it indicates they have not yet updated their weekly
+          availability.
+        </p>
         <br />
         {isOpenJobs === false ? (
           <DatePicker
@@ -1409,6 +1416,7 @@ const AppointmentForm = ({ setGetStartedClicked }) => {
   };
 
   const Stage2 = ({
+    practitionerDataLoaded,
     setStage,
     practitioners,
     setChosenPractitioner,
@@ -1455,17 +1463,29 @@ const AppointmentForm = ({ setGetStartedClicked }) => {
       <div>
         <h2>Do you have a preferred GP?</h2>
         <div className="appointment-form-btns__wrapper">
-          {practitioners.map((data, index) => (
-            <div key={data.id}>
-              <button
-                className="appointment-form-btn"
-                onClick={(e) => handleBtnClicked(e, data)}
-              >
-                {data.fullName}
-              </button>
-              <br />
+          {practitionerDataLoaded === false ? (
+            <div className="practitioner-data-loading__wrapper">
+              <CircleNotch
+                size={20}
+                color="#202020"
+                className={"loading-icon"}
+              />
             </div>
-          ))}
+          ) : (
+            <>
+              {practitioners.map((data, index) => (
+                <div key={data.id}>
+                  <button
+                    className="appointment-form-btn"
+                    onClick={(e) => handleBtnClicked(e, data)}
+                  >
+                    {data.fullName}
+                  </button>
+                  <br />
+                </div>
+              ))}
+            </>
+          )}
         </div>
         <br />
         <br />
@@ -1593,6 +1613,7 @@ const AppointmentForm = ({ setGetStartedClicked }) => {
         />
       ) : stage === 2 ? (
         <Stage2
+          practitionerDataLoaded={practitionerDataLoaded}
           setStage={setStage}
           practitioners={practitioners}
           setChosenPractitioner={setChosenPractitioner}

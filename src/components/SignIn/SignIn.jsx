@@ -278,8 +278,22 @@ const PatientSignUp = ({ setPatientOption, setSuccessfulSignUp }) => {
               }}
             >
               <p className="termsofuse__text">
-                By signing up to create an account: I accept Terms of Use and
-                Privacy Policy
+                By signing up to create an account: I accept{" "}
+                <Link
+                  to="/terms-of-use"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Terms of Use
+                </Link>{" "}
+                and{" "}
+                <Link
+                  to="/privacy-policy"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Privacy Policy
+                </Link>
               </p>
             </div>
             <div style={{ textAlign: "center" }}>
@@ -612,9 +626,6 @@ const PracitionerSignIn = ({ localData, today }) => {
                       </GoogleOAuthProvider>
                     </div>
                   </form>
-
-                  <p>Contact</p>
-                  <p className="contact-number__text">0800-5553-4340</p>
                 </div>
               )}
             </div>
@@ -882,9 +893,6 @@ const PatientSignIn = ({ localData, today }) => {
                       </GoogleOAuthProvider>
                     </div>
                   </form>
-
-                  <p>Contact</p>
-                  <p className="contact-number__text">0800-5553-4340</p>
                 </div>
               )}
             </div>
@@ -940,10 +948,12 @@ const SignUpOpt = ({ healthPractitionerOption }) => {
       GivenName: givenName || "",
       FamilyName: familyName || "",
       EmailAddress: emailAddress,
-      Role: "Practitioner",
+      Role: "General Practitioner",
       DepartmentRole: healthPractitionerOption,
+      WorkPreference: "online",
       UserPassword: password || "",
       DOB: today, //change the logic here to get the age
+      RegisteredOn: today,
       EmailRecovery: "",
       Mobile: "",
       MobileRecovery: "",
@@ -1007,7 +1017,7 @@ const SignUpOpt = ({ healthPractitionerOption }) => {
             setErrorSignupMessage(res.returnStatus.message); //error message for the client to see
           } else {
             console.log(res); //DELETE
-            handleAddInitialTimePref(res.returnStatus.id);
+
             handleAddStripeAccount(res.returnStatus.id); //add stripe account
           }
         })
@@ -1020,13 +1030,13 @@ const SignUpOpt = ({ healthPractitionerOption }) => {
   const handleAddStripeAccount = async (id) => {
     try {
       const response = await fetch(AddStripeAccount, {
-        method: "POST",
+        method: "PUT",
         headers: {
           "Content-Type": "application/json",
           Accept: "application/json",
         },
         body: JSON.stringify({
-          PractitionerId: id,
+          Id: id,
         }),
       });
 
@@ -1036,6 +1046,7 @@ const SignUpOpt = ({ healthPractitionerOption }) => {
 
       const data = await response.json();
       console.log("Stripe account added successfully:", data);
+      handleAddInitialTimePref(id);
     } catch (error) {
       console.error("Error adding Stripe account:", error);
     }
@@ -1195,8 +1206,22 @@ const SignUpOpt = ({ healthPractitionerOption }) => {
                 }}
               >
                 <p className="termsofuse__text">
-                  By signing up to create an account: I accept Terms of Use and
-                  Privacy Policy
+                  By signing up to create an account: I accept{" "}
+                  <Link
+                    to="/terms-of-use"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Terms of Use
+                  </Link>{" "}
+                  and{" "}
+                  <Link
+                    to="/privacy-policy"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Privacy Policy
+                  </Link>
                 </p>
               </div>
               <button className="signup-signin-submit__btn" type="submit">
@@ -1312,7 +1337,7 @@ const SignIn = ({ localData }) => {
               <div>
                 {signupOptionsClicked === false ? (
                   <div className="signinas-form__wrapper">
-                    <h1>Sign in as:</h1>
+                    <h1>Sign in as</h1>
                     <select
                       className="select-option__wrapper"
                       onChange={(e) => setSignInOption(e.target.value)}
