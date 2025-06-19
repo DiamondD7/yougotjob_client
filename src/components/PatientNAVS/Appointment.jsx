@@ -11,6 +11,7 @@ import {
   MapPin,
 } from "@phosphor-icons/react";
 import {
+  GetAllUpcomingAppointmentForPractitioner,
   GetHealthPractitionerData,
   GetPatient,
   AddAppointmentFromForm,
@@ -1256,9 +1257,12 @@ const AppointmentForm = ({ setGetStartedClicked }) => {
       "Saturday",
     ];
     const [selectedDate, setSelectedDate] = useState(null);
+    const [upcomingAppointments, setUpcomingAppointments] = useState([]);
+    const [appointmentsFiltered, setAppointmentsFiltered] = useState([]);
 
     useEffect(() => {
       handleGetDateTime(practId);
+      handleGetAppointmentRequests();
     }, []);
 
     useEffect(() => {
@@ -1285,6 +1289,50 @@ const AppointmentForm = ({ setGetStartedClicked }) => {
         setPractitionersDateTime(data);
       } catch (error) {
         console.log(error);
+      }
+    };
+
+    const handleGetAppointmentRequests = async () => {
+      try {
+        const response = await fetch(
+          `${GetAllUpcomingAppointmentForPractitioner}/${practId}`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              Accept: "application/json",
+            },
+          }
+        );
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+
+        setUpcomingAppointments(data.returnStatus.data);
+        // const items = data.returnStatus.data;
+        // const arrLength = items.length;
+        // for (let i = 0; i < arrLength; i++) {
+        //   const date = new Date(
+        //     items[i].preferredAppointmentDate
+        //   ).toLocaleDateString("en-nz");
+        //   const time = new Date(
+        //     items[i].preferredAppointmentDate
+        //   ).toLocaleTimeString();
+        //   console.log(date);
+
+        //   setUpcomingAppointments((prevArr) => [
+        //     ...prevArr,
+        //     {
+        //       upcomingDate: date,
+        //       upcomingTime: time,
+        //     },
+        //   ]);
+        // }
+      } catch (ex) {
+        console.log(ex);
       }
     };
 
@@ -1317,17 +1365,40 @@ const AppointmentForm = ({ setGetStartedClicked }) => {
           setTimes({ fromTime: fromTime, toTime: toTime });
         }
       }
+
+      const filtered = upcomingAppointments.map((appointment) => {
+        const date = new Date(appointment.preferredAppointmentDate);
+        const time = new Date(appointment.preferredAppointmentDate);
+        return { upcomingDate: date, upcomingTime: time.getHours() };
+      });
+
+      setAppointmentsFiltered(filtered);
     };
 
+    console.log(appointmentsFiltered);
     const isAllowedDay = (date) => {
       // this method helps with filtering the date
       const day = date.getDay();
       return dates.includes(day);
     };
+
+    //this method is important to filter the preferred work times and if the time is already taken by another patient.
     const isAllowedTimes = (time) => {
       // this method helps with filtering the date
       const hour = time.getHours();
-      return hour >= times.fromTime && hour < times.toTime;
+
+      const isAllValid = appointmentsFiltered.every((appointment) => {
+        const day = new Date(time).toDateString("en-nz");
+        const aptDay = new Date(appointment.upcomingDate).toDateString("en-nz");
+
+        return day === aptDay
+          ? hour !== appointment.upcomingTime &&
+              hour >= times.fromTime &&
+              hour < times.toTime
+          : hour >= times.fromTime && hour < times.toTime;
+      });
+
+      return isAllValid;
     };
 
     const getMinTime = () => {
@@ -1373,7 +1444,7 @@ const AppointmentForm = ({ setGetStartedClicked }) => {
             dateFormat="dd/MM/YYYY - hh:mm a"
             minDate={new Date()}
             showTimeSelect
-            timeIntervals={30}
+            timeIntervals={60}
             timeFormat="hh:mm a"
             minTime={getMinTime()}
             maxTime={getMaxTime()}
