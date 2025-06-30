@@ -179,7 +179,7 @@
 
 /* ------------------------------------------------------------Sign up options */
 .signupas-title {
-  font-size: 28px;
+  font-size: 20px;
   text-align: center;
   margin-bottom: 10px;
 }
@@ -188,9 +188,9 @@
   height: 65%;
   width: 30%;
 
-  background-color: #e5f0ff;
+  /* background-color: #e5f0ff;
   box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
-  border-radius: 20px;
+  border-radius: 20px; */
   position: absolute;
   top: 50%;
   left: 50%;
@@ -198,11 +198,11 @@
   padding: 10px;
 }
 
-.signup-options__wrapper {
+/* .signup-options__wrapper {
   display: flex;
 
   gap: 10px;
-}
+} */
 
 .signup-options__btns {
   width: 50%;
@@ -214,6 +214,19 @@
   border-radius: 10px;
   padding: 10px;
   cursor: pointer;
+}
+
+.signup-options__btn {
+  background-color: #e5f0ff;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+
+  width: 100%;
+  padding: 10px;
+  border-radius: 5px;
+}
+.signup-options__btn:hover {
+  background-color: #d6e8ff;
 }
 
 .signup-options__btns button {
