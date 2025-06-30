@@ -1427,41 +1427,47 @@ const AppointmentForm = ({ setGetStartedClicked }) => {
     return (
       <div>
         <h2>Pick a date and time</h2>
-        <p style={{ fontSize: "12px", width: "300px" }}>
-          If there are no available dates to book an appointment with this
-          practitioner, it indicates they have not yet updated their weekly
-          availability.
-        </p>
+
         <br />
-        {isOpenJobs === false ? (
-          <DatePicker
-            placeholderText="Select date and time"
-            selected={selectedDate}
-            onChange={(date) => handleSelectDate(date)}
-            filterDate={isAllowedDay}
-            filterTime={isAllowedTimes}
-            className="datePicker"
-            dateFormat="dd/MM/YYYY - hh:mm a"
-            minDate={new Date()}
-            showTimeSelect
-            timeIntervals={60}
-            timeFormat="hh:mm a"
-            minTime={getMinTime()}
-            maxTime={getMaxTime()}
-          />
+        {practitionersDateTime.length > 0 ? (
+          <>
+            {isOpenJobs === false ? (
+              <DatePicker
+                placeholderText="Select date and time"
+                selected={selectedDate}
+                onChange={(date) => handleSelectDate(date)}
+                filterDate={isAllowedDay}
+                filterTime={isAllowedTimes}
+                className="datePicker"
+                dateFormat="dd/MM/YYYY - hh:mm a"
+                minDate={new Date()}
+                showTimeSelect
+                timeIntervals={60}
+                timeFormat="hh:mm a"
+                minTime={getMinTime()}
+                maxTime={getMaxTime()}
+              />
+            ) : (
+              <DatePicker
+                className="datePicker"
+                dateFormat="dd/MM/YYYY - hh:mm a"
+                selected={selectedDate}
+                onChange={(date) => handleSelectDate(date)}
+                minDate={new Date()}
+                showTimeSelect
+                timeIntervals={30}
+                timeFormat="hh:mm a"
+                minTime={getMinTime()}
+                maxTime={getMaxTime()}
+              />
+            )}
+          </>
         ) : (
-          <DatePicker
-            className="datePicker"
-            dateFormat="dd/MM/YYYY - hh:mm a"
-            selected={selectedDate}
-            onChange={(date) => handleSelectDate(date)}
-            minDate={new Date()}
-            showTimeSelect
-            timeIntervals={30}
-            timeFormat="hh:mm a"
-            minTime={getMinTime()}
-            maxTime={getMaxTime()}
-          />
+          <p style={{ fontSize: "12px", width: "300px" }}>
+            There are no available dates to book an appointment with this
+            practitioner, it indicates they have not yet updated their weekly
+            availability. Please choose another practitioner.
+          </p>
         )}
 
         <br />
