@@ -368,7 +368,7 @@ const PatientSignUp = ({ setPatientOption, setSuccessfulSignUp }) => {
               </GoogleOAuthProvider>
             </div>
           </div>
-          <button className="signup-signin-submit__btn" type="submit">
+          {/* <button className="signup-signin-submit__btn" type="submit">
             Submit
           </button>
           <button
@@ -376,7 +376,7 @@ const PatientSignUp = ({ setPatientOption, setSuccessfulSignUp }) => {
             onClick={() => setPatientOption(false)}
           >
             Back
-          </button>
+          </button> */}
         </form>
       </div>
     </div>
