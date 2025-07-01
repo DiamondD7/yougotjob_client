@@ -37,9 +37,8 @@ const SignUpOptions = ({
   return (
     <div className="signin__wrapper">
       <div className="signupform-options-container__wrapper">
-        <h2 className="signupas-title">Sign up as</h2>
         <div className="signup-options__wrapper">
-          <div className="signup-options__btns">
+          {/* <div className="signup-options__btns">
             <p style={{ fontSize: "12px" }}>Patient</p>
             <button onClick={() => setPatientOption(true)}>
               <img src={PatientLogo} alt="patientLogo" />
@@ -49,6 +48,33 @@ const SignUpOptions = ({
             <p style={{ fontSize: "12px" }}>Practitioner</p>
             <button onClick={() => setHealthPractitionerOption("Practitioner")}>
               <img src={PractitionerLogo} alt="patientLogo" />
+            </button>
+          </div> */}
+
+          <p style={{ fontSize: "12px" }}>
+            <strong>Choose a role to create an account.</strong> <br /> <br />
+            As a patient, you can book appointments with health practitioners.{" "}
+            <br />
+            As a health practitioner, you can manage your appointments and
+            patients.
+          </p>
+          <br />
+          <br />
+          <div>
+            <button
+              className="signup-options__btn"
+              onClick={() => setPatientOption(true)}
+            >
+              Patient
+            </button>
+          </div>
+          <br />
+          <div>
+            <button
+              className="signup-options__btn"
+              onClick={() => setHealthPractitionerOption("Practitioner")}
+            >
+              Practitioner
             </button>
           </div>
           {/* <button
@@ -342,7 +368,7 @@ const PatientSignUp = ({ setPatientOption, setSuccessfulSignUp }) => {
               </GoogleOAuthProvider>
             </div>
           </div>
-          <button className="signup-signin-submit__btn" type="submit">
+          {/* <button className="signup-signin-submit__btn" type="submit">
             Submit
           </button>
           <button
@@ -350,7 +376,7 @@ const PatientSignUp = ({ setPatientOption, setSuccessfulSignUp }) => {
             onClick={() => setPatientOption(false)}
           >
             Back
-          </button>
+          </button> */}
         </form>
       </div>
     </div>
@@ -903,7 +929,10 @@ const PatientSignIn = ({ localData, today }) => {
   );
 };
 
-const SignUpOpt = ({ healthPractitionerOption }) => {
+const SignUpOpt = ({
+  healthPractitionerOption,
+  setHealthPractitionerOption,
+}) => {
   const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
   const [registrationNumber, setRegistrationNumber] = useState("");
   const [googleId, setGoogleId] = useState("");
@@ -1229,9 +1258,7 @@ const SignUpOpt = ({ healthPractitionerOption }) => {
               </button>
               <button
                 className="signup-back__btn"
-                onClick={() => {
-                  window.location.reload();
-                }}
+                onClick={() => setHealthPractitionerOption("")}
               >
                 Back
               </button>
@@ -1375,11 +1402,19 @@ const SignIn = ({ localData }) => {
                   </div>
                 ) : (
                   <div>
-                    <SignUpOptions
-                      setSignupOptionsClicked={setSignupOptionsClicked}
-                      setPatientOption={setPatientOption}
-                      setHealthPractitionerOption={setHealthPractitionerOption}
-                    />
+                    {patientOption === false &&
+                    healthPractitionerOption === "" ? (
+                      <SignUpOptions
+                        setSignupOptionsClicked={setSignupOptionsClicked}
+                        setPatientOption={setPatientOption}
+                        setHealthPractitionerOption={
+                          setHealthPractitionerOption
+                        }
+                      />
+                    ) : (
+                      ""
+                    )}
+
                     {patientOption === true ? (
                       <PatientSignUp
                         setPatientOption={setPatientOption}
@@ -1391,6 +1426,9 @@ const SignIn = ({ localData }) => {
                     {healthPractitionerOption && (
                       <SignUpOpt
                         healthPractitionerOption={healthPractitionerOption}
+                        setHealthPractitionerOption={
+                          setHealthPractitionerOption
+                        }
                       />
                     )}
                   </div>

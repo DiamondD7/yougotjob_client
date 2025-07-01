@@ -11,6 +11,7 @@ import {
   MapPin,
 } from "@phosphor-icons/react";
 import {
+  GetAllUpcomingAppointmentForPractitioner,
   GetHealthPractitionerData,
   GetPatient,
   AddAppointmentFromForm,
@@ -28,6 +29,7 @@ import AppointmentImage from "../../assets/img/AppointmentImage.png";
 
 import "react-datepicker/dist/react-datepicker.css";
 import "../../styles/appointmentstyles.css";
+//import { min } from "moment";
 const CalendarConfirmation = ({ openConfimation }) => {
   return (
     <div
@@ -1074,7 +1076,11 @@ const AppointmentForm = ({ setGetStartedClicked }) => {
                       <div>
                         <label>Appointment Schedule</label>
                         <p>
-                          <strong>11/02/2025, 11:30 am</strong>
+                          <strong>
+                            {new Date(
+                              appointmentData.PreferredAppointmentDate
+                            ).toLocaleString("en-NZ")}
+                          </strong>
                         </p>
                       </div>
                     </div>
@@ -1256,9 +1262,12 @@ const AppointmentForm = ({ setGetStartedClicked }) => {
       "Saturday",
     ];
     const [selectedDate, setSelectedDate] = useState(null);
+    const [upcomingAppointments, setUpcomingAppointments] = useState([]);
+    const [appointmentsFiltered, setAppointmentsFiltered] = useState([]);
 
     useEffect(() => {
       handleGetDateTime(practId);
+      handleGetAppointmentRequests();
     }, []);
 
     useEffect(() => {
@@ -1288,6 +1297,31 @@ const AppointmentForm = ({ setGetStartedClicked }) => {
       }
     };
 
+    const handleGetAppointmentRequests = async () => {
+      try {
+        const response = await fetch(
+          `${GetAllUpcomingAppointmentForPractitioner}/${practId}`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              Accept: "application/json",
+            },
+          }
+        );
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+
+        setUpcomingAppointments(data.returnStatus.data);
+      } catch (ex) {
+        console.log(ex);
+      }
+    };
+
     //console.log(practitionersDateTime[0]?.day);
     const [dates, setDates] = useState([]);
     const [times, setTimes] = useState([]);
@@ -1305,18 +1339,52 @@ const AppointmentForm = ({ setGetStartedClicked }) => {
     };
 
     const handleSelectDate = (date) => {
-      setSelectedDate(date);
+      const chosenTime = new Date(date).getHours();
+      const minDateTime = new Date(date); //makes sure that the minimumDateTime is chosen depends on the work availability of the practitioner
 
       const indexOfDay = new Date(date).getDay(); // Get the day of the week (0-6)
       const dayName = dateOfWeek[indexOfDay]; // Get the name of the day
 
-      for (let i = 0; i < practitionersDateTime.length; i++) {
-        if (dayName === practitionersDateTime[i]?.day) {
-          const fromTime = parseInt(practitionersDateTime[i]?.fromTime); //parses it, as it is a string
-          const toTime = parseInt(practitionersDateTime[i]?.toTime);
-          setTimes({ fromTime: fromTime, toTime: toTime });
+      //if the user chose a practitioner, then we will check the practitionersDateTime to get the available times for that practitioner.
+      if (practitionersDateTime.length > 0 || isOpenJobs === false) {
+        for (let i = 0; i < practitionersDateTime.length; i++) {
+          if (dayName === practitionersDateTime[i]?.day) {
+            const fromTime = parseInt(practitionersDateTime[i]?.fromTime); //parses it, as it is a string
+            const toTime = parseInt(practitionersDateTime[i]?.toTime);
+            setTimes({ fromTime: fromTime, toTime: toTime });
+            minDateTime.setHours(fromTime, 0, 0, 0); // Set the minimum time to the fromTime
+          }
+        }
+      } else {
+        //if the user chose an OpenJob(meaning its not a direct appointment with a practitioner), then the practitionersDateTime will be empty, so we set the minimum time to the next hour.
+        const currentTime = new Date().getHours();
+        const currentDate = new Date().getDate();
+        const chosenDate = new Date(date).getDate();
+        const fromTime = currentTime + 1; // Set the fromTime to the next hour
+
+        // If the chosen date is today, set the minimum time to the next hour
+
+        if (chosenDate === currentDate) {
+          minDateTime.setHours(fromTime, 0, 0, 0); // Set the minimum time to the fromTime
+        } else {
+          // Otherwise, set it to 8 AM
+          minDateTime.setHours(8, 0, 0, 0);
         }
       }
+
+      const filtered = upcomingAppointments.map((appointment) => {
+        const date = new Date(appointment.preferredAppointmentDate);
+        const time = new Date(appointment.preferredAppointmentDate).getHours();
+        return { upcomingDate: date, upcomingTime: time };
+      });
+
+      //if the user chose a time that is greater than the minimum time, then set the selectedDate to that date, otherwise set it to the minimum time.
+      if (chosenTime > minDateTime.getHours()) {
+        setSelectedDate(date);
+      } else {
+        setSelectedDate(minDateTime);
+      }
+      setAppointmentsFiltered(filtered);
     };
 
     const isAllowedDay = (date) => {
@@ -1324,10 +1392,38 @@ const AppointmentForm = ({ setGetStartedClicked }) => {
       const day = date.getDay();
       return dates.includes(day);
     };
+
+    //this method is important to filter the preferred work times and if the time is already taken by another patient.
     const isAllowedTimes = (time) => {
-      // this method helps with filtering the date
+      // this method helps with filtering the time
       const hour = time.getHours();
-      return hour >= times.fromTime && hour < times.toTime;
+
+      const isAllValid = appointmentsFiltered.every((appointment) => {
+        const day = new Date(time).toDateString("en-nz");
+        const aptDay = new Date(appointment.upcomingDate).toDateString("en-nz");
+
+        return day === aptDay
+          ? hour !== appointment.upcomingTime &&
+              hour >= times.fromTime &&
+              hour < times.toTime
+          : hour >= times.fromTime && hour < times.toTime;
+      });
+
+      return isAllValid;
+    };
+
+    const filterTimeForOpenJobs = (time) => {
+      const currentDate = new Date().getDate();
+      const chosenDate = new Date(time).getDate();
+
+      const hour = time.getHours();
+      const currentHour = new Date().getHours();
+
+      // If the chosen date is today, allow times after the current hour
+      if (currentDate === chosenDate) {
+        return hour > currentHour && hour <= 23;
+      }
+      return hour >= 8 && hour <= 23; // Allow times from 8 AM to 11 PM if the chosen date is not today
     };
 
     const getMinTime = () => {
@@ -1356,41 +1452,49 @@ const AppointmentForm = ({ setGetStartedClicked }) => {
     return (
       <div>
         <h2>Pick a date and time</h2>
-        <p style={{ fontSize: "12px", width: "300px" }}>
-          If there are no available dates to book an appointment with this
-          practitioner, it indicates they have not yet updated their weekly
-          availability.
-        </p>
+
         <br />
-        {isOpenJobs === false ? (
-          <DatePicker
-            placeholderText="Select date and time"
-            selected={selectedDate}
-            onChange={(date) => handleSelectDate(date)}
-            filterDate={isAllowedDay}
-            filterTime={isAllowedTimes}
-            className="datePicker"
-            dateFormat="dd/MM/YYYY - hh:mm a"
-            minDate={new Date()}
-            showTimeSelect
-            timeIntervals={30}
-            timeFormat="hh:mm a"
-            minTime={getMinTime()}
-            maxTime={getMaxTime()}
-          />
+        {isOpenJobs === true || practitionersDateTime.length > 0 ? (
+          <>
+            {isOpenJobs === false ? (
+              <DatePicker
+                placeholderText="Select date and time"
+                selected={selectedDate}
+                onChange={(date) => handleSelectDate(date)}
+                filterDate={isAllowedDay}
+                filterTime={isAllowedTimes}
+                className="datePicker"
+                dateFormat="dd/MM/YYYY - hh:mm a"
+                minDate={new Date()}
+                showTimeSelect
+                timeIntervals={60}
+                timeFormat="hh:mm a"
+                minTime={getMinTime()}
+                maxTime={getMaxTime()}
+              />
+            ) : (
+              <DatePicker
+                className="datePicker"
+                placeholderText="Select date and time"
+                dateFormat="dd/MM/YYYY - hh:mm a"
+                filterTime={filterTimeForOpenJobs}
+                selected={selectedDate}
+                onChange={(date) => handleSelectDate(date)}
+                minDate={new Date()}
+                showTimeSelect
+                timeIntervals={60}
+                timeFormat="hh:mm a"
+                minTime={getMinTime()}
+                maxTime={getMaxTime()}
+              />
+            )}
+          </>
         ) : (
-          <DatePicker
-            className="datePicker"
-            dateFormat="dd/MM/YYYY - hh:mm a"
-            selected={selectedDate}
-            onChange={(date) => handleSelectDate(date)}
-            minDate={new Date()}
-            showTimeSelect
-            timeIntervals={30}
-            timeFormat="hh:mm a"
-            minTime={getMinTime()}
-            maxTime={getMaxTime()}
-          />
+          <p style={{ fontSize: "12px", width: "300px" }}>
+            There are no available dates to book an appointment with this
+            practitioner, it indicates they have not yet updated their weekly
+            availability. Please choose another practitioner.
+          </p>
         )}
 
         <br />
@@ -1440,6 +1544,7 @@ const AppointmentForm = ({ setGetStartedClicked }) => {
         HealthPractitionerType: data.role,
         IsOpenJob: false,
       });
+      setIsOpenJobs(false);
     };
 
     const handleOpenJobs = (e) => {

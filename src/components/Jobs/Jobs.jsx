@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Binoculars, Users, User } from "@phosphor-icons/react";
 import {
-  GetAppointmentsForPractitioner,
+  GetAppointmentsDirectRequestForPractitioner,
   GetAvailableJobs,
   AcceptJob,
   GetaHealthPractitioner,
@@ -382,7 +382,7 @@ const Jobs = () => {
   const fetchDirectJobs = (e, id) => {
     e.preventDefault();
     setDefaultFilter("Direct");
-    fetch(`${GetAppointmentsForPractitioner}/${id}`)
+    fetch(`${GetAppointmentsDirectRequestForPractitioner}/${id}`)
       .then((res) => res.json())
       .then((res) => {
         setJobsData(res.returnStatus.data);
