@@ -1,0 +1,8 @@
+.right-side-container-sub__wrapper {
+  display: inline-block;
+  text-align: center;
+
+  border-radius: 10px;
+  border: none;
+  padding: 20px;
+}
