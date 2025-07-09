@@ -9,6 +9,7 @@ import {
 import {
   GetPatient,
   GetMostRecentAppointmentForPatientUser,
+  GetTotalAppointmentForPatient,
 } from "../../assets/js/serverApi";
 
 import "../../styles/patientprofilestyles.css"; //importing the css file for styling
@@ -81,7 +82,7 @@ const NavProfile = ({ clickNav, setClickNav }) => {
           overview
         </button>
 
-        <button
+        {/* <button
           className="nav-btns"
           style={{
             display: "block",
@@ -111,7 +112,7 @@ const NavProfile = ({ clickNav, setClickNav }) => {
             />
           </div>
           records
-        </button>
+        </button> */}
 
         <button
           className="nav-btns"
@@ -153,7 +154,7 @@ const NavProfile = ({ clickNav, setClickNav }) => {
   );
 };
 
-const OverviewProfile = ({ loggedUser }) => {
+const OverviewProfile = ({ loggedUser, totalApt }) => {
   const [isUpdate, setIsUpdate] = useState(false); //initialisation of the update state, started out as false
   const bmi =
     Math.round(
@@ -276,17 +277,17 @@ const OverviewProfile = ({ loggedUser }) => {
     );
   };
 
-  const RightSideContainer = ({ mostRecentApt }) => {
+  const RightSideContainer = ({ mostRecentApt, totalApt }) => {
     const recentAptDate =
       mostRecentApt === null
         ? null
         : new Date(mostRecentApt).toLocaleDateString("en-nz");
 
     return (
-      <div className="right-side-container__wrapper">
+      <div className="right-side__wrapper">
         <br />
         <div className="right-side-container-sub__wrapper">
-          <h2>30</h2>
+          <h2>{totalApt}</h2>
           <p style={{ fontSize: "12px", marginTop: "10px" }}>
             Total Appointments
           </p>
@@ -307,18 +308,21 @@ const OverviewProfile = ({ loggedUser }) => {
         <div>
           <LeftSideContainer loggedUser={loggedUser} />
         </div>
-        <div>
-          <RightSideContainer mostRecentApt={mostRecentApt} />
+        <div className="right-side-container__wrapper">
+          <RightSideContainer
+            mostRecentApt={mostRecentApt}
+            totalApt={totalApt}
+          />
         </div>
       </div>
     </div>
   );
 };
 
-const BodyProfile = ({ loggedUser, clickNav }) => {
+const BodyProfile = ({ loggedUser, clickNav, totalApt }) => {
   const renderBody = () => {
     if (clickNav === "overview") {
-      return <OverviewProfile loggedUser={loggedUser} />;
+      return <OverviewProfile loggedUser={loggedUser} totalApt={totalApt} />;
     }
   };
   return <div>{renderBody()}</div>;
@@ -328,6 +332,7 @@ const PatientProfile = () => {
   const [loading, setLoading] = useState(true); //initialisation of the loading state, started out as true
   const [clickNav, setClickNav] = useState("overview"); //initialisation of the click navigation state, started out as "overview"
   const [loggedUser, setLoggedUser] = useState({});
+  const [totalApt, setTotalApt] = useState(0); //initialisation of the total appointment state, started out as 0
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -365,11 +370,34 @@ const PatientProfile = () => {
 
       const data = await response.json();
       setLoggedUser(data);
+      handleFetchTotalAppointment(); //fetching the total appointment for the patient
       setLoading(false);
     } catch (error) {
       console.log("Error fetching data:", error.message);
     }
   };
+
+  const handleFetchTotalAppointment = async () => {
+    try {
+      const id = parseInt(sessionStorage.getItem("id")); //parsed session id to int
+      const response = await fetch(`${GetTotalAppointmentForPatient}/${id}`, {
+        method: "GET",
+        headers: {
+          Accept: "application/json",
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const data = await response.json();
+      setTotalApt(data); //total appointments (int)
+    } catch (error) {
+      console.log("Error fetching total appointments:", error.message);
+    }
+  };
+
   return (
     <div>
       <h3 style={{ padding: "10px 0 0 30px" }}>Profile</h3>
@@ -384,7 +412,11 @@ const PatientProfile = () => {
           </div>
 
           <div>
-            <BodyProfile loggedUser={loggedUser} clickNav={clickNav} />
+            <BodyProfile
+              loggedUser={loggedUser}
+              clickNav={clickNav}
+              totalApt={totalApt}
+            />
           </div>
         </>
       )}
