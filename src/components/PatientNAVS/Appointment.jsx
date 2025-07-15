@@ -29,6 +29,7 @@ import AppointmentImage from "../../assets/img/AppointmentImage.png";
 
 import "react-datepicker/dist/react-datepicker.css";
 import "../../styles/appointmentstyles.css";
+//import { set } from "react-datepicker/dist/date_utils";
 //import { min } from "moment";
 const CalendarConfirmation = ({ openConfimation }) => {
   return (
@@ -908,6 +909,7 @@ const AppointmentForm = ({ setGetStartedClicked }) => {
   }) => {
     const [loading, setLoading] = useState(false);
     const [success, setSuccess] = useState(false);
+    const [openCancelModal, setOpenCancelModal] = useState(false);
 
     const handleFormSubmit = (e) => {
       e.preventDefault();
@@ -961,8 +963,34 @@ const AppointmentForm = ({ setGetStartedClicked }) => {
       }
     };
 
+    const cancelConfirmationModal = ({
+      setGetStartedClicked,
+      setOpenCancelModal,
+    }) => {
+      return (
+        <div className="appointment-cancel-confirm__wrapper">
+          <h4 style={{ textAlign: "center" }}>
+            Are you sure you want to cancel?
+          </h4>
+          <button
+            className="appointment-cancelBtn-confirm__btn"
+            onClick={() => setGetStartedClicked(false)}
+          >
+            Yes
+          </button>
+          <button
+            className="appointment-dontCancelBtn-confirm__btn"
+            onClick={() => setOpenCancelModal(false)}
+          >
+            No
+          </button>
+        </div>
+      );
+    };
+
     return (
       <div>
+        {openCancelModal && <div className="overlay"></div>}
         {success === true ? (
           <div className="appointment-success-confirmation__wrapper">
             <CheckCircle size={32} weight="fill" color="#f3f3f3" />
@@ -1112,7 +1140,7 @@ const AppointmentForm = ({ setGetStartedClicked }) => {
                 <br />
                 <button
                   className="appointment-cancel-confirm__btn"
-                  onClick={() => setGetStartedClicked(false)}
+                  onClick={() => setOpenCancelModal(true)}
                 >
                   Cancel
                 </button>
@@ -1122,6 +1150,12 @@ const AppointmentForm = ({ setGetStartedClicked }) => {
                 >
                   Agree & Confirm
                 </button>
+
+                {openCancelModal &&
+                  cancelConfirmationModal({
+                    setGetStartedClicked,
+                    setOpenCancelModal,
+                  })}
               </>
             )}
           </>
@@ -1323,6 +1357,7 @@ const AppointmentForm = ({ setGetStartedClicked }) => {
     };
 
     //console.log(practitionersDateTime[0]?.day);
+    const [btnDisabled, setBtnDisabled] = useState(false);
     const [dates, setDates] = useState([]);
     const [times, setTimes] = useState([]);
 
@@ -1345,6 +1380,12 @@ const AppointmentForm = ({ setGetStartedClicked }) => {
       const indexOfDay = new Date(date).getDay(); // Get the day of the week (0-6)
       const dayName = dateOfWeek[indexOfDay]; // Get the name of the day
 
+      const filtered = upcomingAppointments.map((appointment) => {
+        const date = new Date(appointment.preferredAppointmentDate);
+        const time = new Date(appointment.preferredAppointmentDate).getHours();
+        return { upcomingDate: date, upcomingTime: time };
+      });
+
       //if the user chose a practitioner, then we will check the practitionersDateTime to get the available times for that practitioner.
       if (practitionersDateTime.length > 0 || isOpenJobs === false) {
         for (let i = 0; i < practitionersDateTime.length; i++) {
@@ -1352,14 +1393,16 @@ const AppointmentForm = ({ setGetStartedClicked }) => {
             const fromTime = parseInt(practitionersDateTime[i]?.fromTime); //parses it, as it is a string
             const toTime = parseInt(practitionersDateTime[i]?.toTime);
             setTimes({ fromTime: fromTime, toTime: toTime });
+
             minDateTime.setHours(fromTime, 0, 0, 0); // Set the minimum time to the fromTime
           }
         }
       } else {
         //if the user chose an OpenJob(meaning its not a direct appointment with a practitioner), then the practitionersDateTime will be empty, so we set the minimum time to the next hour.
+
         const currentTime = new Date().getHours();
-        const currentDate = new Date().getDate();
-        const chosenDate = new Date(date).getDate();
+        const currentDate = new Date().toDateString();
+        const chosenDate = new Date(date).toDateString();
         const fromTime = currentTime + 1; // Set the fromTime to the next hour
 
         // If the chosen date is today, set the minimum time to the next hour
@@ -1372,18 +1415,30 @@ const AppointmentForm = ({ setGetStartedClicked }) => {
         }
       }
 
-      const filtered = upcomingAppointments.map((appointment) => {
-        const date = new Date(appointment.preferredAppointmentDate);
-        const time = new Date(appointment.preferredAppointmentDate).getHours();
-        return { upcomingDate: date, upcomingTime: time };
-      });
-
       //if the user chose a time that is greater than the minimum time, then set the selectedDate to that date, otherwise set it to the minimum time.
+
       if (chosenTime > minDateTime.getHours()) {
         setSelectedDate(date);
+        setBtnDisabled(false);
       } else {
         setSelectedDate(minDateTime);
+        if (isOpenJobs === false) {
+          //only for direct appointments with a practitioner
+          const filteredTime = filtered.map((apt) => {
+            if (
+              apt.upcomingTime === minDateTime.getHours() &&
+              apt.upcomingDate.toDateString() === minDateTime.toDateString()
+            ) {
+              return true;
+            }
+
+            return false;
+          });
+
+          setBtnDisabled(filteredTime.includes(true));
+        }
       }
+
       setAppointmentsFiltered(filtered);
     };
 
@@ -1397,6 +1452,11 @@ const AppointmentForm = ({ setGetStartedClicked }) => {
     const isAllowedTimes = (time) => {
       // this method helps with filtering the time
       const hour = time.getHours();
+
+      //if there are no upcoming appointments for the particular practitioner, then we will allow the time to be chosen.
+      if (appointmentsFiltered.length === 0) {
+        return hour >= times.fromTime && hour < times.toTime;
+      }
 
       const isAllValid = appointmentsFiltered.every((appointment) => {
         const day = new Date(time).toDateString("en-nz");
@@ -1413,8 +1473,8 @@ const AppointmentForm = ({ setGetStartedClicked }) => {
     };
 
     const filterTimeForOpenJobs = (time) => {
-      const currentDate = new Date().getDate();
-      const chosenDate = new Date(time).getDate();
+      const currentDate = new Date().toDateString();
+      const chosenDate = new Date(time).toDateString();
 
       const hour = time.getHours();
       const currentHour = new Date().getHours();
@@ -1452,8 +1512,14 @@ const AppointmentForm = ({ setGetStartedClicked }) => {
     return (
       <div>
         <h2>Pick a date and time</h2>
-
         <br />
+        <p style={{ fontSize: "12px", width: "300px" }}>
+          Please select a date and time for your appointment with{" "}
+          {isOpenJobs === false
+            ? chosenPractitioner.fullName
+            : "any available practitioner"}
+          .
+        </p>
         {isOpenJobs === true || practitionersDateTime.length > 0 ? (
           <>
             {isOpenJobs === false ? (
@@ -1508,9 +1574,11 @@ const AppointmentForm = ({ setGetStartedClicked }) => {
         <br />
         <button
           className={`appointment-confirmation__btn ${
-            selectedDate !== null ? "" : "btnDisabled"
+            selectedDate !== null && btnDisabled === false ? "" : "btnDisabled"
           }`}
-          disabled={selectedDate !== null ? false : true}
+          disabled={
+            selectedDate !== null && btnDisabled === false ? false : true
+          }
           onClick={(e) => handleConfirm(e)}
         >
           Next: Reason for appointment

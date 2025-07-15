@@ -22,6 +22,7 @@ import PatientProfile from "../ProfileDepartment/PatientProfile";
 import InProgress from "./InProgress";
 
 import "../../styles/displaystyles.css";
+import Feedback from "../Feedback/Feedback";
 const Display = ({ displayed, setEditChanges }) => {
   const role = sessionStorage.getItem("role");
   const isVerified = sessionStorage.getItem("isVerified");
@@ -68,6 +69,8 @@ const Display = ({ displayed, setEditChanges }) => {
           <Jobs />
         ) : displayed === "schedules" ? (
           <Schedules />
+        ) : displayed === "feedback" ? (
+          <Feedback />
         ) : (
           ""
         )}

@@ -1,0 +1,17 @@
+.right-side__wrapper {
+  background-color: #9dcd5a;
+  border-radius: 5px;
+}
+.right-side__wrapper h2,
+.right-side__wrapper p {
+  color: #f3f3f3;
+}
+
+.right-side-container-sub__wrapper {
+  display: inline-block;
+  text-align: center;
+
+  border-radius: 10px;
+  border: none;
+  padding: 20px;
+}

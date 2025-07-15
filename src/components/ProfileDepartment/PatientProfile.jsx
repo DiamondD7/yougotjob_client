@@ -6,8 +6,13 @@ import {
   Calendar,
   CircleNotch,
 } from "@phosphor-icons/react";
-import { GetPatient } from "../../assets/js/serverApi";
+import {
+  GetPatient,
+  GetMostRecentAppointmentForPatientUser,
+  GetTotalAppointmentForPatient,
+} from "../../assets/js/serverApi";
 
+import "../../styles/patientprofilestyles.css"; //importing the css file for styling
 const NavProfile = ({ clickNav, setClickNav }) => {
   const [hovered, setHovered] = useState("overview"); //initialisation of the btn hovered effect, started out as an empty string
 
@@ -77,7 +82,7 @@ const NavProfile = ({ clickNav, setClickNav }) => {
           overview
         </button>
 
-        <button
+        {/* <button
           className="nav-btns"
           style={{
             display: "block",
@@ -107,7 +112,7 @@ const NavProfile = ({ clickNav, setClickNav }) => {
             />
           </div>
           records
-        </button>
+        </button> */}
 
         <button
           className="nav-btns"
@@ -149,113 +154,175 @@ const NavProfile = ({ clickNav, setClickNav }) => {
   );
 };
 
-const OverviewProfile = ({ loggedUser }) => {
+const OverviewProfile = ({ loggedUser, totalApt }) => {
   const [isUpdate, setIsUpdate] = useState(false); //initialisation of the update state, started out as false
   const bmi =
     Math.round(
       (loggedUser.weight / (loggedUser.height * loggedUser.height)) * 10000 * 10
     ) / 10;
 
+  const [mostRecentApt, setMostRecentApt] = useState(null); //initialisation of the most recent appointment state, started out as null
+
+  useEffect(() => {
+    fetchMostRecentAppointment(); //fetching the most recent appointment when the component mounts
+  }, []);
+
+  const fetchMostRecentAppointment = async () => {
+    try {
+      const id = parseInt(sessionStorage.getItem("id")); //parsed session id to int
+      const response = await fetch(
+        `${GetMostRecentAppointmentForPatientUser}/${id}`,
+        {
+          method: "GET",
+          headers: {
+            Accept: "application/json",
+          },
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const data = await response.json();
+      setMostRecentApt(data.returnStatus.data.appointmentDateCompleted); //setting the most recent appointment date
+    } catch (error) {
+      console.log("Error fetching most recent appointment:", error.message);
+    }
+  };
+
+  const LeftSideContainer = ({ loggedUser }) => {
+    return (
+      <div className="left-side-container__wrapper">
+        <h3 style={{ paddingLeft: "10px" }}>{loggedUser.fullName}</h3>
+        <div
+          style={{
+            marginTop: "50px",
+            padding: "10px",
+            borderBottom: "1px solid #e0e0e0",
+          }}
+        >
+          <h5>About</h5>
+          <div style={{ display: "flex", gap: "10px", marginTop: "10px" }}>
+            <label>Date of Birth</label>
+            <p>{new Date(loggedUser.dob).toLocaleDateString("en-nz")}</p>
+          </div>
+
+          <div style={{ display: "flex", gap: "10px", marginTop: "10px" }}>
+            <label>Age</label>
+            <p>{loggedUser.age}</p>
+          </div>
+          <div style={{ display: "flex", gap: "10px", marginTop: "10px" }}>
+            <label>Height</label>
+            <p>{loggedUser.height}cm</p>
+          </div>
+          <div style={{ display: "flex", gap: "10px", marginTop: "10px" }}>
+            <label>Weight</label>
+            <p>{loggedUser.weight}kg</p>
+          </div>
+          <div style={{ display: "flex", gap: "10px", marginTop: "10px" }}>
+            <label>BMI</label>
+            <p>{bmi}</p>
+          </div>
+
+          <div style={{ display: "flex", gap: "10px", marginTop: "10px" }}>
+            <label>Phone</label>
+            <p>{loggedUser.mobileNumber}</p>
+          </div>
+
+          <div style={{ display: "flex", gap: "10px", marginTop: "10px" }}>
+            <label>Email</label>
+            <p>{loggedUser.emailAddress}</p>
+          </div>
+        </div>
+
+        <div
+          style={{
+            marginTop: "50px",
+            padding: "10px",
+            borderBottom: "1px solid #e0e0e0",
+          }}
+        >
+          <h5>Address</h5>
+          <div style={{ display: "flex", gap: "10px", marginTop: "10px" }}>
+            <label>Home</label>
+            <p>{loggedUser.homeAddress}</p>
+          </div>
+        </div>
+        <div
+          style={{
+            marginTop: "50px",
+            padding: "10px",
+            borderBottom: "1px solid #e0e0e0",
+          }}
+        >
+          <h5>Details</h5>
+
+          <div style={{ display: "flex", gap: "10px", marginTop: "10px" }}>
+            <label>Registered on</label>
+            <p>
+              {new Date(loggedUser.registeredOn).toLocaleDateString("en-nz")}
+            </p>
+          </div>
+          <div style={{ display: "flex", gap: "10px", marginTop: "10px" }}>
+            <label>Account Verified</label>
+            <p>{loggedUser.isVerified === true ? "Yes" : "No"}</p>
+          </div>
+          <div style={{ display: "flex", gap: "10px", marginTop: "10px" }}>
+            <label>Verified on</label>
+            <p>{new Date(loggedUser.verifiedOn).toLocaleDateString("en-nz")}</p>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
+  const RightSideContainer = ({ mostRecentApt, totalApt }) => {
+    const recentAptDate =
+      mostRecentApt === null
+        ? null
+        : new Date(mostRecentApt).toLocaleDateString("en-nz");
+
+    return (
+      <div className="right-side__wrapper">
+        <br />
+        <div className="right-side-container-sub__wrapper">
+          <h2>{totalApt}</h2>
+          <p style={{ fontSize: "12px", marginTop: "10px" }}>
+            Total Appointments
+          </p>
+        </div>
+        <div className="right-side-container-sub__wrapper">
+          <h2>{recentAptDate === null ? "-" : recentAptDate}</h2>
+          <p style={{ fontSize: "12px", marginTop: "10px" }}>
+            Most Recent Appointment
+          </p>
+        </div>
+      </div>
+    );
+  };
+
   return (
     <div style={{ padding: "0 10px" }}>
       <div style={{ display: "flex", gap: "3px" }}>
-        <div className="left-side-container__wrapper">
-          <h3 style={{ paddingLeft: "10px" }}>{loggedUser.fullName}</h3>
-          <div
-            style={{
-              marginTop: "50px",
-              padding: "10px",
-              borderBottom: "1px solid #e0e0e0",
-            }}
-          >
-            <h5>About</h5>
-            <div style={{ display: "flex", gap: "10px", marginTop: "10px" }}>
-              <label>Date of Birth</label>
-              <p>{new Date(loggedUser.dob).toLocaleDateString("en-nz")}</p>
-            </div>
-
-            <div style={{ display: "flex", gap: "10px", marginTop: "10px" }}>
-              <label>Age</label>
-              <p>{loggedUser.age}</p>
-            </div>
-            <div style={{ display: "flex", gap: "10px", marginTop: "10px" }}>
-              <label>Height</label>
-              <p>{loggedUser.height}cm</p>
-            </div>
-            <div style={{ display: "flex", gap: "10px", marginTop: "10px" }}>
-              <label>Weight</label>
-              <p>{loggedUser.weight}kg</p>
-            </div>
-            <div style={{ display: "flex", gap: "10px", marginTop: "10px" }}>
-              <label>BMI</label>
-              <p>{bmi}</p>
-            </div>
-
-            <div style={{ display: "flex", gap: "10px", marginTop: "10px" }}>
-              <label>Phone</label>
-              <p>{loggedUser.mobileNumber}</p>
-            </div>
-
-            <div style={{ display: "flex", gap: "10px", marginTop: "10px" }}>
-              <label>Email</label>
-              <p>{loggedUser.emailAddress}</p>
-            </div>
-          </div>
-
-          <div
-            style={{
-              marginTop: "50px",
-              padding: "10px",
-              borderBottom: "1px solid #e0e0e0",
-            }}
-          >
-            <h5>Address</h5>
-            <div style={{ display: "flex", gap: "10px", marginTop: "10px" }}>
-              <label>Home</label>
-              <p>{loggedUser.homeAddress}</p>
-            </div>
-          </div>
-          <div
-            style={{
-              marginTop: "50px",
-              padding: "10px",
-              borderBottom: "1px solid #e0e0e0",
-            }}
-          >
-            <h5>Details</h5>
-
-            <div style={{ display: "flex", gap: "10px", marginTop: "10px" }}>
-              <label>Registered on</label>
-              <p>
-                {new Date(loggedUser.registeredOn).toLocaleDateString("en-nz")}
-              </p>
-            </div>
-            <div style={{ display: "flex", gap: "10px", marginTop: "10px" }}>
-              <label>Account Verified</label>
-              <p>{loggedUser.isVerified === true ? "Yes" : "No"}</p>
-            </div>
-            <div style={{ display: "flex", gap: "10px", marginTop: "10px" }}>
-              <label>Verified on</label>
-              <p>
-                {new Date(loggedUser.verifiedOn).toLocaleDateString("en-nz")}
-              </p>
-            </div>
-          </div>
+        <div>
+          <LeftSideContainer loggedUser={loggedUser} />
         </div>
         <div className="right-side-container__wrapper">
-          <br />
-          <h4>Availability</h4>
-          <br />
+          <RightSideContainer
+            mostRecentApt={mostRecentApt}
+            totalApt={totalApt}
+          />
         </div>
       </div>
     </div>
   );
 };
 
-const BodyProfile = ({ loggedUser, clickNav }) => {
+const BodyProfile = ({ loggedUser, clickNav, totalApt }) => {
   const renderBody = () => {
     if (clickNav === "overview") {
-      return <OverviewProfile loggedUser={loggedUser} />;
+      return <OverviewProfile loggedUser={loggedUser} totalApt={totalApt} />;
     }
   };
   return <div>{renderBody()}</div>;
@@ -265,6 +332,7 @@ const PatientProfile = () => {
   const [loading, setLoading] = useState(true); //initialisation of the loading state, started out as true
   const [clickNav, setClickNav] = useState("overview"); //initialisation of the click navigation state, started out as "overview"
   const [loggedUser, setLoggedUser] = useState({});
+  const [totalApt, setTotalApt] = useState(0); //initialisation of the total appointment state, started out as 0
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -302,11 +370,34 @@ const PatientProfile = () => {
 
       const data = await response.json();
       setLoggedUser(data);
+      handleFetchTotalAppointment(); //fetching the total appointment for the patient
       setLoading(false);
     } catch (error) {
       console.log("Error fetching data:", error.message);
     }
   };
+
+  const handleFetchTotalAppointment = async () => {
+    try {
+      const id = parseInt(sessionStorage.getItem("id")); //parsed session id to int
+      const response = await fetch(`${GetTotalAppointmentForPatient}/${id}`, {
+        method: "GET",
+        headers: {
+          Accept: "application/json",
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const data = await response.json();
+      setTotalApt(data); //total appointments (int)
+    } catch (error) {
+      console.log("Error fetching total appointments:", error.message);
+    }
+  };
+
   return (
     <div>
       <h3 style={{ padding: "10px 0 0 30px" }}>Profile</h3>
@@ -321,7 +412,11 @@ const PatientProfile = () => {
           </div>
 
           <div>
-            <BodyProfile loggedUser={loggedUser} clickNav={clickNav} />
+            <BodyProfile
+              loggedUser={loggedUser}
+              clickNav={clickNav}
+              totalApt={totalApt}
+            />
           </div>
         </>
       )}

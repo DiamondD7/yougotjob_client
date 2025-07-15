@@ -19,6 +19,7 @@ import {
   CalendarPlus,
   ClipboardText,
   CalendarDots,
+  NotePencil,
 } from "@phosphor-icons/react";
 import { Link } from "react-router-dom";
 import NavLogo from "../../assets/img/HauoraLogo.png";
@@ -234,6 +235,29 @@ const NavPractitioner = ({ activeDisplay, minimizedNav, onClickDisplayed }) => {
         </button>
       </li>
 
+      <li
+        className={minimizedNav === true ? "minimizednav-icons" : ""}
+        style={
+          activeDisplay === "feedback" ? { backgroundColor: "#D6E8FF" } : {}
+        }
+      >
+        <button
+          className={minimizedNav === true ? "btn-normal" : "icon-label"}
+          onClick={() => onClickDisplayed("feedback")}
+          style={
+            minimizedNav === false
+              ? activeDisplay === "feedback"
+                ? { backgroundColor: "#D6E8FF" }
+                : {}
+              : {}
+          }
+        >
+          <NotePencil size={20} color="#454545" />
+          &nbsp;
+          {minimizedNav === true ? "" : "Write a Feedback"}
+        </button>
+      </li>
+
       {/* <li
         className={minimizedNav === true ? "minimizednav-icons" : ""}
         style={
@@ -328,6 +352,28 @@ const NavPatient = ({ minimizedNav, activeDisplay, onClickDisplayed }) => {
           <CalendarPlus size={20} color="#454545" />
           &nbsp;
           {minimizedNav === true ? "" : "Appointment"}
+        </button>
+      </li>
+      <li
+        className={minimizedNav === true ? "minimizednav-icons" : ""}
+        style={
+          activeDisplay === "feedback" ? { backgroundColor: "#D6E8FF" } : {}
+        }
+      >
+        <button
+          className={minimizedNav === true ? "btn-normal" : "icon-label"}
+          onClick={() => onClickDisplayed("feedback")}
+          style={
+            minimizedNav === false
+              ? activeDisplay === "feedback"
+                ? { backgroundColor: "#D6E8FF" }
+                : {}
+              : {}
+          }
+        >
+          <NotePencil size={20} color="#454545" />
+          &nbsp;
+          {minimizedNav === true ? "" : "Write a Feedback"}
         </button>
       </li>
 

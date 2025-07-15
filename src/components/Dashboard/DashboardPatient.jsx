@@ -15,6 +15,7 @@ import {
   CalendarSlash,
   X,
   SmileyXEyes,
+  CircleNotch,
 } from "@phosphor-icons/react";
 import Payment from "../Stripe/Payment";
 
@@ -721,6 +722,7 @@ const TablesContainer = () => {
 };
 
 const DashboardPatient = () => {
+  const [loading, setLoading] = useState(true);
   const [previousAptModal, setPreviousAptModal] = useState(false);
   const [apts, setApts] = useState([]);
   const [preferredPractitioner, setPreferredPractitioner] = useState({
@@ -754,6 +756,8 @@ const DashboardPatient = () => {
               res.returnStatus.recentDate
             ).toLocaleDateString("en-nz"),
           });
+
+        setLoading(false); // Set loading to true after fetching the data
       });
   };
   return (
@@ -778,18 +782,32 @@ const DashboardPatient = () => {
       ) : (
         ""
       )}
-      <div>
-        <SummaryCards apts={apts} setPreviousAptModal={setPreviousAptModal} />
-      </div>
-      <div className="dashboard-second-tier__wrapper">
-        <RecentDiagnosis apts={apts} />
-        <PreferredPractitioner preferredPractitioner={preferredPractitioner} />
-        <PrescriptionContainer />
-      </div>
-      <div className="dashboard-third-tier__wrapper">
-        <PaymentContainer apts={apts} />
-        <TablesContainer />
-      </div>
+
+      {loading === true ? (
+        <div className="display-loading-icon__wrapper">
+          <CircleNotch size={45} color="#202020" className={"loading-icon"} />
+        </div>
+      ) : (
+        <>
+          <div>
+            <SummaryCards
+              apts={apts}
+              setPreviousAptModal={setPreviousAptModal}
+            />
+          </div>
+          <div className="dashboard-second-tier__wrapper">
+            <RecentDiagnosis apts={apts} />
+            <PreferredPractitioner
+              preferredPractitioner={preferredPractitioner}
+            />
+            <PrescriptionContainer />
+          </div>
+          <div className="dashboard-third-tier__wrapper">
+            <PaymentContainer apts={apts} />
+            <TablesContainer />
+          </div>
+        </>
+      )}
     </div>
   );
 };
