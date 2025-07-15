@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Pencil, Trash } from "@phosphor-icons/react";
+import { Pencil, Trash, CircleNotch } from "@phosphor-icons/react";
 import {
   GetaHealthPractitioner,
   CreateContact,
@@ -1705,12 +1705,14 @@ const TimezoneEdit = ({
 };
 
 const Account = ({ setEditChanges }) => {
+  const [loading, setLoading] = useState(true);
   const [loggedUserData, setLoggedUserData] = useState([]);
   const navigate = useNavigate();
   const [loadData, setLoadData] = useState(false);
   const [loadDetails, setLoadDetails] = useState(false);
   const id = parseInt(sessionStorage.getItem("id"));
   const role = sessionStorage.getItem("role");
+
   useEffect(() => {
     const fetchData = async (retry = true) => {
       try {
@@ -1745,6 +1747,8 @@ const Account = ({ setEditChanges }) => {
         setLoggedUserData(data);
         setLoadData(false);
         setLoadDetails(true);
+
+        setLoading(false);
       } catch (error) {
         console.log("Error fetching data:", error.message);
       }
@@ -1783,6 +1787,8 @@ const Account = ({ setEditChanges }) => {
         setLoggedUserData(data);
         setLoadData(false);
         setLoadDetails(true);
+
+        setLoading(false);
       } catch (error) {
         console.log("Error fetching data:", error.message);
       }
@@ -1799,31 +1805,39 @@ const Account = ({ setEditChanges }) => {
     <div>
       <div className="setting-contents-display-container__wrapper">
         <h3 style={{ color: "#9dcd5a", fontWeight: "bold" }}>Profile</h3>
-        <div className="settings-first-tier__wrapper">
-          {loadDetails && (
-            <Profile
-              loggedUserData={loggedUserData}
-              setLoadData={setLoadData}
-              navigate={navigate}
-            />
-          )}
+        {loading === true ? (
+          <div className="display-loading-icon__wrapper">
+            <CircleNotch size={45} color="#202020" className={"loading-icon"} />
+          </div>
+        ) : (
+          <>
+            <div className="settings-first-tier__wrapper">
+              {loadDetails && (
+                <Profile
+                  loggedUserData={loggedUserData}
+                  setLoadData={setLoadData}
+                  navigate={navigate}
+                />
+              )}
 
-          {role === "Patient" ? (
-            <InsuranceDetails
-              loggedUserData={loggedUserData}
-              setLoadData={setLoadData}
-            />
-          ) : (
-            ""
-          )}
-        </div>
+              {role === "Patient" ? (
+                <InsuranceDetails
+                  loggedUserData={loggedUserData}
+                  setLoadData={setLoadData}
+                />
+              ) : (
+                ""
+              )}
+            </div>
 
-        <br />
-        <br />
-        <Contacts />
-        <br />
-        <br />
-        <TimezonesSettings setEditChanges={setEditChanges} />
+            <br />
+            <br />
+            <Contacts />
+            <br />
+            <br />
+            <TimezonesSettings setEditChanges={setEditChanges} />
+          </>
+        )}
       </div>
     </div>
   );

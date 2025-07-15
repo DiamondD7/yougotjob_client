@@ -10,6 +10,7 @@ import SuccessPayment from "./components/Stripe/Redirect/SuccessPayment";
 import StripeVerificationSuccess from "./components/Settings/StripeVerificationSuccess/StripeVerificationSuccess";
 import PrivacyLaws from "./components/AppLaws/PrivacyLaws";
 import TermsLaws from "./components/AppLaws/TermsLaws";
+import PageNotFound from "./components/PageNotFound/PageNotFound";
 
 function App() {
   const [currentRole, setCurrentRole] = useState(
@@ -44,6 +45,7 @@ function App() {
     <>
       <>
         <Routes>
+          <Route path="*" element={<PageNotFound />} />
           <Route path="/" element={<SignIn localData={localData} />} />
           <Route path="/meeting" element={<Meeting />} />
           <Route path="/success-payment" element={<SuccessPayment />} />
@@ -53,27 +55,19 @@ function App() {
             path="/stripe-verification-success"
             element={<StripeVerificationSuccess />}
           />
-        </Routes>
-        {currentRole === "Practitioner" ? (
-          <Routes>
+
+          {currentRole === "Practitioner" ? (
             <Route
               path="/home"
               element={<PractitionerHome currentUser={currentUser} />}
             />
-          </Routes>
-        ) : (
-          ""
-        )}
-        {currentRole === "Patient" ? (
-          <Routes>
+          ) : (
             <Route
               path="/home"
               element={<PatientsHome currentUser={currentUser} />}
             />
-          </Routes>
-        ) : (
-          ""
-        )}
+          )}
+        </Routes>
       </>
     </>
   );

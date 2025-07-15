@@ -909,6 +909,7 @@ const AppointmentForm = ({ setGetStartedClicked }) => {
   }) => {
     const [loading, setLoading] = useState(false);
     const [success, setSuccess] = useState(false);
+    const [openCancelModal, setOpenCancelModal] = useState(false);
 
     const handleFormSubmit = (e) => {
       e.preventDefault();
@@ -962,8 +963,34 @@ const AppointmentForm = ({ setGetStartedClicked }) => {
       }
     };
 
+    const cancelConfirmationModal = ({
+      setGetStartedClicked,
+      setOpenCancelModal,
+    }) => {
+      return (
+        <div className="appointment-cancel-confirm__wrapper">
+          <h4 style={{ textAlign: "center" }}>
+            Are you sure you want to cancel?
+          </h4>
+          <button
+            className="appointment-cancelBtn-confirm__btn"
+            onClick={() => setGetStartedClicked(false)}
+          >
+            Yes
+          </button>
+          <button
+            className="appointment-dontCancelBtn-confirm__btn"
+            onClick={() => setOpenCancelModal(false)}
+          >
+            No
+          </button>
+        </div>
+      );
+    };
+
     return (
       <div>
+        {openCancelModal && <div className="overlay"></div>}
         {success === true ? (
           <div className="appointment-success-confirmation__wrapper">
             <CheckCircle size={32} weight="fill" color="#f3f3f3" />
@@ -1113,7 +1140,7 @@ const AppointmentForm = ({ setGetStartedClicked }) => {
                 <br />
                 <button
                   className="appointment-cancel-confirm__btn"
-                  onClick={() => setGetStartedClicked(false)}
+                  onClick={() => setOpenCancelModal(true)}
                 >
                   Cancel
                 </button>
@@ -1123,6 +1150,12 @@ const AppointmentForm = ({ setGetStartedClicked }) => {
                 >
                   Agree & Confirm
                 </button>
+
+                {openCancelModal &&
+                  cancelConfirmationModal({
+                    setGetStartedClicked,
+                    setOpenCancelModal,
+                  })}
               </>
             )}
           </>
