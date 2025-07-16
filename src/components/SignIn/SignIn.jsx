@@ -242,7 +242,7 @@ const PatientSignUp = ({ setPatientOption, setSuccessfulSignUp }) => {
 
   return (
     <div>
-      <div className="signupform-options-container__wrapper">
+      <div className="signinform-container__wrapper">
         <h1 style={{ textAlign: "center" }}>Patient Sign up</h1>
         <form className="signup-form" onSubmit={handleAddPatient}>
           <div>
@@ -257,21 +257,21 @@ const PatientSignUp = ({ setPatientOption, setSuccessfulSignUp }) => {
                 onChange={(e) => setNhi(e.target.value)}
               /> */}
             <input
-              className="signin-signup-form__input"
+              className="signup-form__input"
               type="text"
               placeholder="Full name"
               onChange={(e) => setFullName(e.target.value)}
             />
             <input
               required
-              className="signin-signup-form__input"
+              className="signup-form__input"
               type="text"
               placeholder="Email"
               onChange={(e) => setEmail(e.target.value)}
             />
             <input
               required
-              className="signin-signup-form__input"
+              className="signup-form__input"
               type="password"
               placeholder="Password"
               onChange={(e) => setPassword(e.target.value)}
@@ -280,7 +280,7 @@ const PatientSignUp = ({ setPatientOption, setSuccessfulSignUp }) => {
               required
               type="password"
               placeholder="Confirm password"
-              className="signin-signup-form__input"
+              className="signup-form__input"
               onChange={(e) => setConfirmPassword(e.target.value)}
             />
             <p
@@ -350,13 +350,12 @@ const PatientSignUp = ({ setPatientOption, setSuccessfulSignUp }) => {
                 Back
               </button>
             </div>
-            <br />
             <p>Or</p>
             <div
               style={{
                 display: "flex",
                 justifyContent: "center",
-                marginTop: "15px",
+                marginTop: "10px",
               }}
             >
               <GoogleOAuthProvider
@@ -569,7 +568,7 @@ const PracitionerSignIn = ({ localData, today, setSignInOption }) => {
                 />
                 <br />
                 <Link
-                  className="signin-submit__btn"
+                  className="signin-submit__link"
                   onClick={handleTwoFactorAuthVerify}
                   to="/home"
                 >
@@ -587,7 +586,7 @@ const PracitionerSignIn = ({ localData, today, setSignInOption }) => {
           ) : (
             <div>
               {isLoadingSignIn === true ? (
-                <div>
+                <div className="signinform-loading__wrapper">
                   <CircleNotch
                     size={26}
                     color="#202020"
@@ -629,7 +628,7 @@ const PracitionerSignIn = ({ localData, today, setSignInOption }) => {
                     Submit
                   </Link> */}
                       <button
-                        className="signup-back__btn"
+                        className="signin-back__btn"
                         onClick={(e) => {
                           e.preventDefault();
                           setSignInOption("Patient");
@@ -873,9 +872,9 @@ const PatientSignIn = ({ localData, today, setSignInOption }) => {
           ) : (
             <div>
               {isLoadingSignIn === true ? (
-                <div>
+                <div className="signinform-loading__wrapper">
                   <CircleNotch
-                    size={26}
+                    size={30}
                     color="#202020"
                     className={"loading-icon"}
                   />
@@ -947,6 +946,7 @@ const PatientSignIn = ({ localData, today, setSignInOption }) => {
                             border: "none",
                             textDecoration: "underline",
                             fontSize: "12px",
+                            cursor: "pointer",
                           }}
                           onClick={(e) => {
                             e.preventDefault();
@@ -1213,14 +1213,14 @@ const SignUpOpt = ({
                   type="text"
                   placeholder="Registration Number"
                   value={registrationNumber}
-                  className="signin-signup-form__input"
+                  className="signup-form__input"
                   onChange={(e) => setRegistrationNumber(e.target.value)}
                 />
                 <input
                   type="text"
                   placeholder="Full Name"
                   value={fullName}
-                  className="signin-signup-form__input"
+                  className="signup-form__input"
                   onChange={(e) => setFullName(e.target.value)}
                 />
               </div>
@@ -1229,7 +1229,7 @@ const SignUpOpt = ({
                 type="text"
                 placeholder="Email"
                 value={emailAddress}
-                className="signin-signup-form__input"
+                className="signup-form__input"
                 onChange={(e) => setEmailAddress(e.target.value)}
               />
               <br />
@@ -1246,7 +1246,7 @@ const SignUpOpt = ({
                   type="password"
                   placeholder="Password"
                   onChange={(e) => setPassword(e.target.value)}
-                  className={`signin-signup-form__input ${
+                  className={`signup-form__input ${
                     validPwd === false && password.length !== 0
                       ? "notvalidpwd"
                       : ""
@@ -1257,7 +1257,7 @@ const SignUpOpt = ({
                 required
                 type="password"
                 placeholder="Confirm password"
-                className="signin-signup-form__input"
+                className="signup-form__input"
                 onChange={(e) => setMatchPwd(e.target.value)}
               />
               {validPwdMatch === false && matchPwd.length !== 0 ? (
@@ -1292,7 +1292,7 @@ const SignUpOpt = ({
                   </Link>
                 </p>
               </div>
-              <button className="signup-signin-submit__btn" type="submit">
+              <button className="signup-submit__btn" type="submit">
                 Submit
               </button>
               <button
@@ -1356,7 +1356,17 @@ const SignInPage = ({
   setSignInOption,
   signInOption,
 }) => {
-  console.log(signInOption);
+  const [loading, setLoading] = useState(false);
+
+  const handleJoinUsRegisterBtn = (e) => {
+    e.preventDefault();
+    setLoading(true);
+
+    setTimeout(() => {
+      setLoading(false);
+      setSignupOptionsClicked(true);
+    }, 2000);
+  };
   return (
     <div>
       <div className="signinas-form-container__wrapper">
@@ -1384,28 +1394,36 @@ const SignInPage = ({
                     gap: "5px",
                   }}
                 >
-                  Dont have an account?{" "}
+                  Don't have an account?{" "}
                   <ArrowElbowRightDown size={16} color="#f3f3f3" />
                 </p>
 
                 <button
                   className="signinas-form-joinushere__btn"
-                  onClick={() => setSignupOptionsClicked(true)}
+                  onClick={(e) => handleJoinUsRegisterBtn(e)}
                 >
-                  Join us here
+                  {loading === false ? (
+                    <>Join us here</>
+                  ) : (
+                    <CircleNotch
+                      size={12}
+                      color="#202020"
+                      className={"btn-loading__icon"}
+                    />
+                  )}
                 </button>
               </div>
             </div>
           </div>
           <div className="signinas-form-rightSide__wrapper">
-            {signInOption === "Practitioner" ? (
-              <PracitionerSignIn
+            {signInOption === "Patient" ? (
+              <PatientSignIn
                 localData={localData}
                 today={today}
                 setSignInOption={setSignInOption}
               />
             ) : (
-              <PatientSignIn
+              <PracitionerSignIn
                 localData={localData}
                 today={today}
                 setSignInOption={setSignInOption}
@@ -1430,7 +1448,7 @@ const SignIn = ({ localData }) => {
 
   // ------------------------------------------------------------------------------
 
-  const [signInOption, setSignInOption] = useState("");
+  const [signInOption, setSignInOption] = useState("Patient");
 
   useEffect(() => {
     sessionStorage.setItem("auth", "false");
