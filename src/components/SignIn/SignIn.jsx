@@ -1367,6 +1367,7 @@ const SignInPage = ({
       setSignupOptionsClicked(true);
     }, 2000);
   };
+
   return (
     <div>
       <div className="signinas-form-container__wrapper">

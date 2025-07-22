@@ -65,7 +65,7 @@ const SummaryCards = ({ apts, setPreviousAptModal }) => {
       }
 
       const data = await response.json();
-      console.log(data);
+      //console.log(data);
       handleGetAppointmen(); //calls this function after the validation of the token
     } catch (err) {
       console.log(err.message);
@@ -746,7 +746,7 @@ const DashboardPatient = () => {
     fetch(`${GetMostAppointmentsForPatient}/${id}`)
       .then((res) => res.json())
       .then((res) => {
-        console.log(res);
+        //console.log(res);
         if (res.returnStatus.status === true)
           setPreferredPractitioner({
             name: res.returnStatus.name,
