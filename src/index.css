@@ -23,6 +23,16 @@
   animation: loadingAnimation 1s infinite;
 }
 
+.onboarding-loading-icon {
+  position: relative;
+  top: 10px;
+  animation: loadingAnimation 1s infinite;
+}
+
+.btn-loading__icon {
+  animation: loadingAnimation 1s infinite;
+}
+
 @keyframes loadingAnimation {
   0% {
     transform: rotate(0deg);

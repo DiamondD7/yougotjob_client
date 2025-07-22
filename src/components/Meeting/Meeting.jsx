@@ -334,6 +334,7 @@ const Meeting = () => {
       },
       body: JSON.stringify({
         Id: patientData.id,
+        FullName: patientData.fullName,
         Duration: zoomData.duration,
         AppointmentAgenda: zoomData.agenda,
         PractitionerName: patientData.practitionerName,

@@ -5,7 +5,9 @@ import {
   GetAPatientDateTime,
   AdminUploadFile,
   AddPatientVerification,
+  GetPatient,
 } from "../../assets/js/serverApi";
+import { useNavigate } from "react-router-dom";
 import { X } from "@phosphor-icons/react";
 
 import "../../styles/homestyles.css";
@@ -255,6 +257,11 @@ const PatientsHome = ({ currentUser }) => {
   const [editChanges, setEditChanges] = useState(false);
   const firstLogged = sessionStorage.getItem("firstTime");
 
+  const [onBoardingClicked, setOnBoardingClicked] = useState(false);
+  const [userCurrrentOnBoardingStage, setUserCurrentOnBoardingStage] =
+    useState(1);
+  const navigate = useNavigate();
+
   useEffect(() => {
     const id = parseInt(sessionStorage.getItem("id"));
     fetch(`${GetAPatientDateTime}/${id}`)
@@ -265,6 +272,47 @@ const PatientsHome = ({ currentUser }) => {
         setEditChanges(false); //setting edit change to false once the useEffect finishes running
       });
   }, [editChanges]);
+
+  useEffect(() => {
+    handleFetchUser();
+  }, [displayed, onBoardingClicked]);
+
+  const handleFetchUser = async (retry = true) => {
+    try {
+      const userId = sessionStorage.getItem("id");
+      const response = await fetch(`${GetPatient}/${userId}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+      });
+
+      if (response.status === 302) {
+        //302 is redericting to sign in screen because refresh token and jwt are expired.
+        console.warn("302 detected, redirecting...");
+        // Redirect to the new path
+        navigate("/");
+        return; // Exit the function to prevent further execution
+      }
+
+      if (response.status === 401 && retry) {
+        // Retry the request once if a 401 status is detected
+        console.warn("401 detected, retrying request...");
+        return handleFetchUser(false); // Call with `retry` set to false
+      }
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const data = await response.json();
+      setUserCurrentOnBoardingStage(data.onboardingStage);
+    } catch (error) {
+      console.error("Error fetching user data:", error);
+    }
+  };
+
   return (
     <>
       {firstLogged === "true" ? <div className="overlay"></div> : ""}
@@ -279,7 +327,13 @@ const PatientsHome = ({ currentUser }) => {
             ""
           )}
           <>
-            <Display displayed={displayed} setEditChanges={setEditChanges} />{" "}
+            <Display
+              displayed={displayed}
+              setEditChanges={setEditChanges}
+              userCurrrentOnBoardingStage={userCurrrentOnBoardingStage}
+              onBoardingClicked={onBoardingClicked}
+              setOnBoardingClicked={setOnBoardingClicked}
+            />
             {/*setEditChanges will change the time on the Nav from changing it in the Settings/Account*/}
           </>
         </div>

@@ -11,6 +11,7 @@ import {
   MapPin,
 } from "@phosphor-icons/react";
 import {
+  AppointmentRequestEmailNotif,
   GetAllUpcomingAppointmentForPractitioner,
   GetHealthPractitionerData,
   GetPatient,
@@ -930,6 +931,10 @@ const AppointmentForm = ({ setGetStartedClicked }) => {
             handleFilesUpload(res.returnStatus.aptId);
           }
 
+          if (isOpenJobs === false) {
+            handleSendRequestEmailToPractitioner();
+          }
+
           setTimeout(() => {
             setLoading(false);
             setSuccess(true);
@@ -986,6 +991,31 @@ const AppointmentForm = ({ setGetStartedClicked }) => {
           </button>
         </div>
       );
+    };
+
+    const handleSendRequestEmailToPractitioner = async () => {
+      try {
+        const response = await fetch(AppointmentRequestEmailNotif, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+          body: JSON.stringify({
+            FullName: chosenPractitioner.fullName,
+            PractitionerEmail: chosenPractitioner.email,
+          }),
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        //console.log("Email sent successfully:", data);
+      } catch (error) {
+        console.error("Error sending email:", error);
+      }
     };
 
     return (

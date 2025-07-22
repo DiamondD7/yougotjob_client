@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Binoculars, Users, User } from "@phosphor-icons/react";
+import { Binoculars, Users, User, CircleNotch } from "@phosphor-icons/react";
 import {
   GetAppointmentsDirectRequestForPractitioner,
   GetAvailableJobs,
   AcceptJob,
   GetaHealthPractitioner,
   CreateMeeting,
+  AppointmentRequestApprovalEmail,
   ApplyFilter,
 } from "../../assets/js/serverApi";
 
@@ -190,6 +191,8 @@ const JobsCards = ({
   userFullName,
   searchField,
 }) => {
+  const [loading, setLoading] = useState(false);
+
   const handleAcceptJob = (e, data) => {
     e.preventDefault();
 
@@ -212,7 +215,8 @@ const JobsCards = ({
         if (res.returnStatus.status === false) {
           console.log("bad request");
         }
-        handleFinaliseAuth(data.id); //finalises zoom auth
+
+        handleFinaliseAuth(data);
         fetchOpenJobs();
       })
       .catch((err) => {
@@ -220,107 +224,154 @@ const JobsCards = ({
       });
   };
 
-  const handleFinaliseAuth = (id) => {
+  const handleSendEmailRequestApproved = async (userData) => {
+    try {
+      const response = await fetch(AppointmentRequestApprovalEmail, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({
+          FullName: userData.fullName,
+          PreferredAppointmentDate: userData.preferredAppointmentDate,
+          EmailAddress: userData.emailAddress,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const data = await response.json();
+
+      if (data.returnStatus.status === true) {
+        setLoading(false);
+        setTimeout(() => {
+          window.location.reload(); //loads the page
+        }, 600);
+      }
+    } catch (error) {
+      console.error("Error sending email:", error);
+    }
+  };
+
+  const handleFinaliseAuth = (data) => {
+    setLoading(true);
     const cliendId = import.meta.env.VITE_ZOOM_CLIENT_ID;
     const redirectUri = import.meta.env.VITE_ZOOM_REDIRECT_URI;
     window.open(
-      `https://zoom.us/oauth/authorize?response_type=code&client_id=${cliendId}&redirect_uri=${redirectUri}?id=${id}`,
+      `https://zoom.us/oauth/authorize?response_type=code&client_id=${cliendId}&redirect_uri=${redirectUri}?id=${data.id}`,
       "_blank",
       "noreferrer"
     );
-    window.location.reload(); //loads the page
+
+    handleSendEmailRequestApproved(data);
   };
   return (
     <div>
-      <div className="jobs-contents__wrapper">
-        {jobsData.length <= 0 ? (
-          <div className="jobs-empty-results-icon__wrapper">
-            <Binoculars size={92} color="rgba(0,0,0,0.2)" weight="fill" />
-            <p style={{ color: "rgba(0,0,0,0.3)", fontWeight: "bold" }}>
-              No results found
-            </p>
-            <p style={{ fontSize: "12px", color: "rgba(0,0,0,0.3)" }}>
-              Try adjusting your search or filter to find what you're looking
-              for
-            </p>
-          </div>
-        ) : (
-          <div>
-            {jobsData
-              .filter((item) =>
-                searchField
-                  ? item.suburb
-                      ?.toLowerCase()
-                      .includes(searchField.toLowerCase()) ||
-                    item.city
-                      ?.toLowerCase()
-                      .includes(searchField.toLowerCase()) ||
-                    item.appointmentType
-                      ?.toLowerCase()
-                      .includes(searchField.toLowerCase()) ||
-                    item.healthPractitionerType
-                      ?.toLowerCase()
-                      .includes(searchField.toLowerCase())
-                  : true
-              )
-              .map((item, index) => (
-                <div className="jobs-content-card__wrapper" key={item.id}>
-                  <div className="jobs-content-card-header__wrapper">
-                    <div style={{ display: "flex", gap: "20px" }}>
-                      <div>
-                        <h4>{item.fullName}</h4>
-                        <p style={{ fontSize: "11px", fontWeight: "bold" }}>
-                          Preferred Date/Time:{" "}
-                          {new Date(
-                            item.preferredAppointmentDate
-                          ).toLocaleString("en-nz")}
+      {loading === true ? (
+        <div>
+          <div className="overlay"></div>
+          <CircleNotch size={40} color="#202020" className={"loading-icon"} />
+        </div>
+      ) : (
+        <div className="jobs-contents__wrapper">
+          {jobsData.length <= 0 ? (
+            <div className="jobs-empty-results-icon__wrapper">
+              <Binoculars size={92} color="rgba(0,0,0,0.2)" weight="fill" />
+              <p style={{ color: "rgba(0,0,0,0.3)", fontWeight: "bold" }}>
+                No results found
+              </p>
+              <p style={{ fontSize: "12px", color: "rgba(0,0,0,0.3)" }}>
+                Try adjusting your search or filter to find what you're looking
+                for
+              </p>
+            </div>
+          ) : (
+            <div>
+              <>
+                {jobsData
+                  .filter((item) =>
+                    searchField
+                      ? item.suburb
+                          ?.toLowerCase()
+                          .includes(searchField.toLowerCase()) ||
+                        item.city
+                          ?.toLowerCase()
+                          .includes(searchField.toLowerCase()) ||
+                        item.appointmentType
+                          ?.toLowerCase()
+                          .includes(searchField.toLowerCase()) ||
+                        item.healthPractitionerType
+                          ?.toLowerCase()
+                          .includes(searchField.toLowerCase())
+                      : true
+                  )
+                  .map((item, index) => (
+                    <div className="jobs-content-card__wrapper" key={item.id}>
+                      <div className="jobs-content-card-header__wrapper">
+                        <div style={{ display: "flex", gap: "20px" }}>
+                          <div>
+                            <h4>{item.fullName}</h4>
+                            <p style={{ fontSize: "11px", fontWeight: "bold" }}>
+                              Preferred Date/Time:{" "}
+                              {new Date(
+                                item.preferredAppointmentDate
+                              ).toLocaleString("en-nz")}
+                            </p>
+                          </div>
+                          <p style={{ fontSize: "11px" }}>
+                            Looking for a {item.healthPractitionerType}
+                          </p>
+                        </div>
+                        <button
+                          className={`jobs-content-card__btn ${
+                            userIsVerified === false ? "btnDisable" : ""
+                          }`}
+                          onClick={(e) => handleAcceptJob(e, item)}
+                          disabled={userIsVerified === false ? true : false} //if the user is not verified then set the diabled to true
+                        >
+                          Accept & Finalise
+                        </button>
+                      </div>
+                      <div
+                        style={{
+                          display: "flex",
+                          gap: "10px",
+                          marginTop: "5px",
+                        }}
+                      >
+                        <p style={{ fontSize: "11px", color: "#9dcd5a" }}>
+                          {item.appointmentType}
+                        </p>
+                        {item.appointmentType === "on-site" ? (
+                          <p style={{ fontSize: "11px" }}>
+                            Location: {item.suburb}, {item.city}
+                          </p>
+                        ) : (
+                          ""
+                        )}
+                      </div>
+                      <div style={{ fontSize: "11px" }}>
+                        <p style={{ color: "rgba(0,0,0,0.4)" }}>{item.nhi}</p>
+
+                        <p style={{ color: "rgba(0,0,0,0.4)" }}>
+                          {item.emailAddress}
+                        </p>
+                        <p style={{ color: "rgba(0,0,0,0.4)" }}>
+                          {item.contactNumber}
                         </p>
                       </div>
-                      <p style={{ fontSize: "11px" }}>
-                        Looking for a {item.healthPractitionerType}
-                      </p>
+                      <br />
+                      <p className="jobs-content-comment">{item.comments}</p>
                     </div>
-                    <button
-                      className={`jobs-content-card__btn ${
-                        userIsVerified === false ? "btnDisable" : ""
-                      }`}
-                      onClick={(e) => handleAcceptJob(e, item)}
-                      disabled={userIsVerified === false ? true : false} //if the user is not verified then set the diabled to true
-                    >
-                      Accept & Finalise
-                    </button>
-                  </div>
-                  <div
-                    style={{ display: "flex", gap: "10px", marginTop: "5px" }}
-                  >
-                    <p style={{ fontSize: "11px", color: "#9dcd5a" }}>
-                      {item.appointmentType}
-                    </p>
-                    {item.appointmentType === "on-site" ? (
-                      <p style={{ fontSize: "11px" }}>
-                        Location: {item.suburb}, {item.city}
-                      </p>
-                    ) : (
-                      ""
-                    )}
-                  </div>
-                  <div style={{ fontSize: "11px" }}>
-                    <p style={{ color: "rgba(0,0,0,0.4)" }}>{item.nhi}</p>
-
-                    <p style={{ color: "rgba(0,0,0,0.4)" }}>
-                      {item.emailAddress}
-                    </p>
-                    <p style={{ color: "rgba(0,0,0,0.4)" }}>
-                      {item.contactNumber}
-                    </p>
-                  </div>
-                  <br />
-                  <p className="jobs-content-comment">{item.comments}</p>
-                </div>
-              ))}
-          </div>
-        )}
-      </div>
+                  ))}
+              </>
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 };

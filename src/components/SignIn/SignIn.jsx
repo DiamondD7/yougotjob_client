@@ -20,7 +20,11 @@ import {
 import PatientLogo from "../../assets/img/patientLogo.png";
 import PractitionerLogo from "../../assets/img/practitionerLogo.png";
 import { Link, useNavigate } from "react-router-dom";
-import { CircleNotch, LockKey } from "@phosphor-icons/react";
+import {
+  CircleNotch,
+  LockKey,
+  ArrowElbowRightDown,
+} from "@phosphor-icons/react";
 import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google";
 import { jwtDecode } from "jwt-decode";
 import GoogleSignUpPatient from "./GoogleSignUpPatient";
@@ -238,7 +242,7 @@ const PatientSignUp = ({ setPatientOption, setSuccessfulSignUp }) => {
 
   return (
     <div>
-      <div className="signupform-options-container__wrapper">
+      <div className="signinform-container__wrapper">
         <h1 style={{ textAlign: "center" }}>Patient Sign up</h1>
         <form className="signup-form" onSubmit={handleAddPatient}>
           <div>
@@ -253,21 +257,21 @@ const PatientSignUp = ({ setPatientOption, setSuccessfulSignUp }) => {
                 onChange={(e) => setNhi(e.target.value)}
               /> */}
             <input
-              className="signin-signup-form__input"
+              className="signup-form__input"
               type="text"
               placeholder="Full name"
               onChange={(e) => setFullName(e.target.value)}
             />
             <input
               required
-              className="signin-signup-form__input"
+              className="signup-form__input"
               type="text"
               placeholder="Email"
               onChange={(e) => setEmail(e.target.value)}
             />
             <input
               required
-              className="signin-signup-form__input"
+              className="signup-form__input"
               type="password"
               placeholder="Password"
               onChange={(e) => setPassword(e.target.value)}
@@ -276,7 +280,7 @@ const PatientSignUp = ({ setPatientOption, setSuccessfulSignUp }) => {
               required
               type="password"
               placeholder="Confirm password"
-              className="signin-signup-form__input"
+              className="signup-form__input"
               onChange={(e) => setConfirmPassword(e.target.value)}
             />
             <p
@@ -346,13 +350,12 @@ const PatientSignUp = ({ setPatientOption, setSuccessfulSignUp }) => {
                 Back
               </button>
             </div>
-            <br />
             <p>Or</p>
             <div
               style={{
                 display: "flex",
                 justifyContent: "center",
-                marginTop: "15px",
+                marginTop: "10px",
               }}
             >
               <GoogleOAuthProvider
@@ -383,7 +386,7 @@ const PatientSignUp = ({ setPatientOption, setSuccessfulSignUp }) => {
   );
 };
 
-const PracitionerSignIn = ({ localData, today }) => {
+const PracitionerSignIn = ({ localData, today, setSignInOption }) => {
   const [signinEmailAddress, setSigninEmailAddress] = useState("");
   const [signinPassword, setSigninPassword] = useState("");
   const [signInGoogleId, setSignInGoogleId] = useState("");
@@ -535,11 +538,13 @@ const PracitionerSignIn = ({ localData, today }) => {
 
   return (
     <div>
-      <div className="signin__wrapper">
-        <div className="logo"></div>
+      <div>
+        {/* className="signin__wrapper" */}
+        {/* <div className="logo"></div> */}
 
-        <div className="signinform-container__wrapper">
-          <h1>Pracitioner</h1>
+        <div>
+          {/*  className="signinform-container__wrapper" */}
+          <h3>Login: Practitioner</h3>
           {openAuthForm ? (
             <div>
               <br />
@@ -563,7 +568,7 @@ const PracitionerSignIn = ({ localData, today }) => {
                 />
                 <br />
                 <Link
-                  className="signin-submit__btn"
+                  className="signin-submit__link"
                   onClick={handleTwoFactorAuthVerify}
                   to="/home"
                 >
@@ -581,7 +586,7 @@ const PracitionerSignIn = ({ localData, today }) => {
           ) : (
             <div>
               {isLoadingSignIn === true ? (
-                <div>
+                <div className="signinform-loading__wrapper">
                   <CircleNotch
                     size={26}
                     color="#202020"
@@ -623,20 +628,29 @@ const PracitionerSignIn = ({ localData, today }) => {
                     Submit
                   </Link> */}
                       <button
-                        className="signup-back__btn"
-                        onClick={() => {
-                          window.location.reload();
+                        className="signin-back__btn"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          setSignInOption("Patient");
                         }}
                       >
-                        back
+                        back to patient login
                       </button>
                     </div>
-                    <p>Or</p>
+                    <p
+                      style={{
+                        textAlign: "center",
+                        marginTop: "55px",
+                        fontSize: "12px",
+                      }}
+                    >
+                      Or
+                    </p>
                     <div
                       style={{
                         display: "flex",
                         justifyContent: "center",
-                        marginTop: "20px",
+                        marginTop: "50px",
                       }}
                     >
                       <GoogleOAuthProvider
@@ -646,7 +660,7 @@ const PracitionerSignIn = ({ localData, today }) => {
                           onSuccess={googleLogin}
                           onError={(err) => console.log(err)}
                           text="signin_with"
-                          width="330px"
+                          width="280px"
                           shape="pill"
                         />
                       </GoogleOAuthProvider>
@@ -662,7 +676,7 @@ const PracitionerSignIn = ({ localData, today }) => {
   );
 };
 
-const PatientSignIn = ({ localData, today }) => {
+const PatientSignIn = ({ localData, today, setSignInOption }) => {
   const [signinEmailAddress, setSigninEmailAddress] = useState("");
   const [signinPassword, setSigninPassword] = useState("");
   const [googleId, setGoogleId] = useState("");
@@ -807,11 +821,15 @@ const PatientSignIn = ({ localData, today }) => {
 
   return (
     <div>
-      <div className="signin__wrapper">
-        <div className="logo"></div>
+      <div>
+        {/* className="signin__wrapper" */}
 
-        <div className="signinform-container__wrapper">
-          <h1>Patient</h1>
+        {/* <div className="logo"></div> */}
+
+        <div>
+          {/* className="signinform-container__wrapper" */}
+          <h3> Login: Patient</h3>
+          <br />
 
           {openAuthForm ? (
             <div>
@@ -854,9 +872,9 @@ const PatientSignIn = ({ localData, today }) => {
           ) : (
             <div>
               {isLoadingSignIn === true ? (
-                <div>
+                <div className="signinform-loading__wrapper">
                   <CircleNotch
-                    size={26}
+                    size={30}
                     color="#202020"
                     className={"loading-icon"}
                   />
@@ -889,21 +907,21 @@ const PatientSignIn = ({ localData, today }) => {
                     >
                       Submit
                     </button>
-                    <button
-                      className="signup-back__btn"
-                      onClick={() => {
-                        window.location.reload();
+
+                    <p
+                      style={{
+                        textAlign: "center",
+                        marginTop: "55px",
+                        fontSize: "12px",
                       }}
                     >
-                      back
-                    </button>
-
-                    <p>Or</p>
+                      Or
+                    </p>
                     <div
                       style={{
                         display: "flex",
                         justifyContent: "center",
-                        marginTop: "15px",
+                        marginTop: "50px",
                       }}
                     >
                       <GoogleOAuthProvider
@@ -913,10 +931,31 @@ const PatientSignIn = ({ localData, today }) => {
                           onSuccess={googleAuthSignIn}
                           onError={(err) => console.log(err)}
                           text="signin_with"
-                          width="330px"
+                          width="280px"
                           shape="pill"
                         />
                       </GoogleOAuthProvider>
+                    </div>
+
+                    <div style={{ marginTop: "10px" }}>
+                      <p style={{ fontSize: "12px" }}>
+                        Are you a Practitioner?{" "}
+                        <button
+                          style={{
+                            backgroundColor: "transparent",
+                            border: "none",
+                            textDecoration: "underline",
+                            fontSize: "12px",
+                            cursor: "pointer",
+                          }}
+                          onClick={(e) => {
+                            e.preventDefault();
+                            setSignInOption("Practitioner");
+                          }}
+                        >
+                          Login here
+                        </button>
+                      </p>
                     </div>
                   </form>
                 </div>
@@ -1174,14 +1213,14 @@ const SignUpOpt = ({
                   type="text"
                   placeholder="Registration Number"
                   value={registrationNumber}
-                  className="signin-signup-form__input"
+                  className="signup-form__input"
                   onChange={(e) => setRegistrationNumber(e.target.value)}
                 />
                 <input
                   type="text"
                   placeholder="Full Name"
                   value={fullName}
-                  className="signin-signup-form__input"
+                  className="signup-form__input"
                   onChange={(e) => setFullName(e.target.value)}
                 />
               </div>
@@ -1190,7 +1229,7 @@ const SignUpOpt = ({
                 type="text"
                 placeholder="Email"
                 value={emailAddress}
-                className="signin-signup-form__input"
+                className="signup-form__input"
                 onChange={(e) => setEmailAddress(e.target.value)}
               />
               <br />
@@ -1207,7 +1246,7 @@ const SignUpOpt = ({
                   type="password"
                   placeholder="Password"
                   onChange={(e) => setPassword(e.target.value)}
-                  className={`signin-signup-form__input ${
+                  className={`signup-form__input ${
                     validPwd === false && password.length !== 0
                       ? "notvalidpwd"
                       : ""
@@ -1218,7 +1257,7 @@ const SignUpOpt = ({
                 required
                 type="password"
                 placeholder="Confirm password"
-                className="signin-signup-form__input"
+                className="signup-form__input"
                 onChange={(e) => setMatchPwd(e.target.value)}
               />
               {validPwdMatch === false && matchPwd.length !== 0 ? (
@@ -1253,7 +1292,7 @@ const SignUpOpt = ({
                   </Link>
                 </p>
               </div>
-              <button className="signup-signin-submit__btn" type="submit">
+              <button className="signup-submit__btn" type="submit">
                 Submit
               </button>
               <button
@@ -1310,6 +1349,94 @@ const SignUpOpt = ({
   );
 };
 
+const SignInPage = ({
+  localData,
+  today,
+  setSignupOptionsClicked,
+  setSignInOption,
+  signInOption,
+}) => {
+  const [loading, setLoading] = useState(false);
+
+  const handleJoinUsRegisterBtn = (e) => {
+    e.preventDefault();
+    setLoading(true);
+
+    setTimeout(() => {
+      setLoading(false);
+      setSignupOptionsClicked(true);
+    }, 2000);
+  };
+
+  return (
+    <div>
+      <div className="signinas-form-container__wrapper">
+        <div className="signinas-form__wrapper">
+          <div className="signinas-form-leftSide__wrapper">
+            <h1>Glad You’re Here. Let’s Get You Started.</h1>
+            <p>
+              Empowering you to take control of your health. Safe, smart, and
+              stress-free healthcare—at your fingertips.
+            </p>
+
+            <div
+              style={{
+                marginTop: "50px",
+                display: "flex",
+                justifyContent: "center",
+              }}
+            >
+              <div>
+                <p
+                  style={{
+                    fontSize: "12px",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "5px",
+                  }}
+                >
+                  Don't have an account?{" "}
+                  <ArrowElbowRightDown size={16} color="#f3f3f3" />
+                </p>
+
+                <button
+                  className="signinas-form-joinushere__btn"
+                  onClick={(e) => handleJoinUsRegisterBtn(e)}
+                >
+                  {loading === false ? (
+                    <>Join us here</>
+                  ) : (
+                    <CircleNotch
+                      size={12}
+                      color="#202020"
+                      className={"btn-loading__icon"}
+                    />
+                  )}
+                </button>
+              </div>
+            </div>
+          </div>
+          <div className="signinas-form-rightSide__wrapper">
+            {signInOption === "Patient" ? (
+              <PatientSignIn
+                localData={localData}
+                today={today}
+                setSignInOption={setSignInOption}
+              />
+            ) : (
+              <PracitionerSignIn
+                localData={localData}
+                today={today}
+                setSignInOption={setSignInOption}
+              />
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 const SignIn = ({ localData }) => {
   const [successfulSignUp, setSuccessfulSignUp] = useState(false);
   // SIGNUP-OPTIONS
@@ -1322,18 +1449,7 @@ const SignIn = ({ localData }) => {
 
   // ------------------------------------------------------------------------------
 
-  const [signInOption, setSignInOption] = useState("");
-  const [optionClicked, setOptionClicked] = useState(false);
-  const [component, setComponent] = useState("");
-  const handleSigninOption = (role) => {
-    if (role === "Practitioner") {
-      setOptionClicked(true);
-      setComponent("Pracitioner");
-    } else if (role === "Patient") {
-      setOptionClicked(true);
-      setComponent("Patient");
-    }
-  };
+  const [signInOption, setSignInOption] = useState("Patient");
 
   useEffect(() => {
     sessionStorage.setItem("auth", "false");
@@ -1350,91 +1466,82 @@ const SignIn = ({ localData }) => {
           <div className="logo"></div>
 
           <div>
-            {optionClicked === true ? (
-              <div>
-                {component === "Pracitioner" && (
-                  <PracitionerSignIn localData={localData} today={today} />
-                )}
+            <div>
+              {signupOptionsClicked === false ? (
+                // <div className="signinas-form__wrapper">
+                //   <h3>Sign in as</h3>
+                //   <select
+                //     className="select-option__wrapper"
+                //     onChange={(e) => setSignInOption(e.target.value)}
+                //   >
+                //     <option value="">Choose...</option>
+                //     <option value=""></option>
+                //     <option value="Patient">Patient</option>
+                //     <option value="Practitioner">Practitioner</option>
+                //     {/* <option value="Nurse">Nurses</option>
+                // <option value="Therapist">Therapist</option> */}
+                //   </select>
+                //   <br />
+                //   <button
+                //     className="signinas-btn"
+                //     onClick={() => handleSigninOption(signInOption)}
+                //   >
+                //     Confirm
+                //   </button>
 
-                {component === "Patient" && (
-                  <PatientSignIn localData={localData} today={today} />
-                )}
-              </div>
-            ) : (
-              <div>
-                {signupOptionsClicked === false ? (
-                  <div className="signinas-form__wrapper">
-                    <h1>Sign in as</h1>
-                    <select
-                      className="select-option__wrapper"
-                      onChange={(e) => setSignInOption(e.target.value)}
-                    >
-                      <option value="">Choose...</option>
-                      <option value=""></option>
-                      <option value="Patient">Patient</option>
-                      <option value="Practitioner">Practitioner</option>
-                      {/* <option value="Nurse">Nurses</option>
-                  <option value="Therapist">Therapist</option> */}
-                    </select>
-                    <br />
-                    <button
-                      className="signinas-btn"
-                      onClick={() => handleSigninOption(signInOption)}
-                    >
-                      Confirm
-                    </button>
+                //   <br />
+                //   <br />
+                //   <br />
+                //   <p>or</p>
+                //   <br />
+                //   <h1>No account?</h1>
+                //   <br />
+                //   <div style={{ textAlign: "center" }}>
+                //     <button
+                //       className="signin-signup__btn"
+                //       onClick={() => setSignupOptionsClicked(true)}
+                //     >
+                //       Sign up here
+                //     </button>
+                //   </div>
+                // </div>
+                <SignInPage
+                  localData={localData}
+                  today={today}
+                  setSignupOptionsClicked={setSignupOptionsClicked}
+                  setSignInOption={setSignInOption}
+                  signInOption={signInOption}
+                />
+              ) : (
+                <div>
+                  {patientOption === false &&
+                  healthPractitionerOption === "" ? (
+                    <SignUpOptions
+                      setSignupOptionsClicked={setSignupOptionsClicked}
+                      setPatientOption={setPatientOption}
+                      setHealthPractitionerOption={setHealthPractitionerOption}
+                    />
+                  ) : (
+                    ""
+                  )}
 
-                    <br />
-                    <br />
-                    <br />
-                    <p>or</p>
-                    <br />
-                    <h1>No account?</h1>
-                    <br />
-                    <div style={{ textAlign: "center" }}>
-                      <button
-                        className="signin-signup__btn"
-                        onClick={() => setSignupOptionsClicked(true)}
-                      >
-                        Sign up here
-                      </button>
-                    </div>
-                  </div>
-                ) : (
-                  <div>
-                    {patientOption === false &&
-                    healthPractitionerOption === "" ? (
-                      <SignUpOptions
-                        setSignupOptionsClicked={setSignupOptionsClicked}
-                        setPatientOption={setPatientOption}
-                        setHealthPractitionerOption={
-                          setHealthPractitionerOption
-                        }
-                      />
-                    ) : (
-                      ""
-                    )}
-
-                    {patientOption === true ? (
-                      <PatientSignUp
-                        setPatientOption={setPatientOption}
-                        setSuccessfulSignUp={setSuccessfulSignUp}
-                      />
-                    ) : (
-                      ""
-                    )}
-                    {healthPractitionerOption && (
-                      <SignUpOpt
-                        healthPractitionerOption={healthPractitionerOption}
-                        setHealthPractitionerOption={
-                          setHealthPractitionerOption
-                        }
-                      />
-                    )}
-                  </div>
-                )}
-              </div>
-            )}
+                  {patientOption === true ? (
+                    <PatientSignUp
+                      setPatientOption={setPatientOption}
+                      setSuccessfulSignUp={setSuccessfulSignUp}
+                    />
+                  ) : (
+                    ""
+                  )}
+                  {healthPractitionerOption && (
+                    <SignUpOpt
+                      healthPractitionerOption={healthPractitionerOption}
+                      setHealthPractitionerOption={setHealthPractitionerOption}
+                    />
+                  )}
+                </div>
+              )}
+            </div>
           </div>
         </div>
       )}
