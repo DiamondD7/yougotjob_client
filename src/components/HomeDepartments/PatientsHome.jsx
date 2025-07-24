@@ -259,7 +259,7 @@ const PatientsHome = ({ currentUser }) => {
 
   const [onBoardingClicked, setOnBoardingClicked] = useState(false);
   const [userCurrrentOnBoardingStage, setUserCurrentOnBoardingStage] =
-    useState(1);
+    useState("0");
   const navigate = useNavigate();
 
   useEffect(() => {

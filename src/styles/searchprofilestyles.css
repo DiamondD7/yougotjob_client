@@ -1,18 +1,31 @@
 .search-profile-container__wrapper {
-  margin-left: 10px;
+  height: 650px;
+  overflow: auto;
+}
+
+.btn-loading-icon-search-profile__wrapper {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.search-profile-resultsfiltered__wrapper {
+  padding: 30px 30px 30px 100px;
+  border-top: 1px solid rgba(0, 0, 0, 0.2);
 }
 
 .search-profile__img {
-  width: 170px;
-  height: 170px;
+  width: 70px;
   object-fit: cover;
   object-position: center center;
-  border-radius: 5px;
+  border-radius: 50px;
 }
 
 .search-profile-header__wrapper {
   display: flex;
   gap: 20px;
+  padding: 10px 0;
 }
 
 .search-profile-header__texts {
@@ -29,6 +42,7 @@
   cursor: pointer;
   border-radius: 5px;
   padding: 2px 30px;
+  margin-top: 10px;
   display: flex;
   align-items: center;
 }
@@ -36,6 +50,12 @@
 .search-profile-name__text {
   margin-top: 5px;
   font-size: 19px;
+}
+
+.search-profile-details__text {
+  padding-top: 3px;
+  font-size: 12px;
+  color: rgba(0, 0, 0, 0.4);
 }
 
 .search-profile-nhi__text {

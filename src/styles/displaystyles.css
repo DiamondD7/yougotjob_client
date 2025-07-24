@@ -17,6 +17,22 @@
 .display-onboarding-sideCard__wrapper {
   position: absolute;
   bottom: 10px;
+
+  animation: slideOut 1s linear;
+}
+
+@keyframes slideOut {
+  0% {
+    opacity: 0;
+    transform: translateX(-100%);
+  }
+  85% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }
 .display-onboarding-sideCard__wrapper button {
   color: #f3f3f3;

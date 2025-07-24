@@ -574,7 +574,7 @@ const OnBoardingDisplay = ({
             className="onboarding-general__btn"
             onClick={handleUpdateProfile}
           >
-            {loading === true ? (
+            {loading === false ? (
               "Next"
             ) : (
               <CircleNotch
@@ -795,24 +795,30 @@ const Display = ({
           ""
         )}
 
-        {userCurrrentOnBoardingStage !== "finish" ? (
-          <div>
-            {onBoardingClicked === false ? (
-              <div className="display-onboarding-sideCard__wrapper">
-                <button onClick={() => setOnBoardingClicked(true)}>
-                  Finish up your onboarding <br /> {userCurrrentOnBoardingStage}{" "}
-                  / 6
-                </button>
+        {role !== "Patient" || userCurrrentOnBoardingStage === "0" ? (
+          ""
+        ) : (
+          <>
+            {userCurrrentOnBoardingStage !== "finish" ? (
+              <div>
+                {onBoardingClicked === false ? (
+                  <div className="display-onboarding-sideCard__wrapper">
+                    <button onClick={() => setOnBoardingClicked(true)}>
+                      Finish up your onboarding <br />{" "}
+                      {userCurrrentOnBoardingStage} / 6
+                    </button>
+                  </div>
+                ) : (
+                  <OnBoardingDisplay
+                    setOnBoardingClicked={setOnBoardingClicked}
+                    userCurrrentOnBoardingStage={userCurrrentOnBoardingStage}
+                  />
+                )}
               </div>
             ) : (
-              <OnBoardingDisplay
-                setOnBoardingClicked={setOnBoardingClicked}
-                userCurrrentOnBoardingStage={userCurrrentOnBoardingStage}
-              />
+              ""
             )}
-          </div>
-        ) : (
-          ""
+          </>
         )}
       </div>
     </>
