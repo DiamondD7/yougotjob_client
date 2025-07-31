@@ -252,7 +252,7 @@ const InitialMessage = ({ currentUser }) => {
 
 const PatientsHome = ({ currentUser }) => {
   const [displayed, setDisplayed] = useState("dashboard");
-  const [dateSettings, setDateSettings] = useState([]);
+  const [dateSettings, setDateSettings] = useState(null);
   const [loadData, setLoadData] = useState(false);
   const [editChanges, setEditChanges] = useState(false);
   const firstLogged = sessionStorage.getItem("firstTime");
@@ -316,7 +316,7 @@ const PatientsHome = ({ currentUser }) => {
   return (
     <>
       {firstLogged === "true" ? <div className="overlay"></div> : ""}
-      {loadData === true ? (
+      {loadData === true && dateSettings !== null ? (
         <div className="main-display__wrapper">
           <>
             <Nav setDisplayed={setDisplayed} dateSettings={dateSettings} />

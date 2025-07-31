@@ -24,7 +24,6 @@ const Billing = () => {
   const [isStripeUrlExpired, setIsStripeUrlExpired] = useState(false);
 
   useEffect(() => {
-    console.log("refreshed"); //DELETE WHEN DONE
     fetchData();
   }, [isStripeUrlExpired, stripeId]);
 
