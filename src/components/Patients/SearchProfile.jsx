@@ -25,7 +25,7 @@ const SearchProfile = ({
 }) => {
   const navigate = useNavigate();
   const [patientDetails, setPatientDetails] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     handleValidateAuth();
@@ -75,10 +75,16 @@ const SearchProfile = ({
         .then((res) => res.json())
         .then((res) => {
           //console.log(res);
-          const allPatientsId = res.returnStatus.data.map(
-            (patient) => patient.patientsId
-          );
-          handleGetPatientValues(true, allPatientsId);
+          const { message, status, code } = res.returnStatus;
+          if (status === false) {
+            console.warn(message, code);
+            setLoading(false);
+          } else {
+            const allPatientsId = res.returnStatus.data.map(
+              (patient) => patient.patientsId
+            );
+            handleGetPatientValues(true, allPatientsId);
+          }
         });
     } catch (error) {
       console.log("Error fetching data:", error.message);
@@ -226,7 +232,8 @@ const SearchProfile = ({
   return (
     <div>
       <div className="search-profile-container__wrapper">
-        {loading === true || patientDetails.length <= 0 ? (
+        {/* || patientDetails.length <= 0  */}
+        {loading === true ? (
           <div className="btn-loading-icon-search-profile__wrapper">
             <CircleNotch
               size={30}

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { CircleNotch, DotsThree, X } from "@phosphor-icons/react";
 import {
+  DeleteAptForPatient,
   GetAppointmentsForPatientUser,
   PatientCancelledAppointment,
   GetPatient,
@@ -19,7 +20,8 @@ const RemoveBtn = ({ appointment, navigate, fetchData }) => {
 
   const authUserCancel = async (retry = true) => {
     try {
-      const response = await fetch(`${GetPatient}/${ID}`, {
+      const id = parseInt(sessionStorage.getItem("id"));
+      const response = await fetch(`${GetPatient}/${id}`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -104,6 +106,26 @@ const TableView = ({ appointments, navigate, fetchData }) => {
   const [openActionModal, setOpenActionModal] = useState("0");
   const today = new Date();
 
+  const handleDelete = (e, id) => {
+    e.preventDefault();
+
+    fetch(DeleteAptForPatient, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify({
+        Id: id,
+      }),
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        console.log(res);
+        setOpenActionModal("0");
+        fetchData();
+      });
+  };
   return (
     <div>
       <table className="schedule-table__wrapper">
@@ -145,9 +167,11 @@ const TableView = ({ appointments, navigate, fetchData }) => {
                   <p className="overdue-text">Cancelled</p>
                 </td>
               ) : (
-                <td>
-                  <p className="completed-text">Completed</p>
-                </td>
+                apts.isAppointmentComplete === true && (
+                  <td>
+                    <p className="completed-text">Completed</p>
+                  </td>
+                )
               )}
 
               <td>
@@ -180,7 +204,7 @@ const TableView = ({ appointments, navigate, fetchData }) => {
                   <div className="schedule-table-actions-modal__wrapper">
                     <button className="actions__btns">View</button>
                     <br />
-                    {apts.isCancelled === false ? (
+                    {apts.isCancelled === false && apts.isOpenJob === false ? (
                       <RemoveBtn
                         appointment={apts}
                         navigate={navigate}
@@ -191,7 +215,18 @@ const TableView = ({ appointments, navigate, fetchData }) => {
                     )}
 
                     <br />
-                    <button className="deleteAction">Delete</button>
+                    {apts.isAppointmentComplete === true ||
+                    apts.isCancelled === true ||
+                    apts.isOpenJob === true ? (
+                      <button
+                        className="deleteAction"
+                        onClick={(e) => handleDelete(e, apts.id)}
+                      >
+                        Delete
+                      </button>
+                    ) : (
+                      ""
+                    )}
                   </div>
                 ) : (
                   ""
