@@ -1,17 +1,21 @@
 .patientsId-search__wrapper {
-  /* position: absolute;
-    top:10%;
-    left:50%;
-    transform: translate(-50%, -50%); */
-  margin: 10px 0 0 380px;
+  background-color: #9dcd5a;
+  padding: 50px 0 100px 0;
+  text-align: center;
+}
+
+.search-patient__icon {
+  background-color: white;
+  padding: 5px;
+  border: 1px solid rgba(0, 0, 0, 0.4);
+  border-right: none;
 }
 
 .patientID__input {
   padding: 5px 5px;
-  width: 1000px;
+  width: 70%;
   border: 1px solid rgba(0, 0, 0, 0.4);
-  border-radius: 10px;
-
+  border-left: none;
   font-size: 21px;
   outline: none;
   /* box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px; */

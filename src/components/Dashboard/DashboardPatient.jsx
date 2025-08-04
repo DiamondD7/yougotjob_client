@@ -433,7 +433,9 @@ const PreferredPractitioner = ({ preferredPractitioner }) => {
           <h5>Recent Appointment</h5>
 
           <p className="preferred-practitioner-recent-appointment-result">
-            {preferredPractitioner.recentDate}
+            {preferredPractitioner.recentDate === ""
+              ? "N/A"
+              : preferredPractitioner.recentDate}
           </p>
         </div>
 
