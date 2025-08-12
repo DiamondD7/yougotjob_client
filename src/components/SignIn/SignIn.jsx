@@ -29,10 +29,9 @@ import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google";
 import { jwtDecode } from "jwt-decode";
 import GoogleSignUpPatient from "./GoogleSignUpPatient";
 import GoogleSignUp from "./GoogleSignUp";
-
-import "../../styles/signinstyles.css";
 import SuccessfulSignUp from "./Success/SuccessfulSignUp";
 
+import "../../styles/signinstyles.css";
 const SignUpOptions = ({
   setSignupOptionsClicked,
   setPatientOption,
@@ -115,6 +114,7 @@ const PatientSignUp = ({ setPatientOption, setSuccessfulSignUp }) => {
   const [authProvider, setAuthProvider] = useState("local");
   const [fullName, setFullName] = useState("");
   const [givenName, setGivenName] = useState("");
+  const [gender, setGender] = useState("");
   const [familyName, setFamilyName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -163,6 +163,7 @@ const PatientSignUp = ({ setPatientOption, setSuccessfulSignUp }) => {
         FamilyName: familyName,
         EmailAddress: email,
         UserPassword: password,
+        Gender: gender,
       }),
     })
       .then((res) => res.json())
@@ -262,6 +263,17 @@ const PatientSignUp = ({ setPatientOption, setSuccessfulSignUp }) => {
               placeholder="Full name"
               onChange={(e) => setFullName(e.target.value)}
             />
+            <select
+              required
+              className="signup-form__input"
+              onChange={(e) => setGender(e.target.value)}
+            >
+              <option value="">Choose your gender</option>
+              <option value="Prefer not to say"></option>
+              <option value="Female">Female</option>
+              <option value="Male">Male</option>
+              <option value="Prefer not to say">Prefer not to say</option>
+            </select>
             <input
               required
               className="signup-form__input"
@@ -637,22 +649,8 @@ const PracitionerSignIn = ({ localData, today, setSignInOption }) => {
                         back to patient login
                       </button>
                     </div>
-                    <p
-                      style={{
-                        textAlign: "center",
-                        marginTop: "55px",
-                        fontSize: "12px",
-                      }}
-                    >
-                      Or
-                    </p>
-                    <div
-                      style={{
-                        display: "flex",
-                        justifyContent: "center",
-                        marginTop: "50px",
-                      }}
-                    >
+                    <p className="or__p">Or</p>
+                    <div className="google-login__wrapper">
                       <GoogleOAuthProvider
                         clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}
                       >
@@ -908,22 +906,8 @@ const PatientSignIn = ({ localData, today, setSignInOption }) => {
                       Submit
                     </button>
 
-                    <p
-                      style={{
-                        textAlign: "center",
-                        marginTop: "55px",
-                        fontSize: "12px",
-                      }}
-                    >
-                      Or
-                    </p>
-                    <div
-                      style={{
-                        display: "flex",
-                        justifyContent: "center",
-                        marginTop: "50px",
-                      }}
-                    >
+                    <p className="or__p">Or</p>
+                    <div className="google-login__wrapper">
                       <GoogleOAuthProvider
                         clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}
                       >

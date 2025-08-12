@@ -1,8 +1,4 @@
 @media (max-width: 1900px) {
-  .signin-submit__btn {
-    padding: 3px 143px;
-  }
-
   .notes__wrapper {
     width: 300px;
   }
@@ -110,10 +106,6 @@
 }
 
 @media (max-width: 1750px) {
-  .signin-submit__btn {
-    padding: 3px 130px;
-  }
-
   .dashboard-cards__wrapper,
   .notes__wrapper {
     width: 314px;
@@ -199,10 +191,6 @@
 }
 
 @media (max-width: 1600px) {
-  .signin-submit__btn {
-    padding: 3px 120px;
-  }
-
   .dashboard-cards__wrapper {
     width: 240px;
   }
@@ -360,10 +348,26 @@
 }
 
 @media (max-width: 1400px) {
-  .signin-submit__btn {
-    padding: 3px 100px;
+  .signinas-form-rightSide__wrapper {
+    width: 60%;
   }
 
+  .signinas-form-joinushere__btn {
+    width: 200px;
+  }
+
+  .signinas-form-leftSide__wrapper {
+    width: 40%;
+  }
+
+  .signinas-form-leftSide__wrapper h1 {
+    font-size: 25px;
+    width: 200px;
+  }
+
+  .signinas-form-leftSide__wrapper p {
+    font-size: 13px;
+  }
   .full-profile-container__wrapper {
     display: block;
   }
@@ -603,9 +607,27 @@
   /* ------------------------------CALENDAR------------------------------------ */
 }
 @media (max-width: 1000px) {
-  .signin-submit__btn {
-    padding: 3px 60px;
+  .signinas-form-rightSide__wrapper {
+    width: 60%;
   }
+
+  .signinas-form-joinushere__btn {
+    width: 150px;
+  }
+
+  .signinas-form-leftSide__wrapper {
+    width: 40%;
+  }
+
+  .signinas-form-leftSide__wrapper h1 {
+    font-size: 18px;
+    width: 150px;
+  }
+
+  .signinas-form-leftSide__wrapper p {
+    font-size: 12px;
+  }
+
   .signup-options__btns {
     font-size: 7px;
   }
@@ -667,9 +689,51 @@
     width: 300px;
   }
 }
+
+@media (max-width: 900px) {
+  .signinas-form-container__wrapper {
+    top: 55%;
+  }
+
+  .signinas-form__wrapper {
+    display: block;
+    height: 700px;
+  }
+
+  .signinas-form-rightSide__wrapper {
+    width: 100%;
+    padding: 10px;
+  }
+
+  .signinas-form-leftSide__wrapper {
+    width: 100%;
+    border-bottom-left-radius: 0;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+  }
+
+  .signinas-form-leftSide__wrapper h1 {
+    font-size: 21px;
+    width: 350px;
+  }
+
+  .signinas-form-leftSide__wrapper p {
+    font-size: 13px;
+  }
+
+  .or__p {
+    margin-top: 20px;
+  }
+
+  .google-login__wrapper {
+    margin-top: 10px;
+  }
+}
+
 @media (max-width: 800px) {
-  .signin-submit__btn {
-    padding: 3px 40px;
+  .signinas-form-leftSide__wrapper h1 {
+    font-size: 21px;
+    width: 280px;
   }
 
   /* --------------------------------PATIENT NAVS-------------------------------- */
@@ -686,5 +750,25 @@
 
   .appointmentImage {
     width: 300px;
+  }
+}
+
+@media (max-width: 630px) {
+  .logo {
+    width: 100%;
+    background-repeat: no-repeat;
+  }
+
+  .signinas-form-container__wrapper {
+    width: 70%;
+  }
+
+  .signinas-form-leftSide__wrapper {
+    padding: 30px;
+  }
+
+  .signinas-form-leftSide__wrapper h1 {
+    font-size: 17px;
+    width: 200px;
   }
 }

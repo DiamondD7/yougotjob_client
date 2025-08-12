@@ -24,7 +24,6 @@
 }
 
 .signinform-container__wrapper {
-  height: 65%;
   width: 30%;
 
   background-color: #e5f0ff;
@@ -163,6 +162,18 @@
   cursor: pointer;
   background-color: transparent;
   border: none;
+}
+
+.or__p {
+  text-align: center;
+  margin-top: 55px;
+  font-size: 12px;
+}
+
+.google-login__wrapper {
+  display: flex;
+  justify-content: center;
+  margin-top: 50px;
 }
 
 /* ----------------------------------------- */
@@ -354,7 +365,6 @@
 }
 
 .signinas-form-container__wrapper {
-  height: 50%;
   width: 50%;
 
   /* text-align: center; */
@@ -377,7 +387,7 @@
   border-top-left-radius: 20px;
   border-bottom-left-radius: 20px;
   width: 60%;
-  height: 474px;
+  /* height: 474px; */
 
   padding: 50px;
 }
@@ -413,7 +423,6 @@
 
   padding: 50px;
   width: 40%;
-  height: 474px;
 }
 /* .signinas-form__wrapper {
   height: 50%;
